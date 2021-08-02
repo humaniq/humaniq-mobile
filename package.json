@@ -40,6 +40,7 @@
     "mobx-react-lite": "3.2.0",
     "mobx-state-tree": "5.0.1",
     "react": "17.0.1",
+    "react-ioc": "^1.0.0",
     "react-native": "0.64.2",
     "react-native-animated-nav-tab-bar": "^3.1.4",
     "react-native-gesture-handler": "1.10.3",
@@ -197,7 +198,8 @@
       "react-native/no-raw-text": 0,
       "react/no-unescaped-entities": 0,
       "react/prop-types": "off",
-      "space-before-function-paren": 0
+      "space-before-function-paren": 0,
+      "no-inferrable-types": 0
     }
   }
 }
