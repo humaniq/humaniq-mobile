@@ -5,8 +5,10 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
-import { createStackNavigator } from "@react-navigation/stack"
-import { WelcomeScreen, DemoScreen, DemoListScreen } from "../screens"
+import { DemoListScreen, DemoScreen, WalletScreen } from "../screens"
+import Ionicons from "react-native-vector-icons/Ionicons"
+import { palette } from "../theme/palette"
+import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -26,21 +28,37 @@ export type PrimaryParamList = {
   demoList: undefined
 }
 
-// Documentation: https://reactnavigation.org/docs/stack-navigator/
-const Stack = createStackNavigator<PrimaryParamList>()
+
+const Tab = AnimatedTabBarNavigator()
 
 export function MainNavigator() {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        cardStyle: { backgroundColor: "transparent" },
+    <Tab.Navigator
+      tabBarOptions={ {
+        activeTintColor: palette.deepPurple,
+        inactiveTintColor: "#222222",
+        activeBackgroundColor: palette.orangeDarker
+      } }
+      screenOptions={ ({ route }) => ({
         headerShown: false,
-      }}
-    >
-      <Stack.Screen name="welcome" component={WelcomeScreen} />
-      <Stack.Screen name="demo" component={DemoScreen} />
-      <Stack.Screen name="demoList" component={DemoListScreen} />
-    </Stack.Navigator>
+        tabBarIcon: (options) => {
+          let icon = "wallet"
+          switch (route.name) {
+            case "demo":
+              icon = "bicycle"
+              break
+            case "demoList":
+              icon = "list"
+              break
+          }
+          return <Ionicons name={ icon } size={ options.size } color={ options.focused ? palette.deepPurple : palette.white } />
+        },
+      }) }
+      appearance={ { floating: false, tabBarBackground: palette.deepPurple } }>
+      <Tab.Screen name="wallet" component={ WalletScreen } />
+      <Tab.Screen name="demo" component={ DemoScreen } />
+      <Tab.Screen name="demoList" component={ DemoListScreen } />
+    </Tab.Navigator>
   )
 }
 
@@ -53,5 +71,5 @@ export function MainNavigator() {
  *
  * `canExit` is used in ./app/app.tsx in the `useBackButtonHandler` hook.
  */
-const exitRoutes = ["welcome"]
+const exitRoutes = [ "wallet" ]
 export const canExit = (routeName: string) => exitRoutes.includes(routeName)
