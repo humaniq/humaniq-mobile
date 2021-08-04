@@ -1,27 +1,26 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import { Button, Checkbox, Chip, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Button, Card, Checkbox, Chip, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { WalletScreenModel } from "./WalletScreenModel"
 import Icon from "react-native-vector-icons/Ionicons"
-import { FlatList } from "react-native"
 import { runInAction } from "mobx"
 import FAIcon from "react-native-vector-icons/FontAwesome5"
-import { useStores } from "../../models"
+// import LogoEther from "../../assets/coins/ethereum.svg"
 
 
 const Wallet = observer(function() {
   const view = useInstance(WalletScreenModel)
-  const store = useStores()
+  
   
   useEffect(() => {
-    view.init(store)
+    view.init()
   }, [])
   
   return (
     <View animated testID="WelcomeScreen" flex>
-      <Screen preset="scroll" backgroundColor={ Colors.transparent }>
+      <Screen statusBar={ "light-content" } preset="scroll" backgroundColor={ Colors.transparent }>
         <Text h5 bold marginV-20 center grey20>Кошельки</Text>
         <View center animated flex row padding-20 spread>
           <View left right>
@@ -36,22 +35,27 @@ const Wallet = observer(function() {
           </View>
         </View>
         <View>
-          { view.wallets.map(w => <Text key={ w.address }>{ w.address }</Text>) }
+          { view.wallets.map(w => <Card margin-10 padding-20 animated key={ w.address }>
+            <View row flex>
+              <View flex-8>
+                <View row flex>
+                  <View flex-2>
+                    <Text>ETH</Text>
+                  </View>
+                  <View flex-8>
+                    <Text>{ w.formatedAddress }</Text>
+                  </View>
+                </View>
+                <View row flex>
+                  <Text>{ w.ethBalance }</Text>
+                </View>
+              </View>
+              <View flex-2>
+              </View>
+            </View>
+          </Card>) }
         </View>
       </Screen>
-      <View row>
-        <FlatList
-          data={ [ ...view.wallets ] }
-          keyExtractor={ (item) => String(item.address) }
-          renderItem={ ({ item }) => (
-            <View>
-              <Text>
-                { item.name }
-              </Text>
-            </View>
-          ) }
-        />
-      </View>
       <Dialog
         width={ "100%" }
         containerStyle={ { backgroundColor: Colors.grey80 } }
@@ -120,21 +124,21 @@ const Wallet = observer(function() {
             {
               view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(0, 3)
-                .map((l, i) => <Chip key={ l + i } label={ l } />)
+                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
             }
           </View>
           <View center row paddingV-10>
             {
               view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(4, 7)
-                .map((l, i) => <Chip key={ l + i } label={ l } />)
+                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
             }
           </View>
           <View center row paddingV-10 paddingB-30>
             {
               view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(8, 11)
-                .map((l, i) => <Chip key={ l + i } label={ l } />)
+                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
             }
           </View>
         </View>

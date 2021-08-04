@@ -1,10 +1,12 @@
 import { makeAutoObservable, runInAction } from "mobx"
 import { Wallet } from "../../services/store/Wallet"
 import "react-native-get-random-values"
+import { randomBytes } from "react-native-randombytes"
 import "@ethersproject/shims"
 import { ethers } from "ethers"
 import * as storage from "../../utils/storage"
 import { RootStore } from "../../models"
+import { entropyToMnemonic } from "ethers/lib/utils"
 
 
 export class WalletScreenModel {
@@ -35,11 +37,11 @@ export class WalletScreenModel {
     this.initialized = true
   }
   
-  async init(store: RootStore) {
+  async init() {
     try {
-      this.store = store
       const wallets = await storage.load("wallets") || {}
-      this.wallets = Object.values(wallets)
+      // @ts-ignore
+      this.wallets = Object.values(wallets).map(w => new Wallet(w))
     } catch (e) {
       console.tron.log(e)
     }
@@ -54,13 +56,19 @@ export class WalletScreenModel {
   }
   
   
-  async createWalletProceed() {
+  createWalletProceed = () => {
+    
+    // console.log(wallet)
+    
     this.createWallet.pending = true
     setTimeout(() => {
       runInAction(() => {
         try {
           console.tron.log("CREATE-WALLET")
-          const wallet = ethers.Wallet.createRandom()
+          // const wallet = ethers.Wallet.createRandom()
+          const entropy: Uint8Array = randomBytes(16)
+          const mnemonic = entropyToMnemonic(entropy, "en")
+          const wallet = ethers.Wallet.fromMnemonic(mnemonic)
           this.createWallet.proceed.wallet.mnemonic = wallet.mnemonic.phrase
           this.createWallet.proceed.wallet.path = wallet.mnemonic.path
           this.createWallet.proceed.wallet.locale = wallet.mnemonic.locale
@@ -79,9 +87,11 @@ export class WalletScreenModel {
   async saveWallet() {
     runInAction(() => {
       this.createWallet.proceed.display = false
+      this.createWallet.pending = false
+      this.createWallet.init.accept = false
     })
     try {
-      this.wallets = [ ...this.wallets, this.createWallet.proceed.wallet ]
+      this.wallets = [ ...this.wallets, new Wallet(this.createWallet.proceed.wallet) ]
       await storage.save("wallets", Object.values(this.wallets))
     } catch (e) {
       console.log(e)
