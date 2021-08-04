@@ -1,5 +1,6 @@
 import React from "react"
-import { View, ViewStyle, TextStyle } from "react-native"
+import { TextStyle, ViewStyle } from "react-native"
+import { View } from "react-native-ui-lib"
 import { HeaderProps } from "./header.props"
 import { Button } from "../button/button"
 import { Text } from "../text/text"
@@ -36,26 +37,26 @@ export function Header(props: HeaderProps) {
     titleStyle,
   } = props
   const header = headerText || (headerTx && translate(headerTx)) || ""
-
+  
   return (
-    <View style={[ROOT, style]}>
-      {leftIcon ? (
-        <Button preset="link" onPress={onLeftPress}>
-          <Icon icon={leftIcon} />
+    <View style={ [ ROOT, style ] }>
+      { leftIcon ? (
+        <Button preset="link" onPress={ onLeftPress }>
+          <Icon icon={ leftIcon } />
         </Button>
       ) : (
-        <View style={LEFT} />
-      )}
-      <View style={TITLE_MIDDLE}>
-        <Text style={[TITLE, titleStyle]} text={header} />
+        <View style={ LEFT } />
+      ) }
+      <View style={ TITLE_MIDDLE }>
+        <Text style={ [ TITLE, titleStyle ] } text={ header } />
       </View>
-      {rightIcon ? (
-        <Button preset="link" onPress={onRightPress}>
-          <Icon icon={rightIcon} />
+      { rightIcon ? (
+        <Button preset="link" onPress={ onRightPress }>
+          <Icon icon={ rightIcon } />
         </Button>
       ) : (
-        <View style={RIGHT} />
-      )}
+        <View style={ RIGHT } />
+      ) }
     </View>
   )
 }

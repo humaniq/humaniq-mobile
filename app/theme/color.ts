@@ -1,4 +1,10 @@
 import { palette } from "./palette"
+import { Colors } from "react-native-ui-lib"
+
+Colors.loadColors({
+  pink: "#FF69B4",
+  gold: "#FFD700",
+})
 
 /**
  * Roles for colors.  Prefer using these over the palette.  It makes it easier
@@ -48,14 +54,14 @@ export const color = {
    * Error messages and icons.
    */
   error: palette.angry,
-
+  
   /**
    * Storybook background for Text stories, or any stories where
    * the text color is color.text, which is white by default, and does not show
    * in Stories against the default white background
    */
   storybookDarkBg: palette.black,
-
+  
   /**
    * Storybook text color for stories that display Text components against the
    * white background

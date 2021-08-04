@@ -1,14 +1,16 @@
-import { color, spacing, typography } from "../../theme"
+import { Colors } from "react-native-ui-lib"
+import { spacing, typography } from "../../theme"
 
 export default {
   full: { flex: 1 },
-  container:  {
-    backgroundColor: color.transparent,
+  container: {
+    backgroundColor: Colors.transparent,
     paddingHorizontal: spacing[4],
   },
   text: {
-    color: color.palette.white,
+    color: Colors.grey20,
     fontFamily: typography.primary,
+    fontWeight: "bold",
   },
   bold: { fontWeight: "bold" },
   header: {
@@ -17,7 +19,7 @@ export default {
     paddingHorizontal: 0,
   },
   headerTitle: {
-    color: color.palette.white,
+    color: Colors.grey20,
     fontFamily: typography.primary,
     fontWeight: "bold",
     fontSize: 12,
@@ -28,10 +30,10 @@ export default {
   continue: {
     paddingVertical: spacing[4],
     paddingHorizontal: spacing[4],
-    backgroundColor: color.palette.deepPurple,
+    backgroundColor: Colors.grey70,
   },
   continueText: {
-    color: color.palette.white,
+    color: Colors.grey80,
     fontFamily: typography.primary,
     fontWeight: "bold",
     lineHeight: 15,
@@ -42,5 +44,5 @@ export default {
   footerContent: {
     paddingVertical: spacing[4],
     paddingHorizontal: spacing[4],
-  }
+  },
 }

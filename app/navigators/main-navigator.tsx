@@ -6,8 +6,8 @@
  */
 import React from "react"
 import { DemoListScreen, DemoScreen, WalletScreen } from "../screens"
-import Ionicons from "react-native-vector-icons/Ionicons"
-import { palette } from "../theme/palette"
+import { Colors } from "react-native-ui-lib"
+import Ionicons from "react-native-vector-icons/FontAwesome5"
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 
 /**
@@ -35,9 +35,9 @@ export function MainNavigator() {
   return (
     <Tab.Navigator
       tabBarOptions={ {
-        activeTintColor: palette.deepPurple,
-        inactiveTintColor: "#222222",
-        activeBackgroundColor: palette.orangeDarker
+        activeTintColor: Colors.grey70,
+        inactiveTintColor: Colors.dark80,
+        activeBackgroundColor: Colors.grey10,
       } }
       screenOptions={ ({ route }) => ({
         headerShown: false,
@@ -45,16 +45,17 @@ export function MainNavigator() {
           let icon = "wallet"
           switch (route.name) {
             case "demo":
-              icon = "bicycle"
+              icon = "globe"
               break
             case "demoList":
               icon = "list"
               break
           }
-          return <Ionicons name={ icon } size={ options.size } color={ options.focused ? palette.deepPurple : palette.white } />
+          return <Ionicons name={ icon } size={ options.size }
+                           color={ options.focused ? Colors.grey70 : Colors.grey20 } />
         },
       }) }
-      appearance={ { floating: false, tabBarBackground: palette.deepPurple } }>
+      appearance={ { floating: false, tabBarBackground: Colors.grey70 } }>
       <Tab.Screen name="wallet" component={ WalletScreen } />
       <Tab.Screen name="demo" component={ DemoScreen } />
       <Tab.Screen name="demoList" component={ DemoListScreen } />

@@ -11,16 +11,16 @@
  */
 import "./i18n"
 import "./utils/ignore-warnings"
-import React, { useState, useEffect, useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { NavigationContainerRef } from "@react-navigation/native"
-import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { initFonts } from "./theme/fonts" // expo
 import * as storage from "./utils/storage"
 import {
-  useBackButtonHandler,
-  RootNavigator,
   canExit,
+  RootNavigator,
   setRootNavigation,
+  useBackButtonHandler,
   useNavigationPersistence,
 } from "./navigators"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
@@ -30,24 +30,31 @@ import { ToggleStorybook } from "../storybook/toggle-storybook"
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
+import { configure } from "mobx"
+
 enableScreens()
+
+configure({
+  enforceActions: "never",
+})
+
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 /**
  * This is the root component of our app.
  */
-function App() {
+const AppScreen = () => {
   const navigationRef = useRef<NavigationContainerRef>(null)
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
-
+  const [ rootStore, setRootStore ] = useState<RootStore | undefined>(undefined)
+  
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
   const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
     storage,
     NAVIGATION_PERSISTENCE_KEY,
   )
-
+  
   // Kick off initial async loading actions, like loading fonts and RootStore
   useEffect(() => {
     ;(async () => {
@@ -55,27 +62,29 @@ function App() {
       setupRootStore().then(setRootStore)
     })()
   }, [])
-
+  
   // Before we show the app, we have to wait for our state to be ready.
   // In the meantime, don't render anything. This will be the background
   // color set in native by rootView's background color. You can replace
   // with your own loading component if you wish.
   if (!rootStore) return null
-
+  
   // otherwise, we're ready to render the app
   return (
     <ToggleStorybook>
-      <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <RootStoreProvider value={ rootStore }>
+        <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
           <RootNavigator
-            ref={navigationRef}
-            initialState={initialNavigationState}
-            onStateChange={onNavigationStateChange}
+            ref={ navigationRef }
+            initialState={ initialNavigationState }
+            onStateChange={ onNavigationStateChange }
           />
         </SafeAreaProvider>
       </RootStoreProvider>
     </ToggleStorybook>
   )
 }
+
+const App = AppScreen
 
 export default App
