@@ -8,13 +8,15 @@ import Icon from "react-native-vector-icons/Ionicons"
 import { FlatList } from "react-native"
 import { runInAction } from "mobx"
 import FAIcon from "react-native-vector-icons/FontAwesome5"
+import { useStores } from "../../models"
 
 
 const Wallet = observer(function() {
   const view = useInstance(WalletScreenModel)
+  const store = useStores()
   
   useEffect(() => {
-    view.init()
+    view.init(store)
   }, [])
   
   return (
@@ -33,11 +35,14 @@ const Wallet = observer(function() {
             </Button>
           </View>
         </View>
+        <View>
+          { view.wallets.map(w => <Text key={ w.address }>{ w.address }</Text>) }
+        </View>
       </Screen>
       <View row>
         <FlatList
           data={ [ ...view.wallets ] }
-          keyExtractor={ (item) => String(item.id) }
+          keyExtractor={ (item) => String(item.address) }
           renderItem={ ({ item }) => (
             <View>
               <Text>
@@ -113,21 +118,21 @@ const Wallet = observer(function() {
           </View>
           <View center row paddingV-10>
             {
-              view.createWallet.proceed.mnemonic.split(" ")
+              view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(0, 3)
                 .map((l, i) => <Chip key={ l + i } label={ l } />)
             }
           </View>
           <View center row paddingV-10>
             {
-              view.createWallet.proceed.mnemonic.split(" ")
+              view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(4, 7)
                 .map((l, i) => <Chip key={ l + i } label={ l } />)
             }
           </View>
           <View center row paddingV-10 paddingB-30>
             {
-              view.createWallet.proceed.mnemonic.split(" ")
+              view.createWallet.proceed.wallet.mnemonic.split(" ")
                 .slice(8, 11)
                 .map((l, i) => <Chip key={ l + i } label={ l } />)
             }

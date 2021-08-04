@@ -21,8 +21,9 @@ export const CharacterStoreModel = types
     getCharacters: async () => {
       const characterApi = new CharacterApi(self.environment.api)
       const result = await characterApi.getCharacters()
-
+      
       if (result.kind === "ok") {
+        console.log(result)
         self.saveCharacters(result.characters)
       } else {
         __DEV__ && console.tron.log(result.kind)
@@ -31,7 +32,13 @@ export const CharacterStoreModel = types
   }))
 
 type CharacterStoreType = Instance<typeof CharacterStoreModel>
-export interface CharacterStore extends CharacterStoreType {}
+
+export interface CharacterStore extends CharacterStoreType {
+}
+
 type CharacterStoreSnapshotType = SnapshotOut<typeof CharacterStoreModel>
-export interface CharacterStoreSnapshot extends CharacterStoreSnapshotType {}
+
+export interface CharacterStoreSnapshot extends CharacterStoreSnapshotType {
+}
+
 export const createCharacterStoreDefaultModel = () => types.optional(CharacterStoreModel, {})

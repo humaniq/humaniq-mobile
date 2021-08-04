@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
-import { FlatList, TextStyle, View, ViewStyle, ImageStyle } from "react-native"
+import { FlatList, ImageStyle, TextStyle, View, ViewStyle } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
-import { Header, Screen, Text, Wallpaper, AutoImage as Image } from "../../components"
+import { AutoImage as Image, Header, Screen, Text, Wallpaper } from "../../components"
 import { color, spacing } from "../../theme"
 import { useStores } from "../../models"
 
@@ -44,41 +44,41 @@ const FLAT_LIST: ViewStyle = {
 export const DemoListScreen = observer(function DemoListScreen() {
   const navigation = useNavigation()
   const goBack = () => navigation.goBack()
-
+  
   const { characterStore } = useStores()
   const { characters } = characterStore
-
+  
   useEffect(() => {
-    async function fetchData() {
-      await characterStore.getCharacters()
-    }
-
-    fetchData()
+    // async function fetchData() {
+    //   await characterStore.getCharacters()
+    // }
+    
+    // fetchData()
   }, [])
-
+  
   return (
-    <View testID="DemoListScreen" style={FULL}>
+    <View testID="DemoListScreen" style={ FULL }>
       <Wallpaper />
-      <Screen style={CONTAINER} preset="fixed" backgroundColor={color.transparent}>
+      <Screen style={ CONTAINER } preset="fixed" backgroundColor={ color.transparent }>
         <Header
           headerTx="demoListScreen.title"
           leftIcon="back"
-          onLeftPress={goBack}
-          style={HEADER}
-          titleStyle={HEADER_TITLE}
+          onLeftPress={ goBack }
+          style={ HEADER }
+          titleStyle={ HEADER_TITLE }
         />
         <FlatList
-          contentContainerStyle={FLAT_LIST}
-          data={[...characters]}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <View style={LIST_CONTAINER}>
-              <Image source={{ uri: item.image }} style={IMAGE} />
-              <Text style={LIST_TEXT}>
-                {item.name} ({item.status})
+          contentContainerStyle={ FLAT_LIST }
+          data={ [ ...characters ] }
+          keyExtractor={ (item) => String(item.id) }
+          renderItem={ ({ item }) => (
+            <View style={ LIST_CONTAINER }>
+              <Image source={ { uri: item.image } } style={ IMAGE } />
+              <Text style={ LIST_TEXT }>
+                { item.name } ({ item.status })
               </Text>
             </View>
-          )}
+          ) }
         />
       </Screen>
     </View>
