@@ -48,7 +48,7 @@ export function MainNavigator() {
               icon = "globe"
               break
             case "demoList":
-              icon = "list"
+              icon = "cog"
               break
           }
           return <Ionicons name={ icon } size={ options.size }

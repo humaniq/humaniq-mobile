@@ -1,18 +1,20 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import { Button, Card, Checkbox, Chip, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Button, Card, Colors, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { WalletScreenModel } from "./WalletScreenModel"
 import Icon from "react-native-vector-icons/Ionicons"
 import { runInAction } from "mobx"
 import FAIcon from "react-native-vector-icons/FontAwesome5"
-// import LogoEther from "../../assets/coins/ethereum.svg"
+import { store } from "../../services/store/Store"
+import { CreateWalletDialog } from "./dialogs/CreateWalletDialog"
+import { SaveWalletDialog } from "./dialogs/SaveWalletDialog"
+import { RemoveWalletDialog } from "./dialogs/RemoveWalletDialog"
 
 
 const Wallet = observer(function() {
   const view = useInstance(WalletScreenModel)
-  
   
   useEffect(() => {
     view.init()
@@ -20,6 +22,7 @@ const Wallet = observer(function() {
   
   return (
     <View animated testID="WelcomeScreen" flex>
+      { view.initialized &&
       <Screen statusBar={ "light-content" } preset="scroll" backgroundColor={ Colors.transparent }>
         <Text h5 bold marginV-20 center grey20>Кошельки</Text>
         <View center animated flex row padding-20 spread>
@@ -35,114 +38,39 @@ const Wallet = observer(function() {
           </View>
         </View>
         <View>
-          { view.wallets.map(w => <Card margin-10 padding-20 animated key={ w.address }>
+          { store.walletStore.wallets.map(w => <Card margin-10 padding-20 animated
+                                                     key={ w.address }>
             <View row flex>
               <View flex-8>
                 <View row flex>
-                  <View flex-2>
-                    <Text>ETH</Text>
+                  <View>
+                    <Text dark40 bold>ETH</Text>
                   </View>
-                  <View flex-8>
-                    <Text>{ w.formatedAddress }</Text>
+                  <View paddingL-10>
+                    <Text dark40>{ w.formatAddress }</Text>
                   </View>
                 </View>
                 <View row flex>
-                  <Text>{ w.ethBalance }</Text>
+                  <Text dark20 h4 bold>{ w.formatBalance }</Text>
                 </View>
               </View>
-              <View flex-2>
+              <View flex-1 center right>
+                <Button
+                  onPress={ () => runInAction(() => {
+                    view.walletDialogs.menu.display = !view.walletDialogs.menu.display
+                    view.walletDialogs.menu.currentWallet = w.address
+                  }) }
+                  round backgroundColor={ Colors.grey60 }>
+                  <FAIcon name={ "ellipsis-v" } />
+                </Button>
               </View>
             </View>
           </Card>) }
         </View>
-      </Screen>
-      <Dialog
-        width={ "100%" }
-        containerStyle={ { backgroundColor: Colors.grey80 } }
-        onDismiss={ () => runInAction(() => view.createWallet.init.display = false) }
-        visible={ view.createWallet.init.display }
-        bottom
-      >
-        <View marginH-30 marginV-10>
-          <View row marginV-10 center>
-            <View flex>
-              <Text left h6 bold>{ "Создать кошелек" }</Text>
-            </View>
-            <View right>
-              <Button onPress={ () => runInAction(() => view.createWallet.init.display = false) } link
-                      label="Отмена" />
-            </View>
-          </View>
-          { !view.createWallet.pending &&
-          <View>
-            <Text>{ "На следующем шаге вы увидите 12 слов, из которых вы можете восстановить свой кошелек'," }</Text>
-            <View row center paddingV-10>
-              <FAIcon color={ Colors.grey20 } size={ 120 } name="shield-alt" />
-            </View>
-            <View row>
-              <Checkbox
-                labelStyle={ { width: "90%" } }
-                onValueChange={ (val) => runInAction(() => view.createWallet.init.accept = val) }
-                value={ view.createWallet.init.accept }
-                label={ "Я понимаю, что если потеряю секретную фразу из 12 слов, то не смогу восстановить кошелек " } />
-            </View>
-            <Button
-              disabled={ !view.createWallet.init.accept }
-              fullWidth
-              onPress={ view.createWalletProceed }
-              label={ "Создать" } />
-          </View>
-          }
-          {
-            view.createWallet.pending &&
-            <View marginH-30 marginV-10 height={ 200 }><LoaderScreen color={ Colors.grey20 } /></View>
-          }
-        </View>
-      </Dialog>
-      <Dialog
-        width={ "100%" }
-        containerStyle={ { backgroundColor: Colors.grey80 } }
-        onDismiss={ view.saveWallet }
-        visible={ view.createWallet.proceed.display }
-        bottom
-      >
-        <View marginH-30 marginV-10>
-          <View row marginV-10 center>
-            <View flex>
-              <Text left h6 bold>{ "Ваша сид фраза" }</Text>
-            </View>
-            <View right>
-              <Button onPress={ view.saveWallet } link
-                      label="Сохранить" />
-            </View>
-          </View>
-          <View center paddingV-10>
-            <Text>{ "Кошелек успешно создан" }</Text>
-            <Text>{ "Сохраните сид фразу в надежном месте, с помощью нее вы сможете восстановить Ваш кошелек" }</Text>
-          </View>
-          <View center row paddingV-10>
-            {
-              view.createWallet.proceed.wallet.mnemonic.split(" ")
-                .slice(0, 3)
-                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
-            }
-          </View>
-          <View center row paddingV-10>
-            {
-              view.createWallet.proceed.wallet.mnemonic.split(" ")
-                .slice(4, 7)
-                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
-            }
-          </View>
-          <View center row paddingV-10 paddingB-30>
-            {
-              view.createWallet.proceed.wallet.mnemonic.split(" ")
-                .slice(8, 11)
-                .map((l, i) => <Chip marginH-5 key={ l + i } label={ l } />)
-            }
-          </View>
-        </View>
-      </Dialog>
+      </Screen> }
+      <CreateWalletDialog />
+      <SaveWalletDialog />
+      <RemoveWalletDialog />
     </View>
   )
 })
