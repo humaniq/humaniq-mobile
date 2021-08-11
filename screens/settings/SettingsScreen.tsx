@@ -19,27 +19,27 @@ const Settings = observer(function() {
   
   const keyExtractor = item => item.id
   
-  const renderRow = (row, id) => {
+  const renderRow = ({ item }) => {
     return (
       <Animatable.View animation={ "fadeIn" }>
         <TouchableOpacity
           accessible={ true }
           activeOpacity={ 0.5 }
-          onPress={ row.onPress }
+          onPress={ item.onPress }
         >
           <ListItem
             height={ 50 }
           >
             <ListItem.Part left paddingL-20>
-              <Icon size={ 20 } name={ row.icon } />
+              <Icon size={ 20 } name={ item.icon } />
             </ListItem.Part>
             <ListItem.Part middle column paddingL-20>
               <ListItem.Part>
-                <Text dark10 text70 style={ { flex: 1, marginRight: 10 } } numberOfLines={ 1 }>{ row.name }</Text>
+                <Text dark10 text70 style={ { flex: 1, marginRight: 10 } } numberOfLines={ 1 }>{ item.name }</Text>
               </ListItem.Part>
             </ListItem.Part>
             <ListItem.Part paddingH-20>
-              { row.currentValue && <Text dark10>{ row.currentValue }</Text> }
+              { item.currentValue && <Text dark10>{ item.currentValue }</Text> }
             </ListItem.Part>
           </ListItem>
         </TouchableOpacity>
@@ -54,7 +54,7 @@ const Settings = observer(function() {
         <Text h5 bold marginV-20 center grey20>Настройки</Text>
         <FlatList
           data={ view.settingsMenu }
-          renderItem={ ({ item, index }) => renderRow(item, index) }
+          renderItem={ renderRow }
           keyExtractor={ keyExtractor }
         />
       </Screen> }

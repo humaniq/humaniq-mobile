@@ -30,8 +30,11 @@ import { RootStore } from "./services/DataContext/RootStore";
 import { registerRootStore } from "mobx-keystone";
 import { AppViewModel } from "./AppViewModel";
 import { LoaderScreen } from "react-native-ui-lib";
+import { LogBox } from "react-native";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 enableScreens();
 
