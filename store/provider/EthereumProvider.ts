@@ -1,7 +1,7 @@
 import { _await, createContext, getSnapshot, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone";
 import { ETH_NETWORKS, ETHEREUM_NETWORKS, PROVIDER_TYPE } from "../../config/network";
 import { computed, reaction } from "mobx";
-import * as storage from "../../utils/storage";
+import * as storage from "../../utils/localStorage";
 import { ethers } from "ethers";
 import uuid from "react-native-uuid";
 
@@ -30,6 +30,7 @@ export class EthereumProvider extends Model({
   @modelFlow
   * init() {
     try {
+      console.log('init-provider')
       this.pending = true;
       switch (this.currentProviderType) {
         case PROVIDER_TYPE.infura:
@@ -43,10 +44,10 @@ export class EthereumProvider extends Model({
           break;
       }
       if (!this.initialized) {
-        reaction(() => getSnapshot(this.currentNetworkName), (value) => {
+        reaction(() => getSnapshot(this.currentNetworkName), () => {
           this.init();
         });
-        reaction(() => getSnapshot(this.currentProviderType), (value) => {
+        reaction(() => getSnapshot(this.currentProviderType), () => {
           this.init();
         });
       }
@@ -56,11 +57,4 @@ export class EthereumProvider extends Model({
       console.log("catch", e);
     }
   }
-}
-
-@model("ProviderStore")
-export class ProviderStore extends Model({
-  initialized: p(t.boolean, false),
-  eth: p(t.model<EthereumProvider>(EthereumProvider), () => new EthereumProvider({}))
-}) {
 }

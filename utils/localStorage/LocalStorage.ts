@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 /**
- * Loads a string from storage.
+ * Loads a string from localStorage.
  *
  * @param key The key to fetch.
  */
@@ -15,7 +15,7 @@ export async function loadString(key: string): Promise<string | null> {
 }
 
 /**
- * Saves a string to storage.
+ * Saves a string to localStorage.
  *
  * @param key The key to fetch.
  * @param value The value to store.
@@ -30,7 +30,7 @@ export async function saveString(key: string, value: string): Promise<boolean> {
 }
 
 /**
- * Loads something from storage and runs it thru JSON.parse.
+ * Loads something from localStorage and runs it thru JSON.parse.
  *
  * @param key The key to fetch.
  */
@@ -44,7 +44,7 @@ export async function load(key: string): Promise<any | null> {
 }
 
 /**
- * Saves an object to storage.
+ * Saves an object to localStorage.
  *
  * @param key The key to fetch.
  * @param value The value to store.
@@ -59,7 +59,7 @@ export async function save(key: string, value: any): Promise<boolean> {
 }
 
 /**
- * Removes something from storage.
+ * Removes something from localStorage.
  *
  * @param key The key to kill.
  */

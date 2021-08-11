@@ -11,7 +11,7 @@ import Ionicons from "react-native-vector-icons/FontAwesome5"
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
-import { WalletEtherScreen } from "../screens/wallet/wallet-ether/WalletEtherScreen"
+import { WalletEtherScreen } from "../screens/wallet/walletEther/WalletEtherScreen"
 
 const Stack = createStackNavigator()
 

@@ -4,8 +4,8 @@ import { NativeModules } from "react-native";
 import "@ethersproject/shims";
 import { ethers } from "ethers";
 import { entropyToMnemonic } from "ethers/lib/utils";
-import { RootStore } from "../../services/DataContext/RootStore";
-import { Wallet } from "../../services/DataContext/WalletStore";
+import { RootStore } from "../../store/RootStore";
+import { Wallet } from "../../store/wallet/Wallet";
 
 export class WalletScreenModel {
   initialized = false;

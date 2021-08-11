@@ -11,7 +11,7 @@ import { CreateWalletDialog } from "./dialogs/CreateWalletDialog";
 import { SaveWalletDialog } from "./dialogs/SaveWalletDialog";
 import { RemoveWalletDialog } from "./dialogs/RemoveWalletDialog";
 import { useNavigation } from "@react-navigation/native";
-import { RootStore } from "../../services/DataContext/RootStore";
+import { RootStore } from "../../store/RootStore";
 
 const Wallet = observer(function() {
   const view = useInstance(WalletScreenModel);
