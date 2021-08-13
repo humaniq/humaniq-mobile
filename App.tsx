@@ -14,7 +14,7 @@ import "@ethersproject/shims";
 import { provider, toFactory, useInstance } from "react-ioc";
 import { observer } from "mobx-react-lite";
 import { NavigationContainerRef } from "@react-navigation/native";
-import { LoaderScreen } from "react-native-ui-lib";
+import { Colors, LoaderScreen } from "react-native-ui-lib";
 import * as storage from "./utils/localStorage";
 import {
   canExit,
@@ -32,6 +32,7 @@ import { registerRootStore } from "mobx-keystone";
 import { LogBox } from "react-native";
 import { APP_STATE } from "./store/app/AppStore";
 import { AuthNavigator } from "./navigators/auth-navigator";
+import { Locker } from "./components/locker/Locker";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
 
@@ -69,14 +70,26 @@ const AppScreen = observer(() => {
   }, []);
   
   return (
-    <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
-      { store.appStore.initialized && store.appStore.appState === APP_STATE.APP && <RootNavigator
-        ref={ navigationRef }
-        initialState={ initialNavigationState }
-        onStateChange={ onNavigationStateChange }
-      /> }
+    <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
       {
-        store.appStore.initialized && store.appStore.appState === APP_STATE.AUTH && <AuthNavigator />
+        store.appStore.initialized &&
+        store.appStore.appState === APP_STATE.APP &&
+        !store.appStore.isLocked &&
+        <RootNavigator
+          ref={ navigationRef }
+          initialState={ initialNavigationState }
+          onStateChange={ onNavigationStateChange }
+        /> }
+      {
+        store.appStore.initialized &&
+        store.appStore.appState === APP_STATE.AUTH &&
+        !store.appStore.isLocked &&
+        <AuthNavigator />
+      }
+      {
+        store.appStore.initialized &&
+        store.appStore.isLocked &&
+        <Locker />
       }
       { !store.appStore.initialized && <LoaderScreen /> }
     </SafeAreaProvider>

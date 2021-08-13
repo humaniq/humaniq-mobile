@@ -6,14 +6,18 @@ import { provider, useInstance } from "react-ioc";
 import { REGISTER_STATE, RegisterViewModel } from "./RegisterViewModel";
 import { t } from "../../../i18n";
 import * as Animatable from "react-native-animatable";
+import { RootStore } from "../../../store/RootStore";
 
 const Register = observer(function() {
   const view = useInstance(RegisterViewModel);
+  const store = useInstance(RootStore);
+  
   useEffect(() => {
-    view.init();
+    view.init(store);
   }, []);
+  
   return (
-    <View testID={ "RegisterScreen" } flex style={ { height: "100%" } }>
+    <View testID={ "RegisterScreen" } flex style={ { height: "100%" } } backgroundColor={ Colors.primary }>
       { view.initialized && <Screen
         statusBar={ "light-content" }
         preset={ "fixed" }
@@ -26,7 +30,7 @@ const Register = observer(function() {
               <Image width={ 200 } height={ 40 } source={ require("../../../assets/images/logo-brand-white.png") } />
             </View>
             <View bottom flex paddingB-20>
-              <Button bg-violet10 marginB-20 onPress={ () => view.state = REGISTER_STATE.REGISTER }
+              <Button bg-violet10 marginB-20 onPress={ () => view.goRegister(store) }
                       label={ t("common.register") } />
               <TouchableOpacity>
                 <View row center>

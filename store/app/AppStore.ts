@@ -2,12 +2,10 @@ import { _await, createContext, Model, model, modelAction, modelFlow, tProp as p
 import { providerStore } from "../provider/ProviderStore";
 import { walletStore } from "../wallet/WalletStore";
 import { localStorage } from "../../utils/localStorage";
-import { computed } from "mobx";
 
 export enum APP_STATE {
   AUTH = "AUTH",
   APP = "APP",
-  LOCKED = "LOCKED"
 }
 
 export enum LOCKER_MODE {
@@ -22,9 +20,11 @@ export const appStore = createContext<AppStore>();
 export class AppStore extends Model({
   initialized: p(t.boolean, false),
   appState: p(t.enum(APP_STATE), APP_STATE.AUTH),
-  lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.CHECK),
-  lockerStatus: p(t.boolean, false)
-  
+  isLocked: p(t.boolean, false),
+  lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.SET),
+  lockerStatus: p(t.boolean, false),
+  isLockerDirty: p(t.boolean, false),
+  savedPin: p(t.string)
 }) {
   @modelFlow
   * init() {
@@ -39,9 +39,9 @@ export class AppStore extends Model({
     this.initialized = true;
   }
   
-  @computed
-  get isLockerActive() {
-    return this.appState === APP_STATE.LOCKED;
+  @modelAction
+  setAppState(state: APP_STATE) {
+    this.appState = state;
   }
   
   @modelAction
@@ -52,5 +52,10 @@ export class AppStore extends Model({
   @modelAction
   closeLocker(lastStatus: APP_STATE) {
     this.appState = lastStatus;
+  }
+  
+  @modelAction
+  setPin(pin: string) {
+    this.savedPin = pin;
   }
 }

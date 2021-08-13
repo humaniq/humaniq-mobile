@@ -15,6 +15,11 @@
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",
-    "pinFormErrorIncorrectConfirmationMessage": "Пароли не совпадают"
+    "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
+    "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
+    "pinFormLoginAction": "Введите пин код",
+    "pinFormRegisterAction": "Придумайте пин код",
+    "pinFormConfirmationAction": "Подтвердите пин код",
+    "correctPin": "Пин код подтвержден"
   }
 }

@@ -9,7 +9,8 @@ import { t } from "../../i18n";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { RootStore } from "../../store/RootStore";
 import { reaction } from "mobx";
-import { localStorage } from "../../utils/localStorage";
+import { LOCKER_MODE } from "../../store/app/AppStore";
+import * as Animatable from "react-native-animatable";
 
 // export interface LockerProps {
 //   mode: "set|check";
@@ -22,12 +23,11 @@ const L = observer(function(props) {
   const store = useInstance(RootStore);
   
   useEffect(() => {
-    console.log(store);
     view.init(store);
     
     reaction(() => store.appStore.isLockerActive, async () => {
       view.pin = "";
-      view.settledPin = await localStorage.load("pincode");
+      view.settledPin = store.appStore.savedPin;
       view.confirmationPin = "";
       view.step = 0;
       view.message = "";
@@ -36,19 +36,54 @@ const L = observer(function(props) {
   }, []);
   
   return <Screen backgroundColor={ Colors.primary } statusBarBg={ Colors.primary }>
-    { view.initialized && <View flex>
-      <View flex-3 bg-red20>
-        <Text>
-          vvv
-        </Text>
+    <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
+    { view.initialized &&
+    <View flex>
+      { !view.message &&
+      <View flex-3 center>
+        { view.mode === LOCKER_MODE.CHECK &&
+        <Text white>{ t("lockerScreen.pinFormLoginAction") }</Text> }
+        { view.mode === LOCKER_MODE.SET && view.step === 0 &&
+        <Text white>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
+        { view.mode === LOCKER_MODE.SET && view.step === 1 &&
+        <Text white>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
       </View>
-      <View center flex-1 bg-red20>
-        <Text>
-          vvv
-        </Text>
+      }
+      { !!view.message &&
+      <View flex-3 center>
+        <Text white>{ view.message }</Text>
+      </View>
+      }
+      <View center flex-1>
+        <View row flex>
+          <View marginH-5 style={ {
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            backgroundColor: view.pin.length > 0 ? "white" : Colors.violet10
+          } } />
+          <View marginH-5 style={ {
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            backgroundColor: view.pin.length > 1 ? "white" : Colors.violet10
+          } } />
+          <View marginH-5 style={ {
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            backgroundColor: view.pin.length > 2 ? "white" : Colors.violet10
+          } } />
+          <View marginH-5 style={ {
+            width: 20,
+            height: 20,
+            borderRadius: 10,
+            backgroundColor: view.pin.length > 3 ? "white" : Colors.violet10
+          } } />
+        </View>
       </View>
       <View flex-1 />
-      <View flex-3>
+      <View flex-3 marginB-20>
         {
           [ 1, 2, 3 ].map(col =>
             <View flex row center key={ `col${ col }` }>
@@ -71,7 +106,7 @@ const L = observer(function(props) {
         }
         <View flex row center>
           <View margin-5 center row>
-            <Ripple rippleColor={ "rgb(0, 0, 102)" }>
+            <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.exit }>
               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                 <Text bg-primary text80BL white>
                   { t("common.cancel") }
@@ -101,8 +136,10 @@ const L = observer(function(props) {
       </View>
     </View> }
     { !view.initialized && <LoaderScreen /> }
+    </Animatable.View>
   </Screen>;
 });
 
 export const Locker = provider()(L);
 Locker.register(LockerViewModel);
+;

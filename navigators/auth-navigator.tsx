@@ -3,7 +3,6 @@ import { Colors } from "react-native-ui-lib";
 import React from "react";
 import { RegisterScreen } from "../screens/auth/register/RegisterScreen";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
-import { Locker } from "../components/locker/Locker";
 
 export type AuthStachParamsList = {
   register: undefined
@@ -23,7 +22,7 @@ const AuthStack = () => {
     >
       <Stack.Screen
         name="register"
-        component={ Locker }
+        component={ RegisterScreen }
         options={ {
           headerShown: false
         } }
