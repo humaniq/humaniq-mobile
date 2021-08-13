@@ -59,3 +59,18 @@ node_modules/react-native/react.gradle path
     }
 
 ```
+
+- crypto - https://www.npmjs.com/package/react-native-crypto
+
+```
+    npm i --save react-native-crypto
+    # install peer deps 
+    npm i --save react-native-randombytes
+    react-native link react-native-randombytes
+    # install latest rn-nodeify 
+    npm i --save-dev tradle/rn-nodeify
+    # install node core shims and recursively hack package.json files 
+    # in ./node_modules to add/update the "browser"/"react-native" field with relevant mappings 
+    ./node_modules/.bin/rn-nodeify --hack --install
+
+```

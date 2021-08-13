@@ -14,7 +14,7 @@ import * as storage from "../../utils/localStorage";
 import uuid from "react-native-uuid";
 import { ethereumProvider } from "../provider/EthereumProvider";
 import { Wallet } from "./Wallet";
-
+import Keyring from "eth-simple-keyring";
 
 export const walletStore = createContext<WalletStore>();
 
@@ -24,6 +24,8 @@ export class WalletStore extends Model({
   initialized: p(t.string, ""),
   wallets: p(t.array(t.model<Wallet>(Wallet)), () => [])
 }) {
+  
+  keyring = new Keyring();
   
   
   @modelFlow
@@ -41,20 +43,7 @@ export class WalletStore extends Model({
           wallet.init();
           return wallet;
         }) || [];
-      // privateKey = "0xa38a0419df94711ac7314004ececc9b643fa0f9f080a5c255fd2f2c4699d7d53";
-      // address = "0x6b40c2686c83798EF433AE59448EB23cF9eDa436";
-      // const testWalelt = new Wallet({
-      //   address: "0x6b40c2686c83798EF433AE59448EB23cF9eDa436",
-      //   privateKey: "0xa38a0419df94711ac7314004ececc9b643fa0f9f080a5c255fd2f2c4699d7d53",
-      //   balance: "0",
-      //   mnemonic: "fdf fdf df",
-      //   locale: "ru",
-      //   path: "fdf",
-      //   publicKey: "sds"
-      // });
-      //
-      // yield* testWalelt.init();
-      // this.wallets.push(testWalelt);
+     
       walletStore.setDefault(this);
       if (!this.initialized) {
         reaction(() => getSnapshot(ethereumProvider.getDefault().initialized), (value, a) => {

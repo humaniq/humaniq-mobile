@@ -1,10 +1,10 @@
-import { Model, model, setGlobalConfig, tProp as p, types as t } from "mobx-keystone";
+import { Model, model, ModelAutoTypeCheckingMode, setGlobalConfig, tProp as p, types as t } from "mobx-keystone";
 import { WalletStore } from "./wallet/WalletStore";
 import { ProviderStore } from "./provider/ProviderStore";
 import { AppStore } from "./app/AppStore";
 
 setGlobalConfig({
-  // modelAutoTypeChecking: ModelAutoTypeCheckingMode.AlwaysOff,
+  modelAutoTypeChecking: ModelAutoTypeCheckingMode.AlwaysOff
 })
 
 @model("RootStore")

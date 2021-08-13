@@ -28,15 +28,15 @@ const Stack = createStackNavigator()
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  welcome: undefined
+  wallet: undefined
   demo: undefined
-  demoList: undefined
+  settings: undefined
 }
 
 
 const Tab = AnimatedTabBarNavigator()
 
-export function MainNavigator() {
+export function MainNavigator<PrimaryParamList>() {
   return (
     <Tab.Navigator
       tabBarOptions={ {

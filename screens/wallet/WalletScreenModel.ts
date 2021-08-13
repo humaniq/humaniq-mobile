@@ -61,33 +61,33 @@ export class WalletScreenModel {
   }
   
   
-  createWalletProceed = () => {
+  createWalletProceed = async () => {
     this.walletDialogs.pending = true;
-    
-    runInAction(() => {
-      try {
-        console.log("CREATE-WALLET");
-        const { RNRandomBytes } = NativeModules;
-        RNRandomBytes.randomBytes(16, (err, bytes) => {
-          const entropy: Uint8Array = Uint8Array.from(atob(bytes), c => c.charCodeAt(0)); // randomBytes(16)
-          console.log("step-1");
-          const mnemonic = entropyToMnemonic(entropy, "en");
-          console.log("step-2");
-          const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-          console.log("step-3");
-          this.walletDialogs.proceed.wallet.mnemonic = wallet.mnemonic.phrase;
-          this.walletDialogs.proceed.wallet.path = wallet.mnemonic.path;
-          this.walletDialogs.proceed.wallet.locale = wallet.mnemonic.locale;
-          this.walletDialogs.proceed.wallet.address = wallet.address;
-          this.walletDialogs.proceed.wallet.privateKey = wallet.privateKey;
-          this.walletDialogs.proceed.wallet.publicKey = wallet.publicKey;
-          this.walletDialogs.init.display = false;
-          this.walletDialogs.proceed.display = true;
-        });
-      } catch (e) {
-        console.log("ERROR", e);
-      }
-    });
+    try {
+      console.log("CREATE-WALLET");
+      const { RNRandomBytes } = NativeModules;
+      RNRandomBytes.randomBytes(16, (err, bytes) => {
+        console.log(bytes)
+        const entropy: Uint8Array = Uint8Array.from(atob(bytes), c => c.charCodeAt(0)); // randomBytes(16)
+        console.log("step-1");
+        const mnemonic = entropyToMnemonic(entropy, "en");
+        console.log("step-2", mnemonic);
+        const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+        const wallet2 = new ethers.Wallet(entropy)
+        console.log(wallet2.privateKey, wallet2.address, wallet2.publicKey)
+        console.log("step-3");
+        this.walletDialogs.proceed.wallet.mnemonic = mnemonic // wallet.mnemonic.phrase;
+        this.walletDialogs.proceed.wallet.path = wallet.mnemonic.path;
+        this.walletDialogs.proceed.wallet.locale = wallet.mnemonic.locale;
+        this.walletDialogs.proceed.wallet.address = wallet.address;
+        this.walletDialogs.proceed.wallet.privateKey = wallet.privateKey;
+        this.walletDialogs.proceed.wallet.publicKey = wallet.publicKey;
+        this.walletDialogs.init.display = false;
+        this.walletDialogs.proceed.display = true;
+      });
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   };
   
   async saveWallet() {

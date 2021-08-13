@@ -1,0 +1,20 @@
+{
+  "common": {
+    "ok": "OK!",
+    "cancel": "Выйти",
+    "back": "Назад",
+    "register": "Регистрация"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email address."
+  },
+  "registerScreen": {
+    "registration": "Регистрация",
+    "repareFromMnemonicOne": "Восстановить",
+    "repareFromMnemonicTwo": "по секретной фразе"
+  },
+  "lockerScreen": {
+    "incorrectPin": "Неправильный пин код",
+    "pinFormErrorIncorrectConfirmationMessage": "Пароли не совпадают"
+  }
+}
