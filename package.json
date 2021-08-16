@@ -15,7 +15,8 @@
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "release-android": "cd ./android && ./gradlew assembleRelease",
     "clean": "react-native-clean-project",
-    "clean-all": "npx react-native clean-project-auto"
+    "clean-all": "npx react-native clean-project-auto",
+    "postinstall": "./node_modules/.bin/rn-nodeify --hack --install && npx jetify"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.4.0",
@@ -70,7 +71,6 @@
     "react-native-reanimated": "1.13.3",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
-    "react-native-secure-storage": "^0.1.2",
     "react-native-tcp": "^3.3.2",
     "react-native-udp": "^2.7.0",
     "react-native-ui-lib": "^5.28.3",
