@@ -14,7 +14,8 @@ import "@ethersproject/shims";
 import { provider, toFactory, useInstance } from "react-ioc";
 import { observer } from "mobx-react-lite";
 import { NavigationContainerRef } from "@react-navigation/native";
-import * as storage from "./utils/storage";
+import { Colors, LoaderScreen } from "react-native-ui-lib";
+import * as storage from "./utils/localStorage";
 import {
   canExit,
   RootNavigator,
@@ -26,15 +27,16 @@ import { enableScreens } from "react-native-screens";
 import { configure } from "mobx";
 import "./theme/color";
 import "./theme/typography";
-import { RootStore } from "./services/DataContext/RootStore";
+import { RootStore } from "./store/RootStore";
 import { registerRootStore } from "mobx-keystone";
-import { AppViewModel } from "./AppViewModel";
-import { LoaderScreen } from "react-native-ui-lib";
 import { LogBox } from "react-native";
+import { APP_STATE } from "./store/app/AppStore";
+import { AuthNavigator } from "./navigators/auth-navigator";
+import { Locker } from "./components/locker/Locker";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
 
-LogBox.ignoreLogs(['Setting a timer']);
+LogBox.ignoreLogs([ "Setting a timer" ]);
 
 enableScreens();
 
@@ -52,7 +54,6 @@ function createRootStore() {
 const AppScreen = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>(null);
   const store = useInstance(RootStore);
-  const view = useInstance(AppViewModel);
   
   setRootNavigation(navigationRef);
   useBackButtonHandler(navigationRef, canExit);
@@ -64,27 +65,41 @@ const AppScreen = observer(() => {
   
   useEffect(() => {
     ;(async () => {
-      await store.providerStore.eth.init();
-      await store.walletStore.init();
-      view.initialized = true;
+      await store.appStore.init();
+      await store.providerStore.init()
+      await store.walletStore.init()
     })();
   }, []);
   
   return (
-    <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
-      { view.initialized && <RootNavigator
-        ref={ navigationRef }
-        initialState={ initialNavigationState }
-        onStateChange={ onNavigationStateChange }
-      /> }
-      { !view.initialized && <LoaderScreen /> }
+    <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
+      {
+        store.appStore.initialized &&
+        store.appStore.appState === APP_STATE.APP &&
+        !store.appStore.isLocked &&
+        <RootNavigator
+          ref={ navigationRef }
+          initialState={ initialNavigationState }
+          onStateChange={ onNavigationStateChange }
+        /> }
+      {
+        store.appStore.initialized &&
+        store.appStore.appState === APP_STATE.AUTH &&
+        !store.appStore.isLocked &&
+        <AuthNavigator />
+      }
+      {
+        store.appStore.initialized &&
+        store.appStore.isLocked &&
+        <Locker />
+      }
+      { !store.appStore.initialized && <LoaderScreen /> }
     </SafeAreaProvider>
   );
 });
 
 const App = provider()(AppScreen);
 App.register(
-  AppViewModel,
   [ RootStore, toFactory(createRootStore) ]
 );
 export default App;

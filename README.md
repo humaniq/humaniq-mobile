@@ -31,9 +31,6 @@
 ```
 
 ### Troubleshooting
-- rm -rf ./android/app/src/main/res/drawable-*cd
-- rm -rf ./android/app/src/main/res/raw
-- cd ./android && ./gradlew clean
 
 https://stackoverflow.com/questions/53239705/react-native-error-duplicate-resources-android
 
@@ -43,19 +40,37 @@ node_modules/react-native/react.gradle path
 
 ```
     doLast {
-        def moveFunc = { resSuffix ->
-            File originalDir = file("$buildDir/generated/res/react/release/drawable-${resSuffix}");
+        def moveFolderFunc = { folderName ->
+            File originalDir = file("$buildDir/generated/res/react/release/${folderName}");
             if (originalDir.exists()) {
-                File destDir = file("$buildDir/../src/main/res/drawable-${resSuffix}");
+                File destDir = file("$buildDir/../src/main/res/${folderName}");
                 ant.move(file: originalDir, tofile: destDir);
             }
         }
-        moveFunc.curry("ldpi").call()
-        moveFunc.curry("mdpi").call()
-        moveFunc.curry("hdpi").call()
-        moveFunc.curry("xhdpi").call()
-        moveFunc.curry("xxhdpi").call()
-        moveFunc.curry("xxxhdpi").call()
+
+        moveFolderFunc.curry("drawable-ldpi").call()
+        moveFolderFunc.curry("drawable-mdpi").call()
+        moveFolderFunc.curry("drawable-hdpi").call()
+        moveFolderFunc.curry("drawable-xhdpi").call()
+        moveFolderFunc.curry("drawable-xxhdpi").call()
+        moveFolderFunc.curry("drawable-mdpi-v4").call()
+        moveFolderFunc.curry("drawable-xxxhdpi").call()
+        moveFolderFunc.curry("raw").call()
     }
+
+```
+
+- crypto - https://www.npmjs.com/package/react-native-crypto
+
+```
+    npm i --save react-native-crypto
+    # install peer deps 
+    npm i --save react-native-randombytes
+    react-native link react-native-randombytes
+    # install latest rn-nodeify 
+    npm i --save-dev tradle/rn-nodeify
+    # install node core shims and recursively hack package.json files 
+    # in ./node_modules to add/update the "browser"/"react-native" field with relevant mappings 
+    ./node_modules/.bin/rn-nodeify --hack --install
 
 ```

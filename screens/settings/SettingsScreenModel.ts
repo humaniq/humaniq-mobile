@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx"
 import { ETH_NETWORKS } from "../../config/network"
-import * as storage from "../../utils/storage"
-import { ethereumProvider } from "../../services/DataContext/ProviderStore";
+import * as storage from "../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone";
+import { ethereumProvider } from "../../store/provider/EthereumProvider";
 
 export class SettingsScreenModel {
   

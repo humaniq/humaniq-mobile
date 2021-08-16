@@ -106,7 +106,7 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
     // Save the current route name for later comparision
     routeNameRef.current = currentRouteName
 
-    // Persist state to storage
+    // Persist state to localStorage
     storage.save(persistenceKey, state)
   }
 

@@ -14,6 +14,10 @@ target 'HumaniqMobile' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+  pod 'RNSecureStorage', :path => '../node_modules/react-native-secure-storage'
+
+  pod 'RNThread', :path => '../node_modules/react-native-threads'
+
   target 'HumaniqMobileTests' do
     inherit! :complete
     # Pods for testing
