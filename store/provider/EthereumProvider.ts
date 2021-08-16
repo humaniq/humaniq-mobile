@@ -30,7 +30,7 @@ export class EthereumProvider extends Model({
   @modelFlow
   * init() {
     try {
-      console.log('init-provider')
+      console.log("init-provider");
       this.pending = true;
       switch (this.currentProviderType) {
         case PROVIDER_TYPE.infura:
@@ -39,7 +39,6 @@ export class EthereumProvider extends Model({
           this.currentProvider = ethers.getDefaultProvider(this.currentNetworkName, {
             infura: this.currentNetwork.infuraID
           });
-          global.ethers = this.currentProvider;
           ethereumProvider.setDefault(this);
           break;
       }

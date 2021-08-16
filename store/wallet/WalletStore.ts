@@ -15,6 +15,11 @@ import uuid from "react-native-uuid";
 import { ethereumProvider } from "../provider/EthereumProvider";
 import { Wallet } from "./Wallet";
 import Keyring from "eth-simple-keyring";
+import "react-native-get-random-values";
+import "@ethersproject/shims";
+import HDKeyring from "eth-hd-keyring";
+import { normalize } from "eth-sig-util";
+import { appStore } from "../app/AppStore";
 
 export const walletStore = createContext<WalletStore>();
 
@@ -30,20 +35,23 @@ export class WalletStore extends Model({
   
   @modelFlow
   * init(forse = false) {
+   
     if (!this.initialized || forse) {
-      const storedWallet = yield* _await(storage.load("wallets"));
-      this.wallets = this.wallets.length > 0 ?
-        this.wallets.map(w => {
-          w.init();
-          return w;
-        }) :
-        Object.values(storedWallet || {}).map(w => {
-          // @ts-ignore
-          const wallet = fromSnapshot<Wallet>(w);// new Wallet(w);
-          wallet.init();
-          return wallet;
-        }) || [];
-     
+      console.log("APP-STORE", appStore.getDefault())
+      // const storedWallet = yield* _await(storage.load("wallets"));
+      
+      // this.wallets = this.wallets.length > 0 ?
+      //   this.wallets.map(w => {
+      //     w.init();
+      //     return w;
+      //   }) :
+      //   Object.values(storedWallet || {}).map(w => {
+      //     // @ts-ignore
+      //     const wallet = fromSnapshot<Wallet>(w);// new Wallet(w);
+      //     wallet.init();
+      //     return wallet;
+      //   }) || [];
+      
       walletStore.setDefault(this);
       if (!this.initialized) {
         reaction(() => getSnapshot(ethereumProvider.getDefault().initialized), (value, a) => {
@@ -74,5 +82,19 @@ export class WalletStore extends Model({
     const wallets = Object.values(this.wallets);
     const snapshots = wallets.map(v => getSnapshot(v));
     yield* _await(storage.save("wallets", snapshots));
+  }
+  
+  @modelFlow
+  * createWallet() {
+    const hdKeyRing = new HDKeyring();
+    yield* _await(hdKeyRing.addAccounts());
+    const mnemonic = (yield* _await(hdKeyRing.serialize())) as {};
+    const wallets = hdKeyRing.wallets[0];
+    
+    return {
+      ...mnemonic,
+      privateKey: normalize(wallets.privateKey.toString("hex")),
+      publicKey: normalize(wallets.publicKey.toString("hex"))
+    };
   }
 }

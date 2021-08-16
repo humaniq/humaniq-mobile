@@ -3,7 +3,8 @@
     "ok": "OK!",
     "cancel": "Выйти",
     "back": "Назад",
-    "register": "Регистрация"
+    "register": "Регистрация",
+    "login": "Вход"
   },
   "errors": {
     "invalidEmail": "Invalid email address."
@@ -11,7 +12,8 @@
   "registerScreen": {
     "registration": "Регистрация",
     "repareFromMnemonicOne": "Восстановить",
-    "repareFromMnemonicTwo": "по секретной фразе"
+    "repareFromMnemonicTwo": "по секретной фразе",
+    "walletCreating": "Кошелек создается"
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",

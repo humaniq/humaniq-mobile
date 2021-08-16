@@ -76,7 +76,7 @@ export class WalletScreenModel {
         const wallet2 = new ethers.Wallet(entropy)
         console.log(wallet2.privateKey, wallet2.address, wallet2.publicKey)
         console.log("step-3");
-        this.walletDialogs.proceed.wallet.mnemonic = mnemonic // wallet.mnemonic.phrase;
+        this.walletDialogs.proceed.wallet.mnemonic = wallet.mnemonic.phrase // wallet.mnemonic.phrase;
         this.walletDialogs.proceed.wallet.path = wallet.mnemonic.path;
         this.walletDialogs.proceed.wallet.locale = wallet.mnemonic.locale;
         this.walletDialogs.proceed.wallet.address = wallet.address;

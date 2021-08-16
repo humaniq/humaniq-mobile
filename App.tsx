@@ -66,6 +66,8 @@ const AppScreen = observer(() => {
   useEffect(() => {
     ;(async () => {
       await store.appStore.init();
+      await store.providerStore.init()
+      await store.walletStore.init()
     })();
   }, []);
   

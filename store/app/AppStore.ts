@@ -1,7 +1,5 @@
-import { _await, createContext, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone";
-import { providerStore } from "../provider/ProviderStore";
-import { walletStore } from "../wallet/WalletStore";
-import { localStorage } from "../../utils/localStorage";
+import { createContext, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone";
+import { AppState } from "react-native";
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -23,20 +21,20 @@ export class AppStore extends Model({
   isLocked: p(t.boolean, false),
   lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.SET),
   lockerStatus: p(t.boolean, false),
+  lockerPreviousScreen: p(t.string, ''),
   isLockerDirty: p(t.boolean, false),
   savedPin: p(t.string)
 }) {
   @modelFlow
   * init() {
-    const isFirstAppStart = !(yield* _await(localStorage.load("humaniq-app")));
-    console.log(isFirstAppStart);
-    if (isFirstAppStart) {
-    
-    } else {
-      yield providerStore.getDefault().init();
-      yield walletStore.getDefault().init();
-    }
     this.initialized = true;
+    appStore.setDefault(this)
+    AppState.addEventListener("change", (nextState) => {
+      console.log('state', nextState)
+      if(nextState === 'background') {
+        this.setAppState(APP_STATE.AUTH)
+      }
+    })
   }
   
   @modelAction

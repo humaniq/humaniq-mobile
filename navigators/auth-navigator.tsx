@@ -28,7 +28,7 @@ const AuthStack = () => {
         } }
       />
       <Stack.Screen
-        name="restore"
+        name="login"
         component={ RegisterScreen }
         options={ {
           headerShown: false

@@ -3231,6 +3231,11 @@ cross-spawn@^7.0.0, cross-spawn@^7.0.2:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+cryptr@^6.0.2:
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/cryptr/-/cryptr-6.0.2.tgz#3f9e97f825ffb93f425eb24068efbb6a652bf947"
+  integrity sha512-1TRHI4bmuLIB8WgkH9eeYXzhEg1T4tonO4vVaMBKKde8Dre51J68nAgTVXTwMYXAf7+mV2gBCkm/9wksjSb2sA==
+
 css-color-keywords@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/css-color-keywords/-/css-color-keywords-1.0.0.tgz#fea2616dc676b2962686b3af8dbdbe180b244e05"
@@ -7414,6 +7419,15 @@ react-native-animated-nav-tab-bar@^3.1.4:
     react-native-screens "^2.17.1"
     styled-components "^4.4.1"
 
+react-native-bip39@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-bip39/-/react-native-bip39-2.3.0.tgz#30c58d93a22b41f4937727fd456ab6b03f452671"
+  integrity sha1-MMWNk6IrQfSTdyf9RWq2sD9FJnE=
+  dependencies:
+    react-native-crypto "^2.0.1"
+    react-native-randombytes "^2.2.0"
+    unorm "^1.3.3"
+
 react-native-clean-project@^3.6.3:
   version "3.6.4"
   resolved "https://registry.yarnpkg.com/react-native-clean-project/-/react-native-clean-project-3.6.4.tgz#7589fffe82a184f1bcc0554d6a95c7bac4b1e9ef"
@@ -7437,7 +7451,22 @@ react-native-color@0.0.10:
     react-native-slider "^0.11.0"
     tinycolor2 "^1.4.1"
 
-react-native-crypto@^2.2.0:
+react-native-crypto@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-crypto/-/react-native-crypto-2.1.1.tgz#4b06271a0f6ec0b90389b5b567b738b57ca66a1e"
+  integrity sha512-JHwX0zobeYqCAwdSffRoivXeqlZR54WpCj8ICGcoNh7bvOh8khr63zvNk+fcqdRH3eI9Jhglygswijza0f3D4Q==
+  dependencies:
+    browserify-cipher "^1.0.0"
+    browserify-sign "^4.0.4"
+    create-ecdh "^4.0.0"
+    create-hash "^1.1.0"
+    create-hmac "^1.1.0"
+    diffie-hellman "^5.0.0"
+    inherits "^2.0.1"
+    pbkdf2 "3.0.8"
+    public-encrypt "^4.0.0"
+
+react-native-crypto@^2.0.1, react-native-crypto@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-native-crypto/-/react-native-crypto-2.2.0.tgz#c999ed7c96064f830e1f958687f53d0c44025770"
   integrity sha512-eZu9Y8pa8BN9FU2pIex7MLRAi+Cd1Y6bsxfiufKh7sfraAACJvjQTeW7/zcQAT93WMfM+D0OVk+bubvkrbrUkw==
@@ -7452,6 +7481,13 @@ react-native-crypto@^2.2.0:
     pbkdf2 "3.0.8"
     public-encrypt "^4.0.0"
     randomfill "^1.0.3"
+
+react-native-cryptr@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-cryptr/-/react-native-cryptr-2.0.0.tgz#0e393a56c8cefe95d486d48d6c3e4db103368ed9"
+  integrity sha1-Djk6VsjO/pXUhtSNbD5NsQM2jtk=
+  dependencies:
+    react-native-crypto "2.1.1"
 
 react-native-gesture-handler@^1.10.3:
   version "1.10.3"
@@ -7500,6 +7536,14 @@ react-native-os@^1.2.6:
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/react-native-os/-/react-native-os-1.2.6.tgz#1bb16d78ccad1143972183a04f443cf1af9fbefa"
   integrity sha512-OlT+xQAcvkcnf7imgXiu+myMkqDt4xw2bP5SlVo19hEn5XHBkPMLX7dk3sSGxxncH/ToMDsf1KLyrPabNVtadA==
+
+react-native-randombytes@^2.2.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-randombytes/-/react-native-randombytes-2.3.0.tgz#3ed6f8a4a803c453d787961047f6b2650d7c7335"
+  integrity sha1-Ptb4pKgDxFPXh5YQR/ayZQ18czU=
+  dependencies:
+    buffer "^4.9.1"
+    sjcl "^1.0.3"
 
 react-native-randombytes@^3.6.1:
   version "3.6.1"

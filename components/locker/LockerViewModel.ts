@@ -4,6 +4,9 @@ import { APP_STATE, LOCKER_MODE } from "../../store/app/AppStore";
 import { t } from "../../i18n";
 import { RootStore } from "../../store/RootStore";
 import { runUnprotected } from "mobx-keystone";
+import { localStorage } from "../../utils/localStorage";
+import Cryptr from "react-native-cryptr";
+import bip39 from 'react-native-bip39'
 
 export const PIN_LENGHT = 4;
 
@@ -17,6 +20,7 @@ export class LockerViewModel {
   step = 0;
   message: string;
   rootStore: RootStore;
+  encrypted
   
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -24,8 +28,9 @@ export class LockerViewModel {
   
   async init(rootStore: RootStore) {
     this.rootStore = rootStore;
-    this.settledPin = this.rootStore.appStore.savedPin;
+    this.encrypted = await localStorage.load("hm-wallet")
     this.initialized = true;
+    console.log(this.encrypted)
   }
   
   handleClick(digit) {
@@ -40,8 +45,18 @@ export class LockerViewModel {
   
   async validatePin() {
     if (this.mode === LOCKER_MODE.CHECK) {
-      this.rootStore.appStore.setLocker(this.pin === this.settledPin);
-      if (this.pin !== this.settledPin) {
+      const cryptr = new Cryptr(this.pin)
+      const result = cryptr.decrypt(this.encrypted);
+      let isCorrect = false
+      try {
+        const res = JSON.parse(result)[0]
+        isCorrect = bip39.validateMnemonic(res['mnemonic'])
+      } catch (e) {
+        isCorrect = false
+      }
+      this.rootStore.appStore.setLocker(isCorrect);
+      
+      if (!isCorrect) {
         this.message = t("lockerScreen.incorrectPin");
       } else {
         this.message = t("lockerScreen.correctPin");
