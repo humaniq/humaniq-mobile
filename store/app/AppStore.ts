@@ -1,5 +1,16 @@
-import { createContext, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone";
+import {
+  createContext,
+  Model,
+  model,
+  modelAction,
+  modelFlow,
+  runUnprotected,
+  tProp as p,
+  types as t
+} from "mobx-keystone";
 import { AppState } from "react-native";
+import { REGISTER_STATE } from "../../screens/auth/register/RegisterViewModel";
+import { walletStore } from "../wallet/WalletStore";
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -30,9 +41,16 @@ export class AppStore extends Model({
     this.initialized = true;
     appStore.setDefault(this)
     AppState.addEventListener("change", (nextState) => {
-      console.log('state', nextState)
       if(nextState === 'background') {
         this.setAppState(APP_STATE.AUTH)
+        if(walletStore.getDefault().storedWallets) {
+          runUnprotected(() => {
+            this.lockerPreviousScreen = REGISTER_STATE.LOGIN
+            this.isLocked = true
+            this.lockerStatus = false
+            this.lockerMode = LOCKER_MODE.CHECK
+          })
+        }
       }
     })
   }

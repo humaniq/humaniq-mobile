@@ -6,7 +6,7 @@ import { RootStore } from "../../store/RootStore";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import Cryptr from "react-native-cryptr";
-import bip39 from 'react-native-bip39'
+import bip39 from "react-native-bip39";
 
 export const PIN_LENGHT = 4;
 
@@ -20,7 +20,7 @@ export class LockerViewModel {
   step = 0;
   message: string;
   rootStore: RootStore;
-  encrypted
+  encrypted;
   
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
@@ -28,9 +28,8 @@ export class LockerViewModel {
   
   async init(rootStore: RootStore) {
     this.rootStore = rootStore;
-    this.encrypted = await localStorage.load("hm-wallet")
+    this.encrypted = await localStorage.load("hm-wallet");
     this.initialized = true;
-    console.log(this.encrypted)
   }
   
   handleClick(digit) {
@@ -45,14 +44,14 @@ export class LockerViewModel {
   
   async validatePin() {
     if (this.mode === LOCKER_MODE.CHECK) {
-      const cryptr = new Cryptr(this.pin)
+      const cryptr = new Cryptr(this.pin);
       const result = cryptr.decrypt(this.encrypted);
-      let isCorrect = false
+      let isCorrect = false;
       try {
-        const res = JSON.parse(result)[0]
-        isCorrect = bip39.validateMnemonic(res['mnemonic'])
+        const res = JSON.parse(result);
+        isCorrect = bip39.validateMnemonic(res["mnemonic"].mnemonic);
       } catch (e) {
-        isCorrect = false
+        isCorrect = false;
       }
       this.rootStore.appStore.setLocker(isCorrect);
       
@@ -60,7 +59,9 @@ export class LockerViewModel {
         this.message = t("lockerScreen.incorrectPin");
       } else {
         this.message = t("lockerScreen.correctPin");
-        this.exit()
+        this.rootStore.walletStore.storedWallets = JSON.parse(result);
+        await this.rootStore.walletStore.init(true);
+        this.exit();
       }
     }
     if (this.mode === LOCKER_MODE.SET) {
@@ -74,13 +75,13 @@ export class LockerViewModel {
           this.message = t("lockerScreen.correctPin");
           this.disabled = true;
           await this.rootStore.appStore.setLocker(true);
-          this.exit()
+          this.exit();
         } else {
           await this.rootStore.appStore.setLocker(false);
           this.message = t("lockerScreen.pinFormErrorIncorrectConfirmationMessage");
           setTimeout(() => {
-            this.message = ''
-          }, 1000)
+            this.message = "";
+          }, 1000);
         }
         this.confirmationPin = "";
         this.step = 0;
@@ -92,7 +93,7 @@ export class LockerViewModel {
   
   exit() {
     runUnprotected(() => {
-      this.rootStore.appStore.isLockerDirty = true
+      this.rootStore.appStore.isLockerDirty = true;
       this.rootStore.appStore.isLocked = false;
     });
   }

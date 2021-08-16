@@ -1,5 +1,4 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { RootStore } from "../../../store/RootStore";
 import { APP_STATE, appStore, LOCKER_MODE } from "../../../store/app/AppStore";
 import { runUnprotected } from "mobx-keystone";
 import "react-native-get-random-values";
@@ -8,6 +7,7 @@ import { t } from "../../../i18n";
 import { NavigationProp } from "@react-navigation/native";
 import { localStorage } from "../../../utils/localStorage";
 import Cryptr from "react-native-cryptr";
+import { walletStore } from "../../../store/wallet/WalletStore";
 
 export enum REGISTER_STATE {
   MAIN = "MAIN",
@@ -20,7 +20,6 @@ export class RegisterViewModel {
   initialized = false;
   pending = false;
   state = REGISTER_STATE.MAIN;
-  store: RootStore;
   step = 0;
   navigation: NavigationProp<any>;
   isSavedWallet = false;
@@ -33,34 +32,34 @@ export class RegisterViewModel {
     this.navigation = nav;
   }
   
-  async goRegister(store) {
+  async goRegister() {
     runUnprotected(() => {
-      store.appStore.isLockerDirty = false;
-      store.appStore.savedPin = "";
-      store.appStore.lockerStatus = false;
-      store.appStore.lockerPreviousScreen = REGISTER_STATE.REGISTER;
+      appStore.getDefault().isLockerDirty = false;
+      appStore.getDefault().savedPin = "";
+      appStore.getDefault().lockerStatus = false;
+      appStore.getDefault().lockerPreviousScreen = REGISTER_STATE.REGISTER;
     });
     runInAction(() => {
       this.initialized = true;
       this.state = REGISTER_STATE.REGISTER;
     });
     
-    await this.init(store);
+    await this.init();
   }
   
-  async goLogin(store) {
+  async goLogin() {
     runUnprotected(() => {
-      store.appStore.isLockerDirty = false;
-      store.appStore.savedPin = "";
-      store.appStore.lockerStatus = false;
-      store.appStore.lockerPreviousScreen = REGISTER_STATE.LOGIN;
+      appStore.getDefault().isLockerDirty = false;
+      appStore.getDefault().savedPin = "";
+      appStore.getDefault().lockerStatus = false;
+      appStore.getDefault().lockerPreviousScreen = REGISTER_STATE.LOGIN;
     });
     runInAction(() => {
       this.initialized = true;
       this.state = REGISTER_STATE.LOGIN;
     });
     
-    await this.init(store);
+    await this.init();
   }
   
   get message() {
@@ -72,74 +71,64 @@ export class RegisterViewModel {
     }
   }
   
-  async init(store?: RootStore) {
+  async init() {
     try {
-      
-      console.log("FFDDFD", appStore.getDefault())
-      
       this.pending = true;
-      console.log("init-register");
-      console.log(this.state, appStore.getDefault().lockerPreviousScreen);
-      
-      if (store) {
-        this.store = store;
-      }
-      
       this.isSavedWallet = !!await localStorage.load("hm-wallet");
       
-      if (this.isSavedWallet && !store.appStore.lockerStatus && !store.appStore.isLockerDirty && this.state === REGISTER_STATE.MAIN) {
-        console.log('LOGIN')
+      if (this.isSavedWallet && !appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty && this.state === REGISTER_STATE.MAIN) {
+        
         runUnprotected(() => {
-          store.appStore.lockerPreviousScreen = REGISTER_STATE.LOGIN;
-          store.appStore.lockerMode = LOCKER_MODE.CHECK;
-          store.appStore.isLocked = true;
+          appStore.getDefault().lockerPreviousScreen = REGISTER_STATE.LOGIN;
+          appStore.getDefault().lockerMode = LOCKER_MODE.CHECK;
+          appStore.getDefault().isLocked = true;
         });
       }
       
-      if (store.appStore.lockerStatus && store.appStore.lockerPreviousScreen === REGISTER_STATE.LOGIN) {
+      if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === REGISTER_STATE.LOGIN) {
         this.state = REGISTER_STATE.LOGIN;
         runUnprotected(async () => {
-          this.store.appStore.appState = APP_STATE.APP;
-          this.store.appStore.lockerPreviousScreen = "";
+          appStore.getDefault().appState = APP_STATE.APP;
+          appStore.getDefault().lockerPreviousScreen = "";
         });
-        await this.store.appStore.init();
+        await appStore.getDefault().init();
       }
       
-      if (store.appStore.lockerStatus && store.appStore.lockerPreviousScreen === REGISTER_STATE.REGISTER) {
+      if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === REGISTER_STATE.REGISTER) {
         this.state = REGISTER_STATE.REGISTER;
         runInAction(async () => {
           this.step = 1;
           // const thread = new Thread('./thread.js');
           // thread.postMessage('run');
           // thread.onmessage = (message) => console.log(message);
-          const wallet = await this.store.walletStore.createWallet();
-          const cryptr = new Cryptr(store.appStore.savedPin);
-          const encryptedString = await cryptr.encrypt(JSON.stringify([ wallet ]));
-          await localStorage.save("hm-wallet", encryptedString);
+          const wallet = await walletStore.getDefault().createWallet();
+          const cryptr = new Cryptr(appStore.getDefault().savedPin);
+          const encoded = await cryptr.encrypt(JSON.stringify(wallet));
+          await localStorage.save("hm-wallet", encoded);
           runUnprotected(async () => {
-            this.store.appStore.appState = APP_STATE.APP;
-            await this.store.appStore.init();
-            this.store.appStore.lockerPreviousScreen = "";
+            appStore.getDefault().appState = APP_STATE.APP;
+            appStore.getDefault().lockerPreviousScreen = "";
+            walletStore.getDefault().storedWallets = JSON.parse(JSON.stringify(wallet));
+            walletStore.getDefault().init(true);
           });
+          await appStore.getDefault().init();
         });
       }
-      if (!store.appStore.lockerStatus && !store.appStore.isLockerDirty &&
-        store.appStore.lockerPreviousScreen === REGISTER_STATE.REGISTER) {
-        console.log('go-to-register', store.appStore.lockerPreviousScreen)
+      if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
+        appStore.getDefault().lockerPreviousScreen === REGISTER_STATE.REGISTER) {
         runUnprotected(() => {
-          store.appStore.lockerMode = LOCKER_MODE.SET;
-          store.appStore.isLocked = true;
+          appStore.getDefault().lockerMode = LOCKER_MODE.SET;
+          appStore.getDefault().isLocked = true;
         });
       }
-      if (!store.appStore.lockerStatus && !store.appStore.isLockerDirty &&
-        store.appStore.lockerPreviousScreen === REGISTER_STATE.LOGIN) {
-        console.log('go-to-login', store.appStore.lockerPreviousScreen)
+      if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
+        appStore.getDefault().lockerPreviousScreen === REGISTER_STATE.LOGIN) {
         runUnprotected(() => {
-          store.appStore.lockerMode = LOCKER_MODE.CHECK;
-          store.appStore.isLocked = true;
+          appStore.getDefault().lockerMode = LOCKER_MODE.CHECK;
+          appStore.getDefault().isLocked = true;
         });
       }
-      if (!store.appStore.lockerStatus && store.appStore.isLockerDirty) {
+      if (!appStore.getDefault().lockerStatus && appStore.getDefault().isLockerDirty) {
         this.state = REGISTER_STATE.MAIN;
       }
       this.initialized = true;

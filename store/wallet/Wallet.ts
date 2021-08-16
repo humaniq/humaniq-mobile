@@ -9,13 +9,12 @@ import uuid from "react-native-uuid";
 export class Wallet extends Model({
   pending: p(t.boolean, false),
   initialized: p(t.string, ""),
-  
-  address: p(t.string),
-  name: p(t.string),
-  balance: p(t.string),
-  mnemonic: p(t.string),
-  path: p(t.string),
-  locale: p(t.string),
+  address: p(t.string, ""),
+  name: p(t.string, ""),
+  balance: p(t.string, "0"),
+  mnemonic: p(t.string, ""),
+  path: p(t.string, ""),
+  hdPath: p(t.string, ""),
   privateKey: p(t.string),
   publicKey: p(t.string)
 }) {

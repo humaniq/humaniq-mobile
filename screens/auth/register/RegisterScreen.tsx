@@ -6,16 +6,14 @@ import { provider, useInstance } from "react-ioc";
 import { REGISTER_STATE, RegisterViewModel } from "./RegisterViewModel";
 import { t } from "../../../i18n";
 import * as Animatable from "react-native-animatable";
-import { RootStore } from "../../../store/RootStore";
 import { useNavigation } from "@react-navigation/native";
 
 const Register = observer(function() {
   const view = useInstance(RegisterViewModel);
-  const store = useInstance(RootStore);
   const navigation = useNavigation();
   
   useEffect(() => {
-    view.init(store);
+    view.init();
     view.initNavigation(navigation);
   }, []);
   
@@ -34,10 +32,10 @@ const Register = observer(function() {
             </View>
             <View bottom flex paddingB-20>
               {
-                view.isSavedWallet && <Button bg-violet10 marginB-20 onPress={ () => view.goLogin(store) }
+                view.isSavedWallet && <Button bg-violet10 marginB-20 onPress={ view.goLogin }
                                               label={ t("common.login") } />
               }
-              <Button bg-violet10 marginB-20 onPress={ () => view.goRegister(store) }
+              <Button bg-violet10 marginB-20 onPress={ view.goRegister }
                       label={ t("common.register") } />
               <TouchableOpacity>
                 <View row center>
