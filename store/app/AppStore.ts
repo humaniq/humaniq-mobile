@@ -1,5 +1,5 @@
 import {
-  createContext,
+  createContext, getSnapshot,
   Model,
   model,
   modelAction,
@@ -11,6 +11,7 @@ import {
 import { AppState } from "react-native";
 import { REGISTER_STATE } from "../../screens/auth/register/RegisterViewModel";
 import { walletStore } from "../wallet/WalletStore";
+import { reaction } from "mobx";
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -32,27 +33,36 @@ export class AppStore extends Model({
   isLocked: p(t.boolean, false),
   lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.SET),
   lockerStatus: p(t.boolean, false),
-  lockerPreviousScreen: p(t.string, ''),
+  lockerPreviousScreen: p(t.string, ""),
   isLockerDirty: p(t.boolean, false),
   savedPin: p(t.string)
 }) {
+  
   @modelFlow
   * init() {
-    this.initialized = true;
-    appStore.setDefault(this)
-    AppState.addEventListener("change", (nextState) => {
-      if(nextState === 'background') {
-        this.setAppState(APP_STATE.AUTH)
-        if(walletStore.getDefault().storedWallets) {
-          runUnprotected(() => {
-            this.lockerPreviousScreen = REGISTER_STATE.LOGIN
-            this.isLocked = true
-            this.lockerStatus = false
-            this.lockerMode = LOCKER_MODE.CHECK
-          })
+    if(!this.initialized) {
+      appStore.setDefault(this);
+      AppState.addEventListener("change", (nextState) => {
+        if (nextState === "background") {
+          this.setAppState(APP_STATE.AUTH);
+          if (walletStore.getDefault().storedWallets) {
+            runUnprotected(() => {
+              this.lockerPreviousScreen = REGISTER_STATE.LOGIN;
+              this.isLocked = true;
+              this.lockerStatus = false;
+              this.lockerMode = LOCKER_MODE.CHECK;
+              this.savedPin = "";
+            });
+          }
         }
-      }
-    })
+      });
+      reaction(() => getSnapshot(this.isLocked), (value) => {
+        if(value) {
+          walletStore.getDefault().storedWallets = null
+        }
+      })
+      this.initialized = true;
+    }
   }
   
   @modelAction

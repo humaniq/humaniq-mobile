@@ -1,4 +1,14 @@
-import { _await, createContext, getSnapshot, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone";
+import {
+  _await,
+  createContext,
+  getSnapshot,
+  Model,
+  model,
+  modelAction,
+  modelFlow,
+  tProp as p,
+  types as t
+} from "mobx-keystone";
 import { reaction } from "mobx";
 import * as storage from "../../utils/localStorage";
 import uuid from "react-native-uuid";
@@ -25,15 +35,9 @@ export class WalletStore extends Model({
   
   @modelFlow
   * init(forse = false) {
-    
     if (!this.initialized || forse) {
       if (this.storedWallets) {
-        this.wallets = this.wallets.length > 0 ?
-          this.wallets.map(w => {
-            w.init();
-            return w;
-          }) :
-          this.storedWallets.wallets.map(w => {
+        this.wallets = this.storedWallets.wallets.map(w => {
             // @ts-ignore
             const wallet = new Wallet({
               privateKey: normalize(Buffer.from(w.privateKey.data).toString("hex")),
@@ -53,6 +57,12 @@ export class WalletStore extends Model({
       }
       this.initialized = uuid.v4();
     }
+  }
+  
+  @modelAction
+  * resetStore() {
+    this.storedWallets = null;
+    
   }
   
   @modelFlow
@@ -79,9 +89,11 @@ export class WalletStore extends Model({
   
   @modelFlow
   * createWallet() {
-    this.keyring = this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : this.keyring;
+    console.log("SW", this.storedWallets?.mnemonic)
+    this.keyring = this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring();
     yield* _await(this.keyring.addAccounts());
     const mnemonic = (yield* _await(this.keyring.serialize())) as {};
+    console.log("MN", mnemonic);
     return {
       mnemonic,
       wallets: this.keyring.wallets
