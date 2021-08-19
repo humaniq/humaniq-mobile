@@ -1,23 +1,25 @@
-import React, { useEffect } from "react"
-import { provider, useInstance } from "react-ioc"
-import { ActionSheet, Colors, ListItem, Text, TouchableOpacity, View } from "react-native-ui-lib"
-import { observer } from "mobx-react-lite"
-import { Screen } from "../../components"
-import { SettingsScreenModel } from "./SettingsScreenModel"
-import * as Animatable from "react-native-animatable"
-import { FlatList } from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome5"
+import React, { useEffect } from "react";
+import { provider, useInstance } from "react-ioc";
+import { ActionSheet, Colors, ListItem, Text, TouchableOpacity, View } from "react-native-ui-lib";
+import { observer } from "mobx-react-lite";
+import { Screen } from "../../components";
+import { SettingsScreenModel } from "./SettingsScreenModel";
+import * as Animatable from "react-native-animatable";
+import { FlatList } from "react-native";
+import Icon from "react-native-vector-icons/FontAwesome5";
+import { t } from "../../i18n";
+import { Header } from "../../components/header/Header";
 
 
 const Settings = observer(function() {
-  const view = useInstance(SettingsScreenModel)
+  const view = useInstance(SettingsScreenModel);
   
   useEffect(() => {
-    view.init()
-  }, [])
+    view.init();
+  }, []);
   
   
-  const keyExtractor = item => item.id
+  const keyExtractor = item => item.id;
   
   const renderRow = ({ item }) => {
     return (
@@ -44,30 +46,34 @@ const Settings = observer(function() {
           </ListItem>
         </TouchableOpacity>
       </Animatable.View>
-    )
-  }
+    );
+  };
   
   return (
-    <View testID="SettingsScreen" style={ { flex: 1 } }>
-      { view.initialized &&
-      <Screen preset={ "fixed" } backgroundColor={ Colors.dark80 }>
-        <Text h5 bold marginV-20 center grey20>Настройки</Text>
-        <FlatList
-          data={ view.settingsMenu }
-          renderItem={ renderRow }
-          keyExtractor={ keyExtractor }
-        />
-      </Screen> }
-      <ActionSheet
-        title={ view.settingsDialog.title }
-        message={ "Message of action sheet" }
-        options={ view.settingsDialog.options }
-        visible={ view.settingsDialog.display }
-        onDismiss={ () => view.settingsDialog.display = false }
-      />
-    </View>
-  )
-})
+    <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
+      {
+        view.initialized &&
+        <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
+          <Header title={ t("settingScreen.name") } />
+          <View padding-20>
+            <FlatList
+              data={ view.settingsMenu }
+              renderItem={ renderRow }
+              keyExtractor={ keyExtractor }
+            />
+          </View>
+          <ActionSheet
+            title={ view.settingsDialog.title }
+            message={ "Message of action sheet" }
+            options={ view.settingsDialog.options }
+            visible={ view.settingsDialog.display }
+            onDismiss={ () => view.settingsDialog.display = false }
+          />
+        </Animatable.View>
+      }
+    </Screen>
+  );
+});
 
-export const SettingsScreen = provider()(Settings)
-SettingsScreen.register(SettingsScreenModel)
+export const SettingsScreen = provider()(Settings);
+SettingsScreen.register(SettingsScreenModel);

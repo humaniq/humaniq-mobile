@@ -37,6 +37,7 @@ import { Locker } from "./components/locker/Locker";
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE";
 
 LogBox.ignoreLogs([ "Setting a timer" ]);
+LogBox.ignoreLogs([ "Require cycle" ]);
 
 enableScreens();
 
@@ -65,9 +66,12 @@ const AppScreen = observer(() => {
   
   useEffect(() => {
     ;(async () => {
+      await store.requestStore.init();
+      await store.apiStore.init();
+      await store.providerStore.init();
+      await store.walletStore.init();
       await store.appStore.init();
-      await store.providerStore.init()
-      await store.walletStore.init()
+      store.dictionaryStore.init();
     })();
   }, []);
   

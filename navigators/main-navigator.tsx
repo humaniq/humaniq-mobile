@@ -42,7 +42,8 @@ export function MainNavigator<PrimaryParamList>() {
       tabBarOptions={ {
         activeTintColor: Colors.grey70,
         inactiveTintColor: Colors.dark80,
-        activeBackgroundColor: Colors.grey10,
+        activeBackgroundColor: Colors.primary,
+        showLabels: false
       } }
       screenOptions={ ({ route }) => ({
         headerShown: false,
@@ -57,10 +58,10 @@ export function MainNavigator<PrimaryParamList>() {
               break
           }
           return <Ionicons name={ icon } size={ options.size }
-                           color={ options.focused ? Colors.grey70 : Colors.grey20 } />
+                           color={ options.focused ? Colors.grey70 : Colors.primary } />
         },
       }) }
-      appearance={ { floating: false, tabBarBackground: Colors.grey70 } }>
+      appearance={ { tabBarBackground: Colors.grey70, } }>
       <Tab.Screen options={ { tabBarLabel: "Кошелек" } } name="wallet" component={ WalletStack } />
       {/*<Tab.Screen options={ { tabBarLabel: "Браузер" } } name="demo" component={ WalletStack } />*/}
       <Tab.Screen options={ { tabBarLabel: "Настройки" } } name="settings" component={ SettingsStack } />
