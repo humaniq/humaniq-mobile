@@ -1,2 +1,2 @@
-export * from "./wallet/WalletScreen"
+export * from "./wallet/WalletsScreen"
 // export other screens here

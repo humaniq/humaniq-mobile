@@ -40,6 +40,7 @@ export class WalletStore extends Model({
   * init(forse = false) {
     if (!this.initialized || forse) {
       if (this.storedWallets) {
+        // yield* _await(localStorage.save("hw-wallet-hidden", []))
         this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || [];
         this.wallets = this.storedWallets.wallets.map(w => {
           // @ts-ignore

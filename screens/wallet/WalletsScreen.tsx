@@ -3,7 +3,7 @@ import { provider, useInstance } from "react-ioc";
 import { Button, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib";
 import { observer } from "mobx-react-lite";
 import { Screen } from "../../components";
-import { WalletScreenModel } from "./WalletScreenModel";
+import { WalletsScreenModel } from "./WalletsScreenModel";
 import FAIcon from "react-native-vector-icons/FontAwesome5";
 import { useNavigation } from "@react-navigation/native";
 import { RootStore } from "../../store/RootStore";
@@ -17,7 +17,7 @@ import { WalletMenuDialogViewModel } from "../../components/dialogs/menuWalletDi
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog";
 
 const Wallet = observer(function() {
-  const view = useInstance(WalletScreenModel);
+  const view = useInstance(WalletsScreenModel);
   const walletMenu = useInstance(WalletMenuDialogViewModel);
   const store = useInstance(RootStore);
   const nav = useNavigation();
@@ -95,5 +95,5 @@ const Wallet = observer(function() {
   );
 });
 
-export const WalletScreen = provider()(Wallet);
-WalletScreen.register(WalletScreenModel, WalletMenuDialogViewModel);
+export const WalletsScreen = provider()(Wallet);
+WalletsScreen.register(WalletsScreenModel, WalletMenuDialogViewModel);

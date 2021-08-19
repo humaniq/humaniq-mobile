@@ -2,14 +2,14 @@ import { Button, Colors, Dialog, ListItem, LoaderScreen, Text, View } from "reac
 import { runInAction } from "mobx";
 import React from "react";
 import { useInstance } from "react-ioc";
-import { WalletScreenModel } from "../WalletScreenModel";
+import { WalletsScreenModel } from "../WalletsScreenModel";
 import { observer } from "mobx-react-lite";
 import { t } from "../../../i18n";
 import FAIcon from "react-native-vector-icons/FontAwesome5";
 import Ripple from "react-native-material-ripple";
 
 export const WalletsMenuDialog = observer(() => {
-  const view = useInstance(WalletScreenModel);
+  const view = useInstance(WalletsScreenModel);
   return <Dialog
     width={ "100%" }
     containerStyle={ { backgroundColor: Colors.grey80 } }

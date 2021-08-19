@@ -5,7 +5,7 @@ import { RootStore } from "../../store/RootStore";
 import { t } from "../../i18n";
 import { getWalletStore } from "../../store/wallet/WalletStore";
 
-export class WalletScreenModel {
+export class WalletsScreenModel {
   initialized = false;
   rootStore: RootStore;
   refreshing = false;

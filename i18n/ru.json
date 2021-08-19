@@ -6,7 +6,9 @@
     "register": "Регистрация",
     "login": "Вход",
     "import": "Импортировать",
-    "cancellation": "Отмена"
+    "cancellation": "Отмена",
+    "send": "Отправить",
+    "get": "Получить"
   },
   "errors": {
     "invalidEmail": "Invalid email address."

@@ -1,6 +1,8 @@
 import { makeAutoObservable } from "mobx";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { t } from "../../../i18n";
+import { getActiveRouteName, RootNavigation } from "../../../navigators";
+import { NavigationProp } from "@react-navigation/native";
 import { getWalletStore } from "../../../store/wallet/WalletStore";
 
 export class WalletMenuDialogViewModel {
@@ -8,13 +10,22 @@ export class WalletMenuDialogViewModel {
   display = false;
   message = "";
   wallet: Wallet;
+  nav: NavigationProp<any>;
   
   items = [
     {
       name: t("walletMenuDialog.hideWallet"),
       action: async () => {
         this.display = false;
-        await getWalletStore().removeWallet(this.wallet.address);
+        const rootState = RootNavigation.getRootState();
+        if (getActiveRouteName(rootState) === "wallet-eth") {
+          RootNavigation.goBack();
+          setTimeout(async () => {
+            await getWalletStore().removeWallet(this.wallet.address);
+          }, 1000);
+        } else {
+          await getWalletStore().removeWallet(this.wallet.address);
+        }
       },
       icon: "eye-slash"
     }

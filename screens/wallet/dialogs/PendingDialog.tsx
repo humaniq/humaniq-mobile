@@ -2,11 +2,11 @@ import { Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib";
 import { runInAction } from "mobx";
 import React from "react";
 import { useInstance } from "react-ioc";
-import { WalletScreenModel } from "../WalletScreenModel";
+import { WalletsScreenModel } from "../WalletsScreenModel";
 import { observer } from "mobx-react-lite";
 
 export const PendingDialog = observer(() => {
-  const view = useInstance(WalletScreenModel);
+  const view = useInstance(WalletsScreenModel);
   return <Dialog
     ignoreBackgroundPress
     width={ "100%" }
