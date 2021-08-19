@@ -45,4 +45,7 @@ export interface ScreenProps {
    * Only applies to scroll preset.
    */
   keyboardShouldPersistTaps?: "handled" | "always" | "never"
+  
+  refreshing?: boolean
+  onRefresh?: any
 }

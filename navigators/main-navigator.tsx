@@ -5,13 +5,14 @@
  * You'll likely spend most of your time in this file.
  */
 import React from "react"
-import { WalletScreen } from "../screens"
+import { WalletsScreen } from "../screens"
 import { Colors } from "react-native-ui-lib"
 import Ionicons from "react-native-vector-icons/FontAwesome5"
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
 import { WalletEtherScreen } from "../screens/wallet/walletEther/WalletEtherScreen"
+import { t } from "../i18n";
 
 const Stack = createStackNavigator()
 
@@ -42,7 +43,8 @@ export function MainNavigator<PrimaryParamList>() {
       tabBarOptions={ {
         activeTintColor: Colors.grey70,
         inactiveTintColor: Colors.dark80,
-        activeBackgroundColor: Colors.grey10,
+        activeBackgroundColor: Colors.primary,
+        showLabels: false
       } }
       screenOptions={ ({ route }) => ({
         headerShown: false,
@@ -57,13 +59,13 @@ export function MainNavigator<PrimaryParamList>() {
               break
           }
           return <Ionicons name={ icon } size={ options.size }
-                           color={ options.focused ? Colors.grey70 : Colors.grey20 } />
+                           color={ options.focused ? Colors.grey70 : Colors.primary } />
         },
       }) }
-      appearance={ { floating: false, tabBarBackground: Colors.grey70 } }>
-      <Tab.Screen options={ { tabBarLabel: "Кошелек" } } name="wallet" component={ WalletStack } />
+      appearance={ { tabBarBackground: Colors.grey70, } }>
+      <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet" component={ WalletStack } />
       {/*<Tab.Screen options={ { tabBarLabel: "Браузер" } } name="demo" component={ WalletStack } />*/}
-      <Tab.Screen options={ { tabBarLabel: "Настройки" } } name="settings" component={ SettingsStack } />
+      <Tab.Screen options={ { tabBarLabel: t("settingScreen.name") } } name="settings" component={ SettingsStack } />
     </Tab.Navigator>
   )
 }
@@ -74,7 +76,7 @@ export function WalletStack() {
     <Stack.Navigator screenOptions={ {
       headerShown: false,
     } }>
-      <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletScreen } />
+      <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletsScreen } />
       <Stack.Screen name="wallet-eth" component={ WalletEtherScreen } />
     </Stack.Navigator>
   )
@@ -87,7 +89,7 @@ export function SettingsStack() {
       headerShown: false,
     } }>
       <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen } />
-      <Stack.Screen name="settings-networks" component={ WalletScreen } />
+      <Stack.Screen name="settings-networks" component={ WalletsScreen } />
     </Stack.Navigator>
   )
 }

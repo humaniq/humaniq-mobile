@@ -10,7 +10,7 @@ import {
   types as t
 } from "mobx-keystone";
 import { reaction } from "mobx";
-import * as storage from "../../utils/localStorage";
+import { localStorage } from "../../utils/localStorage";
 import uuid from "react-native-uuid";
 import { ethereumProvider } from "../provider/EthereumProvider";
 import { Wallet } from "./Wallet";
@@ -19,34 +19,39 @@ import "@ethersproject/shims";
 import HDKeyring from "eth-hd-keyring";
 import { normalize } from "eth-sig-util";
 import { ethers } from "ethers";
+import { appStore } from "../app/AppStore";
+import Cryptr from "react-native-cryptr";
 
 export const walletStore = createContext<WalletStore>();
+export const getWalletStore = () => walletStore.getDefault();
 
 @model("WalletStore")
 export class WalletStore extends Model({
   pending: p(t.boolean, false),
   initialized: p(t.string, ""),
-  wallets: p(t.array(t.model<Wallet>(Wallet)), () => [])
+  wallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
+  hiddenWallets: p(t.array(t.string), [])
 }) {
   
   keyring = new HDKeyring();
   storedWallets;
   
-  
   @modelFlow
   * init(forse = false) {
     if (!this.initialized || forse) {
       if (this.storedWallets) {
+        // yield* _await(localStorage.save("hw-wallet-hidden", []))
+        this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || [];
         this.wallets = this.storedWallets.wallets.map(w => {
-            // @ts-ignore
-            const wallet = new Wallet({
-              privateKey: normalize(Buffer.from(w.privateKey.data).toString("hex")),
-              publicKey: normalize(Buffer.from(w.publicKey.data).toString("hex")),
-              address: ethers.utils.computeAddress(normalize(Buffer.from(w.privateKey.data).toString("hex")))
-            });
-            wallet.init();
-            return wallet;
-          }) || [];
+          // @ts-ignore
+          const wallet = new Wallet({
+            privateKey: normalize(Buffer.from(w.privateKey.data).toString("hex")),
+            publicKey: normalize(Buffer.from(w.publicKey.data).toString("hex")),
+            address: ethers.utils.computeAddress(normalize(Buffer.from(w.privateKey.data).toString("hex")))
+          });
+          wallet.init();
+          return wallet;
+        }).filter(h => !this.hiddenWallets.includes(h.address)) || [];
       }
       
       walletStore.setDefault(this);
@@ -59,6 +64,11 @@ export class WalletStore extends Model({
     }
   }
   
+  @modelFlow
+  * updateWalletsInfo() {
+    this.wallets.forEach(w => w.init());
+  }
+  
   @modelAction
   * resetStore() {
     this.storedWallets = null;
@@ -66,34 +76,33 @@ export class WalletStore extends Model({
   }
   
   @modelFlow
-  * addWallet(wallet: Wallet) {
-    yield wallet.init();
-    this.wallets.push(wallet);
-    yield this.saveWallets();
-    return this.wallets;
-  };
-  
-  @modelFlow
-  * removeWallet(address: string) {
-    this.wallets = this.wallets.filter(w => w.address !== address);
-    yield this.saveWallets();
-    return this.wallets;
-  };
-  
-  @modelFlow
-  * saveWallets() {
-    const wallets = Object.values(this.wallets);
-    const snapshots = wallets.map(v => getSnapshot(v));
-    yield* _await(storage.save("wallets", snapshots));
+  * addWallet() {
+    try {
+      const wallet = yield this.createWallet();
+      const cryptr = new Cryptr(appStore.getDefault().savedPin);
+      const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)));
+      yield* _await(localStorage.save("hm-wallet", encoded));
+      this.storedWallets = JSON.parse(JSON.stringify(wallet));
+      this.init(true);
+    } catch (e) {
+      console.log("ERROR", e);
+    }
   }
   
   @modelFlow
-  * createWallet() {
-    console.log("SW", this.storedWallets?.mnemonic)
-    this.keyring = this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring();
+  * removeWallet(address: string) {
+    const hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || [];
+    hiddenWallets.push(address);
+    yield* _await(localStorage.save("hw-wallet-hidden", hiddenWallets));
+    this.wallets = this.wallets.filter(w => w.address !== address);
+  };
+  
+  
+  @modelFlow
+  * createWallet(recoveryPhrase?: string) {
+    this.keyring = recoveryPhrase ? new HDKeyring({ mnemonic: recoveryPhrase }) : this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring();
     yield* _await(this.keyring.addAccounts());
     const mnemonic = (yield* _await(this.keyring.serialize())) as {};
-    console.log("MN", mnemonic);
     return {
       mnemonic,
       wallets: this.keyring.wallets

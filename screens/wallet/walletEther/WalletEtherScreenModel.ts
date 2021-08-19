@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { walletStore } from "../../../store/wallet/WalletStore";
+import { getWalletStore } from "../../../store/wallet/WalletStore";
 
 export class WalletEtherScreenModel {
   initialized = false;
@@ -19,11 +19,7 @@ export class WalletEtherScreenModel {
   }
   
   get wallet() {
-    return walletStore.getDefault().wallets.find(w => w.address === this.currentWalletAddress);
-  }
-  
-  sendTransaction() {
-  
+    return getWalletStore().wallets.find(w => w.address === this.currentWalletAddress);
   }
   
   async init(address) {
@@ -35,9 +31,9 @@ export class WalletEtherScreenModel {
     // })
     this.initialized = true;
     try {
-      await this.wallet.updateBalance();
+      await this.wallet.updateBalanceFromApi();
     } catch (e) {
-      console.log(e);
+      console.log("ERROR", e);
     } finally {
       runInAction(() => {
         this.initialized = true;

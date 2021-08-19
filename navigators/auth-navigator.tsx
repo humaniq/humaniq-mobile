@@ -1,14 +1,8 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { Colors } from "react-native-ui-lib";
 import React from "react";
-import { RegisterScreen } from "../screens/auth/register/RegisterScreen";
+import { AuthScreen } from "../screens/auth/AuthScreen";
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native";
-
-export type AuthStachParamsList = {
-  register: undefined
-  restore: undefined
-  login: undefined
-}
 
 const Stack = createStackNavigator();
 
@@ -21,15 +15,8 @@ const AuthStack = () => {
       } }
     >
       <Stack.Screen
-        name="register"
-        component={ RegisterScreen }
-        options={ {
-          headerShown: false
-        } }
-      />
-      <Stack.Screen
-        name="login"
-        component={ RegisterScreen }
+        name="auth"
+        component={ AuthScreen }
         options={ {
           headerShown: false
         } }

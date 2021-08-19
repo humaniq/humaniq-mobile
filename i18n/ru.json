@@ -1,10 +1,14 @@
 {
   "common": {
     "ok": "OK!",
-    "cancel": "Выйти",
+    "cancel": "Закрыть",
     "back": "Назад",
     "register": "Регистрация",
-    "login": "Вход"
+    "login": "Вход",
+    "import": "Импортировать",
+    "cancellation": "Отмена",
+    "send": "Отправить",
+    "get": "Получить"
   },
   "errors": {
     "invalidEmail": "Invalid email address."
@@ -13,7 +17,9 @@
     "registration": "Регистрация",
     "repareFromMnemonicOne": "Восстановить",
     "repareFromMnemonicTwo": "по секретной фразе",
-    "walletCreating": "Кошелек создается"
+    "walletCreating": "Кошелек создается",
+    "walletRecoverTitle": "Введите фразу восстановления",
+    "recoveryError": "Неправильная фраза восстановления"
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",
@@ -23,5 +29,20 @@
     "pinFormRegisterAction": "Придумайте пин код",
     "pinFormConfirmationAction": "Подтвердите пин код",
     "correctPin": "Пин код подтвержден"
+  },
+  "walletScreen": {
+    "name": "Кошельки",
+    "menuDialog": {
+      "createWallet": {
+        "name": "Создать кошелек",
+        "createWalletMessage": "Кошелек создается, подождите немного..."
+      }
+    }
+  },
+  "walletMenuDialog": {
+    "hideWallet": "Скрыть кошелек"
+  },
+  "settingScreen": {
+    "name": "Настройки"
   }
 }
