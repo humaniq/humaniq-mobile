@@ -12,12 +12,15 @@ import { WalletMenuDialog } from "../../../components/dialogs/menuWalletDialog/W
 import { SendTransactionViewModel } from "../../../components/dialogs/sendTransactionDialog/SendTransactionViewModel";
 import { SendTransactionDialog } from "../../../components/dialogs/sendTransactionDialog/SendTransactionDialog";
 import { t } from "../../../i18n";
+import { SelfAddressQrCodeDialog } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
+import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 
 
 const WalletEther = observer<{ route: any }>(function({ route }) {
   const view = useInstance(WalletEtherScreenModel);
   const walletMenu = useInstance(WalletMenuDialogViewModel);
   const sendTransactionDialog = useInstance(SendTransactionViewModel);
+  const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel);
   
   useEffect(() => {
     view.init(route.params.wallet);
@@ -82,10 +85,14 @@ const WalletEther = observer<{ route: any }>(function({ route }) {
               </Card>
             </View>
             <View row center flex-5>
-              <Card flex margin-10 padding-10 animated center>
+              <Card flex margin-10 padding-10 animated center onPress={ () => {
+                selfAddressQrCodeDialogViewModel.wallet = view.wallet;
+                selfAddressQrCodeDialogViewModel.display = true;
+              }
+              }>
                 <View row center>
                   <FAIcon.Button backgroundColor={ Colors.transparent } color={ Colors.grey20 } size={ 16 }
-                                 name={ "paper-plane" }>
+                                 name={ "qrcode" }>
                   </FAIcon.Button>
                   <Text center bold dark20>{ t("common.get") }</Text>
                 </View>
@@ -97,6 +104,7 @@ const WalletEther = observer<{ route: any }>(function({ route }) {
       </Animatable.View>
       <WalletMenuDialog />
       <SendTransactionDialog />
+      <SelfAddressQrCodeDialog />
     </Screen>
   );
 });
@@ -105,5 +113,6 @@ export const WalletEtherScreen = provider()(WalletEther);
 WalletEtherScreen.register(
   WalletEtherScreenModel,
   WalletMenuDialogViewModel,
-  SendTransactionViewModel
+  SendTransactionViewModel,
+  SelfAddressQrCodeDialogViewModel
 );

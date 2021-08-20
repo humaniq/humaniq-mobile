@@ -16,6 +16,10 @@ export const ROUTES = {
     GET_ALL_SUPPORT_COINS: "/v1/api/prices/coins/list/prepared/json",
     GET_PRICE_FOR_CURRENT_COIN: "/v1/api/prices/current/{0}",
     GET_ALL_PRICES_FOR_COINS: "/v1/api/prices/all",
-    GET_BALANCES_FOR_WALLET: "/v1/api/node/:node/wallet/:address"
+    GET_BALANCES_FOR_WALLET: "/v1/api/node/:node/wallet/:address",
+  },
+  TX: {
+    GET_TRANSACTION_DATA: "v1/api/node/:type/helper/transaction",
+    SEND_TRANSACTION: "/v1/api/node/:type/broadcast/raw"
   }
 };
