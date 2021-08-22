@@ -1,0 +1,14 @@
+{
+  "common": {
+    "ok": "OK!",
+    "cancel": "Cancel",
+    "back": "Back"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email address."
+  },
+  "registerScreen": {
+    "registration": "Регистрация",
+    "repareFromMnemonicOne": "Восстановить по секретной фразе"
+  }
+}

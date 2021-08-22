@@ -1,0 +1,48 @@
+{
+  "common": {
+    "ok": "OK!",
+    "cancel": "Закрыть",
+    "back": "Назад",
+    "register": "Регистрация",
+    "login": "Вход",
+    "import": "Импортировать",
+    "cancellation": "Отмена",
+    "send": "Отправить",
+    "get": "Получить"
+  },
+  "errors": {
+    "invalidEmail": "Invalid email address."
+  },
+  "registerScreen": {
+    "registration": "Регистрация",
+    "repareFromMnemonicOne": "Восстановить",
+    "repareFromMnemonicTwo": "по секретной фразе",
+    "walletCreating": "Кошелек создается",
+    "walletRecoverTitle": "Введите фразу восстановления",
+    "recoveryError": "Неправильная фраза восстановления"
+  },
+  "lockerScreen": {
+    "incorrectPin": "Неправильный пин код",
+    "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
+    "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
+    "pinFormLoginAction": "Введите пин код",
+    "pinFormRegisterAction": "Придумайте пин код",
+    "pinFormConfirmationAction": "Подтвердите пин код",
+    "correctPin": "Пин код подтвержден"
+  },
+  "walletScreen": {
+    "name": "Кошельки",
+    "menuDialog": {
+      "createWallet": {
+        "name": "Создать кошелек",
+        "createWalletMessage": "Кошелек создается, подождите немного..."
+      }
+    }
+  },
+  "walletMenuDialog": {
+    "hideWallet": "Скрыть кошелек"
+  },
+  "settingScreen": {
+    "name": "Настройки"
+  }
+}
