@@ -106,12 +106,15 @@ export class AuthViewModel {
       if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.REGISTER) {
         this.state = AUTH_STATE.REGISTER;
         await this.createWallet();
+        await this.auth();
       }
       
       if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.RECOVER) {
         this.state = AUTH_STATE.RECOVER;
         if (appStore.getDefault().recoverPhrase && appStore.getDefault().lockerStatus && appStore.getDefault().savedPin) {
-          this.createWallet(appStore.getDefault().recoverPhrase);
+          this.createWallet(appStore.getDefault().recoverPhrase).then(() => {
+            // this.auth(walletStore.getDefault().wallets[0])
+          });
         }
       }
       
@@ -159,5 +162,9 @@ export class AuthViewModel {
       walletStore.getDefault().init(true);
     });
     await appStore.getDefault().init();
+  }
+
+  async auth() {
+    // auth token
   }
 }

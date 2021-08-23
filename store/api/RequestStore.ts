@@ -27,6 +27,7 @@ export class RequestStore extends Model({
   });
   
   @modelFlow
+  // eslint-disable-next-line @typescript-eslint/ban-types
   post = _async(function* (this: RequestStore, path, body?: object) {
     return yield* _await(this.axios.post(path, body));
   });

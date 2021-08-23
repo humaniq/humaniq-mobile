@@ -43,6 +43,7 @@ export class WalletStore extends Model({
         // yield* _await(localStorage.save("hw-wallet-hidden", []))
         this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || [];
         this.wallets = this.storedWallets.wallets.map(w => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const wallet = new Wallet({
             privateKey: normalize(Buffer.from(w.privateKey.data).toString("hex")),

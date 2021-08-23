@@ -110,7 +110,7 @@ export class Wallet extends Model({
       withPrices: true
     });
     if (cost.ok) {
-      this.prices = cost.data.items[0]["prices"];
+      this.prices = cost.data.items[0].prices;
     } else {
       this.isError = true;
     }
