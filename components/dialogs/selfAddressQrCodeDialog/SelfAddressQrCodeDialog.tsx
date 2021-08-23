@@ -1,11 +1,13 @@
-import { Button, Colors, Dialog, LoaderScreen, View } from "react-native-ui-lib";
+import { Button, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib";
 import { runInAction } from "mobx";
 import React from "react";
 import { useInstance } from "react-ioc";
 import { observer } from "mobx-react-lite";
 import { t } from "../../../i18n";
-import { TextField } from "react-native-ui-lib";
 import { SelfAddressQrCodeDialogViewModel } from "./SelfAddressQrCodeDialogViewModel";
+import QRCode from "react-native-qrcode-svg";
+import FAIcon from "react-native-vector-icons/FontAwesome5";
+import { Clipboard } from "react-native";
 
 export const SelfAddressQrCodeDialog = observer(() => {
   const view = useInstance(SelfAddressQrCodeDialogViewModel);
@@ -25,8 +27,17 @@ export const SelfAddressQrCodeDialog = observer(() => {
         </View>
       </View>
       { !view.pending &&
-      <View marginB-20>
-        <TextField />
+      <View marginB-40 center>
+        <View row center padding-10>
+          <Text text40 marginR-10>{ view.wallet?.formatAddress }</Text>
+          <Button outline borderRadius={ 4 } avoidMinWidth onPress={() => Clipboard.setString(view.wallet?.address)}>
+            <FAIcon size={ 20 } name={ "copy" } />
+          </Button>
+        </View>
+        <QRCode
+          size={ 250 }
+          value={ `ethereum:${ view.wallet?.address }` }
+        />
       </View>
       }
       {

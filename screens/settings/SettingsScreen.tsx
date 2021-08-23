@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { provider, useInstance } from "react-ioc";
-import { ActionSheet, Colors, ListItem, Text, TouchableOpacity, View } from "react-native-ui-lib";
+import { ActionSheet, Colors, ListItem, Switch, Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { observer } from "mobx-react-lite";
 import { Screen } from "../../components";
 import { SettingsScreenModel } from "./SettingsScreenModel";
@@ -27,7 +27,7 @@ const Settings = observer(function() {
         <TouchableOpacity
           accessible={ true }
           activeOpacity={ 0.5 }
-          onPress={ item.onPress }
+          onPress={ item.type === "dialog" ? item.onPress : () => null }
         >
           <ListItem
             height={ 50 }
@@ -41,7 +41,9 @@ const Settings = observer(function() {
               </ListItem.Part>
             </ListItem.Part>
             <ListItem.Part paddingH-20>
-              { item.currentValue && <Text dark10>{ item.currentValue }</Text> }
+              { item.currentValue && item.type === "dialog" && <Text dark10>{ item.currentValue }</Text> }
+              { item.type === "toggle" &&
+              <Switch onValueChange={ item.onPress } value={ item.currentValue } /> }
             </ListItem.Part>
           </ListItem>
         </TouchableOpacity>
@@ -57,7 +59,7 @@ const Settings = observer(function() {
           <Header title={ t("settingScreen.name") } />
           <View padding-20>
             <FlatList
-              data={ view.settingsMenu }
+              data={ view.settingsMenu() }
               renderItem={ renderRow }
               keyExtractor={ keyExtractor }
             />

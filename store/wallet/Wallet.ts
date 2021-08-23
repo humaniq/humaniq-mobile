@@ -23,9 +23,9 @@ export class Wallet extends Model({
   publicKey: p(t.string),
   balances: p(t.maybeNull(t.object(() => ({
     // Address: t.string,
-    Amount: t.number,
-    AmountUnconfirmed: t.number,
-    RecomendedFee: t.number
+    amount: t.number,
+    amountUnconfirmed: t.number,
+    recomendedFee: t.number
     // Transactions: t.maybeNull(t.)
   })))),
   prices: p(t.maybeNull(t.object(() => ({
@@ -49,7 +49,7 @@ export class Wallet extends Model({
   
   @computed
   get ethBalance() {
-    return +ethers.utils.formatEther(ethers.BigNumber.from(this.balances.Amount.toString()));
+    return +ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()));
   }
   
   @computed
@@ -110,7 +110,7 @@ export class Wallet extends Model({
       withPrices: true
     });
     if (cost.ok) {
-      this.prices = cost.data.items[0]["prices"];
+      this.prices = cost.data.items[0].prices;
     } else {
       this.isError = true;
     }

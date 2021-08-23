@@ -8,7 +8,7 @@
     "invalidEmail": "Invalid email address."
   },
   "registerScreen": {
-    "registration": "Регистрация",
-    "repareFromMnemonicOne": "Восстановить по секретной фразе"
+    "registration": "Registration",
+    "repareFromMnemonicOne": "Recovery from mnemonic"
   }
 }

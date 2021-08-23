@@ -43,6 +43,7 @@ export class WalletStore extends Model({
         // yield* _await(localStorage.save("hw-wallet-hidden", []))
         this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || [];
         this.wallets = this.storedWallets.wallets.map(w => {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           const wallet = new Wallet({
             privateKey: normalize(Buffer.from(w.privateKey.data).toString("hex")),
@@ -79,10 +80,12 @@ export class WalletStore extends Model({
   * addWallet() {
     try {
       const wallet = yield this.createWallet();
+      console.log(appStore.getDefault().savedPin)
       const cryptr = new Cryptr(appStore.getDefault().savedPin);
       const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)));
       yield* _await(localStorage.save("hm-wallet", encoded));
       this.storedWallets = JSON.parse(JSON.stringify(wallet));
+      console.log(this.storedWallets)
       this.init(true);
     } catch (e) {
       console.log("ERROR", e);

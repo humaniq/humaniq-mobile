@@ -1,6 +1,7 @@
 import {
   _await,
-  createContext, getSnapshot,
+  createContext,
+  getSnapshot,
   Model,
   model,
   modelAction,
@@ -27,27 +28,31 @@ export enum LOCKER_MODE {
   CHECK = "CHECK"
 }
 
-
 export const appStore = createContext<AppStore>();
+export const getAppStore = () => appStore.getDefault();
 
 @model("AppStore")
 export class AppStore extends Model({
   initialized: p(t.boolean, false),
-  appState: p(t.enum(APP_STATE), __DEV__? APP_STATE.APP : APP_STATE.AUTH),
+  appState: p(t.enum(APP_STATE), APP_STATE.AUTH),
   isLocked: p(t.boolean, false),
   lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.SET),
   lockerStatus: p(t.boolean, false),
   lockerPreviousScreen: p(t.string, ""),
   isLockerDirty: p(t.boolean, false),
   savedPin: p(t.string),
-  recoverPhrase: p(t.string, "").withSetter()
+  recoverPhrase: p(t.string, "").withSetter(),
+  storedPin: p(t.string, "")
 }) {
+  
   
   @modelFlow
   * init() {
     if (!this.initialized) {
       appStore.setDefault(this);
-      if (!__DEV__) {
+      this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || "";
+      console.log(this.storedPin)
+      if (!this.storedPin) {
         AppState.addEventListener("change", (nextState) => {
           if (nextState === "background") {
             this.setAppState(APP_STATE.AUTH);
@@ -63,14 +68,15 @@ export class AppStore extends Model({
           }
         });
       } else {
-        this.isLocked = false
-        this.setPin("1234")
+        this.appState = APP_STATE.APP;
+        this.isLocked = false;
+        this.setPin(this.storedPin);
         const encypted = yield* _await(localStorage.load("hm-wallet"));
         const cryptr = new Cryptr(this.savedPin);
         const result = cryptr.decrypt(encypted);
         const res = JSON.parse(result);
         const isCorrect = bip39.validateMnemonic(res["mnemonic"].mnemonic);
-        if(isCorrect) {
+        if (isCorrect) {
           getWalletStore().storedWallets = JSON.parse(result);
           yield getWalletStore().init(true);
         }
