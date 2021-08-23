@@ -96,7 +96,7 @@ function toArray(val) {
  * Custom hook for persisting navigation state.
  */
 export function useNavigationPersistence(storage: any, persistenceKey: string) {
-  const [ initialNavigationState, setInitialNavigationState ] = useState();
+  const [ initialNavigationState ] = useState();
   const [ isRestoringNavigationState, setIsRestoringNavigationState ] = useState(true);
   
   const routeNameRef = useRef();
@@ -118,8 +118,8 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
   
   const restoreState = async () => {
     try {
-      const state = await storage.load(persistenceKey);
-      if (state) setInitialNavigationState(state);
+      // const state = await storage.load(persistenceKey);
+      // if (state) setInitialNavigationState(state);
     } finally {
       setIsRestoringNavigationState(false);
     }
