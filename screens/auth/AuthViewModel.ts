@@ -153,9 +153,9 @@ export class AuthViewModel {
     const encoded = await cryptr.encrypt(JSON.stringify(wallet));
     await localStorage.save("hm-wallet", encoded);
     runUnprotected(async () => {
-      appStore.getDefault().appState = APP_STATE.APP;
-      appStore.getDefault().lockerPreviousScreen = "";
       walletStore.getDefault().storedWallets = JSON.parse(JSON.stringify(wallet));
+      appStore.getDefault().lockerPreviousScreen = "";
+      appStore.getDefault().appState = APP_STATE.APP;
       walletStore.getDefault().init(true);
     });
     await appStore.getDefault().init();

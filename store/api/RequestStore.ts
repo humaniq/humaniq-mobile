@@ -1,4 +1,4 @@
-import { _await, createContext, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone";
+import { _async, _await, createContext, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone";
 import { ApisauceInstance, create } from "apisauce";
 import { DEFAULT_API_CONFIG } from "../../config/api";
 
@@ -22,12 +22,12 @@ export class RequestStore extends Model({
   }
   
   @modelFlow
-  * get(path) {
+  get = _async(function* (this: RequestStore, path) {
     return yield* _await(this.axios.get(path));
-  }
+  });
   
   @modelFlow
-  * post(path, body?: object) {
+  post = _async(function* (this: RequestStore, path, body?: object) {
     return yield* _await(this.axios.post(path, body));
-  }
+  });
 }

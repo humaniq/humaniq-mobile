@@ -1,4 +1,4 @@
-import { Button, Colors, Dialog, LoaderScreen, View } from "react-native-ui-lib";
+import { Button, Colors, Dialog, LoaderScreen, View, Text } from "react-native-ui-lib";
 import { runInAction } from "mobx";
 import React from "react";
 import { useInstance } from "react-ioc";
@@ -24,9 +24,19 @@ export const SendTransactionDialog = observer(() => {
                   label={ t("common.cancel") } />
         </View>
       </View>
-      { !view.pending &&
-      <View marginB-20>
-        <TextField />
+      { !view.pending && view.display && !!!view.message &&
+      <View marginB-20 padding-10 paddingH-20>
+        <TextField floatingPlaceholder placeholder={ t("common.address") } value={ view.txData.to }
+                   onChangeText={ (val) => view.txData.to = val } />
+        <TextField floatingPlaceholder placeholder={ t("common.value") } value={ view.txData.value }
+                   onChangeText={ (val) => view.txData.value = val } />
+        <Text margin-20 red30>{ view.txError ? t("errors.transactionBodyError") : "" }</Text>
+        <Button disabled={ !view.isTransferAllow } onPress={ view.sendTx } label={ t("common.send") } />
+      </View>
+      }
+      { !view.pending && view.display && !!view.message &&
+      <View marginB-40 padding-10 paddingH-40 center>
+        <Text text40BO>{ view.message }</Text>
       </View>
       }
       {

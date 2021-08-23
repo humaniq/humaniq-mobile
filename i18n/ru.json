@@ -8,10 +8,13 @@
     "import": "Импортировать",
     "cancellation": "Отмена",
     "send": "Отправить",
-    "get": "Получить"
+    "get": "Получить",
+    "address": "Адрес",
+    "value": "Обьем"
   },
   "errors": {
-    "invalidEmail": "Invalid email address."
+    "invalidEmail": "Invalid email address.",
+    "transactionBodyError": "Введены некорректные данные транзакции"
   },
   "registerScreen": {
     "registration": "Регистрация",
@@ -44,5 +47,9 @@
   },
   "settingScreen": {
     "name": "Настройки"
+  },
+  "sendTransactionDialog": {
+    "successTx": "Средства отправлены!",
+    "errorTx": "Ошибка отправки!"
   }
 }
