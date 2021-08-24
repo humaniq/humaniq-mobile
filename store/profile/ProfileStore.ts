@@ -41,4 +41,15 @@ export class ProfileStore extends Model({
             this.loaded = true
         }
     }
+
+    @modelFlow
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    * update(profile: object, token: string) {
+        const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile, { headers : {
+                Authorization: token
+        }})
+        if (res.ok) {
+            this.load(token)
+        }
+    }
 }
