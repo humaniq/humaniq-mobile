@@ -33,6 +33,7 @@ export const ROUTES = {
     SESSION_REFRESH_POST: "/api/v1/sessions/refresh"
   },
   PROFILE: {
-    UPDATE_PATH: "/api/v1/users/profile"
+    UPDATE_PATH: "/api/v1/users/profile",
+    GET: "/api/v1/users/profile"
   }
 };

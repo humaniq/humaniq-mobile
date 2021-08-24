@@ -51,5 +51,10 @@
   "sendTransactionDialog": {
     "successTx": "Средства отправлены!",
     "errorTx": "Ошибка отправки!"
+  },
+  "profileScreen": {
+    "name": "Профиль",
+    "fullName": "Полное имя",
+    "photo": "Фотография"
   }
 }
