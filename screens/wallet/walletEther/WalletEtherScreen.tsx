@@ -122,10 +122,10 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
     )
 })
 
-export const WalletEtherScreen = provider()(WalletEther)
+export const WalletEtherScreen = provider()(WalletEther);
 WalletEtherScreen.register(
   WalletEtherScreenModel,
   WalletMenuDialogViewModel,
   SendTransactionViewModel,
   SelfAddressQrCodeDialogViewModel
-)
+);
