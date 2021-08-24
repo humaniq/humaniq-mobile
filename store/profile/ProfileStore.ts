@@ -34,22 +34,11 @@ export class ProfileStore extends Model({
             }})
 
         if(profile.ok) {
-            this.lastname = profile.attributes.lastname
-            this.firstname = profile.attributes.firstname
-            this.email = profile.attributes.email
-            this.photoUrl = profile.attributes.photoUrl
+            this.lastname = profile.data.lastname
+            this.firstname = profile.data.firstname
+            this.email = profile.data.email
+            this.photoUrl = profile.data.photoUrl
             this.loaded = true
-        }
-    }
-
-    @modelFlow
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    * update(profile: object, token: string) {
-        const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile, { headers : {
-                Authorization: token
-        }})
-        if (res.ok) {
-            this.load(token)
         }
     }
 }
