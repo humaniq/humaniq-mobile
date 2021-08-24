@@ -2,6 +2,7 @@ import {createContext, Model, modelFlow, tProp as p, types as t} from "mobx-keys
 import {computed} from "mobx";
 import {getAuthRequest} from "../api/AuthRequestStore";
 import {ROUTES} from "../../config/api";
+import {getAuthStore} from "../auth/AuthStore";
 
 export const profileStore = createContext<ProfileStore>()
 export const getProfileStore = () => profileStore.getDefault()
@@ -39,6 +40,17 @@ export class ProfileStore extends Model({
             this.email = profile.attributes.email
             this.photoUrl = profile.attributes.photoUrl
             this.loaded = true
+        }
+    }
+
+    @modelFlow
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    * update(profile: object, token: string) {
+        const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile, { headers : {
+                Authorization: token
+        }})
+        if (res.ok) {
+            this.load(token)
         }
     }
 }
