@@ -1,9 +1,9 @@
-import {Model, model, modelFlow, tProp as p} from "mobx-keystone";
+import {createContext, Model, model, modelFlow, tProp as p} from "mobx-keystone";
 import {types as t} from "mobx-keystone/dist/typeChecking/types";
 import {getAuthRequest} from "../api/HumanIDRequestStore";
 import {ROUTES} from "../../config/api";
 
-
+export const auth = createContext<Auth>();
 @model("Auth")
 export class Auth extends Model({
     isError: p(t.boolean, false),

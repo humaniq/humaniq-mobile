@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { APP_STATE, appStore, LOCKER_MODE } from "../../store/app/AppStore";
+import { APP_STATE, appStore, LOCKER_MODE } from "../../store/ap/AppStore";
 import { runUnprotected } from "mobx-keystone";
 import "react-native-get-random-values";
 import "@ethersproject/shims";
@@ -9,6 +9,7 @@ import { localStorage } from "../../utils/localStorage";
 import Cryptr from "react-native-cryptr";
 import { walletStore } from "../../store/wallet/WalletStore";
 import bip39 from "react-native-bip39";
+import {auth} from "../../store/auth/Auth";
 
 export enum AUTH_STATE {
   MAIN = "MAIN",
@@ -165,6 +166,7 @@ export class AuthViewModel {
   }
 
   async auth() {
-    // auth token
+    const wallet = walletStore.getDefault().wallets[0]
+    auth.getDefault().login(wallet)
   }
 }

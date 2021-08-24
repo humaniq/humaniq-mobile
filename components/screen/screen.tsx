@@ -1,9 +1,8 @@
 import * as React from "react";
-import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StatusBar, View } from "react-native";
+import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StatusBar, View, Appearance  } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
-import { Appearance } from "react-native";
 
 const isIos = Platform.OS === "ios";
 
