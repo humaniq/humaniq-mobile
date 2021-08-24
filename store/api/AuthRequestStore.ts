@@ -32,4 +32,11 @@ export class AuthRequestStore extends Model({
     * post(path, body?: object, headers?: object) {
         return yield* _await(this.axios.post(path, body, headers))
     }
+
+    @modelFlow
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    * patch(path, body?: object, headers?: object) {
+        return yield* _await(this.axios.patch(path, body, headers))
+
+    }
 }
