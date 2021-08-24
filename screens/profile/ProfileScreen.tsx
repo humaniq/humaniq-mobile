@@ -23,7 +23,7 @@ const Profile = observer(function () {
     return (
         <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
         {
-            view.initialized &&
+            view.initialized  &&
             <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                 <Header title={ t("profileScreen.name") } />
                 <View flex>
