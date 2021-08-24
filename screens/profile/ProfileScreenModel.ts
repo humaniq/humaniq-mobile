@@ -15,7 +15,10 @@ export class ProfileScreenModel {
     async init(rootStore) {
         this.rootStore = rootStore;
         try {
-            this.initialized = true;
+            await getProfileStore().load(getAuthStore().token);
+            if (getProfileStore().loaded) {
+                this.initialized = true;
+            }
         } catch (e) {
             console.log("INIT ERROR", e);
         }

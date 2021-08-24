@@ -34,10 +34,10 @@ export class ProfileStore extends Model({
             }})
 
         if(profile.ok) {
-            this.lastname = profile.data.lastname
-            this.firstname = profile.data.firstname
-            this.email = profile.data.email
-            this.photoUrl = profile.data.photoUrl
+            this.lastname = profile.attributes.lastname
+            this.firstname = profile.attributes.firstname
+            this.email = profile.attributes.email
+            this.photoUrl = profile.attributes.photoUrl
             this.loaded = true
         }
     }
