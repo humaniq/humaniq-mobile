@@ -12,7 +12,7 @@ import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
 import { WalletEtherScreen } from "../screens/wallet/walletEther/WalletEtherScreen"
-import { t } from "../i18n";
+import { t } from "../i18n"
 
 const Stack = createStackNavigator()
 
@@ -29,69 +29,68 @@ const Stack = createStackNavigator()
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  wallet: undefined
-  demo: undefined
-  settings: undefined
+    wallet: undefined
+    demo: undefined
+    settings: undefined
 }
 
 
 const Tab = AnimatedTabBarNavigator()
 
 export function MainNavigator<PrimaryParamList>() {
-  return (
-    <Tab.Navigator
-      tabBarOptions={ {
-        activeTintColor: Colors.grey70,
-        inactiveTintColor: Colors.dark80,
-        activeBackgroundColor: Colors.primary,
-        showLabels: false
-      } }
-      screenOptions={ ({ route }) => ({
-        headerShown: false,
-        tabBarIcon: (options) => {
-          let icon = "wallet"
-          switch (route.name) {
-            case "demo":
-              icon = "globe"
-              break
-            case "settings":
-              icon = "cog"
-              break
-          }
-          return <Ionicons name={ icon } size={ options.size }
-                           color={ options.focused ? Colors.grey70 : Colors.primary } />
-        },
-      }) }
-      appearance={ { tabBarBackground: Colors.grey70, } }>
-      <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet" component={ WalletStack } />
-      {/*<Tab.Screen options={ { tabBarLabel: "Браузер" } } name="demo" component={ WalletStack } />*/}
-      <Tab.Screen options={ { tabBarLabel: t("settingScreen.name") } } name="settings" component={ SettingsStack } />
-    </Tab.Navigator>
-  )
+    return (
+      <Tab.Navigator
+        tabBarOptions={ {
+            activeTintColor: Colors.grey70,
+            inactiveTintColor: Colors.dark80,
+            activeBackgroundColor: Colors.primary,
+            showLabels: false
+        } }
+        screenOptions={ ({ route }) => ({
+            headerShown: false,
+            tabBarIcon: (options) => {
+                let icon = "wallet"
+                switch (route.name) {
+                    case "demo":
+                        icon = "globe"
+                        break
+                    case "settings":
+                        icon = "cog"
+                        break
+                }
+                return <Ionicons name={ icon } size={ options.size }
+                                 color={ options.focused ? Colors.grey70 : Colors.primary }/>
+            },
+        }) }
+        appearance={ { tabBarBackground: Colors.grey70, whenActiveShow: "icon-only" } }>
+          <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet" component={ WalletStack }/>
+          <Tab.Screen options={ { tabBarLabel: t("settingScreen.name") } } name="settings" component={ SettingsStack }/>
+      </Tab.Navigator>
+    )
 }
 
 
 export function WalletStack() {
-  return (
-    <Stack.Navigator screenOptions={ {
-      headerShown: false,
-    } }>
-      <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletsScreen } />
-      <Stack.Screen name="wallet-eth" component={ WalletEtherScreen } />
-    </Stack.Navigator>
-  )
+    return (
+      <Stack.Navigator screenOptions={ {
+          headerShown: false,
+      } }>
+          <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletsScreen }/>
+          <Stack.Screen name="wallet-eth" component={ WalletEtherScreen }/>
+      </Stack.Navigator>
+    )
 }
 
 
 export function SettingsStack() {
-  return (
-    <Stack.Navigator screenOptions={ {
-      headerShown: false,
-    } }>
-      <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen } />
-      <Stack.Screen name="settings-networks" component={ WalletsScreen } />
-    </Stack.Navigator>
-  )
+    return (
+      <Stack.Navigator screenOptions={ {
+          headerShown: false,
+      } }>
+          <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen }/>
+          <Stack.Screen name="settings-networks" component={ WalletsScreen }/>
+      </Stack.Navigator>
+    )
 }
 
 /**
