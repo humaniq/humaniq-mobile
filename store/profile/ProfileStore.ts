@@ -2,7 +2,6 @@ import {createContext, Model, modelFlow, tProp as p, types as t} from "mobx-keys
 import {computed} from "mobx";
 import {getAuthRequest} from "../api/AuthRequestStore";
 import {ROUTES} from "../../config/api";
-import {getAuthStore} from "../auth/AuthStore";
 
 export const profileStore = createContext<ProfileStore>()
 export const getProfileStore = () => profileStore.getDefault()
