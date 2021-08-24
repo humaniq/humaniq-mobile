@@ -66,8 +66,10 @@ const AppScreen = observer(() => {
   
   useEffect(() => {
     ;(async () => {
+      await store.authRequestStore.init();
       await store.requestStore.init();
       await store.apiStore.init();
+      await store.authStore.init()
       await store.providerStore.init();
       await store.walletStore.init();
       await store.appStore.init();
