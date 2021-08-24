@@ -1,5 +1,5 @@
 const API_URL = "https://api.node.psec.pro";
-const API_AUTH_URL = "http://localhost:8080";
+const API_AUTH_URL = "https://c7ed-34-134-175-128.ngrok.io/";
 const timeout = 10000;
 
 export interface ApiConfig {
