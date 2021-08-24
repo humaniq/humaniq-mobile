@@ -20,6 +20,7 @@ export const CreateWalletDialog = observer(() => {
           <Text left h6 bold>{ "Создать кошелек" }</Text>
         </View>
         <View right>
+          {/* eslint-disable-next-line no-return-assign */}
           <Button onPress={ () => runInAction(() => view.walletDialogs.send.display = false) } link
                   label="Отмена" />
         </View>

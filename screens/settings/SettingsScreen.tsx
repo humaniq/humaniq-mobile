@@ -40,6 +40,10 @@ const Settings = observer(function() {
                 <Text dark10 text70 style={ { flex: 1, marginRight: 10 } } numberOfLines={ 1 }>{ item.name }</Text>
               </ListItem.Part>
             </ListItem.Part>
+            <ListItem.Part left paddingL-20>
+              <Icon size={ 20 } name={ item.icon } />
+
+            </ListItem.Part>
             <ListItem.Part paddingH-20>
               { item.currentValue && item.type === "dialog" && <Text dark10>{ item.currentValue }</Text> }
               { item.type === "toggle" &&

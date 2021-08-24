@@ -1,14 +1,60 @@
 {
   "common": {
     "ok": "OK!",
-    "cancel": "Cancel",
-    "back": "Back"
+    "cancel": "Закрыть",
+    "back": "Назад",
+    "register": "Регистрация",
+    "login": "Вход",
+    "import": "Импортировать",
+    "cancellation": "Отмена",
+    "send": "Отправить",
+    "get": "Получить",
+    "address": "Адрес",
+    "value": "Обьем"
   },
   "errors": {
-    "invalidEmail": "Invalid email address."
+    "invalidEmail": "Invalid email address.",
+    "transactionBodyError": "Введены некорректные данные транзакции"
   },
   "registerScreen": {
-    "registration": "Registration",
-    "repareFromMnemonicOne": "Recovery from mnemonic"
+    "registration": "Регистрация",
+    "repareFromMnemonicOne": "Восстановить",
+    "repareFromMnemonicTwo": "по секретной фразе",
+    "walletCreating": "Кошелек создается",
+    "walletRecoverTitle": "Введите фразу восстановления",
+    "recoveryError": "Неправильная фраза восстановления"
+  },
+  "lockerScreen": {
+    "incorrectPin": "Неправильный пин код",
+    "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
+    "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
+    "pinFormLoginAction": "Введите пин код",
+    "pinFormRegisterAction": "Придумайте пин код",
+    "pinFormConfirmationAction": "Подтвердите пин код",
+    "correctPin": "Пин код подтвержден"
+  },
+  "walletScreen": {
+    "name": "Кошельки",
+    "menuDialog": {
+      "createWallet": {
+        "name": "Создать кошелек",
+        "createWalletMessage": "Кошелек создается, подождите немного..."
+      }
+    }
+  },
+  "walletMenuDialog": {
+    "hideWallet": "Скрыть кошелек"
+  },
+  "settingScreen": {
+    "name": "Настройки"
+  },
+  "sendTransactionDialog": {
+    "successTx": "Средства отправлены!",
+    "errorTx": "Ошибка отправки!"
+  },
+  "profileScreen": {
+    "name": "Профиль",
+    "fullName": "Полное имя",
+    "photo": "Фотография"
   }
 }
