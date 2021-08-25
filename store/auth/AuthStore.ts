@@ -1,7 +1,7 @@
 import { createContext, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { getAuthRequest } from "../api/AuthRequestStore"
 import { ROUTES } from "../../config/api"
-import uuid from "react-native-uuid";
+import uuid from "react-native-uuid"
 
 export const authStore = createContext<AuthStore>()
 export const getAuthStore = () => authStore.getDefault()
@@ -13,30 +13,33 @@ export class AuthStore extends Model({
     initialized: p(t.string, ""),
     token: p(t.string, ""),
     refresh_token: p(t.string, ""),
-    registered: p(t.boolean, false)
+    loggedIn: p(t.boolean, false)
 }) {
-    
+
     @modelFlow
     * init() {
         authStore.setDefault(this)
         this.initialized = uuid.v4();
     }
-    
+
     @modelFlow
     * login(wallet: string) {
         const auth = yield getAuthRequest().post(ROUTES.AUTH.LOGIN_POST, {
             wallet: wallet,
-            platform_id: 0,
+            platform_id: 1,
         })
         if (auth.ok) {
-            this.token = auth.data.attributes.access_token
-            this.refresh_token = auth.data.attributes.refresh_token
+            console.log(auth)
+            this.token = auth.data.data.attributes.access_token
+            this.refresh_token = auth.data.data.attributes.refresh_token
+            this.loggedIn = true
         } else {
             console.log("ERROR LOGIN")
             this.isError = true
         }
+        return auth
     }
-    
+
     @modelFlow
     * registration(wallet: string) {
         const reg = yield getAuthRequest().post(ROUTES.AUTH.REGISTRATION_POST, {
@@ -45,24 +48,27 @@ export class AuthStore extends Model({
             platform_id: 1
         })
         if (reg.ok) {
-            this.token = reg.data.attributes.access_token
-            this.refresh_token = reg.data.attributes.refresh_token
-            this.registered = true
+            this.token = reg.data.data.attributes.access_token
+            this.refresh_token = reg.data.data.attributes.refresh_token
+            this.loggedIn = true
         } else {
-            console.log(reg)
-            this.isError = true
+            console.log("REGISTRATION_ERROR")
         }
+        return reg
     }
-    
+
     @modelFlow
     * registrationOrLogin(wallet: string) {
-        if (this.registered) {
-            this.login(wallet)
-        } else {
-            this.registration(wallet)
+        if(this.loggedIn) return
+        const reg = yield this.registration(wallet)
+        if(!reg.ok) {
+            const login = yield this.login(wallet)
+            if(!login.ok) {
+                this.isError = true
+            }
         }
     }
-    
+
     @modelFlow
     * check() {
         const check = yield getAuthRequest().get(ROUTES.AUTH.SESSION_CHECK_GET, {
@@ -72,7 +78,7 @@ export class AuthStore extends Model({
         })
         return check.ok
     }
-    
+
     @modelFlow
     * reset() {
         const refreshToken = yield getAuthRequest().post(ROUTES.AUTH.SESSION_REFRESH_POST, {}, {

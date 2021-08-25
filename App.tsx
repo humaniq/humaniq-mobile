@@ -55,28 +55,29 @@ function createRootStore() {
 const AppScreen = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>(null);
   const store = useInstance(RootStore);
-  
+
   setRootNavigation(navigationRef);
   useBackButtonHandler(navigationRef, canExit);
-  
+
   const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
     storage,
     NAVIGATION_PERSISTENCE_KEY
   );
-  
+
   useEffect(() => {
     ;(async () => {
+      await store.authStore.init()
       await store.authRequestStore.init();
       await store.requestStore.init();
       await store.apiStore.init();
-      await store.authStore.init()
+      await store.profileStore.init()
       await store.providerStore.init();
       await store.walletStore.init();
       await store.appStore.init();
       store.dictionaryStore.init();
     })();
   }, []);
-  
+
   return (
     <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
       {

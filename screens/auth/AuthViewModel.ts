@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx"
-import { APP_STATE, appStore, LOCKER_MODE } from "../../store/app/AppStore"
+import { APP_STATE, appStore, getAppStore, LOCKER_MODE } from "../../store/app/AppStore"
 import { runUnprotected } from "mobx-keystone"
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -7,9 +7,9 @@ import { t } from "../../i18n"
 import { NavigationProp } from "@react-navigation/native"
 import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
-import { walletStore } from "../../store/wallet/WalletStore"
+import { getWalletStore } from "../../store/wallet/WalletStore"
 import bip39 from "react-native-bip39"
-import { authStore } from "../../store/auth/AuthStore"
+import { authStore, getAuthStore } from "../../store/auth/AuthStore"
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -26,11 +26,11 @@ export class AuthViewModel {
     navigation: NavigationProp<any>
     isSavedWallet = false
     isValidRecover = false
-    
+
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
     }
-    
+
     onChangeRecoverPhrase(val) {
         runUnprotected(() => {
             appStore.getDefault().recoverPhrase = val
@@ -38,37 +38,37 @@ export class AuthViewModel {
         this.isValidRecover = bip39.validateMnemonic(appStore.getDefault().recoverPhrase)
         console.log(this.isValidRecover)
     }
-    
+
     async recoveryWallet() {
         this.initialized = true
         appStore.getDefault().resetLocker(AUTH_STATE.RECOVER)
         await this.init()
     }
-    
+
     initNavigation(nav) {
         this.navigation = nav
     }
-    
+
     async goRegister() {
         appStore.getDefault().resetLocker(AUTH_STATE.REGISTER)
         this.initialized = true
         this.state = AUTH_STATE.REGISTER
         await this.init()
     }
-    
+
     async goRecover() {
         appStore.getDefault().resetLocker(AUTH_STATE.RECOVER)
         this.initialized = true
         this.state = AUTH_STATE.RECOVER
     }
-    
+
     async goLogin() {
         appStore.getDefault().resetLocker(AUTH_STATE.LOGIN)
         this.initialized = true
         this.state = AUTH_STATE.LOGIN
         await this.init()
     }
-    
+
     get message() {
         switch (this.state) {
             case AUTH_STATE.MAIN:
@@ -79,12 +79,12 @@ export class AuthViewModel {
                 return t("registerScreen.walletRecoverTitle")
         }
     }
-    
+
     async init() {
         try {
             this.pending = true
             this.isSavedWallet = !!await localStorage.load("hm-wallet")
-            
+
             if (this.isSavedWallet &&
               !appStore.getDefault().lockerStatus &&
               !appStore.getDefault().isLockerDirty && this.state === AUTH_STATE.MAIN) {
@@ -94,7 +94,7 @@ export class AuthViewModel {
                     appStore.getDefault().isLocked = true
                 })
             }
-            
+
             if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 this.state = AUTH_STATE.LOGIN
                 runUnprotected(async () => {
@@ -103,22 +103,19 @@ export class AuthViewModel {
                 })
                 await appStore.getDefault().init()
             }
-            
+
             if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 this.state = AUTH_STATE.REGISTER
                 await this.createWallet()
-                // await this.auth();
             }
-            
+
             if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 this.state = AUTH_STATE.RECOVER
                 if (appStore.getDefault().recoverPhrase && appStore.getDefault().lockerStatus && appStore.getDefault().savedPin) {
-                    this.createWallet(appStore.getDefault().recoverPhrase).then(() => {
-                        // this.auth(walletStore.getDefault().wallets[0])
-                    })
+                    await this.createWallet(appStore.getDefault().recoverPhrase)
                 }
             }
-            
+
             if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
               appStore.getDefault().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 runUnprotected(() => {
@@ -126,7 +123,7 @@ export class AuthViewModel {
                     appStore.getDefault().isLocked = true
                 })
             }
-            
+
             if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
               appStore.getDefault().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 runUnprotected(() => {
@@ -150,23 +147,19 @@ export class AuthViewModel {
             console.log("ERROR", e)
         }
     }
-    
+
     async createWallet(phrase?: string) {
-        const wallet = await walletStore.getDefault().createWallet(phrase)
+        const wallet = await getWalletStore().createWallet(phrase)
         const cryptr = new Cryptr(appStore.getDefault().savedPin)
         const encoded = await cryptr.encrypt(JSON.stringify(wallet))
         await localStorage.save("hm-wallet", encoded)
         runUnprotected(async () => {
-            walletStore.getDefault().storedWallets = JSON.parse(JSON.stringify(wallet))
-            appStore.getDefault().lockerPreviousScreen = ""
-            appStore.getDefault().appState = APP_STATE.APP
-            walletStore.getDefault().init(true)
+            getWalletStore().storedWallets = JSON.parse(JSON.stringify(wallet))
+            getAppStore().lockerPreviousScreen = ""
+            getAppStore().appState = APP_STATE.APP
+            await getWalletStore().init(true)
+            getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
         })
-        await appStore.getDefault().init()
-    }
-    
-    async auth() {
-        const wallet = walletStore.getDefault().wallets[0]
-        authStore.getDefault().registration(wallet)
+        await getAppStore().init()
     }
 }

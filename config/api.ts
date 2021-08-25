@@ -1,5 +1,5 @@
 const API_URL = "https://api.node.psec.pro";
-const API_AUTH_URL = "https://eed5-34-134-175-128.ngrok.io";
+const API_AUTH_URL = "https://api.node.psec.pro";
 const timeout = 10000;
 
 export interface ApiConfig {
@@ -33,7 +33,7 @@ export const ROUTES = {
     SESSION_REFRESH_POST: "/api/v1/sessions/refresh"
   },
   PROFILE: {
-    UPDATE_PATH: "/api/v1/users/profile",
-    GET: "/api/v1/users/profile"
+    UPDATE_PATH: "/api/v1/users/profile/",
+    GET: "/api/v1/users/profile/"
   }
 };

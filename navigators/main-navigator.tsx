@@ -13,6 +13,7 @@ import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
 import { WalletEtherScreen } from "../screens/wallet/walletEther/WalletEtherScreen"
 import { t } from "../i18n"
+import { ProfileScreen } from "../screens/profile/ProfileScreen"
 
 const Stack = createStackNavigator()
 
@@ -88,7 +89,7 @@ export function SettingsStack() {
           headerShown: false,
       } }>
           <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen }/>
-          <Stack.Screen name="settings-networks" component={ WalletsScreen }/>
+          <Stack.Screen name="settings-profile" component={ ProfileScreen }/>
       </Stack.Navigator>
     )
 }

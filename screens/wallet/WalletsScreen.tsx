@@ -22,8 +22,8 @@ const Wallet = observer(function () {
     const walletMenu = useInstance(WalletMenuDialogViewModel)
     const store = useInstance(RootStore)
     const nav = useNavigation()
-    
-    
+
+
     useEffect(() => {
         view.init(store)
     }, [])
@@ -40,7 +40,7 @@ const Wallet = observer(function () {
                       <Header onPressMenu={ () => view.walletDialogs.menu.display = true }
                               title={ t("walletScreen.name") }/>
                       <View flex>
-                          { store.walletStore.wallets.map((w: W) => {
+                          { store.walletStore.wallets.map((w: W, i) => {
                               return <Card height={ 100 } margin-10 padding-20 animated key={ w.address }
                                            onPress={ () => nav.navigate("mainStack", {
                                                screen: "wallet",
@@ -80,10 +80,12 @@ const Wallet = observer(function () {
                                           </View>
                                       </View>
                                       <View flex-1 center right>
+                                          { i !== 0 &&
                                           <Button onPress={ () => walletMenu.open(w) } round
                                                   backgroundColor={ Colors.grey60 }>
                                               <FAIcon name={ "ellipsis-v" }/>
                                           </Button>
+                                          }
                                       </View>
                                   </View>
                               </Card>
