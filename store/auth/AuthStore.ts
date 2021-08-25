@@ -19,7 +19,7 @@ export class AuthStore extends Model({
     @modelFlow
     * init() {
         authStore.setDefault(this)
-        this.initialized = uuid.v4();
+        this.initialized = uuid.v4()
     }
 
     @modelFlow
@@ -28,6 +28,7 @@ export class AuthStore extends Model({
             wallet: wallet,
             platform_id: 1,
         })
+        console.log(auth)
         if (auth.ok) {
             console.log(auth)
             this.token = auth.data.data.attributes.access_token
@@ -59,11 +60,12 @@ export class AuthStore extends Model({
 
     @modelFlow
     * registrationOrLogin(wallet: string) {
-        if(this.loggedIn) return
+        console.log('registration-or-login', this.loggedIn)
+        if (this.loggedIn) return
         const reg = yield this.registration(wallet)
-        if(!reg.ok) {
+        if (!reg.ok) {
             const login = yield this.login(wallet)
-            if(!login.ok) {
+            if (!login.ok) {
                 this.isError = true
             }
         }

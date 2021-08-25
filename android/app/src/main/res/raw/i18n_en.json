@@ -1,55 +1,61 @@
 {
   "common": {
     "ok": "OK!",
-    "cancel": "Закрыть",
-    "back": "Назад",
-    "register": "Регистрация",
-    "login": "Вход",
-    "import": "Импортировать",
-    "cancellation": "Отмена",
-    "send": "Отправить",
-    "get": "Получить",
-    "address": "Адрес",
-    "value": "Обьем"
+    "cancel": "Cancel",
+    "back": "Back",
+    "register": "Registration",
+    "login": "Login",
+    "import": "Import",
+    "cancellation": "Cancel",
+    "send": "Send",
+    "get": "Get",
+    "address": "Address",
+    "value": "Value"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
-    "transactionBodyError": "Введены некорректные данные транзакции"
+    "transactionBodyError": "Invalid body transaction"
   },
   "registerScreen": {
-    "registration": "Регистрация",
-    "repareFromMnemonicOne": "Восстановить",
-    "repareFromMnemonicTwo": "по секретной фразе",
-    "walletCreating": "Кошелек создается",
-    "walletRecoverTitle": "Введите фразу восстановления",
-    "recoveryError": "Неправильная фраза восстановления"
+    "registration": "Registration",
+    "repareFromMnemonicOne": "Recovery",
+    "repareFromMnemonicTwo": "from mnemonic",
+    "walletCreating": "Wallet creating",
+    "walletRecoverTitle": "Enter your recovery phrase",
+    "recoveryError": "Invalid recovery phrase"
   },
   "lockerScreen": {
-    "incorrectPin": "Неправильный пин код",
-    "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
-    "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
-    "pinFormLoginAction": "Введите пин код",
-    "pinFormRegisterAction": "Придумайте пин код",
-    "pinFormConfirmationAction": "Подтвердите пин код",
-    "correctPin": "Пин код подтвержден"
+    "incorrectPin": "Invalid PIN",
+    "pinFormErrorIncorrectConfirmationMessage": "Incorrect pin",
+    "pinFormErrorIncorrectPinMessage": "Incorrect pin",
+    "pinFormLoginAction": "Enter PIN code",
+    "pinFormRegisterAction": "Enter PIN code",
+    "pinFormConfirmationAction": "Confirm PIN code",
+    "correctPin": "PIN code verified"
   },
   "walletScreen": {
-    "name": "Кошельки",
+    "name": "Wallets",
     "menuDialog": {
       "createWallet": {
-        "name": "Создать кошелек",
-        "createWalletMessage": "Кошелек создается, подождите немного..."
+        "name": "Create wallet",
+        "createWalletMessage": "The wallet is being created, wait a bit ..."
       }
     }
   },
   "walletMenuDialog": {
-    "hideWallet": "Скрыть кошелек"
+    "hideWallet": "Hide wallet"
   },
   "settingScreen": {
-    "name": "Настройки"
+    "name": "Settings"
   },
   "sendTransactionDialog": {
-    "successTx": "Средства отправлены!",
-    "errorTx": "Ошибка отправки!"
+    "successTx": "Funds sent!",
+    "errorTx": "Send error!"
+  },
+  "profileScreen": {
+    "name": "Profile",
+    "email": "Email",
+    "firstName": "Firstname",
+    "lastName": "Lastname"
   }
 }

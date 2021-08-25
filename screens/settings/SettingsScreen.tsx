@@ -20,6 +20,8 @@ import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { useNavigation } from "@react-navigation/native"
+import { ExportMnemonicDialog } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialog"
+import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
 
 
 const Settings = observer(function () {
@@ -39,7 +41,7 @@ const Settings = observer(function () {
                     <TouchableOpacity
                             accessible={ true }
                             activeOpacity={ 0.5 }
-                            onPress={ item.type === "dialog" ? item.onPress : () => null }
+                            onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
                     >
                         <ListItem
                                 height={ 50 }
@@ -54,7 +56,7 @@ const Settings = observer(function () {
                                 </ListItem.Part>
                             </ListItem.Part>
                             <ListItem.Part paddingH-20>
-                                { item.currentValue && item.type === "dialog" &&
+                                { item.currentValue && item.type === "actionSheet" &&
                                 <Text dark10>{ item.currentValue }</Text> }
                                 { item.type === "toggle" &&
                                 <Switch onValueChange={ item.onPress } value={ item.currentValue }/> }
@@ -70,7 +72,7 @@ const Settings = observer(function () {
                 {
                     view.isAllInitialized &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
-                        <Header title={ t("settingScreen.name") }/>
+                        <Header title={ t("settingsScreen.name") }/>
                         <View row center padding-60>
                             <View flex-1/>
                             <View flex-8 center><FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
@@ -83,7 +85,8 @@ const Settings = observer(function () {
                                                 }
                                             }) }
                                     >
-                                        <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 } name={ 'pencil-alt' }/>
+                                        <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 }
+                                                name={ 'pencil-alt' }/>
                                     </Button>
                                 </View>
                             </View>
@@ -97,12 +100,24 @@ const Settings = observer(function () {
                             />
                         </View>
                         <ActionSheet
+                                renderTitle={ () =>
+                                    <TouchableOpacity onPressIn={ () => view.settingsDialog.display = false }>
+                                        <View row paddingV-2 center>
+                                            <View flex center paddingH-20 paddingV-5>
+                                                <Button onPressIn={ () => view.settingsDialog.display = false } avoidInnerPadding avoidMinWidth
+                                                        style={ { padding: 4, paddingHorizontal: 20, backgroundColor: Colors.grey40 } }/>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                }
+                                dialogStyle={{ borderTopRightRadius: 30, borderTopLeftRadius: 30,paddingBottom: 10}}
                                 title={ view.settingsDialog.title }
                                 message={ "Message of action sheet" }
                                 options={ view.settingsDialog.options }
                                 visible={ view.settingsDialog.display }
                                 onDismiss={ () => view.settingsDialog.display = false }
                         />
+                        <ExportMnemonicDialog/>
                     </Animatable.View>
                 }
                 {
@@ -114,4 +129,4 @@ const Settings = observer(function () {
 })
 
 export const SettingsScreen = provider()(Settings)
-SettingsScreen.register(SettingsScreenModel)
+SettingsScreen.register(SettingsScreenModel, ExportMnemonicDialogViewModel)

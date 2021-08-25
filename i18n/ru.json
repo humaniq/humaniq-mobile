@@ -46,9 +46,17 @@
   "walletMenuDialog": {
     "hideWallet": "Скрыть кошелек"
   },
-  "settingScreen": {
+  "exportMnemonicDialog": {
+    "title": "Ваша фраза восстновления",
+    "description": "Это ваша сид-фраза. Она используется для доказательства владения кошельком. Запишите ее на бумаге и храните в надежном месте. Она понадобится вам, если вы потеряете или переустановите кошелек"
+  },
+  "settingsScreen": {
     "name": "Настройки",
-    "editProfile": "Редактировать"
+    "editProfile": "Редактировать",
+    "menu": {
+      "ethNetwork": "Сеть эфира",
+      "exportMnemonic": "Экспорт фразы восстановления"
+    }
   },
   "sendTransactionDialog": {
     "successTx": "Средства отправлены!",
