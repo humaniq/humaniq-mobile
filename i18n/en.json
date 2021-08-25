@@ -45,8 +45,16 @@
   "walletMenuDialog": {
     "hideWallet": "Hide wallet"
   },
-  "settingScreen": {
-    "name": "Settings"
+  "exportMnemonicDialog": {
+    "title": "Your recovery phrase",
+    "description": "Это ваша сид-фраза. Она используется для доказательства владения кошельком. Запишите ее на бумаге и храните в надежном месте. Она понадобится вам, если вы потеряете или переустановите кошелек"
+  },
+  "settingsScreen": {
+    "name": "Settings",
+    "menu": {
+      "ethNetwork": "Ethereum network",
+      "exportMnemonic": "Export seed phrase"
+    }
   },
   "sendTransactionDialog": {
     "successTx": "Funds sent!",
