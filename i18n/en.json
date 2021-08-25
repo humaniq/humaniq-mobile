@@ -53,6 +53,7 @@
     "errorTx": "Send error!"
   },
   "profileScreen": {
+    "name": "Profile",
     "email": "Email",
     "firstName": "Firstname",
     "lastName": "Lastname"

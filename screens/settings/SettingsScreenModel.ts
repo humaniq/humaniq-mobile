@@ -1,27 +1,32 @@
-import { makeAutoObservable } from "mobx";
-import { ETH_NETWORKS } from "../../config/network";
-import * as storage from "../../utils/localStorage";
-import { runUnprotected } from "mobx-keystone";
-import { ethereumProvider } from "../../store/provider/EthereumProvider";
-import { getAppStore } from "../../store/app/AppStore";
-import { localStorage } from "../../utils/localStorage";
+import { makeAutoObservable } from "mobx"
+import { ETH_NETWORKS } from "../../config/network"
+import * as storage from "../../utils/localStorage"
+import { localStorage } from "../../utils/localStorage"
+import { runUnprotected } from "mobx-keystone"
+import { ethereumProvider } from "../../store/provider/EthereumProvider"
+import { getAppStore } from "../../store/app/AppStore"
+import { getProfileStore } from "../../store/profile/ProfileStore"
 
 export class SettingsScreenModel {
-  
+
   initialized = false;
-  
+
   settingsDialog = {
     title: "RRR",
     display: false,
     options: []
   };
-  
+
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
     this.init();
   }
-  
-  settingsMenu = () => {
+
+  get isAllInitialized() {
+      return this.initialized && !!getProfileStore().initialized
+  }
+
+  get settingsMenu() {
     const settings = [ {
       id: 1,
       type: "dialog",
@@ -41,7 +46,7 @@ export class SettingsScreenModel {
         }));
       }
     } ];
-    
+
     if (__DEV__ && getAppStore().savedPin) {
       settings.push({
         id: 2,
@@ -59,10 +64,10 @@ export class SettingsScreenModel {
         }
       });
     }
-    
+
     return settings;
   }
-  
+
   init() {
     this.initialized = true;
   }
