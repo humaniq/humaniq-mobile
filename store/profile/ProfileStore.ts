@@ -2,7 +2,7 @@ import {
     createContext,
     getSnapshot,
     model,
-    Model, modelAction,
+    Model,
     modelFlow,
     runUnprotected,
     tProp as p,
@@ -66,7 +66,6 @@ export class ProfileStore extends Model({
     // eslint-disable-next-line @typescript-eslint/ban-types
     * update(profile: object) {
         const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile)
-        console.log(res)
         if (res.ok) {
             this.load()
         }

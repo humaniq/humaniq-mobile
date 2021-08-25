@@ -58,9 +58,6 @@ const Profile = observer(function () {
                             />
                         </View>
                         <View flex bottom>
-                            {/*<Button disabled={ !view.profileDraft.isDirty } bg-grey40 fullWidth onPress={ () => {*/ }
-                            {/*    view.profileDraft.reset()*/ }
-                            {/*} } label={ t("common.cancellation") }/>*/ }
                             <Button fullWidth onPress={ async () => {
                                 await store.profileStore.update({
                                     email: store.profileStore.email,

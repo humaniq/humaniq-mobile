@@ -55,6 +55,7 @@
     "errorTx": "Ошибка отправки!"
   },
   "profileScreen": {
+    "name": "Профиль",
     "email": "Email",
     "firstName": "Имя",
     "lastName": "Фамилия"

@@ -21,11 +21,11 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
     const walletMenu = useInstance(WalletMenuDialogViewModel)
     const sendTransactionDialog = useInstance(SendTransactionViewModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
-    
+
     useEffect(() => {
         view.init(route.params.wallet)
     }, [])
-    
+
     return (
       <BlurWrapper
         before={ <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
@@ -56,7 +56,7 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                             <Text text40 dark20 bold>{ view.wallet.formatBalance }</Text>
                           </View>
                           <View center>
-                            <Text dark40 text70>{ ` ≈${ view.wallet.fiatBalance }` }</Text>
+                            <Text violet40 text70 bold>{ ` ≈${ view.wallet.fiatBalance }` }</Text>
                           </View>
                         </View> }
                         { view.wallet.pending && <LoaderScreen/> }
@@ -80,10 +80,10 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                         } }
                   >
                     <View row center>
-                      <FAIcon.Button backgroundColor={ Colors.transparent } color={ Colors.grey20 } size={ 16 }
+                      <FAIcon.Button backgroundColor={ Colors.transparent } color={ Colors.violet30 } size={ 16 }
                                      name={ "paper-plane" }>
                       </FAIcon.Button>
-                      <Text center bold dark20>{ t("common.send") }</Text>
+                      <Text center bold violet30>{ t("common.send") }</Text>
                     </View>
                   </Card>
                 </View>
@@ -94,10 +94,10 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                   }
                   }>
                     <View row center>
-                      <FAIcon.Button backgroundColor={ Colors.transparent } color={ Colors.grey20 } size={ 16 }
+                      <FAIcon.Button backgroundColor={ Colors.transparent } color={ Colors.violet30 } size={ 16 }
                                      name={ "qrcode" }>
                       </FAIcon.Button>
-                      <Text center bold dark20>{ t("common.get") }</Text>
+                      <Text center bold violet30>{ t("common.get") }</Text>
                     </View>
                   </Card>
                 </View>

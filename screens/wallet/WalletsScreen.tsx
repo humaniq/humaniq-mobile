@@ -68,7 +68,7 @@ const Wallet = observer(function () {
                                                   <Text text40 dark20 bold>{ w.formatBalance }</Text>
                                                 </View>
                                                 <View center>
-                                                  <Text dark40 text70>{ ` ≈${ w.fiatBalance }` }</Text>
+                                                  <Text violet40 text70 bold>{ ` ≈${ w.fiatBalance }` }</Text>
                                                 </View>
                                               </View> }
                                               { w.pending && <LoaderScreen/> }
@@ -82,8 +82,8 @@ const Wallet = observer(function () {
                                       <View flex-1 center right>
                                           { i !== 0 &&
                                           <Button onPress={ () => walletMenu.open(w) } round
-                                                  backgroundColor={ Colors.grey60 }>
-                                              <FAIcon name={ "ellipsis-v" }/>
+                                                  backgroundColor={ Colors.violet60 }>
+                                              <FAIcon color={ Colors.primary } name={ "ellipsis-v" }/>
                                           </Button>
                                           }
                                       </View>

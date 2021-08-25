@@ -45,17 +45,13 @@ const Settings = observer(function () {
                                 height={ 50 }
                         >
                             <ListItem.Part left paddingL-20>
-                                <FAIcon size={ 20 } name={ item.icon }/>
+                                <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
                             </ListItem.Part>
                             <ListItem.Part middle column paddingL-20>
                                 <ListItem.Part>
                                     <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
                                           numberOfLines={ 1 }>{ item.name }</Text>
                                 </ListItem.Part>
-                            </ListItem.Part>
-                            <ListItem.Part left paddingL-20>
-                                <FAIcon size={ 20 } name={ item.icon }/>
-
                             </ListItem.Part>
                             <ListItem.Part paddingH-20>
                                 { item.currentValue && item.type === "dialog" &&
@@ -75,25 +71,25 @@ const Settings = observer(function () {
                     view.isAllInitialized &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                         <Header title={ t("settingScreen.name") }/>
-                            <View row center padding-20>
-                                <View flex-1 />
-                                <View flex-8 center><FAIcon size={100} name={"user-circle"} />
-                                    <View absR>
-                                        <Button round
-                                                onPress={ () => nav.navigate("mainStack", {
-                                                    screen: "settings",
-                                                    params: {
-                                                        screen: "settings-profile",
-                                                    }
-                                                }) }
-                                        >
-                                            <FAIcon style={{ padding: 4}} size={20} name={'pencil-alt'} />
-                                        </Button>
-                                    </View>
+                        <View row center padding-60>
+                            <View flex-1/>
+                            <View flex-8 center><FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
+                                <View absR>
+                                    <Button round
+                                            onPress={ () => nav.navigate("mainStack", {
+                                                screen: "settings",
+                                                params: {
+                                                    screen: "settings-profile",
+                                                }
+                                            }) }
+                                    >
+                                        <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 } name={ 'pencil-alt' }/>
+                                    </Button>
                                 </View>
-                                <View flex-1 />
                             </View>
-                        <View padding-20>
+                            <View flex-1/>
+                        </View>
+                        <View flex top bg-white>
                             <FlatList
                                     data={ view.settingsMenu }
                                     renderItem={ renderRow }
@@ -111,7 +107,7 @@ const Settings = observer(function () {
                 }
                 {
 
-                    !view.isAllInitialized && <LoaderScreen />
+                    !view.isAllInitialized && <LoaderScreen/>
                 }
             </Screen>
     )
