@@ -41,12 +41,12 @@ const Auth = observer(function() {
               <TouchableOpacity onPress={ view.goRecover }>
                 <View row center>
                   <Text text70 white>
-                    { t("registerScreen.repareFromMnemonicOne") }
+                    { t("registerScreen.recoverFromMnemonicOne") }
                   </Text>
                 </View>
                 <View row center>
                   <Text text70 white>
-                    { t("registerScreen.repareFromMnemonicTwo") }
+                    { t("registerScreen.recoverFromMnemonicTwo") }
                   </Text>
                 </View>
               </TouchableOpacity>
