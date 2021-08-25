@@ -1,32 +1,26 @@
-import {makeAutoObservable} from "mobx";
-import {getProfileStore} from "../../store/profile/ProfileStore";
-import {getAuthStore} from "../../store/auth/AuthStore";
-import {RootStore} from "../../store/RootStore";
+import { makeAutoObservable } from "mobx"
+import { getProfileStore } from "../../store/profile/ProfileStore"
 
 export class ProfileScreenModel {
-    initialized = false;
-    rootStore: RootStore;
-    refreshing = false;
+    initialized = false
+    refreshing = false
 
     constructor() {
-        makeAutoObservable(this, {}, { autoBind: true });
+        makeAutoObservable(this, {}, { autoBind: true })
     }
 
-    async init(rootStore) {
-        this.rootStore = rootStore;
+
+    async init() {
         try {
-            await getProfileStore().load(getAuthStore().token);
-            if (getProfileStore().loaded) {
-                this.initialized = true;
-            }
+            this.initialized = true
         } catch (e) {
-            console.log("INIT ERROR", e);
+            console.log("INIT ERROR", e)
         }
     }
 
     async onRefresh() {
-        this.refreshing = true;
-        await getProfileStore().load(getAuthStore().token);
+        this.refreshing = true
+        await getProfileStore().load()
         this.refreshing = false
     }
 }

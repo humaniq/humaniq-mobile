@@ -16,7 +16,7 @@
     "release-android": "cd ./android && ./gradlew assembleRelease",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "postinstall": " cp ./react.gradle ./node_modules/react-native/react.gradle && ./node_modules/.bin/rn-nodeify --hack --install && npx jetify"
+    "postinstall": "cp ./react.gradle ./node_modules/react-native/react.gradle && ./node_modules/.bin/rn-nodeify --hack --install && npx jetify"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.4.0",
@@ -31,7 +31,6 @@
     "@tradle/react-native-http": "^2.0.1",
     "apisauce": "^2.1.1",
     "assert": "^1.5.0",
-    "axios": "^0.21.1",
     "bip39": "^3.0.4",
     "browserify-zlib": "^0.1.4",
     "console-browserify": "^1.2.0",
@@ -41,7 +40,6 @@
     "dns.js": "^1.0.1",
     "domain-browser": "^1.2.0",
     "eth-hd-keyring": "^3.6.0",
-    "eth-keyring-controller": "^6.2.1",
     "eth-sig-util": "^3.0.1",
     "eth-simple-keyring": "^4.2.0",
     "ethereumjs-util": "^7.1.0",

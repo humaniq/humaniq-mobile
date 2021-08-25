@@ -1,22 +1,23 @@
 import {
-  _await,
-  createContext,
-  getSnapshot,
-  Model,
-  model,
-  modelAction,
-  modelFlow,
-  runUnprotected,
-  tProp as p,
-  types as t
-} from "mobx-keystone";
-import { AppState } from "react-native";
-import { AUTH_STATE } from "../../screens/auth/AuthViewModel";
-import { getWalletStore, walletStore } from "../wallet/WalletStore";
-import { reaction } from "mobx";
-import { localStorage } from "../../utils/localStorage";
-import Cryptr from "react-native-cryptr";
-import bip39 from "react-native-bip39";
+    _await,
+    createContext,
+    getSnapshot,
+    Model,
+    model,
+    modelAction,
+    modelFlow,
+    runUnprotected,
+    tProp as p,
+    types as t
+} from "mobx-keystone"
+import { AppState } from "react-native"
+import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
+import { getWalletStore, walletStore } from "../wallet/WalletStore"
+import { reaction } from "mobx"
+import { localStorage } from "../../utils/localStorage"
+import Cryptr from "react-native-cryptr"
+import bip39 from "react-native-bip39"
+import { getAuthStore } from "../auth/AuthStore"
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -44,8 +45,8 @@ export class AppStore extends Model({
   recoverPhrase: p(t.string, "").withSetter(),
   storedPin: p(t.string, "")
 }) {
-  
-  
+
+
   @modelFlow
   * init() {
     if (!this.initialized) {
@@ -79,6 +80,7 @@ export class AppStore extends Model({
         if (isCorrect) {
           getWalletStore().storedWallets = JSON.parse(result);
           yield getWalletStore().init(true);
+           yield getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
         }
       }
       reaction(() => getSnapshot(this.isLocked), (value) => {
@@ -89,22 +91,22 @@ export class AppStore extends Model({
       this.initialized = true;
     }
   }
-  
+
   @modelAction
   setAppState(state: APP_STATE) {
     this.appState = state;
   }
-  
+
   @modelAction
   setLocker(bool: boolean) {
     this.lockerStatus = bool;
   }
-  
+
   @modelAction
   closeLocker(lastStatus: APP_STATE) {
     this.appState = lastStatus;
   }
-  
+
   @modelAction
   resetLocker(previousScreen?: AUTH_STATE) {
     this.savedPin = "";
@@ -114,7 +116,7 @@ export class AppStore extends Model({
       this.lockerPreviousScreen = previousScreen;
     }
   }
-  
+
   @modelAction
   setPin(pin: string) {
     this.savedPin = pin;

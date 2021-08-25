@@ -30,8 +30,8 @@ export const BlurWrapper = observer<BlurWrapperProps>((
         right: 0
       } }
       blurType="light"
-      blurAmount={ 5 }
-      reducedTransparencyFallbackColor="white"
+      blurAmount={ 4 }
+      // reducedTransparencyFallbackColor="white"
     />
     }
     { after }

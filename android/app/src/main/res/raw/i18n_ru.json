@@ -10,7 +10,8 @@
     "send": "Отправить",
     "get": "Получить",
     "address": "Адрес",
-    "value": "Обьем"
+    "value": "Обьем",
+    "save": "Cохранить"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -46,10 +47,17 @@
     "hideWallet": "Скрыть кошелек"
   },
   "settingScreen": {
-    "name": "Настройки"
+    "name": "Настройки",
+    "editProfile": "Редактировать"
   },
   "sendTransactionDialog": {
     "successTx": "Средства отправлены!",
     "errorTx": "Ошибка отправки!"
+  },
+  "profileScreen": {
+    "name": "Профиль",
+    "email": "Email",
+    "firstName": "Имя",
+    "lastName": "Фамилия"
   }
 }

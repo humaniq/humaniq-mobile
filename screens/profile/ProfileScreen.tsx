@@ -1,49 +1,78 @@
-import { observer } from "mobx-react-lite";
-import React, {useEffect} from "react";
-import {provider, useInstance} from "react-ioc";
-import { Screen } from "../../components";
+import { observer } from "mobx-react-lite"
+import React, { useEffect } from "react"
+import { provider, useInstance } from "react-ioc"
+import { Screen } from "../../components"
 
-import {ProfileScreenModel} from "./ProfileScreenModel";
-import {Colors, Text, View} from "react-native-ui-lib";
-import {SettingsScreenModel} from "../settings/SettingsScreenModel";
-import {Header} from "../../components/header/Header";
-import * as Animatable from "react-native-animatable";
-import {t} from "../../i18n";
-import {RootStore} from "../../store/RootStore";
-import {Image} from "react-native";
+import { ProfileScreenModel } from "./ProfileScreenModel"
+import { Button, Colors, TextField, View } from "react-native-ui-lib"
+import { Header } from "../../components/header/Header"
+import * as Animatable from "react-native-animatable"
+import { t } from "../../i18n"
+import { RootStore } from "../../store/RootStore"
+import { useNavigation } from "@react-navigation/native"
+import { runUnprotected } from "mobx-keystone"
 
 const Profile = observer(function () {
     const store = useInstance(RootStore)
+    const nav = useNavigation()
 
     const view = useInstance(ProfileScreenModel)
     useEffect(() => {
-        view.init(store);
+        view.init()
+        console.log(store.profileStore.email)
     }, [])
 
     return (
-        <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
-        {
-            view.initialized  &&
-            <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
-                <Header title={ t("profileScreen.name") } />
-                <View flex>
-                    <Text left h6 bold>{ t("profileScreen.photo") }</Text>
-                    <Image source={store.profileStore.photoUrl}/>
-                </View>
-                <View flex>
-                    <Text left h6 bold>{ t("profileScreen.email") }</Text>
-                    <Text right>{ store.profileStore.email }</Text>
-
-                </View>
-                <View flex>
-                    <Text left h6 bold>{ t("profileScreen.fullName") }</Text>
-                    <Text right>{ store.profileStore.fullName }</Text>
-                </View>
-            </Animatable.View>
-        }
-        </Screen>
-    );
+            <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
+                {
+                    view.initialized && store.profileStore.initialized &&
+                    <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
+                        <Header title={ t("profileScreen.name") }/>
+                        <View padding-20>
+                            <TextField
+                                    autoCompleteType={ "email" }
+                                    floatingPlaceholder value={ store.profileStore.email } placeholder={ "Email" }
+                                    onChangeText={ (val) => {
+                                        runUnprotected(() => {
+                                            store.profileStore.email = val
+                                        })
+                                    } }
+                            />
+                            <TextField floatingPlaceholder value={ store.profileStore.firstName }
+                                       placeholder={ "First name" }
+                                       autoCompleteType={ "name" }
+                                       onChangeText={ (val) => {
+                                           runUnprotected(() => {
+                                               store.profileStore.firstName = val
+                                               console.log(store.profileStore.firstName)
+                                           })
+                                       } }
+                            />
+                            <TextField floatingPlaceholder value={ store.profileStore.lastName }
+                                       placeholder={ "Second name" }
+                                       onChangeText={ (val) => {
+                                           runUnprotected(() => {
+                                               store.profileStore.lastName = val
+                                           })
+                                       } }
+                            />
+                        </View>
+                        <View flex bottom>
+                            <Button fullWidth onPress={ async () => {
+                                await store.profileStore.update({
+                                    email: store.profileStore.email,
+                                    first_name: store.profileStore.firstName,
+                                    last_name: store.profileStore.lastName
+                                })
+                                await store.authStore.login(store.walletStore.wallets[0].address)
+                                nav.goBack()
+                            } } label={ t("common.save") }/>
+                        </View>
+                    </Animatable.View>
+                }
+            </Screen>
+    )
 })
 
-export const ProfileScreen = provider()(Profile);
-ProfileScreen.register(SettingsScreenModel);
+export const ProfileScreen = provider()(Profile)
+ProfileScreen.register(ProfileScreenModel)
