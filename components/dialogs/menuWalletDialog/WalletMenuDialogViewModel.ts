@@ -3,7 +3,7 @@ import { Wallet } from "../../../store/wallet/Wallet";
 import { t } from "../../../i18n";
 import { getActiveRouteName, RootNavigation } from "../../../navigators";
 import { NavigationProp } from "@react-navigation/native";
-import { getWalletStore } from "../../../store/wallet/WalletStore";
+import { getWalletStore } from "../../../App"
 
 export class WalletMenuDialogViewModel {
   pending = false;
@@ -11,7 +11,7 @@ export class WalletMenuDialogViewModel {
   message = "";
   wallet: Wallet;
   nav: NavigationProp<any>;
-  
+
   items = [
     {
       name: t("walletMenuDialog.hideWallet"),
@@ -30,11 +30,11 @@ export class WalletMenuDialogViewModel {
       icon: "eye-slash"
     }
   ];
-  
+
   constructor() {
     makeAutoObservable(this);
   }
-  
+
   open(w: Wallet) {
     this.wallet = w;
     this.display = true;

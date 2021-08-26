@@ -3,12 +3,11 @@ import { ETH_NETWORKS } from "../../config/network"
 import * as storage from "../../utils/localStorage"
 import { localStorage } from "../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone"
-import { ethereumProvider } from "../../store/provider/EthereumProvider"
 import { getAppStore } from "../../store/app/AppStore"
-import { getProfileStore } from "../../store/profile/ProfileStore"
 import { t } from "../../i18n"
 import { inject } from "react-ioc"
 import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
+import { ethereumProvider, getProfileStore } from "../../App"
 
 export class SettingsScreenModel {
 

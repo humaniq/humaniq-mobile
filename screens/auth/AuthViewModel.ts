@@ -7,9 +7,8 @@ import { t } from "../../i18n"
 import { NavigationProp } from "@react-navigation/native"
 import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
-import { getWalletStore } from "../../store/wallet/WalletStore"
 import bip39 from "react-native-bip39"
-import { authStore, getAuthStore } from "../../store/auth/AuthStore"
+import { getAuthStore, getWalletStore } from "../../App"
 
 export enum AUTH_STATE {
     MAIN = "MAIN",

@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { getWalletStore } from "../../../store/wallet/WalletStore";
+import { getWalletStore } from "../../../App"
+
 
 export class WalletEtherScreenModel {
   initialized = false;

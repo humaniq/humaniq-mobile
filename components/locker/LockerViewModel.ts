@@ -7,8 +7,8 @@ import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import Cryptr from "react-native-cryptr";
 import bip39 from "react-native-bip39";
-import { getAuthStore } from "../../store/auth/AuthStore"
-import { getWalletStore } from "../../store/wallet/WalletStore"
+import { getAuthStore, getWalletStore } from "../../App"
+
 
 export const PIN_LENGHT = 4;
 
@@ -51,7 +51,7 @@ export class LockerViewModel {
       let isCorrect = false;
       try {
         const res = JSON.parse(result);
-        isCorrect = bip39.validateMnemonic(res["mnemonic"].mnemonic);
+        isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic);
       } catch (e) {
         isCorrect = false;
       }

@@ -1,10 +1,10 @@
 import { autorun, makeAutoObservable } from "mobx";
-import { getRequest, requestStore } from "../../../store/api/RequestStore";
 import { ROUTES } from "../../../config/api";
 import { formatRoute } from "../../../navigators";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { BigNumber, ethers } from "ethers";
 import { t } from "../../../i18n";
+import { getRequest } from "../../../App"
 
 export class SendTransactionViewModel {
   display = false;
@@ -18,16 +18,17 @@ export class SendTransactionViewModel {
     value: "",
     to: ""
   };
+
   txError = false;
   message = ""
-  
+
   get Tx() {
     return {
       ...this.txData,
       value: ethers.utils.parseEther(this.txData.value)
     };
   }
-  
+
   get isTransferAllow() {
     if (!this.wallet.balances.amount || !this.txData.value) return false;
     return BigNumber.from(this.wallet.balances.amount)
@@ -36,7 +37,7 @@ export class SendTransactionViewModel {
         )
       );
   }
-  
+
   sendTx = async () => {
     try {
       const tx = await this.wallet.ether.signTransaction(this.Tx);
@@ -51,20 +52,20 @@ export class SendTransactionViewModel {
       console.log("ERROR", e);
     }
   };
-  
+
   getTransactionData = autorun(async () => {
     if (this.display) {
       const txData = await getRequest().post(formatRoute(ROUTES.TX.GET_TRANSACTION_DATA, { type: "eth" }), { from: this.wallet.address });  // requ.get(ROUTES.TX.GET_TRANSACTION_DATA);
       if (txData.ok) {
         // @ts-ignore
-        this.txData = { ...this.txData, ...txData.data.item };
+          this.txData = { ...this.txData, ...txData.data.item };
       } else {
         console.log("ERROR", txData);
       }
     }
   });
-  
-  
+
+
   constructor() {
     makeAutoObservable(this);
   }

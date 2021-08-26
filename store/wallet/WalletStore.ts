@@ -1,29 +1,16 @@
-import {
-    _await,
-    createContext,
-    getSnapshot,
-    Model,
-    model,
-    modelAction,
-    modelFlow,
-    tProp as p,
-    types as t
-} from "mobx-keystone"
+import { _await, getSnapshot, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
 import uuid from "react-native-uuid"
-import { ethereumProvider } from "../provider/EthereumProvider"
 import { Wallet } from "./Wallet"
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import HDKeyring from "eth-hd-keyring"
 import { normalize } from "eth-sig-util"
 import { ethers } from "ethers"
-import { appStore } from "../app/AppStore"
+import { appStore, getAppStore } from "../app/AppStore"
 import Cryptr from "react-native-cryptr"
-
-export const walletStore = createContext<WalletStore>()
-export const getWalletStore = () => walletStore.getDefault()
+import { getEthereumProvider } from "../../App"
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -54,14 +41,18 @@ export class WalletStore extends Model({
                     return wallet
                 }).filter(h => !this.hiddenWallets.includes(h.address)) || []
             }
-            if (!this.initialized) {
-                walletStore.setDefault(this)
-                reaction(() => getSnapshot(ethereumProvider.getDefault().initialized), (value, a) => {
-                    this.init(true)
-                })
-            }
             this.initialized = uuid.v4()
         }
+    }
+
+    @modelAction
+    registerObservers() {
+        reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
+            this.init(true)
+        })
+        reaction(() => getSnapshot(getAppStore().savedPin), (pin) => {
+            console.log("pin-settled")
+        })
     }
 
     @modelFlow
@@ -104,7 +95,7 @@ export class WalletStore extends Model({
     * createWallet(recoveryPhrase?: string) {
         this.keyring = recoveryPhrase ? new HDKeyring({ mnemonic: recoveryPhrase }) : this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring()
         if (recoveryPhrase) {
-            yield* _await(localStorage.clear("hw-wallet-hidden"))
+            yield* _await(localStorage.clear())
         }
         yield* _await(this.keyring.addAccounts())
         const mnemonic = (yield* _await(this.keyring.serialize())) as {}
