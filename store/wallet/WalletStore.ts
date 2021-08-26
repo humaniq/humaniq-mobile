@@ -1,5 +1,5 @@
 import { _await, getSnapshot, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { reaction } from "mobx"
+import { observable, reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
 import uuid from "react-native-uuid"
 import { Wallet } from "./Wallet"
@@ -9,7 +9,8 @@ import HDKeyring from "eth-hd-keyring"
 import { normalize } from "eth-sig-util"
 import { ethers } from "ethers"
 import Cryptr from "react-native-cryptr"
-import { getAppStore, getEthereumProvider } from "../../App"
+import { getAppStore, getAuthStore, getEthereumProvider, getWalletStore } from "../../App"
+import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -19,14 +20,16 @@ export class WalletStore extends Model({
     hiddenWallets: p(t.array(t.string), [])
 }) {
 
+    @observable
     keyring = new HDKeyring()
+
+    @observable
     storedWallets
 
     @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
             if (this.storedWallets) {
-                // yield* _await(localStorage.save("hw-wallet-hidden", []))
                 this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
                 this.wallets = this.storedWallets.wallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -40,12 +43,27 @@ export class WalletStore extends Model({
                     return wallet
                 }).filter(h => !this.hiddenWallets.includes(h.address)) || []
             }
-            if(!this.initialized) {
+            if (!this.initialized) {
+                reaction(() => this.storedWallets, (val) => {
+                    // console.log("Wallets=>", val)
+                })
                 reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
                     this.init(true)
                 })
-                reaction(() => getSnapshot(getAppStore().savedPin), (pin) => {
-                    console.log("pin-settled")
+                reaction(() => getSnapshot(getAppStore().savedPin), async (pin) => {
+                    if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
+                        const cryptr = new Cryptr(pin)
+                        const encrypted = await localStorage.load("hm-wallet")
+                        const result = cryptr.decrypt(encrypted)
+                        this.storedWallets = JSON.parse(result)
+                        await this.init(true)
+                        getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
+                    }
+                })
+                reaction(() => getSnapshot(getAppStore().isLocked), (value) => {
+                    if (value) {
+                        this.storedWallets = null
+                    }
                 })
             }
             this.initialized = uuid.v4()
@@ -72,7 +90,6 @@ export class WalletStore extends Model({
             const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)))
             yield* _await(localStorage.save("hm-wallet", encoded))
             this.storedWallets = JSON.parse(JSON.stringify(wallet))
-            console.log(this.storedWallets)
             this.init(true)
         } catch (e) {
             console.log("ERROR", e)

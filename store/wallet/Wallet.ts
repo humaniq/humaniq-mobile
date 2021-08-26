@@ -62,19 +62,21 @@ export class Wallet extends Model({
     }
 
     @modelFlow
-    * init() {
-        try {
-            this.pending = true
-            this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
-            // yield this.updateBalanceFromProvider();
-            yield this.updateBalanceFromApi()
-            yield this.getCoinCost()
-        } catch (e) {
-            console.log("ERROR", e)
-            this.isError = true
-        } finally {
-            this.initialized = uuid.v4()
-            this.pending = false
+    * init(force = false) {
+        if(!this.initialized || force) {
+            try {
+                this.pending = true
+                this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
+                // yield this.updateBalanceFromProvider();
+                yield this.updateBalanceFromApi()
+                yield this.getCoinCost()
+            } catch (e) {
+                console.log("ERROR", e)
+                this.isError = true
+            } finally {
+                this.initialized = uuid.v4()
+                this.pending = false
+            }
         }
     }
 

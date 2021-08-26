@@ -92,6 +92,8 @@ export class AuthViewModel {
                     getAppStore().lockerMode = LOCKER_MODE.CHECK
                     getAppStore().isLocked = true
                 })
+                this.initialized = true
+                this.pending = false
             }
 
             if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
@@ -101,47 +103,57 @@ export class AuthViewModel {
                     getAppStore().lockerPreviousScreen = ""
                 })
                 await getAppStore().init()
+                this.pending = false
+                this.initialized = true
             }
 
             if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 this.state = AUTH_STATE.REGISTER
-                await this.createWallet()
+                this.pending = true
+                setTimeout(async () => {
+                    await this.createWallet()
+                    this.pending = false
+                    this.initialized = true
+                }, 1)
             }
 
             if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 this.state = AUTH_STATE.RECOVER
                 if (getAppStore().recoverPhrase && getAppStore().lockerStatus && getAppStore().savedPin) {
-                    await this.createWallet(getAppStore().recoverPhrase)
+                    this.pending = true
+                    setTimeout(async () => {
+                        await this.createWallet(getAppStore().recoverPhrase)
+                        this.initialized = true
+                        this.pending = false
+                    }, 1)
                 }
             }
 
-            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
-              getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
+            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty && (
+              getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER ||
+              getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER)) {
                 runUnprotected(() => {
                     getAppStore().lockerMode = LOCKER_MODE.SET
                     getAppStore().isLocked = true
                 })
+                this.pending = false
+                this.initialized = true
             }
 
-            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
-              getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
-                runUnprotected(() => {
-                    getAppStore().lockerMode = LOCKER_MODE.SET
-                    getAppStore().isLocked = true
-                })
-            }
             if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
               getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 runUnprotected(() => {
                     getAppStore().lockerMode = LOCKER_MODE.CHECK
                     getAppStore().isLocked = true
                 })
+                this.pending = false
+                this.initialized = true
             }
             if (!getAppStore().lockerStatus && getAppStore().isLockerDirty) {
                 this.state = AUTH_STATE.MAIN
+                this.pending = false
+                this.initialized = true
             }
-            this.initialized = true
-            this.pending = false
         } catch (e) {
             console.log("ERROR", e)
         }

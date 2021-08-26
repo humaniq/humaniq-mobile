@@ -1,21 +1,8 @@
-import {
-    _await,
-    getSnapshot,
-    Model,
-    model,
-    modelAction,
-    modelFlow,
-    runUnprotected,
-    tProp as p,
-    types as t
-} from "mobx-keystone"
+import { _await, Model, model, modelAction, modelFlow, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
-import { reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
-import Cryptr from "react-native-cryptr"
-import bip39 from "react-native-bip39"
-import { getAuthStore, getWalletStore } from "../../App"
+import { getWalletStore } from "../../App"
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -26,7 +13,6 @@ export enum LOCKER_MODE {
     SET = "SET",
     CHECK = "CHECK"
 }
-
 
 
 @model("AppStore")
@@ -65,28 +51,10 @@ export class AppStore extends Model({
                     }
                 })
             } else {
+                this.setPin(this.storedPin)
                 this.appState = APP_STATE.APP
                 this.isLocked = false
-                this.setPin(this.storedPin)
-                const encypted = yield* _await(localStorage.load("hm-wallet"))
-                const cryptr = new Cryptr(this.savedPin)
-                const result = cryptr.decrypt(encypted)
-                const res = JSON.parse(result)
-                const isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
-                if (isCorrect) {
-                    getWalletStore().storedWallets = JSON.parse(result)
-                    yield getWalletStore().init(true)
-                    yield getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
-                }
             }
-            reaction(() => getSnapshot(this.isLocked), (value) => {
-                if (value) {
-                    getWalletStore().storedWallets = null
-                }
-            })
-            // reaction(() => getSnapshot(this.savedPin), (val) => {
-            //     console.log('pin-settled', val)
-            // })
             this.initialized = true
         }
     }
