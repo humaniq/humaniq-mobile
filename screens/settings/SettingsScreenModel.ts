@@ -6,7 +6,7 @@ import { runUnprotected } from "mobx-keystone"
 import { t } from "../../i18n"
 import { inject } from "react-ioc"
 import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
-import { ethereumProvider, getAppStore, getEthereumProvider, getProfileStore } from "../../App"
+import { getAppStore, getEthereumProvider, getProfileStore } from "../../App"
 
 export class SettingsScreenModel {
 
@@ -34,7 +34,7 @@ export class SettingsScreenModel {
             id: 1,
             type: "actionSheet",
             name: t("settingsScreen.menu.ethNetwork"),
-            currentValue: ethereumProvider.getDefault().currentNetworkName,
+            currentValue: getEthereumProvider().currentNetworkName,
             icon: "link",
             onPress: (val?: any) => {
                 this.settingsDialog.title = "Выбрать сеть"
