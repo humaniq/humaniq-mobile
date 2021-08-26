@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx"
-import { APP_STATE, appStore, getAppStore, LOCKER_MODE } from "../../store/app/AppStore"
+import { APP_STATE, LOCKER_MODE } from "../../store/app/AppStore"
 import { runUnprotected } from "mobx-keystone"
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -8,7 +8,7 @@ import { NavigationProp } from "@react-navigation/native"
 import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
-import { getAuthStore, getWalletStore } from "../../App"
+import { getAppStore, getAuthStore, getWalletStore } from "../../App"
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -32,15 +32,15 @@ export class AuthViewModel {
 
     onChangeRecoverPhrase(val) {
         runUnprotected(() => {
-            appStore.getDefault().recoverPhrase = val
+            getAppStore().recoverPhrase = val
         })
-        this.isValidRecover = bip39.validateMnemonic(appStore.getDefault().recoverPhrase)
+        this.isValidRecover = bip39.validateMnemonic(getAppStore().recoverPhrase)
         console.log(this.isValidRecover)
     }
 
     async recoveryWallet() {
         this.initialized = true
-        appStore.getDefault().resetLocker(AUTH_STATE.RECOVER)
+        getAppStore().resetLocker(AUTH_STATE.RECOVER)
         await this.init()
     }
 
@@ -49,20 +49,20 @@ export class AuthViewModel {
     }
 
     async goRegister() {
-        appStore.getDefault().resetLocker(AUTH_STATE.REGISTER)
+        getAppStore().resetLocker(AUTH_STATE.REGISTER)
         this.initialized = true
         this.state = AUTH_STATE.REGISTER
         await this.init()
     }
 
     async goRecover() {
-        appStore.getDefault().resetLocker(AUTH_STATE.RECOVER)
+        getAppStore().resetLocker(AUTH_STATE.RECOVER)
         this.initialized = true
         this.state = AUTH_STATE.RECOVER
     }
 
     async goLogin() {
-        appStore.getDefault().resetLocker(AUTH_STATE.LOGIN)
+        getAppStore().resetLocker(AUTH_STATE.LOGIN)
         this.initialized = true
         this.state = AUTH_STATE.LOGIN
         await this.init()
@@ -85,59 +85,59 @@ export class AuthViewModel {
             this.isSavedWallet = !!await localStorage.load("hm-wallet")
 
             if (this.isSavedWallet &&
-              !appStore.getDefault().lockerStatus &&
-              !appStore.getDefault().isLockerDirty && this.state === AUTH_STATE.MAIN) {
+              !getAppStore().lockerStatus &&
+              !getAppStore().isLockerDirty && this.state === AUTH_STATE.MAIN) {
                 runUnprotected(() => {
-                    appStore.getDefault().lockerPreviousScreen = AUTH_STATE.LOGIN
-                    appStore.getDefault().lockerMode = LOCKER_MODE.CHECK
-                    appStore.getDefault().isLocked = true
+                    getAppStore().lockerPreviousScreen = AUTH_STATE.LOGIN
+                    getAppStore().lockerMode = LOCKER_MODE.CHECK
+                    getAppStore().isLocked = true
                 })
             }
 
-            if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.LOGIN) {
+            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 this.state = AUTH_STATE.LOGIN
                 runUnprotected(async () => {
-                    appStore.getDefault().appState = APP_STATE.APP
-                    appStore.getDefault().lockerPreviousScreen = ""
+                    getAppStore().appState = APP_STATE.APP
+                    getAppStore().lockerPreviousScreen = ""
                 })
-                await appStore.getDefault().init()
+                await getAppStore().init()
             }
 
-            if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.REGISTER) {
+            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 this.state = AUTH_STATE.REGISTER
                 await this.createWallet()
             }
 
-            if (appStore.getDefault().lockerStatus && appStore.getDefault().lockerPreviousScreen === AUTH_STATE.RECOVER) {
+            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 this.state = AUTH_STATE.RECOVER
-                if (appStore.getDefault().recoverPhrase && appStore.getDefault().lockerStatus && appStore.getDefault().savedPin) {
-                    await this.createWallet(appStore.getDefault().recoverPhrase)
+                if (getAppStore().recoverPhrase && getAppStore().lockerStatus && getAppStore().savedPin) {
+                    await this.createWallet(getAppStore().recoverPhrase)
                 }
             }
 
-            if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
-              appStore.getDefault().lockerPreviousScreen === AUTH_STATE.RECOVER) {
+            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
+              getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 runUnprotected(() => {
-                    appStore.getDefault().lockerMode = LOCKER_MODE.SET
-                    appStore.getDefault().isLocked = true
+                    getAppStore().lockerMode = LOCKER_MODE.SET
+                    getAppStore().isLocked = true
                 })
             }
 
-            if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
-              appStore.getDefault().lockerPreviousScreen === AUTH_STATE.REGISTER) {
+            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
+              getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 runUnprotected(() => {
-                    appStore.getDefault().lockerMode = LOCKER_MODE.SET
-                    appStore.getDefault().isLocked = true
+                    getAppStore().lockerMode = LOCKER_MODE.SET
+                    getAppStore().isLocked = true
                 })
             }
-            if (!appStore.getDefault().lockerStatus && !appStore.getDefault().isLockerDirty &&
-              appStore.getDefault().lockerPreviousScreen === AUTH_STATE.LOGIN) {
+            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
+              getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 runUnprotected(() => {
-                    appStore.getDefault().lockerMode = LOCKER_MODE.CHECK
-                    appStore.getDefault().isLocked = true
+                    getAppStore().lockerMode = LOCKER_MODE.CHECK
+                    getAppStore().isLocked = true
                 })
             }
-            if (!appStore.getDefault().lockerStatus && appStore.getDefault().isLockerDirty) {
+            if (!getAppStore().lockerStatus && getAppStore().isLockerDirty) {
                 this.state = AUTH_STATE.MAIN
             }
             this.initialized = true
@@ -149,7 +149,7 @@ export class AuthViewModel {
 
     async createWallet(phrase?: string) {
         const wallet = await getWalletStore().createWallet(phrase)
-        const cryptr = new Cryptr(appStore.getDefault().savedPin)
+        const cryptr = new Cryptr(getAppStore().savedPin)
         const encoded = await cryptr.encrypt(JSON.stringify(wallet))
         await localStorage.save("hm-wallet", encoded)
         runUnprotected(async () => {

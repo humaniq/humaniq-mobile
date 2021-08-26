@@ -24,7 +24,7 @@ import "./theme/typography"
 import { RootStore } from "./store/RootStore"
 import { createContext, registerRootStore } from "mobx-keystone"
 import { LogBox } from "react-native"
-import { APP_STATE } from "./store/app/AppStore"
+import { APP_STATE, AppStore } from "./store/app/AppStore"
 import { AuthNavigator } from "./navigators/auth-navigator"
 import { Locker } from "./components/locker/Locker"
 import { WalletStore } from "./store/wallet/WalletStore"
@@ -47,26 +47,29 @@ configure({
     enforceActions: "never"
 })
 
-export const walletStore = createContext<WalletStore>()
+const appStore = createContext<AppStore>()
+export const getAppStore = () => appStore.getDefault()
+const walletStore = createContext<WalletStore>()
 export const getWalletStore = () => walletStore.getDefault()
-export const requestStore = createContext<RequestStore>()
+const requestStore = createContext<RequestStore>()
 export const getRequest = () => requestStore.getDefault()
-export const authRequestStore = createContext<AuthRequestStore>()
+const authRequestStore = createContext<AuthRequestStore>()
 export const getAuthRequest = () => authRequestStore.getDefault()
-export const authStore = createContext<AuthStore>()
+const authStore = createContext<AuthStore>()
 export const getAuthStore = () => authStore.getDefault()
-export const dictionaryStore = createContext<DictionaryStore>()
+const dictionaryStore = createContext<DictionaryStore>()
 export const getDictionary = () => dictionaryStore.getDefault()
-export const profileStore = createContext<ProfileStore>()
+const profileStore = createContext<ProfileStore>()
 export const getProfileStore = () => profileStore.getDefault()
-export const providerStore = createContext<ProviderStore>()
+const providerStore = createContext<ProviderStore>()
 export const getProviderStore = () => providerStore.getDefault()
-export const ethereumProvider = createContext<EthereumProvider>()
+const ethereumProvider = createContext<EthereumProvider>()
 export const getEthereumProvider = () => ethereumProvider.getDefault()
 
 function createRootStore() {
     const rootStore = new RootStore({})
     registerRootStore(rootStore)
+    appStore.setDefault(rootStore.appStore)
     walletStore.setDefault(rootStore.walletStore)
     requestStore.setDefault(rootStore.requestStore)
     authRequestStore.setDefault(rootStore.authRequestStore)
@@ -100,7 +103,6 @@ const AppScreen = observer(() => {
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
-            store.walletStore.registerObservers()
             store.dictionaryStore.init()
         })()
     }, [])

@@ -7,17 +7,18 @@ import { AUTH_STATE, AuthViewModel } from "./AuthViewModel";
 import { t } from "../../i18n";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
-import { appStore } from "../../store/app/AppStore";
+import { getAppStore } from "../../App"
+
 
 const Auth = observer(function() {
   const view = useInstance(AuthViewModel);
   const navigation = useNavigation();
-  
+
   useEffect(() => {
     view.init();
     view.initNavigation(navigation);
   }, []);
-  
+
   return (
     <View testID={ "AuthScreen" } flex style={ { height: "100%" } } backgroundColor={ Colors.primary }>
       { view.initialized && <Screen
@@ -81,14 +82,14 @@ const Auth = observer(function() {
               </Animatable.View>
             </View>
             <View row bg-violet20 flex-3 margin-20>
-              <TextArea errorMessage={ t("registerScreen.recoveryError") } value={ appStore.getDefault().recoverPhrase }
+              <TextArea errorMessage={ t("registerScreen.recoveryError") } value={ getAppStore().recoverPhrase }
                         onChangeText={ view.onChangeRecoverPhrase }
                         containerStyle={ { padding: 30 } } color={ Colors.grey70 } padding-10 />
             </View>
             <View>
               { view.isValidRecover &&
               <Button onPress={ view.recoveryWallet } link color={ Colors.violet80 } label={ t("common.import") } /> }
-              { !view.isValidRecover && appStore.getDefault().recoverPhrase.length > 0 &&
+              { !view.isValidRecover && getAppStore().recoverPhrase.length > 0 &&
               <Text color={ Colors.violet80 }>{ t("registerScreen.recoveryError") }
               </Text> }
             </View>

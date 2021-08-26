@@ -59,7 +59,7 @@ const Settings = observer(function () {
                                         </View>
                                     </View>
                                     <View flex-2/>
-                                </View> : <View row center paddingV-60 height={190}><LoaderScreen/></View>
+                                </View> : <View row center paddingV-60 height={ 190 }><LoaderScreen/></View>
                         }
                         <View flex top bg-white>
                             {

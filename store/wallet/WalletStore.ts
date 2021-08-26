@@ -8,9 +8,8 @@ import "@ethersproject/shims"
 import HDKeyring from "eth-hd-keyring"
 import { normalize } from "eth-sig-util"
 import { ethers } from "ethers"
-import { appStore, getAppStore } from "../app/AppStore"
 import Cryptr from "react-native-cryptr"
-import { getEthereumProvider } from "../../App"
+import { getAppStore, getEthereumProvider } from "../../App"
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -41,18 +40,16 @@ export class WalletStore extends Model({
                     return wallet
                 }).filter(h => !this.hiddenWallets.includes(h.address)) || []
             }
+            if(!this.initialized) {
+                reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
+                    this.init(true)
+                })
+                reaction(() => getSnapshot(getAppStore().savedPin), (pin) => {
+                    console.log("pin-settled")
+                })
+            }
             this.initialized = uuid.v4()
         }
-    }
-
-    @modelAction
-    registerObservers() {
-        reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
-            this.init(true)
-        })
-        reaction(() => getSnapshot(getAppStore().savedPin), (pin) => {
-            console.log("pin-settled")
-        })
     }
 
     @modelFlow
@@ -70,8 +67,8 @@ export class WalletStore extends Model({
     * addWallet() {
         try {
             const wallet = yield this.createWallet()
-            console.log(appStore.getDefault().savedPin)
-            const cryptr = new Cryptr(appStore.getDefault().savedPin)
+            console.log(getAppStore().savedPin)
+            const cryptr = new Cryptr(getAppStore().savedPin)
             const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)))
             yield* _await(localStorage.save("hm-wallet", encoded))
             this.storedWallets = JSON.parse(JSON.stringify(wallet))

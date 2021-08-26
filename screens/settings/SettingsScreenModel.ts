@@ -3,11 +3,10 @@ import { ETH_NETWORKS } from "../../config/network"
 import * as storage from "../../utils/localStorage"
 import { localStorage } from "../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone"
-import { getAppStore } from "../../store/app/AppStore"
 import { t } from "../../i18n"
 import { inject } from "react-ioc"
 import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
-import { ethereumProvider, getProfileStore } from "../../App"
+import { ethereumProvider, getAppStore, getEthereumProvider, getProfileStore } from "../../App"
 
 export class SettingsScreenModel {
 
@@ -43,7 +42,7 @@ export class SettingsScreenModel {
                 this.settingsDialog.options = Object.values(ETH_NETWORKS).map(i => ({
                     label: i, onPress: () => {
                         runUnprotected(() => {
-                            ethereumProvider.getDefault().currentNetworkName = i
+                            getEthereumProvider().currentNetworkName = i
                         })
                         storage.save("currentNetworkName", i)
                     }

@@ -1,6 +1,5 @@
 import {
     _await,
-    createContext,
     getSnapshot,
     Model,
     model,
@@ -28,8 +27,7 @@ export enum LOCKER_MODE {
     CHECK = "CHECK"
 }
 
-export const appStore = createContext<AppStore>()
-export const getAppStore = () => appStore.getDefault()
+
 
 @model("AppStore")
 export class AppStore extends Model({
@@ -49,7 +47,6 @@ export class AppStore extends Model({
     @modelFlow
     * init() {
         if (!this.initialized) {
-            appStore.setDefault(this)
             this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
             console.log(this.storedPin)
             if (!this.storedPin) {

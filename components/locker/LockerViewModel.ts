@@ -1,14 +1,13 @@
 import { makeAutoObservable, reaction } from "mobx";
 import { Vibration } from "react-native";
-import { APP_STATE, appStore, LOCKER_MODE } from "../../store/app/AppStore";
+import { APP_STATE, LOCKER_MODE } from "../../store/app/AppStore";
 import { t } from "../../i18n";
 import { RootStore } from "../../store/RootStore";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import Cryptr from "react-native-cryptr";
 import bip39 from "react-native-bip39";
-import { getAuthStore, getWalletStore } from "../../App"
-
+import { getAppStore, getAuthStore, getWalletStore } from "../../App"
 
 export const PIN_LENGHT = 4;
 
@@ -61,7 +60,7 @@ export class LockerViewModel {
         this.message = t("lockerScreen.incorrectPin");
       } else {
         this.message = t("lockerScreen.correctPin");
-        appStore.getDefault().setPin(this.pin);
+       getAppStore().setPin(this.pin);
         this.rootStore.walletStore.storedWallets = JSON.parse(result);
         await this.rootStore.walletStore.init(true);
         getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
@@ -74,7 +73,7 @@ export class LockerViewModel {
         this.step = 1;
       } else if (this.step === 1) {
         if (this.pin === this.confirmationPin) {
-          appStore.getDefault().setPin(this.pin);
+          getAppStore().setPin(this.pin);
           this.settledPin = this.pin;
           this.message = t("lockerScreen.correctPin");
           this.disabled = true;
