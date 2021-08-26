@@ -15,7 +15,6 @@ import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { SettingsScreenModel } from "./SettingsScreenModel"
 import * as Animatable from "react-native-animatable"
-import { FlatList } from "react-native"
 import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
@@ -33,50 +32,17 @@ const Settings = observer(function () {
     }, [])
 
 
-    const keyExtractor = item => item.id
-
-    const renderRow = ({ item }) => {
-        return (
-                <Animatable.View animation={ "fadeIn" }>
-                    <TouchableOpacity
-                            accessible={ true }
-                            activeOpacity={ 0.5 }
-                            onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
-                    >
-                        <ListItem
-                                height={ 50 }
-                        >
-                            <ListItem.Part left paddingL-20>
-                                <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
-                            </ListItem.Part>
-                            <ListItem.Part middle column paddingL-20>
-                                <ListItem.Part>
-                                    <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
-                                          numberOfLines={ 1 }>{ item.name }</Text>
-                                </ListItem.Part>
-                            </ListItem.Part>
-                            <ListItem.Part paddingH-20>
-                                { item.currentValue && item.type === "actionSheet" &&
-                                <Text dark10>{ item.currentValue }</Text> }
-                                { item.type === "toggle" &&
-                                <Switch onValueChange={ item.onPress } value={ item.currentValue }/> }
-                            </ListItem.Part>
-                        </ListItem>
-                    </TouchableOpacity>
-                </Animatable.View>
-        )
-    }
-
     return (
-            <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
+            <Screen style={{height: "100%"}} preset={ "scroll" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
                 {
                     view.isAllInitialized &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                         <Header title={ t("settingsScreen.name") }/>
-                        <View row center padding-60>
-                            <View flex-1/>
-                            <View flex-8 center><FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
-                                <View absR>
+                        <View row center paddingV-60>
+                            <View flex-2/>
+                            <View center>
+                                <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
+                                <View style={ { position: "absolute", right: -15 } }>
                                     <Button round
                                             onPress={ () => nav.navigate("mainStack", {
                                                 screen: "settings",
@@ -90,27 +56,56 @@ const Settings = observer(function () {
                                     </Button>
                                 </View>
                             </View>
-                            <View flex-1/>
+                            <View flex-2/>
                         </View>
                         <View flex top bg-white>
-                            <FlatList
-                                    data={ view.settingsMenu }
-                                    renderItem={ renderRow }
-                                    keyExtractor={ keyExtractor }
-                            />
+                            {
+                                view.settingsMenu.map(item => <Animatable.View key={ item.id } animation={ "fadeIn" }>
+                                    <TouchableOpacity
+                                            accessible={ true }
+                                            activeOpacity={ 0.5 }
+                                            onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
+                                    >
+                                        <ListItem
+                                                height={ 50 }
+                                        >
+                                            <ListItem.Part left paddingL-20>
+                                                <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
+                                            </ListItem.Part>
+                                            <ListItem.Part middle column paddingL-20>
+                                                <ListItem.Part>
+                                                    <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
+                                                          numberOfLines={ 1 }>{ item.name }</Text>
+                                                </ListItem.Part>
+                                            </ListItem.Part>
+                                            <ListItem.Part paddingH-20>
+                                                { item.currentValue && item.type === "actionSheet" &&
+                                                <Text dark10>{ item.currentValue }</Text> }
+                                                { item.type === "toggle" &&
+                                                <Switch onValueChange={ item.onPress } value={ item.currentValue }/> }
+                                            </ListItem.Part>
+                                        </ListItem>
+                                    </TouchableOpacity>
+                                </Animatable.View>)
+                            }
                         </View>
                         <ActionSheet
                                 renderTitle={ () =>
-                                    <TouchableOpacity onPressIn={ () => view.settingsDialog.display = false }>
-                                        <View row paddingV-2 center>
-                                            <View flex center paddingH-20 paddingV-5>
-                                                <Button onPressIn={ () => view.settingsDialog.display = false } avoidInnerPadding avoidMinWidth
-                                                        style={ { padding: 4, paddingHorizontal: 20, backgroundColor: Colors.grey40 } }/>
+                                        <TouchableOpacity onPressIn={ () => view.settingsDialog.display = false }>
+                                            <View row paddingV-2 center>
+                                                <View flex center paddingH-20 paddingV-5>
+                                                    <Button onPressIn={ () => view.settingsDialog.display = false }
+                                                            avoidInnerPadding avoidMinWidth
+                                                            style={ {
+                                                                padding: 4,
+                                                                paddingHorizontal: 20,
+                                                                backgroundColor: Colors.grey40
+                                                            } }/>
+                                                </View>
                                             </View>
-                                        </View>
-                                    </TouchableOpacity>
+                                        </TouchableOpacity>
                                 }
-                                dialogStyle={{ borderTopRightRadius: 30, borderTopLeftRadius: 30,paddingBottom: 10}}
+                                dialogStyle={ { borderTopRightRadius: 30, borderTopLeftRadius: 30, paddingBottom: 10 } }
                                 title={ view.settingsDialog.title }
                                 message={ "Message of action sheet" }
                                 options={ view.settingsDialog.options }
@@ -122,7 +117,7 @@ const Settings = observer(function () {
                 }
                 {
 
-                    !view.isAllInitialized && <LoaderScreen/>
+                    !view.isAllInitialized && <View flex center><LoaderScreen/></View>
                 }
             </Screen>
     )
