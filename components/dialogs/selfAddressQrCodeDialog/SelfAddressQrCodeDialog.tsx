@@ -23,9 +23,9 @@ export const SelfAddressQrCodeDialog = observer(() => {
         <DialogHeader onPressIn={ () => view.display = false }/>
       { !view.pending &&
       <View marginB-40 center>
-        <View row center padding-10>
-          <Text text40 marginR-10>{ view.wallet?.formatAddress }</Text>
-          <Button outline borderRadius={ 4 } avoidMinWidth onPress={() => Clipboard.setString(view.wallet?.address)}>
+        <View row center padding-10 paddingH-50>
+          <Text text60 numberOfLines={1} margin-20>{ view.wallet?.address }</Text>
+          <Button link borderRadius={ 4 } avoidMinWidth onPress={() => Clipboard.setString(view.wallet?.address)}>
             <FAIcon size={ 20 } name={ "copy" } />
           </Button>
         </View>

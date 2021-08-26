@@ -1,4 +1,4 @@
-import { Colors, Dialog, ListItem, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { runInAction } from "mobx"
 import React from "react"
 import { useInstance } from "react-ioc"
@@ -28,12 +28,11 @@ export const WalletMenuDialog = observer(() => {
                             rippleColor={ Colors.primary }
                             onPress={ i.action }
                     >
-                        <ListItem row>
-                            <View padding-20 row center>
-                                <FAIcon size={ 20 } color={ Colors.primary } name={ i.icon }/>
-                                <Text marginL-20 text60R dark20>{ i.name }</Text>
-                            </View>
-                        </ListItem>
+                        <View padding-20 row>
+                            <FAIcon size={ 20 } color={ Colors.primary } name={ i.icon }/>
+                            <Text marginL-20 text60R dark20>{ i.name }</Text>
+                        </View>
+
                     </Ripple>
                 }) }
             </View>
