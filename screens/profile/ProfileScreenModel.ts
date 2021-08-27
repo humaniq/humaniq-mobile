@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx"
-import { getProfileStore } from "../../store/profile/ProfileStore"
+import { getProfileStore } from "../../App"
 
 export class ProfileScreenModel {
     initialized = false

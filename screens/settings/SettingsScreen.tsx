@@ -33,31 +33,34 @@ const Settings = observer(function () {
 
 
     return (
-            <Screen style={{height: "100%"}} preset={ "scroll" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
+            <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.dark70 }
+                    statusBarBg={ Colors.dark70 }>
                 {
-                    view.isAllInitialized &&
+                    view.initialized &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                         <Header title={ t("settingsScreen.name") }/>
-                        <View row center paddingV-60>
-                            <View flex-2/>
-                            <View center>
-                                <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
-                                <View style={ { position: "absolute", right: -15 } }>
-                                    <Button round
-                                            onPress={ () => nav.navigate("mainStack", {
-                                                screen: "settings",
-                                                params: {
-                                                    screen: "settings-profile",
-                                                }
-                                            }) }
-                                    >
-                                        <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 }
-                                                name={ 'pencil-alt' }/>
-                                    </Button>
-                                </View>
-                            </View>
-                            <View flex-2/>
-                        </View>
+                        { view.isAllInitialized ?
+                                <View row center paddingV-60>
+                                    <View flex-2/>
+                                    <View center>
+                                        <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
+                                        <View style={ { position: "absolute", right: -15 } }>
+                                            <Button round
+                                                    onPress={ () => nav.navigate("mainStack", {
+                                                        screen: "settings",
+                                                        params: {
+                                                            screen: "settings-profile",
+                                                        }
+                                                    }) }
+                                            >
+                                                <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 }
+                                                        name={ 'pencil-alt' }/>
+                                            </Button>
+                                        </View>
+                                    </View>
+                                    <View flex-2/>
+                                </View> : <View row center paddingV-60 height={ 190 }><LoaderScreen/></View>
+                        }
                         <View flex top bg-white>
                             {
                                 view.settingsMenu.map(item => <Animatable.View key={ item.id } animation={ "fadeIn" }>
@@ -117,7 +120,7 @@ const Settings = observer(function () {
                 }
                 {
 
-                    !view.isAllInitialized && <View flex center><LoaderScreen/></View>
+                    !view.initialized && <View flex center><LoaderScreen/></View>
                 }
             </Screen>
     )

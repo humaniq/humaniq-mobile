@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx"
-import { getWalletStore } from "../../../store/wallet/WalletStore"
+import { getWalletStore } from "../../../App"
+
 
 export class ExportMnemonicDialogViewModel {
     pending = false

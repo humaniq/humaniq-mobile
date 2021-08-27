@@ -1,10 +1,8 @@
-import { createContext, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { getAuthRequest } from "../api/AuthRequestStore"
+import { Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { ROUTES } from "../../config/api"
 import uuid from "react-native-uuid"
+import { getAuthRequest } from "../../App"
 
-export const authStore = createContext<AuthStore>()
-export const getAuthStore = () => authStore.getDefault()
 
 @model("AuthStore")
 export class AuthStore extends Model({
@@ -18,7 +16,6 @@ export class AuthStore extends Model({
 
     @modelFlow
     * init() {
-        authStore.setDefault(this)
         this.initialized = uuid.v4()
     }
 
@@ -28,9 +25,7 @@ export class AuthStore extends Model({
             wallet: wallet,
             platform_id: 1,
         })
-        console.log(auth)
         if (auth.ok) {
-            console.log(auth)
             this.token = auth.data.data.attributes.access_token
             this.refresh_token = auth.data.data.attributes.refresh_token
             this.loggedIn = true
