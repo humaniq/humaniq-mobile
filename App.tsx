@@ -107,30 +107,31 @@ const AppScreen = observer(() => {
         })()
     }, [])
 
-    return (
-            <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
-                {
-                    store.appStore.initialized &&
-                    store.appStore.appState === APP_STATE.APP &&
-                    !store.appStore.isLocked &&
-                    <RootNavigator
-                            ref={ navigationRef }
-                            initialState={ initialNavigationState }
-                            onStateChange={ onNavigationStateChange }
-                    /> }
-                {
-                    store.appStore.initialized &&
-                    store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked &&
-                    <AuthNavigator/>
-                }
-                {
-                    store.appStore.initialized &&
-                    store.appStore.isLocked &&
-                    <Locker/>
-                }
-                { !store.appStore.initialized && <LoaderScreen/> }
-            </SafeAreaProvider>
+    return (<>
+                <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
+                    {
+                        store.appStore.initialized &&
+                        store.appStore.appState === APP_STATE.APP &&
+                        !store.appStore.isLocked &&
+                        <RootNavigator
+                                ref={ navigationRef }
+                                initialState={ initialNavigationState }
+                                onStateChange={ onNavigationStateChange }
+                        /> }
+                    {
+                        store.appStore.initialized &&
+                        store.appStore.appState === APP_STATE.AUTH &&
+                        !store.appStore.isLocked &&
+                        <AuthNavigator/>
+                    }
+                    {
+                        store.appStore.initialized &&
+                        store.appStore.isLocked &&
+                        <Locker/>
+                    }
+                    { !store.appStore.initialized && <LoaderScreen/> }
+                </SafeAreaProvider>
+            </>
     )
 })
 

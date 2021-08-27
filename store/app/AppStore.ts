@@ -34,7 +34,6 @@ export class AppStore extends Model({
     * init() {
         if (!this.initialized) {
             this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
-            console.log(this.storedPin)
             if (!this.storedPin) {
                 AppState.addEventListener("change", (nextState) => {
                     if (nextState === "background") {
