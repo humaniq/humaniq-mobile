@@ -32,7 +32,7 @@ const Wallet = observer(function () {
                     before={
                         <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
                                 preset="scroll"
-                                style={{height: "100%"}}
+                                style={ { height: "100%" } }
                                 refreshing={ view.refreshing }
                                 onRefresh={ view.onRefresh }
                         >
@@ -41,7 +41,7 @@ const Wallet = observer(function () {
                                     <Header onPressMenu={ () => view.walletDialogs.menu.display = true }
                                             title={ t("walletScreen.name") }/>
                                     <View flex>
-                                        { store.walletStore.wallets.map((w: W, i) => {
+                                        { store.walletStore.allWallets.map((w: W, i) => {
                                             return <Card height={ 100 } margin-10 padding-20 animated
                                                          key={ w.address }
                                                          onPress={ () => nav.navigate("mainStack", {
@@ -111,10 +111,9 @@ const Wallet = observer(function () {
                         </View>
                     }
                     isBlurActive={
-                        false
-                        // view.walletDialogs.pendingDialog.display ||
-                        // view.walletDialogs.menu.display
-                        // walletMenu.display
+                        view.walletDialogs.pendingDialog.display ||
+                        view.walletDialogs.menu.display ||
+                        walletMenu.display
                     }
             />
     )

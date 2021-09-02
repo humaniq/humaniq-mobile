@@ -7,10 +7,12 @@
  *
  * @format
  */
+import "./shim"
 import "react-native-gesture-handler"
 import React, { useEffect, useRef } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import "@ethersproject/shims"
+import 'react-native-url-polyfill/auto';
 import { provider, toFactory, useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
 import { NavigationContainerRef } from "@react-navigation/native"

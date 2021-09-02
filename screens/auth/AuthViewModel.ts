@@ -96,7 +96,7 @@ export class AuthViewModel {
                 this.pending = false
             }
 
-            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
+            else if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 this.state = AUTH_STATE.LOGIN
                 runUnprotected(async () => {
                     getAppStore().appState = APP_STATE.APP
@@ -107,7 +107,7 @@ export class AuthViewModel {
                 this.initialized = true
             }
 
-            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
+            else if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER) {
                 this.state = AUTH_STATE.REGISTER
                 this.pending = true
                 setTimeout(async () => {
@@ -117,7 +117,7 @@ export class AuthViewModel {
                 }, 1)
             }
 
-            if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
+            else if (getAppStore().lockerStatus && getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER) {
                 this.state = AUTH_STATE.RECOVER
                 if (getAppStore().recoverPhrase && getAppStore().lockerStatus && getAppStore().savedPin) {
                     this.pending = true
@@ -129,7 +129,7 @@ export class AuthViewModel {
                 }
             }
 
-            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty && (
+            else if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty && (
               getAppStore().lockerPreviousScreen === AUTH_STATE.RECOVER ||
               getAppStore().lockerPreviousScreen === AUTH_STATE.REGISTER)) {
                 runUnprotected(() => {
@@ -140,7 +140,7 @@ export class AuthViewModel {
                 this.initialized = true
             }
 
-            if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
+            else if (!getAppStore().lockerStatus && !getAppStore().isLockerDirty &&
               getAppStore().lockerPreviousScreen === AUTH_STATE.LOGIN) {
                 runUnprotected(() => {
                     getAppStore().lockerMode = LOCKER_MODE.CHECK
@@ -149,8 +149,11 @@ export class AuthViewModel {
                 this.pending = false
                 this.initialized = true
             }
-            if (!getAppStore().lockerStatus && getAppStore().isLockerDirty) {
+            else if (!getAppStore().lockerStatus && getAppStore().isLockerDirty) {
                 this.state = AUTH_STATE.MAIN
+                this.pending = false
+                this.initialized = true
+            } else {
                 this.pending = false
                 this.initialized = true
             }
@@ -169,7 +172,7 @@ export class AuthViewModel {
             getAppStore().lockerPreviousScreen = ""
             getAppStore().appState = APP_STATE.APP
             await getWalletStore().init(true)
-            getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
+            getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
         })
         await getAppStore().init()
     }

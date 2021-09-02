@@ -20,7 +20,7 @@ export class WalletEtherScreenModel {
   }
 
   get wallet() {
-    return getWalletStore().wallets.find(w => w.address === this.currentWalletAddress);
+    return getWalletStore().allWallets.find(w => w.address === this.currentWalletAddress);
   }
 
   async init(address) {

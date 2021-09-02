@@ -14,6 +14,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { WalletEtherScreen } from "../screens/wallet/walletEther/WalletEtherScreen"
 import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
+import { BrowserScreen } from "../screens/browser/BrowserScreen"
 
 const Stack = createStackNavigator()
 
@@ -52,7 +53,7 @@ export function MainNavigator<PrimaryParamList>() {
             tabBarIcon: (options) => {
                 let icon = "wallet"
                 switch (route.name) {
-                    case "demo":
+                    case "browser":
                         icon = "globe"
                         break
                     case "settings":
@@ -65,6 +66,7 @@ export function MainNavigator<PrimaryParamList>() {
         }) }
         appearance={ { tabBarBackground: Colors.grey70, whenActiveShow: "icon-only" } }>
           <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet" component={ WalletStack }/>
+          <Tab.Screen options={ { tabBarLabel: t("browserScreen.name") } } name="browser" component={ BrowserScreen }/>
           <Tab.Screen options={ { tabBarLabel: t("settingScreen.name") } } name="settings" component={ SettingsStack }/>
       </Tab.Navigator>
     )

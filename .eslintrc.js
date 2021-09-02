@@ -60,5 +60,6 @@ module.exports = {
     "no-inferrable-types": 0,
     "no-return-assign": 2,
     "no-extra-parens": 2,
+    "prefer-promise-reject-errors": 0
   },
-};
+}

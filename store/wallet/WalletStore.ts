@@ -1,5 +1,15 @@
-import { _await, getSnapshot, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { observable, reaction } from "mobx"
+import {
+    _await,
+    getSnapshot,
+    Model,
+    model,
+    modelAction,
+    modelFlow,
+    runUnprotected,
+    tProp as p,
+    types as t
+} from "mobx-keystone"
+import { computed, observable, reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
 import uuid from "react-native-uuid"
 import { Wallet } from "./Wallet"
@@ -16,8 +26,9 @@ import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 export class WalletStore extends Model({
     pending: p(t.boolean, false),
     initialized: p(t.string, ""),
-    wallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
-    hiddenWallets: p(t.array(t.string), [])
+    allWallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
+    hiddenWallets: p(t.array(t.string), []),
+    selectedWalletIndex: p(t.number, 0)
 }) {
 
     @observable
@@ -26,12 +37,27 @@ export class WalletStore extends Model({
     @observable
     storedWallets
 
+    @computed
+    get wallets() {
+        return this.allWallets.filter(h => !this.hiddenWallets.includes(h.address))
+    }
+
+    @computed
+    get selectedWallet() {
+        return this.wallets[this.selectedWalletIndex]
+    }
+
+    @modelAction
+    selectWallet(index) {
+        this.selectedWalletIndex = index
+    }
+
     @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
             if (this.storedWallets) {
                 this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
-                this.wallets = this.storedWallets.wallets.map(w => {
+                this.allWallets = this.storedWallets.allWallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     const wallet = new Wallet({
@@ -41,23 +67,25 @@ export class WalletStore extends Model({
                     })
                     wallet.init()
                     return wallet
-                }).filter(h => !this.hiddenWallets.includes(h.address)) || []
+                }) || []
+                this.initialized = uuid.v4()
             }
             if (!this.initialized) {
-                reaction(() => this.storedWallets, (val) => {
-                    // console.log("Wallets=>", val)
-                })
                 reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
                     this.init(true)
                 })
                 reaction(() => getSnapshot(getAppStore().savedPin), async (pin) => {
                     if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
-                        const cryptr = new Cryptr(pin)
-                        const encrypted = await localStorage.load("hm-wallet")
-                        const result = cryptr.decrypt(encrypted)
-                        this.storedWallets = JSON.parse(result)
-                        await this.init(true)
-                        getAuthStore().registrationOrLogin(getWalletStore().wallets[0].address)
+                        await runUnprotected(async () => {
+                            const cryptr = new Cryptr(pin)
+                            const encrypted = await localStorage.load("hm-wallet")
+                            const result = cryptr.decrypt(encrypted)
+                            this.storedWallets = JSON.parse(result)
+                            console.log(this.storedWallets)
+                            await this.init(true)
+                            this.initialized = uuid.v4()
+                            getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
+                        })
                     }
                 })
                 reaction(() => getSnapshot(getAppStore().isLocked), (value) => {
@@ -66,13 +94,12 @@ export class WalletStore extends Model({
                     }
                 })
             }
-            this.initialized = uuid.v4()
         }
     }
 
     @modelFlow
     * updateWalletsInfo() {
-        this.wallets.forEach(w => w.init())
+        this.allWallets.forEach(w => w.init())
     }
 
     @modelAction
@@ -101,7 +128,7 @@ export class WalletStore extends Model({
         const hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
         hiddenWallets.push(address)
         yield* _await(localStorage.save("hw-wallet-hidden", hiddenWallets))
-        this.wallets = this.wallets.filter(w => w.address !== address)
+        this.allWallets = this.allWallets.filter(w => w.address !== address)
     };
 
 
@@ -115,7 +142,7 @@ export class WalletStore extends Model({
         const mnemonic = (yield* _await(this.keyring.serialize())) as {}
         return {
             mnemonic,
-            wallets: this.keyring.wallets
+            allWallets: this.keyring.wallets
         }
     }
 }

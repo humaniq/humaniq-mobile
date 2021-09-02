@@ -10,7 +10,9 @@
     "send": "Send",
     "get": "Get",
     "address": "Address",
-    "value": "Amount"
+    "value": "Amount",
+    "deny": "Deny",
+    "allow": "Allow"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -42,6 +44,9 @@
       }
     }
   },
+  "browserScreen": {
+    "name": "Browser"
+  },
   "walletMenuDialog": {
     "hideWallet": "Hide address"
   },
@@ -59,6 +64,10 @@
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
     "errorTx": "Error submitting transaction"
+  },
+  "approvalDappConnectDialog": {
+    "wontToConnect": "хочет подключиться к",
+    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
   },
   "profileScreen": {
     "name": "Profile",
