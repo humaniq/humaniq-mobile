@@ -11,7 +11,8 @@ import { getSnapshot } from "mobx-keystone"
 import { JS_POST_MESSAGE_TO_PROVIDER, SET_NETWORK_ID } from "../../utils/browserScripts"
 import { inject } from "react-ioc"
 import { ApprovalDappConnectDialogViewModel } from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialogViewModel"
-import controller from "@metamask/controllers"
+import { resemblesAddress } from "../../utils/address"
+import { ethErrors } from 'eth-json-rpc-errors'
 
 export class BrowserScreenViewModel {
 
@@ -42,8 +43,8 @@ export class BrowserScreenViewModel {
     inputRef: MutableRefObject<any>
 
     url = ""
-    title = "metamask"
-    icon = "metamask"
+    title = ""
+    icon = ""
 
     webviewUrlPostMessagePromiseResolve = null
     backgroundBridges: Array<any>
@@ -184,38 +185,9 @@ export class BrowserScreenViewModel {
     //         }
     //
     //         const rpcMethods = {
-    //             net_version: async () => {
-    //                 return getEthereumProvider().currentNetwork.chainID
-    //                 // const provider = getEthereumProvider()
-    //                 // const { networkType } = props;
-    //                 // const isInitialNetwork = networkType && getAllNetworks().includes(networkType);
-    //                 // if (isInitialNetwork) {
-    //                 //     res.result = Networks[networkType].networkId;
-    //                 // } else {
-    //                 //     return next();
-    //                 // }
-    //             },
     //             eth_coinbase: async () => {
     //                 const accounts = await getAccounts()
     //                 res.result = accounts.length > 0 ? accounts[0] : null
-    //             },
-    //
-    //
-    //             : async () => {
-    //                 const pageMeta = {
-    //                     meta: {
-    //                         url: this.url,
-    //                         title: this.title,
-    //                         icon: this.icon
-    //                     }
-    //                 }
-    //                 const rawSig = await getAppStore().messageManager.addUnapprovedMessageAsync({
-    //                     data: req.params[1],
-    //                     from: req.params[0],
-    //                     ...pageMeta
-    //                 })
-    //
-    //                 res.result = rawSig
     //             },
     //
     //             personal_sign: async () => {
@@ -445,8 +417,6 @@ export class BrowserScreenViewModel {
 
             if (data.type === "web3-send-async-read-only") {
                 console.log(data.payload.method)
-                let result = {}
-                const MessageManager = new controller.MessageManager()
                 switch (data.payload.method) {
                     case 'eth_getTransactionByHash':
                         this.postAsyncCallbackMessage({
@@ -484,33 +454,171 @@ export class BrowserScreenViewModel {
                             data
                         })
                         break
-                    case 'eth_sign':
-                        // const pageMeta = {
-                        //     meta: {
-                        //         url: this.url,
-                        //         title: this.title,
-                        //         icon: this.icon
-                        //     }
-                        // }
-                        // console.log(pageMeta)
-                        // result = await getAppStore().messageManager.addUnapprovedMessageAsync({
-                        //     data: data.payload.params[1],
-                        //     from: data.payload.params[0],
-                        //     ...pageMeta
-                        // })
-
-
-
-                        result = await MessageManager.addUnapprovedMessageAsync({
-                            data: "0x879a053d4800c6354e76c7985a865d2922c82fb5b3f4577b2fe08b998954f2e0",
-                            from: "0xfB4B91eCcD3afF9217Aa7F0C3a58c3185230D767",
-                        })
-
+                    case 'eth_sign': {
+                        const pageMeta = {
+                            meta: {
+                                url: this.url,
+                                title: this.title,
+                                icon: this.icon
+                            }
+                        }
                         this.postAsyncCallbackMessage({
-                            result,
+                            result: await getAppStore().messageManager.addUnapprovedMessageAsync({
+                                data: data.payload.params[1],
+                                from: data.payload.params[0],
+                                ...pageMeta
+                            }),
                             data
                         })
                         break
+                    }
+                    case 'personal_sign': {
+                        const firstParam = data.payload.params[0]
+                        const secondParam = data.payload.params[1]
+                        const params = {
+                            data: firstParam,
+                            from: secondParam
+                        }
+
+                        if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
+                            params.data = secondParam
+                            params.from = firstParam
+                        }
+
+                        const pageMeta = {
+                            meta: {
+                                url: this.url,
+                                title: this.title,
+                                icon: this.icon
+                            }
+                        }
+                        this.postAsyncCallbackMessage({
+                            result: await getAppStore().personalMessageManager.addUnapprovedMessageAsync({
+                                ...params,
+                                ...pageMeta
+                            }),
+                            data
+                        })
+                        break
+                    }
+                    case "eth_signTypedData": {
+                        const firstParam = data.payload.params[0]
+                        const secondParam = data.payload.params[1]
+                        const pageMeta = {
+                            meta: {
+                                url: this.url,
+                                title: this.title,
+                                icon: this.icon
+                            }
+                        }
+                        const params = {
+                            data: firstParam,
+                            from: secondParam
+                        }
+
+                        if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
+                            params.data = secondParam
+                            params.from = firstParam
+                        }
+                        this.postAsyncCallbackMessage({
+                            result: await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
+                              {
+                                  ...params,
+                                  ...pageMeta
+                              },
+                              'V1'
+                            ),
+                            data
+                        })
+                        break
+                    }
+                    case 'eth_signTypedData_v3': {
+
+                        const firstParam = data.payload.params[0]
+                        const secondParam = data.payload.params[1]
+                        const params = {
+                            data: firstParam,
+                            from: secondParam
+                        }
+
+                        const pageMeta = {
+                            meta: {
+                                url: this.url,
+                                title: this.title,
+                                icon: this.icon
+                            }
+                        }
+
+                        if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
+                            params.data = secondParam
+                            params.from = firstParam
+                        }
+
+                        const chainId = JSON.parse(params.data).domain.chainId
+                        const activeChainId = getEthereumProvider().currentNetwork.chainID
+
+                        // eslint-disable-next-line
+                        if (chainId && chainId != activeChainId) {
+                            throw ethErrors.rpc.invalidRequest(
+                              `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
+                            )
+                        }
+
+                        this.postAsyncCallbackMessage({
+                            result: await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
+                              {
+                                  ...params,
+                                  ...pageMeta
+                              },
+                              'V3'
+                            ),
+                            data
+                        })
+                        break
+                    }
+                    case 'eth_signTypedData_v4': {
+                        const firstParam = data.payload.params[0]
+                        const secondParam = data.payload.params[1]
+                        const params = {
+                            data: firstParam,
+                            from: secondParam
+                        }
+
+                        const pageMeta = {
+                            meta: {
+                                url: this.url,
+                                title: this.title,
+                                icon: this.icon
+                            }
+                        }
+
+                        if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
+                            params.data = secondParam
+                            params.from = firstParam
+                        }
+
+                        const chainId = JSON.parse(params.data).domain.chainId
+                        const activeChainId = getEthereumProvider().currentNetwork.chainID
+
+                        // eslint-disable-next-line
+                        if (chainId && chainId != activeChainId) {
+                            throw ethErrors.rpc.invalidRequest(
+                              `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
+                            )
+                        }
+
+                        this.postAsyncCallbackMessage({
+                            result: await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
+                              {
+                                  ...params,
+                                  ...pageMeta
+                              },
+                              'V4'
+                            ),
+                            data
+                        })
+                        break
+                    }
                 }
             }
         } catch (e) {

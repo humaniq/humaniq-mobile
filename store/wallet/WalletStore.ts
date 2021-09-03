@@ -56,6 +56,8 @@ export class WalletStore extends Model({
     * init(forse = false) {
         if (!this.initialized || forse) {
             if (this.storedWallets) {
+                console.log('init-wallet-store', { forse })
+                this.keyring = new HDKeyring(this.storedWallets.mnemonic)
                 this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
                 this.allWallets = this.storedWallets.allWallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -81,9 +83,8 @@ export class WalletStore extends Model({
                             const encrypted = await localStorage.load("hm-wallet")
                             const result = cryptr.decrypt(encrypted)
                             this.storedWallets = JSON.parse(result)
-                            console.log(this.storedWallets)
                             await this.init(true)
-                            this.initialized = uuid.v4()
+                            runUnprotected(() => this.initialized = uuid.v4())
                             getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
                         })
                     }

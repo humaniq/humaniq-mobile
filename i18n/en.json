@@ -12,7 +12,10 @@
     "address": "Address",
     "value": "Amount",
     "deny": "Deny",
-    "allow": "Allow"
+    "allow": "Allow",
+    "sign": "Подписать",
+    "message": "Сообщение",
+    "messageFrom": "Сообщение от"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -74,5 +77,11 @@
     "email": "Email",
     "firstName": "First name",
     "lastName": "Last name"
+  },
+  "signature_request": {
+    "title": "Signature Request",
+    "signRequested": "Your signature is being requested",
+    "signing": "Sign this message?",
+    "ethSignWarning": "Proceed with caution. This action can potentially be used to withdraw assets from your account. Make sure you trust this site."
   }
 }
