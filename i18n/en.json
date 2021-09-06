@@ -15,7 +15,10 @@
     "allow": "Allow",
     "sign": "Подписать",
     "message": "Сообщение",
-    "messageFrom": "Сообщение от"
+    "messageFrom": "Сообщение от",
+    "total": "Всего",
+    "wallet": "Кошелек",
+    "balance": "Баланс"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -66,7 +69,11 @@
   },
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
-    "errorTx": "Error submitting transaction"
+    "errorTx": "Error submitting transaction",
+    "suggestedFee": "Предлагаемая комиссия",
+    "maxFee": "Комиссия",
+    "maxAmount": "Максимум",
+    "insufficientBalance": "Вам нужно еще {0} для совершения этой транзакции"
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "хочет подключиться к",

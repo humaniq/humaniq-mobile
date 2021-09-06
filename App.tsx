@@ -38,6 +38,10 @@ import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
+import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel"
+import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
+import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -122,6 +126,8 @@ const AppScreen = observer(() => {
                                 onStateChange={ onNavigationStateChange }
                         />
                             <SigningDialog/>
+                            <SendWalletTransactionDialog/>
+                            <SendTransactionDialog />
                         </> }
                     {
                         store.appStore.initialized &&
@@ -142,6 +148,8 @@ const AppScreen = observer(() => {
 
 const App = provider()(AppScreen)
 App.register(
-        [ RootStore, toFactory(createRootStore) ]
+        [ RootStore, toFactory(createRootStore) ],
+        SendWalletTransactionViewModel,
+        SendTransactionViewModel
 )
 export default App

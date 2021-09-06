@@ -13,6 +13,7 @@ import { inject } from "react-ioc"
 import { ApprovalDappConnectDialogViewModel } from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialogViewModel"
 import { resemblesAddress } from "../../utils/address"
 import { ethErrors } from 'eth-json-rpc-errors'
+import { SendTransactionViewModel } from "../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 
 export class BrowserScreenViewModel {
 
@@ -59,6 +60,7 @@ export class BrowserScreenViewModel {
     reload
 
     approvalDialog = inject(this, ApprovalDappConnectDialogViewModel)
+    sendTransactionDialog = inject(this, SendTransactionViewModel)
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
@@ -171,73 +173,12 @@ export class BrowserScreenViewModel {
         return { gasPrice: 21000 }
     }
 
-    /**
-     * Handle RPC methods called by dapps
-     */
-    // getRpcMethodMiddleware({ hostname, getProviderState }) {
-    //     createAsyncMiddleware(async (req: JsonRpcRequest<any>, res: PendingJsonRpcResponse<any>, next) => {
-    //         const getAccounts = async () => {
-    //             const selectedAddress = getWalletStore().selectedWallet.address
-    //             const privacyMode = false
-    //             const isEnabled = !privacyMode || this.approvedHosts[hostname]
-    //
-    //             return isEnabled && selectedAddress ? [ selectedAddress ] : []
-    //         }
-    //
+
     //         const rpcMethods = {
     //             eth_coinbase: async () => {
     //                 const accounts = await getAccounts()
     //                 res.result = accounts.length > 0 ? accounts[0] : null
     //             },
-    //
-    //             personal_sign: async () => {
-    //                 const firstParam = req.params[0]
-    //                 const secondParam = req.params[1]
-    //                 const params = {
-    //                     data: firstParam,
-    //                     from: secondParam
-    //                 }
-    //
-    //                 if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
-    //                     params.data = secondParam
-    //                     params.from = firstParam
-    //                 }
-    //
-    //                 const pageMeta = {
-    //                     meta: {
-    //                         url: this.url,
-    //                         title: this.title,
-    //                         icon: this.icon
-    //                     }
-    //                 }
-    //                 const rawSig = await getAppStore().personalMessageManager.addUnapprovedMessageAsync({
-    //                     ...params,
-    //                     ...pageMeta
-    //                 })
-    //
-    //                 res.result = rawSig
-    //             },
-    //
-    //             eth_signTypedData: async () => {
-    //                 const pageMeta = {
-    //                     meta: {
-    //                         url: this.url,
-    //                         title: this.title,
-    //                         icon: this.icon
-    //                     }
-    //                 }
-    //                 const rawSig = await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
-    //                   {
-    //                       data: req.params[0],
-    //                       from: req.params[1],
-    //                       ...pageMeta
-    //                   },
-    //                   'V1'
-    //                 )
-    //
-    //                 res.result = rawSig
-    //             },
-    //
     //             eth_signTypedData_v3: async () => {
     //                 const data = JSON.parse(req.params[1])
     //                 const chainId = data.domain.chainId
@@ -454,6 +395,37 @@ export class BrowserScreenViewModel {
                             data
                         })
                         break
+                    case 'eth_sendTransaction': {
+                        if (this.sendTransactionDialog.display) return
+                        await this.sendTransactionDialog.init(data.payload.params[0], data.meta)
+                        const approved = await new Promise((resolve, reject) => {
+                            this.sendTransactionDialog.approvalRequest = {
+                                resolve,
+                                reject
+                            }
+                        })
+
+                        if (approved) {
+                            try {
+                                const result = await getWalletStore().selectedWallet.ether.sendTransaction(approved.tx)
+                                this.sendTransactionDialog.txHash = result.hash
+                                this.postAsyncCallbackMessage({
+                                    result: { hash: result.hash, message: "success" },
+                                    data
+                                })
+                            } catch (e) {
+                                this.postAsyncCallbackMessage({
+                                    result: { message: 'error', error: e },
+                                    data
+                                })
+                            }
+                        }
+                        this.postAsyncCallbackMessage({
+                            result: { message: 'rejected' },
+                            data
+                        })
+                        break
+                    }
                     case 'eth_sign': {
                         const pageMeta = {
                             meta: {

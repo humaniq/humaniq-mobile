@@ -58,7 +58,7 @@ export class Wallet extends Model({
 
     @computed
     get fiatBalance() {
-        return currencyFormat(this?.prices?.usd * this.ethBalance)
+        return this.prices?.usd ? currencyFormat(this?.prices?.usd * this.ethBalance) : 0
     }
 
     @modelFlow

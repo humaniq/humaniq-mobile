@@ -230,7 +230,10 @@
         bridgeSend({
           type: 'web3-send-async-read-only',
           messageId: messageId,
-          payload: payload
+          payload: payload,
+          meta: {
+            location: location.href
+          }
         })
 
         return new Promise(function (resolve, reject) {
