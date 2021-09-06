@@ -3,6 +3,8 @@ import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
 import { getWalletStore } from "../../App"
+import 'react-native-get-random-values'
+import { MessageManager, PersonalMessageManager, TypedMessageManager } from "@metamask/controllers"
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -26,12 +28,21 @@ export class AppStore extends Model({
     isLockerDirty: p(t.boolean, false),
     savedPin: p(t.string),
     recoverPhrase: p(t.string, "").withSetter(),
-    storedPin: p(t.string, "")
+    storedPin: p(t.string, ""),
+    signMessageParams: p(t.unchecked<any>()),
+    signType: p(t.string, ""),
+    signPageTitle: p(t.string, ""),
+    signPageUrl: p(t.string, ""),
+    signMessageDialogDisplay: p(t.boolean, false)
 }) {
 
+    messageManager = new MessageManager()
+    personalMessageManager = new PersonalMessageManager()
+    typedMessageManager = new TypedMessageManager()
 
     @modelFlow
     * init() {
+
         if (!this.initialized) {
             this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
             if (!this.storedPin) {
@@ -54,8 +65,33 @@ export class AppStore extends Model({
                 this.appState = APP_STATE.APP
                 this.isLocked = false
             }
+
+            this.messageManager.hub.on('unapprovedMessage', messageParams =>
+              this.onUnapprovedMessage(messageParams, 'eth')
+            )
+
+            this.personalMessageManager.hub.on('unapprovedMessage', messageParams =>
+              this.onUnapprovedMessage(messageParams, 'personal')
+            )
+
+            this.typedMessageManager.hub.on('unapprovedMessage', messageParams =>
+              this.onUnapprovedMessage(messageParams, 'typed')
+            )
+
             this.initialized = true
         }
+    }
+
+    @modelAction
+    onUnapprovedMessage = (messageParams, type) => {
+        console.log("On-unaproved-message", messageParams, type)
+        const { title: currentPageTitle, url: currentPageUrl } = messageParams.meta
+        delete messageParams.meta
+        this.signMessageParams = messageParams
+        this.signType = type
+        this.signPageTitle = currentPageTitle
+        this.signPageUrl = currentPageUrl
+        this.signMessageDialogDisplay = true
     }
 
     @modelAction

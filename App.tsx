@@ -7,10 +7,12 @@
  *
  * @format
  */
+import "./shim"
 import "react-native-gesture-handler"
 import React, { useEffect, useRef } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import "@ethersproject/shims"
+import 'react-native-url-polyfill/auto'
 import { provider, toFactory, useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
 import { NavigationContainerRef } from "@react-navigation/native"
@@ -35,6 +37,11 @@ import { DictionaryStore } from "./store/dictionary/DictionaryStore"
 import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
+import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
+import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel"
+import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
+import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -113,11 +120,15 @@ const AppScreen = observer(() => {
                         store.appStore.initialized &&
                         store.appStore.appState === APP_STATE.APP &&
                         !store.appStore.isLocked &&
-                        <RootNavigator
+                        <><RootNavigator
                                 ref={ navigationRef }
                                 initialState={ initialNavigationState }
                                 onStateChange={ onNavigationStateChange }
-                        /> }
+                        />
+                            <SigningDialog/>
+                            <SendWalletTransactionDialog/>
+                            <SendTransactionDialog />
+                        </> }
                     {
                         store.appStore.initialized &&
                         store.appStore.appState === APP_STATE.AUTH &&
@@ -137,6 +148,8 @@ const AppScreen = observer(() => {
 
 const App = provider()(AppScreen)
 App.register(
-        [ RootStore, toFactory(createRootStore) ]
+        [ RootStore, toFactory(createRootStore) ],
+        SendWalletTransactionViewModel,
+        SendTransactionViewModel
 )
 export default App

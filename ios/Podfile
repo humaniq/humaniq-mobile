@@ -18,6 +18,10 @@ target 'HumaniqMobile' do
 
   pod 'RNThread', :path => '../node_modules/react-native-threads'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'HumaniqMobileTests' do
     inherit! :complete
     # Pods for testing

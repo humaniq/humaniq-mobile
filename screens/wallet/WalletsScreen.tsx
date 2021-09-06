@@ -16,10 +16,12 @@ import { PendingDialog } from "./dialogs/PendingDialog"
 import { WalletMenuDialogViewModel } from "../../components/dialogs/menuWalletDialog/WalletMenuDialogViewModel"
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog"
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
+import { SendTransactionViewModel } from "../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 
 const Wallet = observer(function () {
     const view = useInstance(WalletsScreenModel)
     const walletMenu = useInstance(WalletMenuDialogViewModel)
+    const sendTransactionDialog = useInstance(SendTransactionViewModel)
     const store = useInstance(RootStore)
     const nav = useNavigation()
 
@@ -32,7 +34,7 @@ const Wallet = observer(function () {
                     before={
                         <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
                                 preset="scroll"
-                                style={{height: "100%"}}
+                                style={ { height: "100%" } }
                                 refreshing={ view.refreshing }
                                 onRefresh={ view.onRefresh }
                         >
@@ -41,7 +43,7 @@ const Wallet = observer(function () {
                                     <Header onPressMenu={ () => view.walletDialogs.menu.display = true }
                                             title={ t("walletScreen.name") }/>
                                     <View flex>
-                                        { store.walletStore.wallets.map((w: W, i) => {
+                                        { store.walletStore.allWallets.map((w: W, i) => {
                                             return <Card height={ 100 } margin-10 padding-20 animated
                                                          key={ w.address }
                                                          onPress={ () => nav.navigate("mainStack", {
@@ -64,29 +66,30 @@ const Wallet = observer(function () {
                                                             </View>
                                                         </View>
                                                         <View flex left>
-                                                            { !w.pending && !w.isError &&
-                                                            <View row>
-                                                                <View center>
+                                                            <View row center>
+                                                                <View center paddingR-10>
                                                                     <Text text40 dark20
                                                                           bold>{ w.formatBalance }</Text>
                                                                 </View>
+                                                                { !w.pending && !w.isError &&
                                                                 <View center>
                                                                     <Text violet40 text70
                                                                           bold>{ ` ≈${ w.fiatBalance }` }</Text>
                                                                 </View>
-                                                            </View> }
-                                                            { w.pending && <LoaderScreen/> }
-                                                            { w.isError && !w.pending &&
-                                                            <View row center>
-                                                                <FAIcon size={ 16 } name={ "bug" }
-                                                                        color={ Colors.red40 }/>
-                                                                <Text red40 text70R marginL-10>Error</Text>
-                                                            </View> }
+                                                                }
+                                                                { w.pending &&
+                                                                <View left padding-10><LoaderScreen/></View> }
+                                                                { w.isError && !w.pending &&
+                                                                <><FAIcon size={ 16 } name={ "bug" }
+                                                                          color={ Colors.red40 }/>
+                                                                    <Text red40 text70R marginL-10>Error</Text></>
+                                                                }
+                                                            </View>
                                                         </View>
                                                     </View>
                                                     <View flex-1 center right>
                                                         { i !== 0 &&
-                                                        <Button onPress={ () => walletMenu.open(w) } round
+                                                        <Button onPress={ async () => walletMenu.open(w) } round
                                                                 backgroundColor={ Colors.violet60 }>
                                                             <FAIcon color={ Colors.primary } name={ "ellipsis-v" }/>
                                                         </Button>
@@ -111,10 +114,9 @@ const Wallet = observer(function () {
                         </View>
                     }
                     isBlurActive={
-                        false
-                        // view.walletDialogs.pendingDialog.display ||
-                        // view.walletDialogs.menu.display
-                        // walletMenu.display
+                        view.walletDialogs.pendingDialog.display ||
+                        view.walletDialogs.menu.display ||
+                        walletMenu.display
                     }
             />
     )

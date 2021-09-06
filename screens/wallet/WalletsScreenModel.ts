@@ -11,6 +11,7 @@ export class WalletsScreenModel {
   rootStore: RootStore;
   refreshing = false;
 
+
   walletDialogs = {
     pending: false,
     pendingDialog: {

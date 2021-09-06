@@ -10,7 +10,15 @@
     "send": "Send",
     "get": "Get",
     "address": "Address",
-    "value": "Amount"
+    "value": "Amount",
+    "deny": "Deny",
+    "allow": "Allow",
+    "sign": "Подписать",
+    "message": "Сообщение",
+    "messageFrom": "Сообщение от",
+    "total": "Всего",
+    "wallet": "Кошелек",
+    "balance": "Баланс"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -42,6 +50,9 @@
       }
     }
   },
+  "browserScreen": {
+    "name": "Browser"
+  },
   "walletMenuDialog": {
     "hideWallet": "Hide address"
   },
@@ -58,12 +69,26 @@
   },
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
-    "errorTx": "Error submitting transaction"
+    "errorTx": "Error submitting transaction",
+    "suggestedFee": "Предлагаемая комиссия",
+    "maxFee": "Комиссия",
+    "maxAmount": "Максимум",
+    "insufficientBalance": "Вам нужно еще {0} для совершения этой транзакции"
+  },
+  "approvalDappConnectDialog": {
+    "wontToConnect": "хочет подключиться к",
+    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
   },
   "profileScreen": {
     "name": "Profile",
     "email": "Email",
     "firstName": "First name",
     "lastName": "Last name"
+  },
+  "signature_request": {
+    "title": "Signature Request",
+    "signRequested": "Your signature is being requested",
+    "signing": "Sign this message?",
+    "ethSignWarning": "Proceed with caution. This action can potentially be used to withdraw assets from your account. Make sure you trust this site."
   }
 }

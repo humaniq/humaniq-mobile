@@ -64,7 +64,7 @@ const Profile = observer(function () {
                                     first_name: store.profileStore.firstName,
                                     last_name: store.profileStore.lastName
                                 })
-                                await store.authStore.login(store.walletStore.wallets[0].address)
+                                await store.authStore.login(store.walletStore.allWallets[0].address)
                                 nav.goBack()
                             } } label={ t("common.save") }/>
                         </View>

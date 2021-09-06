@@ -48,7 +48,7 @@ export class Wallet extends Model({
 
     @computed
     get ethBalance() {
-        return +ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))
+        return this?.balances?.amount && +ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))
     }
 
     @computed
@@ -58,7 +58,7 @@ export class Wallet extends Model({
 
     @computed
     get fiatBalance() {
-        return currencyFormat(this.prices.usd * this.ethBalance)
+        return this.prices?.usd ? currencyFormat(this?.prices?.usd * this.ethBalance) : 0
     }
 
     @modelFlow
