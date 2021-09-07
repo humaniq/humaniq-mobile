@@ -22,7 +22,7 @@ export class BrowserScreenViewModel {
     backEnabled = false
     forwardEnabled = false
     progress = 0
-    initialUrl = "https://metamask.github.io/test-dapp/" // 'https://app.uniswap.org/' //  'https://metamask.github.io/test-dapp/' // 'https://dap.ps' //
+    initialUrl = 'https://dap.ps' // "https://metamask.github.io/test-dapp/" // 'https://app.uniswap.org/'
     firstUrlLoaded = false
     autocompleteValue = ''
     error = null
