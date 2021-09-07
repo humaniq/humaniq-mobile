@@ -3,31 +3,39 @@
     "ok": "OK!",
     "cancel": "Cancel",
     "back": "Back",
-    "register": "Registration",
-    "login": "Login",
+    "register": "Sign up",
+    "login": "Sign in",
     "import": "Import",
     "cancellation": "Cancel",
     "send": "Send",
     "get": "Get",
     "address": "Address",
-    "value": "Value"
+    "value": "Amount",
+    "deny": "Deny",
+    "allow": "Allow",
+    "sign": "Подписать",
+    "message": "Сообщение",
+    "messageFrom": "Сообщение от",
+    "total": "Всего",
+    "wallet": "Кошелек",
+    "balance": "Баланс"
   },
   "errors": {
-    "invalidEmail": "Invalid email address.",
-    "transactionBodyError": "Invalid body transaction"
+    "invalidEmail": "Invalid email address",
+    "transactionBodyError": "Invalid transaction body"
   },
   "registerScreen": {
     "registration": "Registration",
-    "repareFromMnemonicOne": "Recovery",
-    "repareFromMnemonicTwo": "from mnemonic",
-    "walletCreating": "Wallet creating",
+    "recoverFromMnemonicOne": "Recover",
+    "recoverFromMnemonicTwo": "from recovery phrase",
+    "walletCreating": "Wallet is being created",
     "walletRecoverTitle": "Enter your recovery phrase",
     "recoveryError": "Invalid recovery phrase"
   },
   "lockerScreen": {
     "incorrectPin": "Invalid PIN",
-    "pinFormErrorIncorrectConfirmationMessage": "Incorrect pin",
-    "pinFormErrorIncorrectPinMessage": "Incorrect pin",
+    "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
+    "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
     "pinFormLoginAction": "Enter PIN code",
     "pinFormRegisterAction": "Enter PIN code",
     "pinFormConfirmationAction": "Confirm PIN code",
@@ -37,33 +45,50 @@
     "name": "Wallets",
     "menuDialog": {
       "createWallet": {
-        "name": "Create wallet",
-        "createWalletMessage": "The wallet is being created, wait a bit ..."
+        "name": "Create new address",
+        "createWalletMessage": "New address is being created, please wait…"
       }
     }
   },
+  "browserScreen": {
+    "name": "Browser"
+  },
   "walletMenuDialog": {
-    "hideWallet": "Hide wallet"
+    "hideWallet": "Hide address"
   },
   "exportMnemonicDialog": {
-    "title": "Your recovery phrase",
-    "description": "Это ваша сид-фраза. Она используется для доказательства владения кошельком. Запишите ее на бумаге и храните в надежном месте. Она понадобится вам, если вы потеряете или переустановите кошелек"
+    "title": "Your secret phrase",
+    "description": "This is your secret (recovery) phrase. It proves wallet ownership, never disclose it to anyone. Write it on paper and store in a safe place. If you lose device or reinstall wallet, you would need it."
   },
   "settingsScreen": {
     "name": "Settings",
     "menu": {
       "ethNetwork": "Ethereum network",
-      "exportMnemonic": "Export seed phrase"
+      "exportMnemonic": "Export recovery phrase"
     }
   },
   "sendTransactionDialog": {
-    "successTx": "Funds sent!",
-    "errorTx": "Send error!"
+    "successTx": "Funds sent successfully",
+    "errorTx": "Error submitting transaction",
+    "suggestedFee": "Предлагаемая комиссия",
+    "maxFee": "Комиссия",
+    "maxAmount": "Максимум",
+    "insufficientBalance": "Вам нужно еще {0} для совершения этой транзакции"
+  },
+  "approvalDappConnectDialog": {
+    "wontToConnect": "хочет подключиться к",
+    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
   },
   "profileScreen": {
     "name": "Profile",
     "email": "Email",
-    "firstName": "Firstname",
-    "lastName": "Lastname"
+    "firstName": "First name",
+    "lastName": "Last name"
+  },
+  "signature_request": {
+    "title": "Signature Request",
+    "signRequested": "Your signature is being requested",
+    "signing": "Sign this message?",
+    "ethSignWarning": "Proceed with caution. This action can potentially be used to withdraw assets from your account. Make sure you trust this site."
   }
 }
