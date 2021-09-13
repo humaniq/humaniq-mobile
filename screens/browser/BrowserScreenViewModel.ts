@@ -1,7 +1,6 @@
 import { makeAutoObservable, reaction } from "mobx"
 import { MutableRefObject } from "react"
 import { DAPPS_CONFIG } from "../../config/dapp"
-import { getUrlObj } from "../../utils/browser"
 import { getAppStore, getEthereumProvider, getWalletStore } from "../../App"
 // import { createAsyncMiddleware, JsonRpcRequest, PendingJsonRpcResponse } from "json-rpc-engine"
 import { NavigationProp } from "@react-navigation/native"
@@ -14,6 +13,7 @@ import { ApprovalDappConnectDialogViewModel } from "../../components/dialogs/app
 import { resemblesAddress } from "../../utils/address"
 import { ethErrors } from 'eth-json-rpc-errors'
 import { SendTransactionViewModel } from "../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import { ExploreModalViewModel } from "./ExploreModalViewModel"
 
 export class BrowserScreenViewModel {
 
@@ -22,7 +22,7 @@ export class BrowserScreenViewModel {
     backEnabled = false
     forwardEnabled = false
     progress = 0
-    initialUrl = 'https://dap.ps' // "https://metamask.github.io/test-dapp/" // 'https://app.uniswap.org/'
+    initialUrl = "https://home.metamask.io/" // https://metamask.github.io/test-dapp/" // 'https://dap.ps' // 'https://app.uniswap.org/'
     firstUrlLoaded = false
     autocompleteValue = ''
     error = null
@@ -61,6 +61,7 @@ export class BrowserScreenViewModel {
 
     approvalDialog = inject(this, ApprovalDappConnectDialogViewModel)
     sendTransactionDialog = inject(this, SendTransactionViewModel)
+    exploreModal = inject(this, ExploreModalViewModel)
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
@@ -71,6 +72,11 @@ export class BrowserScreenViewModel {
         this.initialized = true
         const entryScriptWeb3 = await dappsProvider.get()
         this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
+        const result = this.go("https://home.metamask.io/", true)
+        if (result) {
+            this.exploreModal.tabs[0] = { url: result, title: "", icon: "" }
+            this.exploreModal.selectedTab = 0
+        }
 
         reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
             this.reloadWebView()
@@ -86,6 +92,22 @@ export class BrowserScreenViewModel {
             this.webviewRef.reload()
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    onPressSearch() {
+        this.isSearchMode = !this.isSearchMode
+    }
+
+    isSearchMode = false
+
+
+    onSearchSubmit(val) {
+        this.isSearchMode = false
+        const result = this.go(val.toLowerCase())
+        if (result) {
+            this.exploreModal.tabs.push({ url: result, title: "", icon: "" })
+            this.exploreModal.selectedTab++
         }
     }
 
@@ -114,13 +136,6 @@ export class BrowserScreenViewModel {
         return url
     }
 
-    toggleUrlModal({ urlInput = null } = {}) {
-        const goingToShow = !this.showUrlModal
-        const urlToShow = this.getMaskedUrl(urlInput || this.url)
-        if (goingToShow && urlToShow) this.autocompleteValue = urlToShow
-        this.showUrlModal = goingToShow
-    }
-
     /**
      * Checks if it is a ENS website
      */
@@ -137,30 +152,15 @@ export class BrowserScreenViewModel {
     };
 
     /**
-     * Checks if a given url or the current url is the homepage
+     * Stops normal loading when it's ens, instead call go to be properly set up
      */
-    isHomePage(checkUrl = null) {
-        const currentPage = checkUrl || this.url
-        const { host: currentHost } = getUrlObj(currentPage)
-        return currentHost === DAPPS_CONFIG.HOMEPAGE_HOST
-    }
-
-    notifyAllConnections(payload, restricted = true) {
-        if (!this.url) return
-        const fullHostname = new URL(this.url).hostname
-
-        // TODO:permissions move permissioning logic elsewhere
-        this.backgroundBridges.forEach(bridge => {
-            if (
-              bridge.hostname === fullHostname &&
-              // (!props.privacyMode || !restricted || this.approvedHosts[bridge.hostname])
-              (!restricted || this.approvedHosts[bridge.hostname])
-            ) {
-                bridge.sendNotification(payload)
-            }
-        })
-    }
-
+    onShouldStartLoadWithRequest({ url }) {
+        if (this.isENSUrl(url)) {
+            this.go(url.replace(/^http:\/\//, 'https://'))
+            return false
+        }
+        return true
+    };
 
     async polyfillGasPrice(method, params = []) {
         // const { TransactionController } = Engine.context;
@@ -173,85 +173,7 @@ export class BrowserScreenViewModel {
         return { gasPrice: 21000 }
     }
 
-
     //         const rpcMethods = {
-    //             eth_coinbase: async () => {
-    //                 const accounts = await getAccounts()
-    //                 res.result = accounts.length > 0 ? accounts[0] : null
-    //             },
-    //             eth_signTypedData_v3: async () => {
-    //                 const data = JSON.parse(req.params[1])
-    //                 const chainId = data.domain.chainId
-    //                 const activeChainId = getEthereumProvider().currentNetwork.chainID
-    //                   // props.networkType === RPC ? props.network : Networks[props.networkType].networkId
-    //
-    //                 // eslint-disable-next-line
-    //                 if (chainId && chainId != activeChainId) {
-    //                     throw ethErrors.rpc.invalidRequest(
-    //                       `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
-    //                     )
-    //                 }
-    //
-    //                 const pageMeta = {
-    //                     meta: {
-    //                         url: this.url,
-    //                         title: this.title,
-    //                         icon: this.icon
-    //                     }
-    //                 }
-    //
-    //                 const rawSig = await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
-    //                   {
-    //                       data: req.params[1],
-    //                       from: req.params[0],
-    //                       ...pageMeta
-    //                   },
-    //                   'V3'
-    //                 )
-    //
-    //                 res.result = rawSig
-    //             },
-    //
-    //             eth_signTypedData_v4: async () => {
-    //                 const data = JSON.parse(req.params[1])
-    //                 const chainId = data.domain.chainId
-    //                 const activeChainId = getEthereumProvider().currentNetwork.chainID
-    //
-    //                 // eslint-disable-next-line eqeqeq
-    //                 if (chainId && chainId != activeChainId) {
-    //                     throw ethErrors.rpc.invalidRequest(
-    //                       `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
-    //                     )
-    //                 }
-    //
-    //                 const pageMeta = {
-    //                     meta: {
-    //                         url: this.url,
-    //                         title: this.title,
-    //                         icon: this.icon
-    //                     }
-    //                 }
-    //                 const rawSig = await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
-    //                   {
-    //                       data: req.params[1],
-    //                       from: req.params[0],
-    //                       ...pageMeta
-    //                   },
-    //                   'V4'
-    //                 )
-    //
-    //                 res.result = rawSig
-    //             },
-    //
-    //             web3_clientVersion: async () => {
-    //                 let version = this.appVersion
-    //                 if (!version) {
-    //                     this.appVersion = getVersion()
-    //                     version = this.appVersion
-    //                 }
-    //                 res.result = `MetaMask/${ version }/Beta/Mobile`
-    //             },
-    //
     //             wallet_scanQRCode: () =>
     //               new Promise((resolve, reject) => {
     //                   this.navigation.navigate('QRScanner', {
@@ -276,23 +198,6 @@ export class BrowserScreenViewModel {
     //                       }
     //                   })
     //               }),
-    //
-    //             wallet_watchAsset: async () => {
-    //                 const {
-    //                     params: {
-    //                         options: { address, decimals, image, symbol },
-    //                         type
-    //                     }
-    //                 } = req
-    //
-    //                 const suggestionResult = await getAppStore().tokensController.watchAsset(
-    //                   { address, symbol, decimals, image },
-    //                   type
-    //                 )
-    //
-    //                 res.result = suggestionResult.result
-    //             },
-    //
 
 
     getAccounts(host = this.url) {
@@ -314,11 +219,19 @@ export class BrowserScreenViewModel {
             if (data.type === 'history-state-changed') {
                 this.url = data.navState.url
                 this.title = data.navState.title
+                this.icon = data.navState.icon.replace("svg", "png")
+                this.backEnabled = !!(data.navState.canGoBack - 1)
+
+                this.exploreModal.tabs[this.exploreModal.selectedTab] = {
+                    url: this.url,
+                    title: this.title,
+                    icon: this.icon
+                }
             }
             if (data.permission === "web3") {
-                console.log("web3-permission", this.url)
+                console.log("web3-permission", this.url, new URL(data.params?.url).host)
                 const selectedAddress = getWalletStore().selectedWallet.address
-                if (this.getAccounts(data.params?.host).length > 0) {
+                if (this.getAccounts(data.params?.url).length > 0) {
                     this.postMessage({
                         messageId: data.messageId,
                         type: "api-response",
@@ -329,14 +242,14 @@ export class BrowserScreenViewModel {
                 } else {
                     if (this.approvalDialog.display) return
                     this.approvalDialog.display = true
-                    this.approvalDialog.hostName = new URL(data.params?.host).host || this.url
+                    this.approvalDialog.hostName = new URL(data.params?.url).host || this.url
 
                     const approved = await new Promise((resolve, reject) => {
                         this.approvalDialog.approvalRequest = { resolve, reject }
                     })
 
                     if (approved) {
-                        this.approvedHosts.add(new URL(data.params?.host).host)
+                        this.approvedHosts.add(new URL(data.params?.url).host)
                         this.postMessage({
                             messageId: data.messageId,
                             type: "api-response",
@@ -378,6 +291,7 @@ export class BrowserScreenViewModel {
                         })
                         break
                     case 'eth_accounts':
+                    case 'eth_coinbase':
                         this.postAsyncCallbackMessage({
                             result: this.getAccounts(),
                             data
@@ -407,6 +321,7 @@ export class BrowserScreenViewModel {
 
                         if (approved) {
                             try {
+                                // @ts-ignore
                                 const result = await getWalletStore().selectedWallet.ether.sendTransaction(approved.tx)
                                 this.sendTransactionDialog.txHash = result.hash
                                 this.postAsyncCallbackMessage({
@@ -610,5 +525,106 @@ export class BrowserScreenViewModel {
             beta: true,
             result: { result }
         })
+    }
+
+    /**
+     * Handles state changes for when the url changes
+     */
+    changeUrl(siteInfo, type) {
+        this.backEnabled = siteInfo.canGoBack
+        this.forwardEnabled = siteInfo.canGoForward
+        // isTabActive() &&
+        // props.navigation.setParams({
+        //     url: getMaskedUrl(siteInfo.url),
+        //     icon: siteInfo.icon,
+        //     silent: true
+        // })
+        //
+        // props.updateTabInfo(getMaskedUrl(siteInfo.url), props.id)
+        //
+        // props.addToBrowserHistory({
+        //     name: siteInfo.title,
+        //     url: getMaskedUrl(siteInfo.url)
+        // })
+    };
+
+    onLoadEnd({ nativeEvent }) {
+        if (nativeEvent.loading) return
+        console.log("END-LOADING")
+        this.webviewRef.injectJavaScript(JS_POST_MESSAGE_TO_PROVIDER(JSON.stringify({ type: 'getPageInfo' })))
+        const { hostname: currentHostname } = this.url ? new URL(this.url) : { hostname: this.initialUrl }
+        const { hostname } = new URL(nativeEvent.url)
+        if (currentHostname === hostname) {
+            this.changeUrl({ ...nativeEvent, icon: this.icon }, 'end-promise')
+        }
+    }
+
+    onProgress({ nativeEvent: { progress } }) {
+        this.progress = progress * 100
+    }
+
+    get isHomePage() {
+        return this.initialUrl === this.url
+    }
+
+    isAllowedUrl(hostName) {
+        return !getAppStore().phishingController.test(hostName)
+    }
+
+    handleNotAllowedUrl(urlTogo) {
+        this.blockedUrl = urlTogo
+        this.showPhishingModal = true
+    }
+
+    goBack() {
+        if (!this.backEnabled) return
+        this.webviewRef?.goBack()
+    }
+
+    goForward() {
+        if (!this.forwardEnabled) return
+        this.webviewRef?.goForward()
+    }
+
+    navChanged(nav) {
+        console.log("NAV-CHANGED", nav)
+        this.backEnabled = nav.canGoBack
+        this.forwardEnabled = nav.canGoForward
+        this.url = nav.url
+        this.title = nav.title
+    }
+
+    go(url, initialCall = false) {
+        if (url === this.initialUrl) {
+            this.forwardEnabled = false
+            this.backEnabled = false
+        }
+        const hasProtocol = url.match(/^[a-z]*:\/\//)
+        const sanitizedURL = hasProtocol ? url : `${ "https://" }${ url }`
+        const { hostname } = new URL(sanitizedURL.toLowerCase())
+        const urlToGo = sanitizedURL[sanitizedURL.length - 1] === "/" ? sanitizedURL : `${ sanitizedURL }/`
+        // const isEnsUrl = this.isENSUrl(url);
+
+        // if (isEnsUrl) {
+        //    this.webviewRef && this.webviewRef.stopLoading();
+        //     const { url: ensUrl, type, hash, reload } = await this.handleIpfsContent(url, { hostname, search, pathname });
+        //     if (reload) return this.go(ensUrl);
+        //     urlToGo = ensUrl;
+        //     this.sessionENSNames[urlToGo] = { hostname, hash, type };
+        // }
+
+        if (this.isAllowedUrl(hostname)) {
+            if (initialCall) {
+                this.initialUrl = urlToGo
+                this.firstUrlLoaded = true
+            } else {
+                this.webviewRef && this.webviewRef.injectJavaScript(`(function(){window.location.href = '${ urlToGo }' })()`)
+            }
+
+            this.progress = 0
+            return urlToGo
+        }
+        this.handleNotAllowedUrl(urlToGo)
+        return null
     }
 }

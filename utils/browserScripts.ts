@@ -16,28 +16,16 @@ const getWindowInformation = `
 	))
 `;
 
-const getWebviewUrl = `
-	const __getFavicon = function(){
-		let favicon = undefined;
-		const nodeList = document.getElementsByTagName("link");
-		for (let i = 0; i < nodeList.length; i++)
-		{
-			const rel = nodeList[i].getAttribute("rel")
-			if (rel === "icon" || rel === "shortcut icon")
-			{
-				favicon = nodeList[i]
-			}
-		}
-		return favicon && favicon.href
-	}
-	window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(
-		{
-			type: 'GET_WEBVIEW_URL',
-			payload: {
+export const getWebviewUrl = `
+	ReactNativeWebView && ReactNativeWebView.postMessage(
+		JSON.stringify({
+			type: 'history-state-changed',
+			navState: {
 				url: location.href,
-				icon: __getFavicon()
+				icon: __getFavicon(),
+				title: document.title
 			}
-		}
+		})
 	))
 `;
 

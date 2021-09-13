@@ -6,12 +6,13 @@ import { amountFormat, currencyFormat } from "../../../utils/number"
 export class SendTransactionViewModel {
     display = false
     pending = false
+    initialized = false
     symbol = "ETH"
     txHash = ""
 
     approvalRequest
     meta: {
-        location: ""
+        url: ""
     }
 
     txData = {
@@ -38,6 +39,7 @@ export class SendTransactionViewModel {
             ...txData
         }
         this.display = true
+        this.initialized = true
         this.txData.chainId = getEthereumProvider().currentNetwork.chainID
         const [ nonce, estimateGas ] = await Promise.all([
             await getEthereumProvider().currentProvider.getTransactionCount(this.selectedWallet.address, "pending"),
@@ -49,7 +51,7 @@ export class SendTransactionViewModel {
     }
 
     get hostname() {
-        return this.meta.location ? new URL(this.meta.location).hostname : ""
+        return this.meta?.url ? new URL(this.meta.url).hostname : ""
     }
 
     get selectedWallet() {

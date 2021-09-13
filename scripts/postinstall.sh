@@ -7,8 +7,8 @@ node_modules/.bin/rn-nodeify --install 'crypto,buffer,react-native-randombytes,v
 echo "2. jetify"
 npx jetify
 
-echo "3. Patch npm packages"
-npx patch-package
+# echo "3. Patch npm packages"
+# npx patch-package
 
 #echo "4. Create xcconfig files..."
 #echo "" > ios/debug.xcconfig

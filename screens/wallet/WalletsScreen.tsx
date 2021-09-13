@@ -38,8 +38,9 @@ const Wallet = observer(function () {
                                 refreshing={ view.refreshing }
                                 onRefresh={ view.onRefresh }
                         >
+                            { view.initialized &&
                             <Animatable.View animation={ "fadeIn" } style={ { height: "100%", flex: 1 } }>
-                                { view.initialized && <View flex>
+                                <View flex>
                                     <Header onPressMenu={ () => view.walletDialogs.menu.display = true }
                                             title={ t("walletScreen.name") }/>
                                     <View flex>
@@ -100,10 +101,8 @@ const Wallet = observer(function () {
                                         }) }
                                     </View>
                                 </View>
-                                }
-                            </Animatable.View>
-                            { !view.initialized && <LoaderScreen/> }
-
+                            </Animatable.View> }
+                            { !view.initialized && <View flex><LoaderScreen/></View> }
                         </Screen>
                     }
                     after={
