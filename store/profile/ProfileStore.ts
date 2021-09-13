@@ -1,21 +1,9 @@
-import {
-    createContext,
-    getSnapshot,
-    model,
-    Model,
-    modelFlow,
-    runUnprotected,
-    tProp as p,
-    types as t
-} from "mobx-keystone"
+import { getSnapshot, model, Model, modelFlow, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { computed, reaction } from "mobx"
-import { getAuthRequest } from "../api/AuthRequestStore"
 import { ROUTES } from "../../config/api"
-import { getAuthStore } from "../auth/AuthStore"
 import uuid from "react-native-uuid"
+import { getAuthRequest, getAuthStore } from "../../App"
 
-export const profileStore = createContext<ProfileStore>()
-export const getProfileStore = () => profileStore.getDefault()
 
 @model("ProfileStore")
 export class ProfileStore extends Model({
@@ -27,10 +15,8 @@ export class ProfileStore extends Model({
     loaded: p(t.boolean, false)
 }) {
 
-
     @modelFlow
     * init() {
-        profileStore.setDefault(this)
         if (!this.initialized) {
             reaction(() => getSnapshot(getAuthStore().loggedIn), async (val) => {
                 if (val) {
@@ -43,7 +29,6 @@ export class ProfileStore extends Model({
             })
         }
     }
-
 
     @computed
     get fullName() {

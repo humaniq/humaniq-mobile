@@ -3,13 +3,15 @@ import "react-native-get-random-values";
 import "@ethersproject/shims";
 import { RootStore } from "../../store/RootStore";
 import { t } from "../../i18n";
-import { getWalletStore } from "../../store/wallet/WalletStore";
+import { getWalletStore } from "../../App"
+
 
 export class WalletsScreenModel {
   initialized = false;
   rootStore: RootStore;
   refreshing = false;
-  
+
+
   walletDialogs = {
     pending: false,
     pendingDialog: {
@@ -32,11 +34,11 @@ export class WalletsScreenModel {
       ]
     }
   };
-  
+
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true });
   }
-  
+
   async init(rootStore) {
     this.rootStore = rootStore;
     try {
@@ -45,13 +47,13 @@ export class WalletsScreenModel {
       console.log("INIT ERROR", e);
     }
   }
-  
+
   async onRefresh() {
     this.refreshing = true;
     await getWalletStore().updateWalletsInfo();
     this.refreshing = false
   }
-  
+
   async addWallet() {
     try {
       await getWalletStore().addWallet()

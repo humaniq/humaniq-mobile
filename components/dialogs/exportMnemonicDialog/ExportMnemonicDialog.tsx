@@ -25,7 +25,7 @@ export const ExportMnemonicDialog = observer(() => {
                     view.recoveryPhrase.map((i, id) => <Chip margin-5 padding-6
                                                              useCounter
                                                              badgeProps={ {
-                                                                 label: id + 1
+                                                                 label: `${ id + 1 }`
                                                              } }
                                                              labelStyle={ {
                                                                  fontSize: 16,
@@ -36,7 +36,7 @@ export const ExportMnemonicDialog = observer(() => {
                                                                  borderColor: Colors.violet40,
                                                                  backgroundColor: Colors.violet40
                                                              } }
-                                                             key={ i }
+                                                             key={ `${ i }` }
                                                              label={ `${ i }` }/>
                     )
                 }

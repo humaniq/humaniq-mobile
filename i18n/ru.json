@@ -10,8 +10,16 @@
     "send": "Отправить",
     "get": "Получить",
     "address": "Адрес",
-    "value": "Обьем",
-    "save": "Cохранить"
+    "value": "Сумма",
+    "save": "Cохранить",
+    "deny": "Отказать",
+    "allow": "Разрешить",
+    "sign": "Подписать",
+    "message": "Сообщение",
+    "messageFrom": "Сообщение от",
+    "total": "Всего",
+    "wallet": "Кошелек",
+    "balance": "Баланс"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -19,8 +27,8 @@
   },
   "registerScreen": {
     "registration": "Регистрация",
-    "repareFromMnemonicOne": "Восстановить",
-    "repareFromMnemonicTwo": "по секретной фразе",
+    "recoverFromMnemonicOne": "Восстановить",
+    "recoverFromMnemonicTwo": "по секретной фразе",
     "walletCreating": "Кошелек создается",
     "walletRecoverTitle": "Введите фразу восстановления",
     "recoveryError": "Неправильная фраза восстановления"
@@ -38,17 +46,22 @@
     "name": "Кошельки",
     "menuDialog": {
       "createWallet": {
-        "name": "Создать кошелек",
-        "createWalletMessage": "Кошелек создается, подождите немного..."
+        "name": "Создать новый адрес",
+        "createWalletMessage": "Создается новый адрес, пожалуйста подождите…"
       }
     }
   },
+  "browserScreen": {
+    "name": "Браузер",
+    "searchPlaceholder": "Введите URL-адрес",
+    "closeAllTabs": "Закрыть все вкладки"
+  },
   "walletMenuDialog": {
-    "hideWallet": "Скрыть кошелек"
+    "hideWallet": "Скрыть адрес"
   },
   "exportMnemonicDialog": {
-    "title": "Ваша фраза восстновления",
-    "description": "Это ваша сид-фраза. Она используется для доказательства владения кошельком. Запишите ее на бумаге и храните в надежном месте. Она понадобится вам, если вы потеряете или переустановите кошелек"
+    "title": "Ваша секретная фраза",
+    "description": "Это ваша фраза восстановления. Она используется для доказательства владения кошельком. Запишите ее на бумаге и храните в надежном месте. Она понадобится вам, если вы потеряете или переустановите кошелек"
   },
   "settingsScreen": {
     "name": "Настройки",
@@ -59,13 +72,29 @@
     }
   },
   "sendTransactionDialog": {
-    "successTx": "Средства отправлены!",
-    "errorTx": "Ошибка отправки!"
+    "successTx": "Средства успешно отправлены",
+    "errorTx": "Ошибка создания транзакции",
+    "suggestedFee": "Предлагаемая комиссия",
+    "maxFee": "Комиссия",
+    "maxAmount": "Максимум",
+    "insufficientBalance": "Вам нужно еще %{balance} для совершения этой транзакции",
+    "outerSuggestion": "TX data",
+    "successSendTx": "Транзакция успешно отправлена"
+  },
+  "approvalDappConnectDialog": {
+    "wontToConnect": "хочет подключиться к",
+    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
   },
   "profileScreen": {
     "name": "Профиль",
     "email": "Email",
     "firstName": "Имя",
     "lastName": "Фамилия"
+  },
+  "signatureRequest": {
+    "title": "Запрос на подпись",
+    "signRequested": "Ваша подпись запрашивается",
+    "signing": "Подписать это сообщение?",
+    "ethSignWarning": "Действовать с осторожностью. Это действие потенциально может быть использовано для вывода средств с вашего счета. Убедитесь, что вы доверяете этому сайту."
   }
 }

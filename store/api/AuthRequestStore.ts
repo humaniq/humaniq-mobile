@@ -1,11 +1,9 @@
-import { _await, createContext, getSnapshot, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { _await, getSnapshot, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { ApisauceInstance, create } from "apisauce"
 import { DEFAULT_API_CONFIG } from "../../config/api"
 import { reaction } from "mobx"
-import { getAuthStore } from "../auth/AuthStore"
+import { getAuthStore } from "../../App"
 
-export const authRequestStore = createContext<AuthRequestStore>()
-export const getAuthRequest = () => authRequestStore.getDefault()
 
 @model("AuthRequestStore")
 export class AuthRequestStore extends Model({
@@ -15,7 +13,6 @@ export class AuthRequestStore extends Model({
 
     @modelFlow
     * init() {
-        authRequestStore.setDefault(this)
         this.axios = create({
             baseURL: DEFAULT_API_CONFIG.authUrl,
             timeout: DEFAULT_API_CONFIG.timeout

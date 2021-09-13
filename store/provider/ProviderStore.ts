@@ -1,7 +1,5 @@
-import { createContext, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone";
-import { EthereumProvider } from "./EthereumProvider";
-
-export const providerStore = createContext<ProviderStore>();
+import { Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { EthereumProvider } from "./EthereumProvider"
 
 @model("ProviderStore")
 export class ProviderStore extends Model({

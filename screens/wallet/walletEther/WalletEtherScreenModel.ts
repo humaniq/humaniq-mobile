@@ -1,5 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { getWalletStore } from "../../../store/wallet/WalletStore";
+import { getWalletStore } from "../../../App"
+
 
 export class WalletEtherScreenModel {
   initialized = false;
@@ -19,7 +20,7 @@ export class WalletEtherScreenModel {
   }
 
   get wallet() {
-    return getWalletStore().wallets.find(w => w.address === this.currentWalletAddress);
+    return getWalletStore().allWallets.find(w => w.address === this.currentWalletAddress);
   }
 
   async init(address) {
