@@ -27,7 +27,7 @@ export const SendTransactionDialog = observer(() => {
     >
         <View>
             <DialogHeader onPressIn={ () => view.display = false }/>
-            { view.display && !!view.txHash &&
+            { view.initialized && !!view.txHash &&
             <View center padding-20>
                 <View row>
                     <FAIcon size={ 80 } style={ { color: Colors.green30 } } name={ 'check-circle' }/>
@@ -37,7 +37,7 @@ export const SendTransactionDialog = observer(() => {
                 </View>
             </View>
             }
-            { view.display && !view.txHash &&
+            { view.initialized && !view.txHash &&
             <View center padding-20>
                 <View row center>
                     <Text purple40 text60R> { view.hostname } </Text>

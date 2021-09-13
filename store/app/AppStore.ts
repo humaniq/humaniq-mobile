@@ -4,7 +4,7 @@ import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
 import { getWalletStore } from "../../App"
 import 'react-native-get-random-values'
-import { MessageManager, PersonalMessageManager, TypedMessageManager } from "@metamask/controllers"
+import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -39,6 +39,7 @@ export class AppStore extends Model({
     messageManager = new MessageManager()
     personalMessageManager = new PersonalMessageManager()
     typedMessageManager = new TypedMessageManager()
+    phishingController = new PhishingController()
 
     @modelFlow
     * init() {

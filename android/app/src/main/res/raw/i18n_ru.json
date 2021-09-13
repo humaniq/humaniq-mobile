@@ -52,7 +52,9 @@
     }
   },
   "browserScreen": {
-    "name": "Браузер"
+    "name": "Браузер",
+    "searchPlaceholder": "Введите URL-адрес",
+    "closeAllTabs": "Закрыть все вкладки"
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес"

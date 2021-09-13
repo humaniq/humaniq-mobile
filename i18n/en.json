@@ -51,7 +51,8 @@
     }
   },
   "browserScreen": {
-    "name": "Browser"
+    "name": "Browser",
+    "searchPlaceholder": "Input URL-address"
   },
   "walletMenuDialog": {
     "hideWallet": "Hide address"

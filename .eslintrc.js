@@ -36,6 +36,7 @@ module.exports = {
     "it": false,
   },
   "rules": {
+    "no-inline-comments": 0,
     "react-native/no-inline-styles": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
@@ -60,6 +61,6 @@ module.exports = {
     "no-inferrable-types": 0,
     "no-return-assign": 2,
     "no-extra-parens": 2,
-    "prefer-promise-reject-errors": 0
+    "prefer-promise-reject-errors": 0,
   },
 }
