@@ -58,7 +58,7 @@ export const BrowserHeader = observer<HeaderProps>((
             </View>
             <View left>
                 {
-                    isSearchMode && <View flex row>
+                    isSearchMode && <View row>
                         <TextField autoCapitalize='none' hideUnderline style={ {
                             width: "100%",
                             padding: 0,
