@@ -104,7 +104,7 @@ export class BrowserScreenViewModel {
 
     onSearchSubmit(val) {
         this.isSearchMode = false
-        const result = this.go(val.toLowerCase())
+        const result = this.go(val)
         if (result) {
             this.exploreModal.tabs.push({ url: result, title: "", icon: "" })
             this.exploreModal.selectedTab++
