@@ -36,7 +36,8 @@ export class SettingsScreenModel {
             name: t("settingsScreen.menu.ethNetwork"),
             currentValue: getEthereumProvider().currentNetworkName,
             icon: "link",
-            onPress: (val?: any) => {
+            onPress: () => {
+                console.log("EEE")
                 this.settingsDialog.title = "Выбрать сеть"
                 this.settingsDialog.display = true
                 this.settingsDialog.options = Object.values(ETH_NETWORKS).map(i => ({

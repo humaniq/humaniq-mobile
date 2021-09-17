@@ -63,33 +63,37 @@ const Settings = observer(function () {
                         }
                         <View flex top bg-white>
                             {
-                                view.settingsMenu.map(item => <Animatable.View key={ item.id } animation={ "fadeIn" }>
-                                    <TouchableOpacity
-                                            accessible={ true }
-                                            activeOpacity={ 0.5 }
-                                            onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
-                                    >
-                                        <ListItem
-                                                height={ 50 }
+                                view.settingsMenu.map(item => {
+                                    console.log(item)
+                                    return <Animatable.View key={ item.id } animation={ "fadeIn" }>
+                                        <TouchableOpacity
+                                                accessible={ true }
+                                                activeOpacity={ 0.5 }
                                         >
-                                            <ListItem.Part left paddingL-20>
-                                                <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
-                                            </ListItem.Part>
-                                            <ListItem.Part middle column paddingL-20>
-                                                <ListItem.Part>
-                                                    <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
-                                                          numberOfLines={ 1 }>{ item.name }</Text>
+                                            <ListItem
+                                                    onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
+                                                    height={ 50 }
+                                            >
+                                                <ListItem.Part left paddingL-20>
+                                                    <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
                                                 </ListItem.Part>
-                                            </ListItem.Part>
-                                            <ListItem.Part paddingH-20>
-                                                { item.currentValue && item.type === "actionSheet" &&
-                                                <Text dark10>{ item.currentValue }</Text> }
-                                                { item.type === "toggle" &&
-                                                <Switch onValueChange={ item.onPress } value={ item.currentValue }/> }
-                                            </ListItem.Part>
-                                        </ListItem>
-                                    </TouchableOpacity>
-                                </Animatable.View>)
+                                                <ListItem.Part middle column paddingL-20>
+                                                    <ListItem.Part>
+                                                        <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
+                                                              numberOfLines={ 1 }>{ item.name }</Text>
+                                                    </ListItem.Part>
+                                                </ListItem.Part>
+                                                <ListItem.Part paddingH-20>
+                                                    { item.currentValue && item.type === "actionSheet" &&
+                                                    <Text dark10>{ item.currentValue }</Text> }
+                                                    { item.type === "toggle" &&
+                                                    <Switch onValueChange={ item.onPress }
+                                                            value={ item.currentValue }/> }
+                                                </ListItem.Part>
+                                            </ListItem>
+                                        </TouchableOpacity>
+                                    </Animatable.View>
+                                })
                             }
                         </View>
                         <ActionSheet
