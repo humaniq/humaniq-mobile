@@ -5,6 +5,7 @@ import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { RootNavigation } from "../../navigators"
 import Ripple from "react-native-material-ripple"
 import { t } from "../../i18n"
+import { Dimensions } from "react-native"
 
 export interface HeaderProps {
     title: string;
@@ -58,14 +59,14 @@ export const BrowserHeader = observer<HeaderProps>((
             </View>
             <View left>
                 {
-                    isSearchMode && <View row>
-                        <TextField autoCapitalize='none' hideUnderline style={ {
-                            width: "100%",
+                    isSearchMode && <View flex row>
+                        <TextField width={ Dimensions.get('window').width * 0.5} autoCapitalize='none' hideUnderline style={ {
                             padding: 0,
                             margin: 0,
                             height: 40,
                             fontWeight: "bold",
                             color: Colors.dark30,
+                            overflow: 'hidden'
                         } }
                                    onSubmitEditing={ () => onSearchSubmit(value) }
                                    ref={ inputRef }
