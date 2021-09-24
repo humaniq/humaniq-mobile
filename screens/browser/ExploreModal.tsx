@@ -24,7 +24,7 @@ export const ExploreModal = observer(() => {
         </View>
         <View flex>
             { view.tabsArr.map((t, i) => {
-                return <TouchableOpacity activeBackgroundColor={ Colors.violet60 } key={ t.url + t.title }
+                return <TouchableOpacity activeBackgroundColor={ Colors.violet60 } key={ i }
                                          onPress={ () => {
                                              const result = browserView.go(t.url)
                                              if (result) {

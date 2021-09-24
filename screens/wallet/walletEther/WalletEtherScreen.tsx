@@ -13,6 +13,7 @@ import { t } from "../../../i18n"
 import { SelfAddressQrCodeDialog } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog"
 import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel"
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper"
+import { useNavigation } from "@react-navigation/native"
 
 
 const WalletEther = observer<{ route: any }>(function ({ route }) {
@@ -20,6 +21,7 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
     const walletMenu = useInstance(WalletMenuDialogViewModel)
     const sendTransactionDialog = useInstance(SendWalletTransactionViewModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
+    const nav = useNavigation()
 
     useEffect(() => {
         view.init(route.params.wallet)
@@ -29,15 +31,26 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
             <BlurWrapper
                     before={ <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
                                      preset="scroll"
-                            // refreshing={ view.refreshing }
-                            // onRefresh={ view.onRefresh }
+                                     refreshing={ view.refreshing }
+                                     onRefresh={ view.onRefresh }
                     >
                         <Header title={ view.initialized && view?.wallet?.formatAddress || "" }
-                                onPressMenu={ () => walletMenu.open(view.wallet) }
+                                onPressMenu={ () => walletMenu.open(view.wallet, nav) }
                         />
                         { view.initialized &&
                         <View>
-                            <Card height={ 100 } margin-10 padding-20 animated>
+                            <Card height={ 100 } margin-10 padding-20 animated
+                                  onPress={ () => nav.navigate("mainStack", {
+                                      screen: "wallet",
+                                      params: {
+                                          screen: "wallet-eth-transactions",
+                                          params: {
+                                              wallet: route.params.wallet,
+                                              symbol: 'ETH'
+                                          }
+                                      }
+                                  }) }
+                            >
                                 <View row flex>
                                     <View flex-8>
                                         <View row flex>
@@ -74,9 +87,9 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                             <View row>
                                 <View row center flex-5>
                                     <Card margin-10 flex padding-10 animated center
-                                          onPress={ () => {
+                                          onPress={ async () => {
                                               sendTransactionDialog.wallet = view.wallet
-                                              sendTransactionDialog.display = true
+                                              await sendTransactionDialog.init()
                                           } }
                                     >
                                         <View row center>

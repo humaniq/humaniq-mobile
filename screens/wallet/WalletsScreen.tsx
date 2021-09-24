@@ -16,12 +16,10 @@ import { PendingDialog } from "./dialogs/PendingDialog"
 import { WalletMenuDialogViewModel } from "../../components/dialogs/menuWalletDialog/WalletMenuDialogViewModel"
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog"
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
-import { SendTransactionViewModel } from "../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 
 const Wallet = observer(function () {
     const view = useInstance(WalletsScreenModel)
     const walletMenu = useInstance(WalletMenuDialogViewModel)
-    const sendTransactionDialog = useInstance(SendTransactionViewModel)
     const store = useInstance(RootStore)
     const nav = useNavigation()
 
@@ -89,12 +87,10 @@ const Wallet = observer(function () {
                                                         </View>
                                                     </View>
                                                     <View flex-1 center right>
-                                                        { i !== 0 &&
-                                                        <Button onPress={ async () => walletMenu.open(w) } round
+                                                        <Button onPress={ async () => walletMenu.open(w, nav) } round
                                                                 backgroundColor={ Colors.violet60 }>
                                                             <FAIcon color={ Colors.primary } name={ "ellipsis-v" }/>
                                                         </Button>
-                                                        }
                                                     </View>
                                                 </View>
                                             </Card>
