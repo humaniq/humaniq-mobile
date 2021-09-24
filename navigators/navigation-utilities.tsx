@@ -3,7 +3,7 @@ import { BackHandler } from "react-native";
 import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native";
 
 export const RootNavigation = {
-  navigate(name: string) {
+  navigate(name: string, params?: any) {
     name; // eslint-disable-line no-unused-expressions
   },
   goBack() {
@@ -30,10 +30,10 @@ export const setRootNavigation = (ref: React.RefObject<NavigationContainerRef>) 
  */
 export function getActiveRouteName(state: NavigationState | PartialState<NavigationState>) {
   const route = state.routes[state.index];
-  
+
   // Found the active route -- return the name
   if (!route.state) return route.name;
-  
+
   // Recursive call to deal with nested routers
   return getActiveRouteName(route.state);
 }
@@ -47,42 +47,42 @@ export function useBackButtonHandler(
   canExit: (routeName: string) => boolean
 ) {
   const canExitRef = useRef(canExit);
-  
+
   useEffect(() => {
     canExitRef.current = canExit;
   }, [ canExit ]);
-  
+
   useEffect(() => {
     // We'll fire this when the back button is pressed on Android.
     const onBackPress = () => {
       const navigation = ref.current;
-      
+
       if (navigation == null) {
         return false;
       }
-      
+
       // grab the current route
       const routeName = getActiveRouteName(navigation.getRootState());
-      
+
       // are we allowed to exit?
       if (canExitRef.current(routeName)) {
         // let the system know we've not handled this event
         return false;
       }
-      
+
       // we can't exit, so let's turn this into a back action
       if (navigation.canGoBack()) {
         navigation.goBack();
-        
+
         return true;
       }
-      
+
       return false;
     };
-    
+
     // Subscribe when we come to life
     BackHandler.addEventListener("hardwareBackPress", onBackPress);
-    
+
     // Unsubscribe when we're done
     return () => BackHandler.removeEventListener("hardwareBackPress", onBackPress);
   }, [ ref ]);
@@ -98,24 +98,24 @@ function toArray(val) {
 export function useNavigationPersistence(storage: any, persistenceKey: string) {
   const [ initialNavigationState ] = useState();
   const [ isRestoringNavigationState, setIsRestoringNavigationState ] = useState(true);
-  
+
   const routeNameRef = useRef();
   const onNavigationStateChange = (state) => {
     const previousRouteName = routeNameRef.current;
     const currentRouteName = getActiveRouteName(state);
-    
+
     if (previousRouteName !== currentRouteName) {
       // track screens.
       __DEV__ && console.log(currentRouteName);
     }
-    
+
     // Save the current route name for later comparision
     routeNameRef.current = currentRouteName;
-    
+
     // Persist state to localStorage
     storage.save(persistenceKey, state);
   };
-  
+
   const restoreState = async () => {
     try {
       // const state = await storage.load(persistenceKey);
@@ -124,17 +124,17 @@ export function useNavigationPersistence(storage: any, persistenceKey: string) {
       setIsRestoringNavigationState(false);
     }
   };
-  
+
   useEffect(() => {
     if (isRestoringNavigationState) restoreState();
   }, [ isRestoringNavigationState ]);
-  
+
   return { onNavigationStateChange, restoreState, initialNavigationState };
 }
 
 
 export function formatRoute(routePath, params) {
-  
+
   const reRepeatingSlashes = /\/+/g; // "/some//path"
   const reSplatParams = /\*{1,2}/g;  // "/some/*/complex/**/path"
   const reResolvedOptionalParams = /\(([^:*?#]+?)\)/g; // "/path/with/(resolved/params)"
@@ -142,14 +142,14 @@ export function formatRoute(routePath, params) {
   const reUnresolvedOptionalParamsRR4 = /(\/[^\/]*\?)/g; // "/path/with/groups/containing/unresolved?/optional/params?"
   const reTokens = /<(.*?)>/g;
   const reSlashTokens = /_!slash!_/g;
-  
+
   let tokens = {};
-  
+
   if (params) {
     for (let paramName in params) {
       if (params.hasOwnProperty(paramName)) {
         let paramValue = params[paramName];
-        
+
         if (paramName === "splat") { // special param name in RR, used for "*" and "**" placeholders
           paramValue = toArray(paramValue); // when there are multiple globs, RR defines "splat" param as array.
           let i = 0;
@@ -189,7 +189,7 @@ export function formatRoute(routePath, params) {
       }
     }
   }
-  
+
   return routePath
     // Remove braces around resolved optional params (i.e. "/path/(value)")
     .replace(reResolvedOptionalParams, "$1")

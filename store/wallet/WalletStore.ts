@@ -7,7 +7,7 @@ import {
     modelFlow,
     runUnprotected,
     tProp as p,
-    types as t
+    types as t,
 } from "mobx-keystone"
 import { computed, observable, reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
@@ -101,7 +101,7 @@ export class WalletStore extends Model({
 
     @modelFlow
     * updateWalletsInfo() {
-        this.allWallets.forEach(w => w.init())
+        this.allWallets.forEach(w => w.init(true))
     }
 
     @modelAction

@@ -1,4 +1,4 @@
-import { _await, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { _await, Model, model, modelFlow, objectMap, tProp as p, types as t } from "mobx-keystone"
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, currencyFormat } from "../../utils/number"
@@ -6,6 +6,7 @@ import uuid from "react-native-uuid"
 import { ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEthereumProvider, getRequest } from "../../App"
+import { EthereumTransaction } from "../transaction/EthereumTransaction"
 
 @model("Wallet")
 export class Wallet extends Model({
@@ -30,7 +31,9 @@ export class Wallet extends Model({
     prices: p(t.maybeNull(t.object(() => ({
         eur: t.number,
         usd: t.number
-    }))))
+    })))),
+    // transactions: p(t.array(t.model<EthereumTransaction>(EthereumTransaction)), () => []),
+    transactions:  p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
 }) {
 
     @observable
@@ -39,6 +42,11 @@ export class Wallet extends Model({
     @computed
     get isConnected() {
         return !!this.ether.provider
+    }
+
+    @computed
+    get formatTransactions() {
+        return Object.values<EthereumTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
     }
 
     @computed
@@ -63,12 +71,14 @@ export class Wallet extends Model({
 
     @modelFlow
     * init(force = false) {
-        if(!this.initialized || force) {
+        if (!this.initialized || force) {
             try {
                 this.pending = true
                 this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
-                // yield this.updateBalanceFromProvider();
-                yield this.updateBalanceFromApi()
+
+                getEthereumProvider().currentNetworkName !== 'mainnet' ?
+                  yield this.updateBalanceFromProvider() :
+                  yield this.updateBalanceFromApi()
                 yield this.getCoinCost()
             } catch (e) {
                 console.log("ERROR", e)
@@ -85,6 +95,11 @@ export class Wallet extends Model({
         try {
             const bn = yield* _await(this.ether.getBalance())
             this.balance = this.isConnected ? bn.toString() : this.balance
+            this.balances = {
+                amount: this.isConnected ? bn.toString() : this.balances.amount,
+                amountUnconfirmed: 0,
+                recomendedFee: 0
+            }
         } catch (e) {
             console.log("ERROR", e)
             this.isError = true

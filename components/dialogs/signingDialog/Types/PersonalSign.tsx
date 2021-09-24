@@ -2,12 +2,20 @@ import { observer } from "mobx-react-lite"
 import { Button, Colors, Text, View } from "react-native-ui-lib"
 import { getAppStore, getWalletStore } from "../../../../App"
 import { t } from "../../../../i18n"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { runUnprotected } from "mobx-keystone"
 import { normalize } from "eth-sig-util"
+import { hexToText } from "@metamask/controllers/dist/util"
 
 export const PersonalSign = observer(() => {
     const appStore = getAppStore()
+
+    const [ message, setMessage ] = useState("")
+
+    useEffect(() => {
+        console.log(appStore.signMessageParams)
+        setMessage(hexToText(appStore.signMessageParams.data))
+    }, [ appStore.signMessageParams ])
 
     const signMessage = async () => {
         await runUnprotected(async () => {
@@ -41,8 +49,9 @@ export const PersonalSign = observer(() => {
                   text60>{ appStore.signPageTitle || new URL(appStore.signPageUrl).host }</Text>
         </View>
         <View row center paddingT-10>
-            <Text purple50 center
-                  text80>{ t('signatureRequest.ethSignWarning') }</Text>
+            <Text>
+                { message }
+            </Text>
         </View>
         <View row center padding-20>
             <Text primary
