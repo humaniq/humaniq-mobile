@@ -16,6 +16,7 @@ import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
 import { TransactionsScreen } from "../screens/wallet/walletEther/transactions/TransactionsScreen"
+import { WaitForEthTransaction } from "../components/toasts/waitForEthTransaction/WaitForEthTransaction"
 
 const Stack = createStackNavigator()
 
@@ -79,13 +80,15 @@ export function MainNavigator<PrimaryParamList>() {
 
 export function WalletStack() {
     return (
-            <Stack.Navigator screenOptions={ {
+            <><Stack.Navigator screenOptions={ {
                 headerShown: false,
             } }>
                 <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletsScreen }/>
                 <Stack.Screen name="wallet-eth" component={ WalletEtherScreen }/>
                 <Stack.Screen name="wallet-eth-transactions" component={ TransactionsScreen }/>
             </Stack.Navigator>
+                <WaitForEthTransaction/>
+            </>
     )
 }
 

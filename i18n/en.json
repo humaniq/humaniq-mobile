@@ -19,7 +19,10 @@
     "messageFrom": "Message from",
     "total": "Total",
     "wallet": "Wallet",
-    "balance": "Balance"
+    "balance": "Balance",
+    "low": "Low",
+    "medium": "Medium",
+    "fast": "Fast"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -81,7 +84,8 @@
     "insufficientBalance": "You need {0} for send transaction",
     "outerSuggestion": "TX data",
     "successSendTx": "Transaction successfully send",
-    "sendTransaction": "Send"
+    "sendTransaction": "Send",
+    "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction"
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "want to connect",
@@ -112,7 +116,8 @@
       "outgoing": "outgoing",
       "incoming": "incoming",
       "undefined": "undefined",
-      "smartContract": "Smart contract"
+      "smartContract": "Smart contract",
+      "reject": "rejected transaction"
     }
   }
 }

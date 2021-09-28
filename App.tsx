@@ -43,6 +43,8 @@ import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTran
 import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
+import { WaitForEthTransaction } from "./components/toasts/waitForEthTransaction/WaitForEthTransaction"
+import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -155,6 +157,7 @@ const App = provider()(AppScreen)
 App.register(
         [ RootStore, toFactory(createRootStore) ],
         SendWalletTransactionViewModel,
-        SendTransactionViewModel
+        SendTransactionViewModel,
+        WaitForEthTransactionViewModel
 )
 export default App

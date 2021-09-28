@@ -3,14 +3,19 @@ import { Wallet } from "../../../store/wallet/Wallet"
 import { BigNumber, ethers } from "ethers"
 import { getEthereumProvider, getWalletStore } from "../../../App"
 import { amountFormat, currencyFormat } from "../../../utils/number"
+import { EthereumTransaction } from "../../../store/transaction/EthereumTransaction"
+import { runUnprotected } from "mobx-keystone"
+import { inject } from "react-ioc"
+import { WaitForEthTransactionViewModel } from "../../toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
 
 export class SendWalletTransactionViewModel {
     display = false
     pending = false
-    pendingTransaction = null
+    pendingTransaction = false
     initialized = false
     wallet: Wallet
     symbol = "ETH"
+    commissionSelectExpanded = false
     txData = {
         chainId: 0,
         gas: 0,
@@ -19,16 +24,41 @@ export class SendWalletTransactionViewModel {
         value: "0",
         to: "",
         estimateGas: "",
-        estimateGasLimit: 21000,
     }
 
     txError = false
     message = ""
 
+    gasSpeed = {
+        low: false,
+        medium: true,
+        fast: false
+    }
+
+    ethTransactionToast = inject(this, WaitForEthTransactionViewModel)
+
+    get estimateGasLimit() {
+        switch (true) {
+            case this.gasSpeed.medium:
+                return 21000 * 1.5
+            case this.gasSpeed.fast:
+                return 21000 * 2
+            default:
+                return 21000
+        }
+    }
+
+    changeGasSpeed(speed) {
+        this.gasSpeed = {
+            low: speed === 'low',
+            medium: speed === 'medium',
+            fast: speed === 'fast'
+        }
+    }
+
     async init() {
         this.pending = true
         this.display = true
-        this.initialized = true
         this.txData.chainId = getEthereumProvider().currentNetwork.chainID
 
         const [ nonce, estimateGas ] = await Promise.all([
@@ -37,8 +67,9 @@ export class SendWalletTransactionViewModel {
         ])
 
         this.txData.nonce = nonce
-        this.txData.estimateGas = estimateGas
+        this.txData.estimateGas = estimateGas.toString()
         this.pending = false
+        this.initialized = true
     }
 
     get price() {
@@ -50,7 +81,7 @@ export class SendWalletTransactionViewModel {
     }
 
     get transactionFee() {
-        return this.txData.estimateGas ? +ethers.utils.formatEther(+this.txData.estimateGas * this.txData.estimateGasLimit) : 0
+        return this.txData.estimateGas ? +ethers.utils.formatEther(+this.txData.estimateGas * this.estimateGasLimit) : 0
     }
 
     get transactionTotalAmount() {
@@ -74,18 +105,6 @@ export class SendWalletTransactionViewModel {
         }
     }
 
-    get txBody() {
-        return {
-            chainId: this.txData.chainId,
-            nonce: this.txData.nonce,
-            gasPrice: this.txData.estimateGas,
-            gasLimit: this.txData.estimateGasLimit,
-            to: this.txData.to,
-            from: this.wallet.address,
-            value: ethers.utils.parseEther(this.parsedValue.toString())
-        }
-    }
-
     get diffBalanceTotal() {
         return +amountFormat(this.wallet.ethBalance - this.transactionTotalAmount, 8)
     }
@@ -96,32 +115,55 @@ export class SendWalletTransactionViewModel {
 
 
     get isTransferAllow() {
-        if (!this.wallet.balances.amount || !this.parsedValue) return false
+        if (!this.wallet.balances.amount || !this.parsedValue || !this.enoughBalance || !this.txBody.to) return false
         return BigNumber.from(this.wallet.balances.amount)
           .gt(ethers.utils.parseEther(this.txData.value).add(
-              BigNumber.from(this.txData.estimateGasLimit * this.txData.gasPrice)
+              BigNumber.from(this.estimateGasLimit * this.txData.gasPrice)
             )
           )
     }
 
+    get txBody() {
+        return {
+            chainId: this.txData.chainId,
+            nonce: this.txData.nonce,
+            gasPrice: this.txData.estimateGas,
+            gasLimit: this.estimateGasLimit,
+            to: this.txData.to,
+            from: this.wallet.address,
+            value: ethers.utils.parseEther(this.parsedValue.toString()),
+        }
+    }
+
     sendTx = async () => {
         try {
-            console.log(this.txBody)
-            this.pendingTransaction = this.txBody
-            const tx = await this.wallet.ether.sendTransaction(this.txBody)
-            this.pendingTransaction = tx
-            try {
-                const transaction = await tx.wait()
-                console.log({ transaction })
-            } catch (e) {
+            if (this.pendingTransaction) return
+            this.pendingTransaction = true
 
+            const etxBody = {
+                chainId: this.txBody.chainId.toString(),
+                nonce: this.txBody.nonce.toString(),
+                gasPrice: this.txBody.gasPrice.toString(),
+                gas: this.txBody.gasLimit.toString(),
+                value: this.txBody.value.toString(),
+                walletAddress: this.wallet.address,
+                toAddress: this.txBody.to,
+                fromAddress: this.txBody.from,
+                input: "0x",
+                blockTimestamp: new Date()
             }
-            // try {
-            //     const result = await getRequest().post(formatRoute(ROUTES.TX.SEND_TRANSACTION, { type: "eth" }), { raw_tx: tx })
-            //     this.message = result.ok ? t("sendTransactionDialog.successTx") : t("sendTransactionDialog.errorTx")
-            // } catch (e) {
-            //     console.log("ERROR", e)
-            // }
+
+            const etx = new EthereumTransaction(etxBody)
+            const tx = await this.wallet.ether.sendTransaction(this.txBody)
+
+            runUnprotected(() => {
+                etx.hash = tx.hash
+                etx.wait = tx.wait
+                this.wallet.transactions.set(tx.nonce, etx)
+                this.ethTransactionToast.transaction = etx
+            })
+            this.pendingTransaction = false
+            this.closeDialog()
         } catch (e) {
             this.txError = true
             console.log("ERROR", e)
@@ -129,6 +171,7 @@ export class SendWalletTransactionViewModel {
     }
 
     closeDialog = () => {
+        if (this.pendingTransaction) return
         this.pending = true
         this.initialized = false
         this.txData = {
@@ -139,9 +182,8 @@ export class SendWalletTransactionViewModel {
             value: "0",
             to: "",
             estimateGas: "",
-            estimateGasLimit: 21000,
-            from: ""
         }
+        this.pendingTransaction = false
         this.display = false
     }
 
