@@ -1,8 +1,9 @@
 import { model, Model, prop, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
-import { computed } from "mobx"
+import { computed, observable } from "mobx"
 import { t as tr } from "../../i18n"
 import { formatEther } from "ethers/lib/utils"
 import { Colors } from "react-native-ui-lib"
+import { ethers } from "ethers"
 
 
 @model("EthereumTransaction")
@@ -22,6 +23,21 @@ export class EthereumTransaction extends Model({
     receiptStatus: p(t.string, ""),
     blockTimestamp: prop<number>().withTransform(timestampToDateTransform())
 }) {
+
+    @computed
+    get txBody() {
+        return {
+            chainId: +this.chainId,
+            nonce: this.nonce,
+            gasPrice: this.gasPrice,
+            gasLimit: this.gas,
+            to: this.toAddress,
+            from: this.fromAddress,
+            value: this.value
+        }
+    }
+
+    @observable
     wait = null
 
 
@@ -37,7 +53,7 @@ export class EthereumTransaction extends Model({
                 return tr('transactionModel.status.fail')
             case "1":
                 return tr('transactionModel.status.success')
-            case "9":
+            case "":
                 return tr('transactionModel.status.process')
         }
     }
@@ -49,7 +65,7 @@ export class EthereumTransaction extends Model({
                 return Colors.purple40
             case "1":
                 return Colors.primary
-            case "9":
+            case "":
                 return Colors.yellow30
             default:
                 return Colors.dark70
@@ -63,7 +79,7 @@ export class EthereumTransaction extends Model({
                 return "times-circle"
             case "1":
                 return "check-circle"
-            case "9":
+            case "":
                 return "clock"
             default:
                 return "spinner"
@@ -73,6 +89,8 @@ export class EthereumTransaction extends Model({
     @computed
     get action() {
         switch (true) {
+            case this.walletAddress === this.fromAddress && this.toAddress === ethers.constants.AddressZero && this.value === "0":
+                return 5
             case this.walletAddress === this.fromAddress && this.value && this.input === "0x":
                 return 1
             case this.walletAddress === this.toAddress && this.value && this.input === "0x":
@@ -95,6 +113,8 @@ export class EthereumTransaction extends Model({
                 return tr('transactionModel.action.smartContract')
             case 4:
                 return tr('transactionModel.action.undefined')
+            case 5:
+                return tr('transactionModel.action.reject')
         }
     }
 }

@@ -19,7 +19,10 @@
     "messageFrom": "Сообщение от",
     "total": "Всего",
     "wallet": "Кошелек",
-    "balance": "Баланс"
+    "balance": "Баланс",
+    "low": "Медленно",
+    "medium": "Обычно",
+    "fast": "Быстро"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -81,7 +84,8 @@
     "insufficientBalance": "Вам нужно еще %{balance} для совершения этой транзакции",
     "outerSuggestion": "TX data",
     "successSendTx": "Транзакция успешно отправлена",
-    "sendTransaction": "Отправить"
+    "sendTransaction": "Отправить",
+    "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "хочет подключиться к",
@@ -112,7 +116,8 @@
       "outgoing": "Отправленние",
       "incoming": "Поступленние",
       "undefined": "Неустановлено",
-      "smartContract": "Смарт конракт"
+      "smartContract": "Смарт конракт",
+      "reject": "Отмена отправки"
     }
   }
 }

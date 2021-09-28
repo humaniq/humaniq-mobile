@@ -11,14 +11,18 @@
     "get": "Get",
     "address": "Address",
     "value": "Amount",
+    "save": "Save",
     "deny": "Deny",
     "allow": "Allow",
-    "sign": "Подписать",
-    "message": "Сообщение",
-    "messageFrom": "Сообщение от",
-    "total": "Всего",
-    "wallet": "Кошелек",
-    "balance": "Баланс"
+    "sign": "Sign",
+    "message": "Message",
+    "messageFrom": "Message from",
+    "total": "Total",
+    "wallet": "Wallet",
+    "balance": "Balance",
+    "low": "Low",
+    "medium": "Medium",
+    "fast": "Fast"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -52,10 +56,12 @@
   },
   "browserScreen": {
     "name": "Browser",
-    "searchPlaceholder": "Input URL-address"
+    "searchPlaceholder": "Input URL-address",
+    "closeAllTabs": "Close all tabs"
   },
   "walletMenuDialog": {
-    "hideWallet": "Hide address"
+    "hideWallet": "Hide address",
+    "transactionHistory": "Transactions"
   },
   "exportMnemonicDialog": {
     "title": "Your secret phrase",
@@ -63,6 +69,7 @@
   },
   "settingsScreen": {
     "name": "Settings",
+    "editProfile": "Edit",
     "menu": {
       "ethNetwork": "Ethereum network",
       "exportMnemonic": "Export recovery phrase"
@@ -71,13 +78,16 @@
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
     "errorTx": "Error submitting transaction",
-    "suggestedFee": "Предлагаемая комиссия",
-    "maxFee": "Комиссия",
-    "maxAmount": "Максимум",
-    "insufficientBalance": "Вам нужно еще {0} для совершения этой транзакции"
+    "suggestedFee": "Suggested fee",
+    "maxFee": "Max fee",
+    "maxAmount": "Max amount",
+    "insufficientBalance": "You need {0} for send transaction",
+    "outerSuggestion": "TX data",
+    "successSendTx": "Transaction successfully send",
+    "sendTransaction": "Send"
   },
   "approvalDappConnectDialog": {
-    "wontToConnect": "хочет подключиться к",
+    "wontToConnect": "want to connect",
     "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
   },
   "profileScreen": {
@@ -91,5 +101,21 @@
     "signRequested": "Your signature is being requested",
     "signing": "Sign this message?",
     "ethSignWarning": "Proceed with caution. This action can potentially be used to withdraw assets from your account. Make sure you trust this site."
+  },
+  "transactionsScreen": {
+    "name": "Transactions"
+  },
+  "transactionModel": {
+    "status": {
+      "fail": "fail",
+      "success": "success",
+      "process": "process"
+    },
+    "action": {
+      "outgoing": "outgoing",
+      "incoming": "incoming",
+      "undefined": "undefined",
+      "smartContract": "Smart contract"
+    }
   }
 }

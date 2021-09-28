@@ -39,7 +39,7 @@ const Transactions = observer<{ route: any }>(({ route }) => {
                                             <View center flex-1>
                                                 <FAIcon size={ 25 } color={ i.statusColor } name={ i.statusIcon }/>
                                             </View>
-                                            <View flex-6 paddingL-10>
+                                            <View flex-5 paddingL-10>
                                                 <View>
                                                     <Text dark30 text70R bold>{ i.actionName }</Text>
                                                 </View>
@@ -47,8 +47,8 @@ const Transactions = observer<{ route: any }>(({ route }) => {
                                                     <Text dark50>{ `${ i.blockTimestamp.toLocaleDateString() } ${ i.blockTimestamp.toLocaleTimeString() }` }</Text>
                                                 </View>
                                             </View>
-                                            <View center flex-3>
-                                                <Text text60 dark30 bold>{ i.formatValue }</Text>
+                                            <View right centerV flex-4>
+                                                <Text numberOfLines={1} text70 dark30 bold>{ i.formatValue }</Text>
                                             </View>
                                         </View>
 

@@ -33,11 +33,16 @@ export class Wallet extends Model({
         usd: t.number
     })))),
     // transactions: p(t.array(t.model<EthereumTransaction>(EthereumTransaction)), () => []),
-    transactions:  p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
+    transactions: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
 }) {
 
     @observable
     ether: Signer
+
+    @computed
+    get pendingTransaction() {
+        return Object.values<EthereumTransaction>(this.transactions).find(t => !t.receiptStatus)
+    }
 
     @computed
     get isConnected() {
