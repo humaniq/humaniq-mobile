@@ -11,7 +11,6 @@ import {
     TouchableOpacity,
     View
 } from "react-native-ui-lib"
-import { runInAction } from "mobx"
 import React from "react"
 import { useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
@@ -27,12 +26,12 @@ export const SendWalletTransactionDialog = observer(() => {
     return <Dialog
             width={ "100%" }
             containerStyle={ { backgroundColor: Colors.grey80, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
-            onDismiss={ () => runInAction(() => view.display = false) }
+            onDismiss={ view.closeDialog }
             visible={ view.display }
             bottom
     >
         { view.initialized && <View>
-            <DialogHeader onPressIn={ () => view.display = false }/>
+            <DialogHeader onPressIn={ view.closeDialog }/>
             { !view.pending && !view.message && view.initialized &&
             <ScrollView>
                 <View center padding-20>
