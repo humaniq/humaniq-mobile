@@ -22,7 +22,8 @@
     "balance": "Balance",
     "low": "Low",
     "medium": "Medium",
-    "fast": "Fast"
+    "fast": "Fast",
+    "speedUp": "Speed up"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -118,6 +119,15 @@
       "undefined": "undefined",
       "smartContract": "Smart contract",
       "reject": "rejected transaction"
+    }
+  },
+  "sendTransaction": {
+    "action": {
+      "pending": "Wait for transaction...",
+      "cancel": "Wait for cancel...",
+      "speedUp": "Wait for speed up...",
+      "done": "Transaction mined!",
+      "error": "Error transaction"
     }
   }
 }
