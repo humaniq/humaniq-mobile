@@ -7,6 +7,7 @@ import { Wallet } from "../../../store/wallet/Wallet"
 import { amountFormat } from "../../../utils/number"
 import { ethers } from "ethers"
 import { Colors } from "react-native-ui-lib"
+import { t } from "../../../i18n"
 
 export class WaitForEthTransactionViewModel {
 
@@ -17,7 +18,23 @@ export class WaitForEthTransactionViewModel {
 
     transaction: EthereumTransaction
     wallet: Wallet
-    process: 'pending' | 'cancel' | 'speedUp'
+    process: 'pending' | 'cancel' | 'speedUp' | 'done' | 'error'
+
+    get transactionActionName() {
+        switch (this.process) {
+            case "pending":
+                return t("sendTransaction.action.pending")
+            case "cancel":
+                return t("sendTransaction.action.cancel")
+            case "done":
+                return t("sendTransaction.action.done")
+            case "speedUp":
+                return t("sendTransaction.action.speedUp")
+            case "error":
+            default:
+                return t("sendTransaction.action.error")
+        }
+    }
 
     navToTransaction() {
         if (!this.transaction) return
@@ -53,10 +70,16 @@ export class WaitForEthTransactionViewModel {
                     savedTx.receiptStatus = transaction.status.toString()
                     if (this.process === 'pending') {
                         this.wallet.transactions.set(this.transaction.nonce, savedTx)
-                        this.transaction = null
+                        this.process = 'done'
+                        setTimeout(() => {
+                            this.transaction = null
+                        }, 10 * 1000)
                     }
                 })
             } catch (e) {
+                if(this.process === "pending") {
+                    this.process = 'error'
+                }
                 console.log("ERROR-SEND", e)
             }
         }
@@ -73,11 +96,14 @@ export class WaitForEthTransactionViewModel {
                 txBody.to = ethers.constants.AddressZero
                 console.log({ txBody })
                 await this.sendTransaction(txBody)
+                this.process = 'done'
             }
         } catch (e) {
             console.log("ERROR-CANCEL", e)
         } finally {
-            this.transaction = null
+            setTimeout(() => {
+                this.transaction = null
+            }, 10 * 1000)
         }
     }
 
@@ -88,12 +114,14 @@ export class WaitForEthTransactionViewModel {
                 const txBody = this.transaction.txBody
                 txBody.gasPrice = (txBody.gasPrice * 1.5).toFixed(0).toString()
                 await this.sendTransaction(txBody)
-                this.transaction = null
+                this.process = 'done'
             }
         } catch (e) {
             console.log("ERROR-SPEED-UP", e)
         } finally {
-            this.transaction = null
+            setTimeout(() => {
+                this.transaction = null
+            }, 10 * 1000)
         }
     }
 
