@@ -27,7 +27,7 @@ export class MoralisRequestStore extends Model({
     })
 
     @modelFlow
-    post = _async(function* (this: MoralisRequestStore, path, body?: any) {
+        post = _async(function* (this: MoralisRequestStore, path, body?: any) {
         return yield* _await(this.axios.post(path, body))
     })
 }

@@ -1,6 +1,6 @@
 import { model, Model, prop, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
 import { computed, observable } from "mobx"
-import { t as tr } from "../../i18n"
+import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
 import { Colors } from "react-native-ui-lib"
 import { ethers } from "ethers"

@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction } from "mobx"
-import { EthereumTransaction } from "../../../store/transaction/EthereumTransaction"
+import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction"
 import { RootNavigation } from "../../../navigators"
 import { runUnprotected } from "mobx-keystone"
 import { getWalletStore } from "../../../App"
