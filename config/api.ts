@@ -2,6 +2,7 @@ const API_URL = "https://api.node.psec.pro"
 const API_AUTH_URL = "https://api.node.psec.pro"
 const API_MORALIS_URL = "https://deep-index.moralis.io/api/v2"
 export const MORALIS_TOKEN = "ndvgmaxPzVSe5OM7cBRsHIMQDvqn5d7HX7Zoz9bBrilJyQCIYtjPHY8nsgx1hoe8"
+export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/assets/9af1b653778b5ee8f9207dc4440c7ee22e8ce5b7/blockchains/ethereum/tokenlist.json"
 const timeout = 10000
 
 export interface ApiConfig {
@@ -50,6 +51,7 @@ export const MORALIS_ROUTES = {
         GET_ERC2_TRANSFERS: '/:address/erc20/transfers'
     },
     TOKEN: {
-        GET_ERC20_METADATA: '/erc20/metadata'
+        GET_ERC20_METADATA: '/erc20/metadata',
+        GET_ERC20_PRICE: '/erc20/:address/price'
     }
 }
