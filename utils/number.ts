@@ -5,7 +5,7 @@ const floor = Math.floor;
 const abs = Math.abs;
 const log = Math.log;
 
-const abbrev = "KMB";
+const abbrev = "KMBTQ";
 
 function round(n, precision) {
   const prec = Math.pow(10, precision);
@@ -34,7 +34,7 @@ export function preciseRound(n) {
 
 export function beautifyNumber(n, symbol?: string) {
   let base = floor(log(abs(n)) / log(1000));
-  const suffix = abbrev[Math.min(2, base - 1)];
+  const suffix = abbrev[Math.min(4, base - 1)];
   base = abbrev.indexOf(suffix) + 1;
   const rounded = round(n / pow(1000, base), 2);
 
@@ -45,4 +45,16 @@ export function beautifyNumber(n, symbol?: string) {
       : suffix
           ? rounded + suffix
           : n;
+}
+
+export function stringToIntHash(str, upperbound, lowerbound) {
+  let result = 0;
+  for (let i = 0; i < str.length; i++) {
+    result = result + str.charCodeAt(i);
+  }
+
+  if (!lowerbound) lowerbound = 0;
+  if (!upperbound) upperbound = 500;
+
+  return (result % (upperbound - lowerbound)) + lowerbound;
 }

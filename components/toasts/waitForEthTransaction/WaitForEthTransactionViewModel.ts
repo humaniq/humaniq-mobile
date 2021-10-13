@@ -149,7 +149,7 @@ export class WaitForEthTransactionViewModel {
     }
 
     get canRewriteTransaction() {
-        return +amountFormat(this.wallet.ethBalance - this.transactionFee * 1.5, 8) > 0
+        return +amountFormat(this.wallet.valBalance - this.transactionFee * 1.5, 8) > 0
     }
 
     constructor() {

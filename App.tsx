@@ -43,13 +43,13 @@ import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTran
 import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
-import { WaitForEthTransaction } from "./components/toasts/waitForEthTransaction/WaitForEthTransaction"
 import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 LogBox.ignoreLogs([ "Setting a timer" ])
 LogBox.ignoreLogs([ "Require cycle" ])
+LogBox.ignoreLogs([ "componentWillReceiveProps" ])
 
 enableScreens()
 
@@ -109,6 +109,7 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            await store.dictionaryStore.init()
             await store.authStore.init()
             await store.authRequestStore.init()
             await store.moralisRequestStore.init()
@@ -117,7 +118,6 @@ const AppScreen = observer(() => {
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
-            store.dictionaryStore.init()
         })()
     }, [])
 

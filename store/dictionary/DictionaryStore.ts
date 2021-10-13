@@ -22,7 +22,13 @@ export class Coin extends Model({
 export class DictionaryStore extends Model({
   initialized: p(t.string, ""),
   coinsDictionary: p(t.array(t.model<Coin>(Coin)), () => []),
-  ethTokenLogo: p(t.objectMap(t.string), () => objectMap())
+  ethToken: p(t.objectMap(t.object(() => ({
+    logoURI: t.string,
+    address: t.string,
+    decimals: t.number,
+    type: t.string
+  }))), () => objectMap()),
+  ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap())
 }) {
 
   @modelFlow
@@ -43,7 +49,12 @@ export class DictionaryStore extends Model({
     } else {
       tokens = (yield* _await(localStorage.load("hm-wallet-tokens")))
     }
-    tokens.forEach(t => this.ethTokenLogo.set(t.symbol, t.logoURI))
+    tokens.forEach(t => this.ethToken.set(t.symbol, {
+      logoURI: t.logoURI,
+      address: t.address,
+      decimals: t.decimals,
+      type: t.type
+    }))
     this.initialized = uuid.v4()
   }
 }
