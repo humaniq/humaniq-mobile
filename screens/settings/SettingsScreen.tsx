@@ -45,17 +45,17 @@ const Settings = observer(function () {
                                     <View center>
                                         <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
                                         <View style={ { position: "absolute", right: -15 } }>
-                                            <Button round
-                                                    onPress={ () => nav.navigate("mainStack", {
-                                                        screen: "settings",
-                                                        params: {
-                                                            screen: "settings-profile",
-                                                        }
-                                                    }) }
-                                            >
-                                                <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 }
-                                                        name={ 'pencil-alt' }/>
-                                            </Button>
+                                            {/*<Button round*/}
+                                            {/*        onPress={ () => nav.navigate("mainStack", {*/}
+                                            {/*            screen: "settings",*/}
+                                            {/*            params: {*/}
+                                            {/*                screen: "settings-profile",*/}
+                                            {/*            }*/}
+                                            {/*        }) }*/}
+                                            {/*>*/}
+                                            {/*    <FAIcon color={ Colors.white } style={ { padding: 4 } } size={ 20 }*/}
+                                            {/*            name={ 'pencil-alt' }/>*/}
+                                            {/*</Button>*/}
                                         </View>
                                     </View>
                                     <View flex-2/>
