@@ -45,10 +45,10 @@ export function MainNavigator<PrimaryParamList>() {
     return (
             <Tab.Navigator
                     tabBarOptions={ {
-                        activeTintColor: Colors.grey70,
-                        inactiveTintColor: Colors.dark80,
+                        activeTintColor: Colors.bg,
+                        inactiveTintColor: Colors.grey,
                         activeBackgroundColor: Colors.primary,
-                        showLabels: false
+                        showLabels: true
                     } }
                     screenOptions={ ({ route }) => ({
                         headerShown: false,
@@ -63,15 +63,15 @@ export function MainNavigator<PrimaryParamList>() {
                                     break
                             }
                             return <Ionicons name={ icon } size={ options.size }
-                                             color={ options.focused ? Colors.grey70 : Colors.primary }/>
+                                             color={ options.focused ? Colors.bg : Colors.grey }/>
                         },
                     }) }
-                    appearance={ { tabBarBackground: Colors.grey70, whenActiveShow: "icon-only" } }>
+                    appearance={ { tabBarBackground: Colors.bg } }>
                 <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet"
                             component={ WalletStack }/>
                 <Tab.Screen options={ { tabBarLabel: t("browserScreen.name") } } name="browser"
                             component={ BrowserScreen }/>
-                <Tab.Screen options={ { tabBarLabel: t("settingScreen.name") } } name="settings"
+                <Tab.Screen options={ { tabBarLabel: t("settingsScreen.name") } } name="settings"
                             component={ SettingsStack }/>
             </Tab.Navigator>
     )
@@ -83,7 +83,7 @@ export function WalletStack() {
             <><Stack.Navigator screenOptions={ {
                 headerShown: false,
             } }>
-                <Stack.Screen options={ { title: "Кошельки" } } name="wallet-main" component={ WalletsScreen }/>
+                <Stack.Screen options={ { title: "Кошелек" } } name="wallet-main" component={ WalletsScreen }/>
                 <Stack.Screen name="wallet-eth" component={ WalletEtherScreen }/>
                 <Stack.Screen name="wallet-eth-transactions" component={ TransactionsScreen }/>
             </Stack.Navigator>

@@ -31,7 +31,7 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
 
   return (
       <BlurWrapper
-          before={ <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
+          before={ <Screen backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }
                            preset="scroll"
                            refreshing={ view.refreshing }
                            onRefresh={ view.onRefresh }

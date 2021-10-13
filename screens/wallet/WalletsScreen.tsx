@@ -30,7 +30,7 @@ const Wallet = observer(function () {
   return (
       <BlurWrapper
           before={
-            <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
+            <Screen backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }
                     preset="scroll"
                     style={ { height: "100%" } }
                     refreshing={ view.refreshing }

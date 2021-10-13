@@ -47,7 +47,7 @@
     "correctPin": "Пин код подтвержден"
   },
   "walletScreen": {
-    "name": "Кошельки",
+    "name": "Кошелек",
     "menuDialog": {
       "createWallet": {
         "name": "Создать новый адрес",
