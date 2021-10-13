@@ -42,11 +42,14 @@ import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletT
 import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
 import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
+import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
+import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 LogBox.ignoreLogs([ "Setting a timer" ])
 LogBox.ignoreLogs([ "Require cycle" ])
+LogBox.ignoreLogs([ "componentWillReceiveProps" ])
 
 enableScreens()
 
@@ -58,6 +61,8 @@ const appStore = createContext<AppStore>()
 export const getAppStore = () => appStore.getDefault()
 const walletStore = createContext<WalletStore>()
 export const getWalletStore = () => walletStore.getDefault()
+const moralisRequestStore = createContext<MoralisRequestStore>()
+export const getMoralisRequest = () => moralisRequestStore.getDefault()
 const requestStore = createContext<RequestStore>()
 export const getRequest = () => requestStore.getDefault()
 const authRequestStore = createContext<AuthRequestStore>()
@@ -78,6 +83,7 @@ function createRootStore() {
     registerRootStore(rootStore)
     appStore.setDefault(rootStore.appStore)
     walletStore.setDefault(rootStore.walletStore)
+    moralisRequestStore.setDefault(rootStore.moralisRequestStore)
     requestStore.setDefault(rootStore.requestStore)
     authRequestStore.setDefault(rootStore.authRequestStore)
     authStore.setDefault(rootStore.authStore)
@@ -103,14 +109,15 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            await store.dictionaryStore.init()
             await store.authStore.init()
             await store.authRequestStore.init()
+            await store.moralisRequestStore.init()
             await store.requestStore.init()
             await store.profileStore.init()
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
-            store.dictionaryStore.init()
         })()
     }, [])
 
@@ -127,7 +134,7 @@ const AppScreen = observer(() => {
                         />
                             <SigningDialog/>
                             <SendWalletTransactionDialog/>
-                            <SendTransactionDialog />
+                            <SendTransactionDialog/>
                         </> }
                     {
                         store.appStore.initialized &&
@@ -150,6 +157,7 @@ const App = provider()(AppScreen)
 App.register(
         [ RootStore, toFactory(createRootStore) ],
         SendWalletTransactionViewModel,
-        SendTransactionViewModel
+        SendTransactionViewModel,
+        WaitForEthTransactionViewModel
 )
 export default App

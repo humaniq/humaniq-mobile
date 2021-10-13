@@ -26,7 +26,7 @@ export class SettingsScreenModel {
     }
 
     get isAllInitialized() {
-        return this.initialized && !!getProfileStore().initialized
+        return this.initialized // && !!getProfileStore().initialized
     }
 
     get settingsMenu() {

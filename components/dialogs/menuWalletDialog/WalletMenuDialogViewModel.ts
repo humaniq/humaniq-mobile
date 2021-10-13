@@ -12,34 +12,59 @@ export class WalletMenuDialogViewModel {
     wallet: Wallet
     nav: NavigationProp<any>
 
-    // dialog: MutableRefObject<any>
 
-    items = [
-        {
-            name: t("walletMenuDialog.hideWallet"),
-            action: async () => {
+    get items() {
+
+        if(!this.display) return []
+
+        const items = [ {
+            name: t("walletMenuDialog.transactionHistory"),
+            action: () => {
                 this.display = false
-                const rootState = RootNavigation.getRootState()
-                if (getActiveRouteName(rootState) === "wallet-eth") {
-                    RootNavigation.goBack()
-                    setTimeout(async () => {
-                        await getWalletStore().removeWallet(this.wallet.address)
-                    }, 1000)
-                } else {
-                    await getWalletStore().removeWallet(this.wallet.address)
-                }
+                RootNavigation.navigate("mainStack", {
+                    screen: "wallet",
+                    params: {
+                        screen: "wallet-eth-transactions",
+                        params: {
+                            wallet: this.wallet.address,
+                            symbol: 'ETH'
+                        }
+                    }
+                })
             },
-            icon: "eye-slash"
+            icon: "list-alt"
         }
-    ]
+        ]
+
+        if(getWalletStore()?.wallets[0]?.address !== this.wallet?.address) {
+            items.push({
+                name: t("walletMenuDialog.hideWallet"),
+                action: async () => {
+                    this.display = false
+                    const rootState = RootNavigation.getRootState()
+                    if (getActiveRouteName(rootState) === "wallet-eth") {
+                        RootNavigation.goBack()
+                        setTimeout(async () => {
+                            await getWalletStore().removeWallet(this.wallet.address)
+                        }, 1000)
+                    } else {
+                        await getWalletStore().removeWallet(this.wallet.address)
+                    }
+                },
+                icon: "eye-slash"
+            },)
+        }
+
+        return items
+    }
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    open(w: Wallet) {
-        // this.dialog.current.snapTo(0)
+    open(w: Wallet, nav: NavigationProp<any>) {
         this.wallet = w
+        this.nav = nav
         this.display = true
     }
 }
