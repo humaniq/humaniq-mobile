@@ -1,7 +1,7 @@
 import { _await, Model, model, modelFlow, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
-import { amountFormat, currencyFormat } from "../../utils/number"
+import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import uuid from "react-native-uuid"
 import { MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
@@ -10,6 +10,7 @@ import { EthereumTransaction } from "./transaction/EthereumTransaction"
 import { intToHex } from "ethjs-util"
 import { changeCaseObj } from "../../utils/general"
 import { ERC20 } from "./erc20/ERC20"
+import { ERC20Transaction } from "./transaction/ERC20Transaction";
 
 export interface TransactionsRequestResult {
   page: number,
@@ -43,7 +44,7 @@ export class Wallet extends Model({
     usd: t.number
   })))),
   transactions: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
-  erc20: p(t.array(t.model<ERC20>(ERC20)), () => [])
+  erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>())
 }) {
 
   @observable
@@ -60,7 +61,12 @@ export class Wallet extends Model({
   }
 
   @computed
-  get formatTransactions() {
+  get erc20List() {
+    return Object.values<ERC20>(this.erc20.items)
+  }
+
+  @computed
+  get transactionsList() {
     return Object.values<EthereumTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
   }
 
@@ -70,18 +76,36 @@ export class Wallet extends Model({
   }
 
   @computed
-  get ethBalance() {
-    return this?.balances?.amount && +ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))
+  get valBalance() {
+    return this?.balances?.amount ? preciseRound(+ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))) : 0
   }
 
   @computed
   get formatBalance() {
-    return amountFormat(this.ethBalance, 8)
+    return amountFormat(this.valBalance, 8)
   }
 
   @computed
   get fiatBalance() {
-    return this.prices?.usd ? currencyFormat(this?.prices?.usd * this.ethBalance) : 0
+    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.valBalance) : 0
+  }
+
+  @computed
+  get formatFiatBalance() {
+    return this.fiatBalance ? `≈$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+  }
+
+  @computed
+  get totalWalletFiatBalance() {
+    return this.fiatBalance + this.erc20List.reduce((acc, item) => {
+      acc += item.fiatBalance
+      return acc
+    }, 0)
+  }
+
+  @computed
+  get formatTotalWalletFiatBalance() {
+    return currencyFormat(+this.totalWalletFiatBalance)
   }
 
   @modelFlow
@@ -174,6 +198,36 @@ export class Wallet extends Model({
   }
 
   @modelFlow
+  * getERC20Transactions() {
+    const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
+      address: this.address
+    })
+    const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
+    const result = yield getMoralisRequest().get(route, { chain })
+
+    if (result.ok && (result.data as TransactionsRequestResult).total) {
+      (result.data as TransactionsRequestResult).result.forEach(r => {
+
+        const currentToken = this.erc20.get(r.address)
+
+        const tr = new ERC20Transaction({
+          ...changeCaseObj(r),
+          symbol: currentToken.symbol,
+          decimals: currentToken.decimals,
+          chainId: getEthereumProvider().currentNetwork.chainID,
+          walletAddress: this.address.toLowerCase(),
+          blockTimestamp: new Date(r.block_timestamp)
+        })
+        if (currentToken) {
+          runUnprotected(() => {
+            currentToken.transactions.set(tr.transactionHash, tr)
+          })
+        }
+      })
+    }
+  }
+
+  @modelFlow
   * getErc20Balances() {
 
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
@@ -182,10 +236,10 @@ export class Wallet extends Model({
     const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
     const erc20 = yield getMoralisRequest().get(route, { chain })
     if (erc20.ok) {
-      this.erc20 = erc20.data.map(t => {
-        const erc20 = new ERC20(changeCaseObj(t))
-        erc20.init()
-        return erc20
+      erc20.data.forEach(t => {
+        const erc20Token = new ERC20({ ...changeCaseObj(t), walletAddress: this.address })
+        this.erc20.set(t.token_address, erc20Token)
+        erc20Token.init()
       })
     }
   }

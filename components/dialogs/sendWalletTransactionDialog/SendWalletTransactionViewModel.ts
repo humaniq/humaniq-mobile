@@ -106,7 +106,7 @@ export class SendWalletTransactionViewModel {
     }
 
     get diffBalanceTotal() {
-        return +amountFormat(this.wallet.ethBalance - this.transactionTotalAmount, 8)
+        return +amountFormat(this.wallet.valBalance - this.transactionTotalAmount, 8)
     }
 
     get enoughBalance() {

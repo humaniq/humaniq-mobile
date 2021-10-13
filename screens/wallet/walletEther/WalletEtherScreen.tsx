@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import { Avatar, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../../components"
 import { WalletEtherScreenModel } from "./WalletEtherScreenModel"
@@ -14,7 +14,8 @@ import { SelfAddressQrCodeDialog } from "../../../components/dialogs/selfAddress
 import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel"
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper"
 import { useNavigation } from "@react-navigation/native"
-import { getDictionary } from "../../../App";
+import { TokenItem } from "../../../components/tokenItem/TokenItem";
+import { beautifyNumber } from "../../../utils/number";
 
 
 const WalletEther = observer<{ route: any }>(function ({ route }) {
@@ -56,9 +57,6 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                         <View flex-8>
                             <View row flex>
                                 <View>
-                                    <Text dark40 text80 bold>ETH</Text>
-                                </View>
-                                <View paddingL-10>
                                     <Text dark50 text80>{ view.wallet.formatAddress }</Text>
                                 </View>
                             </View>
@@ -66,11 +64,7 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                               { !view.wallet.pending && !view.wallet.isError &&
                               <View row>
                                   <View center>
-                                      <Text text40 dark20 bold>{ view.wallet.formatBalance }</Text>
-                                  </View>
-                                  <View center>
-                                      <Text violet40 text70
-                                            bold>{ ` ≈${ view.wallet.fiatBalance }` }</Text>
+                                      <Text text40 dark20 bold>{ view.wallet.formatTotalWalletFiatBalance }</Text>
                                   </View>
                               </View> }
                               { view.wallet.pending && <LoaderScreen/> }
@@ -118,36 +112,42 @@ const WalletEther = observer<{ route: any }>(function ({ route }) {
                         </Card>
                     </View>
                 </View>
-                <Card marginH-10 bg-white marginT-10>
+                <Card marginH-10 bg-white marginV-10>
+                    <TokenItem
+                        onPress={ () => nav.navigate("mainStack", {
+                          screen: "wallet",
+                          params: {
+                            screen: "wallet-eth-transactions",
+                            params: {
+                              wallet: route.params.wallet,
+                              symbol: 'ETH'
+                            }
+                          }
+                        }) }
+                        symbol={ "ETH" }
+                        tokenAddress={ view.wallet.address }
+                        logo={ "ethereum" }
+                        name={ "Ethereum" }
+                        formatBalance={ beautifyNumber(+view.wallet.formatBalance) }
+                        formatFiatBalance={ view.wallet.formatFiatBalance }
+                    />
                   {
-                    view.wallet.erc20.length > 0 && view.wallet.erc20.map(e => {
-                      return <View  padding-10 paddingH-20 key={ e.symbol }>
-                        <View row centerV>
-                          <View flex-2>
-                            <Avatar size={40} source={ { uri: getDictionary().ethTokenLogo.get(e.symbol) } }/>
-                          </View>
-                          <View flex-5>
-                            <View>
-                              <Text numberOfLines={1} bold grey20>{ e.symbol }</Text>
-                            </View>
-                            <View>
-                              <Text numberOfLines={1} text90R violet40>{ e.name }</Text>
-                            </View>
-                          </View>
-                          <View flex-4 right>
-                           {/*<View>*/}
-                           {/*  <Text grey20 bold>*/}
-                           {/*    { e.fiatBalance }*/}
-                           {/*  </Text>*/}
-                           {/*</View>*/}
-                            <View>
-                              <Text text60 bold grey20>
-                                { e.valBalance }
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                      </View>
+                    view.wallet.erc20List.length > 0 && view.wallet.erc20List.map(p => {
+                      return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
+                                        formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
+                                        logo={ p.logo } name={ p.name } onPress={
+                        () => nav.navigate("mainStack", {
+                          screen: "wallet",
+                          params: {
+                            screen: "wallet-eth-transactions",
+                            params: {
+                              wallet: route.params.wallet,
+                              symbol: p.symbol,
+                              tokenAddress: p.tokenAddress
+                            }
+                          }
+                        })
+                      }/>
                     })
                   }
                 </Card>

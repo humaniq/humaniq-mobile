@@ -32,7 +32,7 @@ const Transactions = observer<{ route: any }>(({ route }) => {
                     <ScrollView>
                         <View>
                             {
-                                view.wallet.formatTransactions.map(i => {
+                              !!view.transactions && !!view.transactions.length && view.transactions.map(i => {
                                     return <View backgroundColor={ Colors.white } paddingV-10 paddingH-20
                                                  key={ i.nonce }>
                                         <View row spread paddingT-5>

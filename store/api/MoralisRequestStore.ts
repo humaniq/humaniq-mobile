@@ -23,7 +23,7 @@ export class MoralisRequestStore extends Model({
 
     @modelFlow
     get = _async(function* (this: MoralisRequestStore, path, params?: any) {
-        return yield* _await(this.axios.get(path, params))
+        return yield* _await(this.axios.get<any>(path, params))
     })
 
     @modelFlow

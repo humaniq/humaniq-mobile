@@ -4,6 +4,7 @@ import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
 import { Colors } from "react-native-ui-lib"
 import { ethers } from "ethers"
+import { beautifyNumber, preciseRound } from "../../../utils/number";
 
 
 @model("EthereumTransaction")
@@ -43,7 +44,7 @@ export class EthereumTransaction extends Model({
 
     @computed
     get formatValue() {
-        return `${ formatEther(this.value) } ETH`
+        return `${ beautifyNumber(preciseRound(+formatEther(this.value))) }`
     }
 
     @computed

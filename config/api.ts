@@ -48,7 +48,7 @@ export const MORALIS_ROUTES = {
     ACCOUNT: {
         GET_TRANSACTIONS: '/:address',
         GET_ERC20_BALANCES: '/:address/erc20',
-        GET_ERC2_TRANSFERS: '/:address/erc20/transfers'
+        GET_ERC20_TRANSFERS: '/:address/erc20/transfers'
     },
     TOKEN: {
         GET_ERC20_METADATA: '/erc20/metadata',
