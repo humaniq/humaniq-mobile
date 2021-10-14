@@ -1,11 +1,13 @@
 import { Typography } from "react-native-ui-lib";
 
 Typography.loadTypographies({
-  h1: { fontSize: 42, fontWeight: "300", lineHeight: 54 },
-  h2: { fontSize: 36, fontWeight: "300", lineHeight: 42 },
-  h3: { fontSize: 32, fontWeight: "300", lineHeight: 38 },
-  h4: { fontSize: 26, fontWeight: "300", lineHeight: 38 },
-  h5: { fontSize: 22, fontWeight: "600", lineHeight: 28 },
-  h6: { fontSize: 18, fontWeight: "600", lineHeight: 24 },
-  bold: { fontWeight: "bold" },
-})
+      h1: { fontSize: 32, fontFamily: "Roboto-Bold" },
+      titleB: { fontSize: 22, fontFamily: "Roboto-Bold" },
+      title: { fontSize: 22, fontFamily: "Roboto-Medium" },
+      subtitle: { fontSize: 20, fontFamily: "Roboto-Medium" },
+      textM: { fontSize: 16, fontFamily: "Roboto-Medium" },
+      textR: { fontSize: 16, fontFamily: "Roboto-Regular" },
+      textSmallM: { fontSize: 12, fontFamily: "Roboto-Medium" },
+      textSmallR: { fontSize: 12, fontFamily: "Roboto-Regular" },
+    }
+)
