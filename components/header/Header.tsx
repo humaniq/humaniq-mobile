@@ -25,7 +25,7 @@ export const Header = observer<HeaderProps>((
       </TouchableOpacity>
     </View>
     <View flex-6 center>
-      <Text h5 bold center primary>{ title }</Text>
+      <Text h1 center primary>{ title }</Text>
     </View>
     <View flex-2 right marginR-20>
       { onPressMenu &&
