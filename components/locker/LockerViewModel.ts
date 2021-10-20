@@ -12,101 +12,106 @@ import { getAppStore } from "../../App"
 export const PIN_LENGHT = 4
 
 export class LockerViewModel {
-    initialized = false
-    lastAppState: APP_STATE
-    pin = ""
-    disabled = false
-    settledPin = ""
-    confirmationPin = ""
-    step = 0
-    message: string
-    rootStore: RootStore
-    encrypted
+  initialized = false
+  lastAppState: APP_STATE
+  pin = ""
+  disabled = false
+  settledPin = ""
+  confirmationPin = ""
+  step = 0
+  message: string
+  rootStore: RootStore
+  encrypted
 
-    constructor() {
-        makeAutoObservable(this, {}, { autoBind: true })
+  constructor() {
+    makeAutoObservable(this, {}, { autoBind: true })
+  }
+
+  async init(rootStore: RootStore) {
+    this.rootStore = rootStore
+    this.encrypted = await localStorage.load("hm-wallet")
+    this.initialized = true
+  }
+
+  handleClick(digit) {
+    Vibration.vibrate(100)
+    this.pin += digit
+  }
+
+  removeDigit() {
+    Vibration.vibrate(150)
+    this.pin = this.pin.substring(0, this.pin.length - 1);
+  }
+
+  get mode() {
+    return this.rootStore.appStore.lockerMode
+  }
+
+
+  async validatePin() {
+    if (this.mode === LOCKER_MODE.CHECK) {
+      const cryptr = new Cryptr(this.pin)
+      const result = cryptr.decrypt(this.encrypted)
+      let isCorrect = false
+      try {
+        const res = JSON.parse(result)
+        isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
+      } catch (e) {
+        isCorrect = false
+      }
+
+      this.rootStore.appStore.setLocker(isCorrect)
+      if (!isCorrect) {
+        this.message = t("lockerScreen.incorrectPin")
+      } else {
+        this.message = t("lockerScreen.correctPin")
+        getAppStore().setPin(this.pin)
+        this.exit()
+      }
     }
-
-    async init(rootStore: RootStore) {
-        this.rootStore = rootStore
-        this.encrypted = await localStorage.load("hm-wallet")
-        this.initialized = true
-    }
-
-    handleClick(digit) {
-        Vibration.vibrate(100)
-        this.pin += digit
-    }
-
-    get mode() {
-        return this.rootStore.appStore.lockerMode
-    }
-
-
-    async validatePin() {
-        if (this.mode === LOCKER_MODE.CHECK) {
-            const cryptr = new Cryptr(this.pin)
-            const result = cryptr.decrypt(this.encrypted)
-            let isCorrect = false
-            try {
-                const res = JSON.parse(result)
-                isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
-            } catch (e) {
-                isCorrect = false
-            }
-
-            this.rootStore.appStore.setLocker(isCorrect)
-            if (!isCorrect) {
-                this.message = t("lockerScreen.incorrectPin")
-            } else {
-                this.message = t("lockerScreen.correctPin")
-                getAppStore().setPin(this.pin)
-                this.exit()
-            }
+    if (this.mode === LOCKER_MODE.SET) {
+      if (this.step === 0) {
+        this.confirmationPin = this.pin
+        this.step = 1
+      } else if (this.step === 1) {
+        if (this.pin === this.confirmationPin) {
+          getAppStore().setPin(this.pin)
+          this.settledPin = this.pin
+          this.message = t("lockerScreen.correctPin")
+          this.disabled = true
+          await this.rootStore.appStore.setLocker(true)
+          this.exit()
+        } else {
+          await this.rootStore.appStore.setLocker(false)
+          this.message = t("lockerScreen.pinFormErrorIncorrectConfirmationMessage")
+          setTimeout(() => {
+            this.message = ""
+          }, 1000)
         }
-        if (this.mode === LOCKER_MODE.SET) {
-            if (this.step === 0) {
-                this.confirmationPin = this.pin
-                this.step = 1
-            } else if (this.step === 1) {
-                if (this.pin === this.confirmationPin) {
-                    getAppStore().setPin(this.pin)
-                    this.settledPin = this.pin
-                    this.message = t("lockerScreen.correctPin")
-                    this.disabled = true
-                    await this.rootStore.appStore.setLocker(true)
-                    this.exit()
-                } else {
-                    await this.rootStore.appStore.setLocker(false)
-                    this.message = t("lockerScreen.pinFormErrorIncorrectConfirmationMessage")
-                    setTimeout(() => {
-                        this.message = ""
-                    }, 1000)
-                }
-                this.confirmationPin = ""
-                this.step = 0
-            }
-        }
-        this.reset()
+        this.confirmationPin = ""
+        this.step = 0
+      }
     }
+    this.reset()
+  }
 
 
-    exit() {
-        runUnprotected(() => {
-            this.rootStore.appStore.isLockerDirty = true
-            this.rootStore.appStore.isLocked = false
-        })
-    }
-
-    reset() {
-        this.pin = ""
-        this.disabled = false
-    }
-
-    watchPin = reaction(() => this.pin, async (val) => {
-        if (val && val.length === PIN_LENGHT) {
-            this.disabled = true
-            await this.validatePin()
-        }
+  exit() {
+    runUnprotected(() => {
+      this.rootStore.appStore.isLockerDirty = true
+      this.rootStore.appStore.isLocked = false
     })
+  }
+
+  reset() {
+    this.pin = ""
+    this.disabled = false
+  }
+
+  watchPin = reaction(() => this.pin, async (val) => {
+    if (val && val.length === PIN_LENGHT) {
+      this.disabled = true
+      await this.validatePin()
+    }
+  })
 }

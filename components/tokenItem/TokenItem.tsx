@@ -11,12 +11,13 @@ export interface TokenItemProps {
   name: string
   formatBalance: string
   formatFiatBalance: string
-  onPress?: any
+  onPress?: any,
+  index: number
 }
 
 export const TokenItem = (props: TokenItemProps) => {
   return <Ripple onPress={ props.onPress } rippleColor={ Colors.primary }>
-    <View padding-10 paddingH-20
+    <View padding-10 paddingH-8
           key={ props.symbol }>
       <View row centerV>
         <View flex-2>
@@ -30,24 +31,28 @@ export const TokenItem = (props: TokenItemProps) => {
                     source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
           }
         </View>
-        <View flex-4>
+        <View flex-6>
           <View>
-            <Text numberOfLines={ 1 } bold grey20>{ props.symbol }</Text>
+            <Text numberOfLines={ 1 } textM grey20>{ props.name }</Text>
           </View>
           <View>
-            <Text numberOfLines={ 1 } text90R violet40>{ props.name }</Text>
+            <Text numberOfLines={ 1 } text90R grey40>{ props.symbol }</Text>
           </View>
         </View>
         <View flex-3 right>
-          <Text numberOfLines={ 1 } text60 bold grey20>
+          <Text numberOfLines={ 1 } text16 robotoB grey20>
+            { props.formatFiatBalance }
+          </Text>
+          <Text numberOfLines={ 1 } text90 grey40 bold>
             { props.formatBalance }
           </Text>
         </View>
-        <View flex-2 left center>
-          <Text numberOfLines={ 1 } text90 primary bold>
-            { props.formatFiatBalance }
-          </Text>
-        </View>
       </View>
+      { props.index !== 0 && <View absR style={ {
+        borderWidth: 1,
+        borderColor: Colors.grey,
+        width: "85%",
+        borderBottomColor: "transparent"
+      } }/> }
     </View></Ripple>
 }

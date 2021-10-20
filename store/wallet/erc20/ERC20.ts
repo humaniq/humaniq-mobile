@@ -71,6 +71,6 @@ export class ERC20 extends Model({
 
   @computed
   get formatFiatBalance() {
-    return this.fiatBalance ? `≈$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+    return this.fiatBalance ? `$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
   }
 }

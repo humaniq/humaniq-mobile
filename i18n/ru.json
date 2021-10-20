@@ -46,12 +46,15 @@
     "pinFormConfirmationAction": "Подтвердите пин код",
     "correctPin": "Пин код подтвержден"
   },
-  "walletScreen": {
-    "name": "Кошельки",
+    "walletScreen": {
+    "allAddresses": "Все адреса",
+    "totalBalanceTittle": "Все ваши средства",
+    "name": "Кошелек",
     "menuDialog": {
       "createWallet": {
         "name": "Создать новый адрес",
-        "createWalletMessage": "Создается новый адрес, пожалуйста подождите…"
+        "createWalletMessage": "Создается новый адрес…",
+        "createWalletMessageDone": "Новый адрес создан!"
       }
     }
   },
@@ -129,5 +132,8 @@
       "done": "Транзакция выполнена!",
       "error": "Ошибка транзакции"
     }
+  },
+  "appToasts": {
+    "addressCopied": "Ваш публичный адрес скопирован"
   }
 }

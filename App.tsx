@@ -44,6 +44,9 @@ import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDi
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
 import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
+import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
+import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
+import { AppToast } from "./components/toasts/appToast/AppToast";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -54,7 +57,7 @@ LogBox.ignoreLogs([ "componentWillReceiveProps" ])
 enableScreens()
 
 configure({
-    enforceActions: "never"
+  enforceActions: "never"
 })
 
 const appStore = createContext<AppStore>()
@@ -79,85 +82,88 @@ const ethereumProvider = createContext<EthereumProvider>()
 export const getEthereumProvider = () => ethereumProvider.getDefault()
 
 function createRootStore() {
-    const rootStore = new RootStore({})
-    registerRootStore(rootStore)
-    appStore.setDefault(rootStore.appStore)
-    walletStore.setDefault(rootStore.walletStore)
-    moralisRequestStore.setDefault(rootStore.moralisRequestStore)
-    requestStore.setDefault(rootStore.requestStore)
-    authRequestStore.setDefault(rootStore.authRequestStore)
-    authStore.setDefault(rootStore.authStore)
-    dictionaryStore.setDefault(rootStore.dictionaryStore)
-    profileStore.setDefault(rootStore.profileStore)
-    providerStore.setDefault(rootStore.providerStore)
-    ethereumProvider.setDefault(rootStore.providerStore.eth)
-    return rootStore
+  const rootStore = new RootStore({})
+  registerRootStore(rootStore)
+  appStore.setDefault(rootStore.appStore)
+  walletStore.setDefault(rootStore.walletStore)
+  moralisRequestStore.setDefault(rootStore.moralisRequestStore)
+  requestStore.setDefault(rootStore.requestStore)
+  authRequestStore.setDefault(rootStore.authRequestStore)
+  authStore.setDefault(rootStore.authStore)
+  dictionaryStore.setDefault(rootStore.dictionaryStore)
+  profileStore.setDefault(rootStore.profileStore)
+  providerStore.setDefault(rootStore.providerStore)
+  ethereumProvider.setDefault(rootStore.providerStore.eth)
+  return rootStore
 }
 
 
 const AppScreen = observer(() => {
-    const navigationRef = useRef<NavigationContainerRef>(null)
-    const store = useInstance(RootStore)
+  const navigationRef = useRef<NavigationContainerRef>(null)
+  const store = useInstance(RootStore)
 
-    setRootNavigation(navigationRef)
-    useBackButtonHandler(navigationRef, canExit)
+  setRootNavigation(navigationRef)
+  useBackButtonHandler(navigationRef, canExit)
 
-    const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
-            storage,
-            NAVIGATION_PERSISTENCE_KEY
-    )
+  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
+      storage,
+      NAVIGATION_PERSISTENCE_KEY
+  )
 
-    useEffect(() => {
-        ;(async () => {
-            await store.dictionaryStore.init()
-            await store.authStore.init()
-            await store.authRequestStore.init()
-            await store.moralisRequestStore.init()
-            await store.requestStore.init()
-            await store.profileStore.init()
-            await store.providerStore.init()
-            await store.walletStore.init()
-            await store.appStore.init()
-        })()
-    }, [])
+  useEffect(() => {
+    ;(async () => {
+      await store.dictionaryStore.init()
+      await store.authStore.init()
+      await store.authRequestStore.init()
+      await store.moralisRequestStore.init()
+      await store.requestStore.init()
+      await store.profileStore.init()
+      await store.providerStore.init()
+      await store.walletStore.init()
+      await store.appStore.init()
+    })()
+  }, [])
 
-    return (<>
-                <SafeAreaProvider style={ { backgroundColor: Colors.primary } } initialMetrics={ initialWindowMetrics }>
-                    {
-                        store.appStore.initialized &&
-                        store.appStore.appState === APP_STATE.APP &&
-                        !store.appStore.isLocked &&
-                        <><RootNavigator
-                                ref={ navigationRef }
-                                initialState={ initialNavigationState }
-                                onStateChange={ onNavigationStateChange }
-                        />
-                            <SigningDialog/>
-                            <SendWalletTransactionDialog/>
-                            <SendTransactionDialog/>
-                        </> }
-                    {
-                        store.appStore.initialized &&
-                        store.appStore.appState === APP_STATE.AUTH &&
-                        !store.appStore.isLocked &&
-                        <AuthNavigator/>
-                    }
-                    {
-                        store.appStore.initialized &&
-                        store.appStore.isLocked &&
-                        <Locker/>
-                    }
-                    { !store.appStore.initialized && <LoaderScreen/> }
-                </SafeAreaProvider>
-            </>
-    )
+  return (<>
+        <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
+          {
+            store.appStore.initialized &&
+            store.appStore.appState === APP_STATE.APP &&
+            !store.appStore.isLocked &&
+            <><RootNavigator
+                ref={ navigationRef }
+                initialState={ initialNavigationState }
+                onStateChange={ onNavigationStateChange }
+            />
+                <AppToast/>
+                <CreateWalletToast/>
+                <SigningDialog/>
+                <SendWalletTransactionDialog/>
+                <SendTransactionDialog/>
+            </> }
+          {
+            store.appStore.initialized &&
+            store.appStore.appState === APP_STATE.AUTH &&
+            !store.appStore.isLocked &&
+            <AuthNavigator/>
+          }
+          {
+            store.appStore.initialized &&
+            store.appStore.isLocked &&
+            <Locker/>
+          }
+          { !store.appStore.initialized && <LoaderScreen/> }
+        </SafeAreaProvider>
+      </>
+  )
 })
 
 const App = provider()(AppScreen)
 App.register(
-        [ RootStore, toFactory(createRootStore) ],
-        SendWalletTransactionViewModel,
-        SendTransactionViewModel,
-        WaitForEthTransactionViewModel
+    [ RootStore, toFactory(createRootStore) ],
+    WalletsScreenModel,
+    SendWalletTransactionViewModel,
+    SendTransactionViewModel,
+    WaitForEthTransactionViewModel
 )
 export default App

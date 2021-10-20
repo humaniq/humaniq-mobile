@@ -1,4 +1,4 @@
-import { getWalletStore } from "../../../../App"
+import { getWalletStore } from "../../../App"
 import { makeAutoObservable } from "mobx"
 
 
