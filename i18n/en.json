@@ -47,11 +47,14 @@
     "correctPin": "PIN code verified"
   },
   "walletScreen": {
+    "allAddresses": "All addresses",
+    "totalBalanceTittle": "Your total balance",
     "name": "Wallets",
     "menuDialog": {
       "createWallet": {
         "name": "Create new address",
-        "createWalletMessage": "New address is being created, please wait…"
+        "createWalletMessage": "Creation of new address…",
+        "createWalletMessageDone": "New address was created!"
       }
     }
   },
@@ -129,5 +132,8 @@
       "done": "Transaction mined!",
       "error": "Error transaction"
     }
+  },
+  "appToasts": {
+    "addressCopied": "Your public address copied"
   }
 }

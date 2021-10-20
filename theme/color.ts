@@ -4,28 +4,24 @@ Colors.loadColors({
   primary: "#0066DA",
   error: "#F44336",
   success: "#4CAF50",
-  warning: "#FD9900"
-})
-
-Colors.loadColors({
+  warning: "#FD9900",
+  textBlack: "#001833",
+  black: "#001833",
+  "text-grey": "#BDBDBD",
   bg: "#F5FAFF",
   white: "#FFFFFF",
-  grey: "#E0E0E0"
+  grey: "#E0E0E0",
+  greyLight: "#F2F3F6"
 })
 
 Colors.loadColors({
-  "text-black": "#001833",
-  "text-grey": "#BDBDBD",
-})
-
-Colors.loadColors({
-  "primary-10": "#00438F",
-  "primary-20": "#004A9F",
-  "primary-30": "#0053B1",
-  "primary-40": "#005CC4",
-  "primary-50": "#0066DA",
-  "primary-60": "#0070F0",
-  "primary-70": "#007BFF",
-  "primary-80": "#0088FF",
-  "primary-90": "#0095FF",
+  "primary10": "#00438F",
+  "primary20": "#004A9F",
+  "primary30": "#0053B1",
+  "primary40": "#005CC4",
+  "primary50": "#0066DA",
+  "primary60": "#0070F0",
+  "primary70": "#007BFF",
+  "primary80": "#0088FF",
+  "primary90": "#0095FF",
 })

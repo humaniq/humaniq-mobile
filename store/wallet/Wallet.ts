@@ -92,7 +92,7 @@ export class Wallet extends Model({
 
   @computed
   get formatFiatBalance() {
-    return this.fiatBalance ? `≈$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+    return this.fiatBalance ? `$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
   }
 
   @computed
@@ -241,6 +241,8 @@ export class Wallet extends Model({
         this.erc20.set(t.token_address, erc20Token)
         erc20Token.init()
       })
+    } else {
+      console.log("ERROR-GET-ERC20")
     }
   }
 }

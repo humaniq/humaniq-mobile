@@ -1,9 +1,9 @@
-import { ThemeManager, Typography } from "react-native-ui-lib";
+import { Typography } from "react-native-ui-lib";
 
 Typography.loadTypographies({
       robotoB: { fontFamily: "Roboto-Bold" },
-      robotoM: { fontFamily: "Roboto-Bold" },
-      robotoR: { fontFamily: "Roboto-Bold" },
+      robotoM: { fontFamily: "Roboto-Medium" },
+      robotoR: { fontFamily: "Roboto-Regular" },
     }
 )
 
@@ -26,8 +26,8 @@ Typography.loadTypographies({
       h1: { fontSize: 32, fontFamily: "Roboto-Bold" },
       h2: { fontSize: 30, fontFamily: "Roboto-Bold" },
       h3: { fontSize: 28, fontFamily: "Roboto-Bold" },
-      h4: { fontSize: 24, fontFamily: "Roboto-Medium" },
-      h5: { fontSize: 22, fontFamily: "Roboto-Medium" },
+      h4: { fontSize: 24, fontFamily: "Roboto-Bold" },
+      h5: { fontSize: 22, fontFamily: "Roboto-Bold" },
       h6: { fontSize: 20, fontFamily: "Roboto-Medium" },
       titleB: { fontSize: 22, fontFamily: "Roboto-Bold" },
       title: { fontSize: 22, fontFamily: "Roboto-Medium" },

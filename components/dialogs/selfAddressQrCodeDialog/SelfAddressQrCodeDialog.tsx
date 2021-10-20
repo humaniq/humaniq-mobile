@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite"
 import { SelfAddressQrCodeDialogViewModel } from "./SelfAddressQrCodeDialogViewModel"
 import QRCode from "react-native-qrcode-svg"
 import FAIcon from "react-native-vector-icons/FontAwesome5"
-import { Clipboard } from "react-native"
+import Clipboard from '@react-native-clipboard/clipboard';
 import { DialogHeader } from "../dialogHeader/DalogHeader"
 
 export const SelfAddressQrCodeDialog = observer(() => {
