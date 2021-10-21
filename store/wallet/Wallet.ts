@@ -188,7 +188,11 @@ export class Wallet extends Model({
           ...changeCaseObj(r),
           chainId: getEthereumProvider().currentNetwork.chainID,
           walletAddress: this.address.toLowerCase(),
-          blockTimestamp: new Date(r.block_timestamp)
+          blockTimestamp: new Date(r.block_timestamp),
+          prices: {
+            usd: this.prices.usd,
+            eur: this.prices.eur
+          }
         })
         runUnprotected(() => {
           this.transactions.set(tr.nonce, tr)
@@ -216,7 +220,10 @@ export class Wallet extends Model({
           decimals: currentToken.decimals,
           chainId: getEthereumProvider().currentNetwork.chainID,
           walletAddress: this.address.toLowerCase(),
-          blockTimestamp: new Date(r.block_timestamp)
+          blockTimestamp: new Date(r.block_timestamp),
+          prices: {
+            usd: currentToken.priceUSD,
+          }
         })
         if (currentToken) {
           runUnprotected(() => {

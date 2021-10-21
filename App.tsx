@@ -16,7 +16,7 @@ import 'react-native-url-polyfill/auto'
 import { provider, toFactory, useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
 import { NavigationContainerRef } from "@react-navigation/native"
-import { Colors, LoaderScreen } from "react-native-ui-lib"
+import { LoaderScreen } from "react-native-ui-lib"
 import * as storage from "./utils/localStorage"
 import { canExit, RootNavigator, setRootNavigation, useBackButtonHandler, useNavigationPersistence } from "./navigators"
 import { enableScreens } from "react-native-screens"
@@ -47,6 +47,8 @@ import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTr
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
 import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
+import { SelfAddressQrCodeDialogViewModel } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -164,6 +166,8 @@ App.register(
     WalletsScreenModel,
     SendWalletTransactionViewModel,
     SendTransactionViewModel,
-    WaitForEthTransactionViewModel
+    WaitForEthTransactionViewModel,
+    SelfAddressQrCodeDialogViewModel,
+    WalletMenuDialogViewModel
 )
 export default App

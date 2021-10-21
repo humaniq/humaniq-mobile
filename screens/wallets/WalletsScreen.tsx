@@ -110,4 +110,3 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
 })
 
 export const WalletsScreen = provider()(Wallets)
-WalletsScreen.register(WalletMenuDialogViewModel, SelfAddressQrCodeDialogViewModel)

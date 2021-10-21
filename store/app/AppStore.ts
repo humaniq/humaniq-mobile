@@ -26,6 +26,7 @@ export enum TOASTER_TYPE {
 @model("AppStore")
 export class AppStore extends Model({
   initialized: p(t.boolean, false),
+  walletPageInitialized: p(t.boolean, false),
   appState: p(t.enum(APP_STATE), APP_STATE.AUTH),
   isLocked: p(t.boolean, false),
   lockerMode: p(t.enum(LOCKER_MODE), LOCKER_MODE.SET),
@@ -72,6 +73,7 @@ export class AppStore extends Model({
                 this.lockerStatus = false
                 this.lockerMode = LOCKER_MODE.CHECK
                 this.savedPin = ""
+                this.walletPageInitialized = false
               })
             }
           }

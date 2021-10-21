@@ -2,7 +2,8 @@ import { makeAutoObservable } from "mobx";
 import "react-native-get-random-values";
 import "@ethersproject/shims";
 import { t } from "../../i18n";
-import { getWalletStore } from "../../App"
+import { getAppStore, getWalletStore } from "../../App"
+import { runUnprotected } from "mobx-keystone";
 
 
 export class WalletsScreenModel {
@@ -47,14 +48,18 @@ export class WalletsScreenModel {
   }
 
   get allInitialized() {
-    return getWalletStore().allWalletsInitialized
+    return getAppStore().walletPageInitialized && getWalletStore().allWalletsInitialized
   }
 
-  async init() {
+  async init(force = false) {
     try {
-      if (this.initialized) return
-      await getWalletStore().updateWalletsInfo();
+      if (!this.initialized || force || !getAppStore().walletPageInitialized) {
+        await getWalletStore().updateWalletsInfo();
+      }
       this.initialized = true;
+      runUnprotected(() => {
+        getAppStore().walletPageInitialized = true
+      })
     } catch (e) {
       console.log("INIT ERROR", e);
     }

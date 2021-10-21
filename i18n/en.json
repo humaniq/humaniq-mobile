@@ -23,7 +23,8 @@
     "low": "Low",
     "medium": "Medium",
     "fast": "Fast",
-    "speedUp": "Speed up"
+    "speedUp": "Speed up",
+    "receive": "Receive"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
