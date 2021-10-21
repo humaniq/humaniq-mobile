@@ -47,7 +47,7 @@
     "pinFormConfirmationAction": "Подтвердите пин код",
     "correctPin": "Пин код подтвержден"
   },
-    "walletScreen": {
+  "walletScreen": {
     "allAddresses": "Все адреса",
     "totalBalanceTittle": "Все ваши средства",
     "name": "Кошелек",
@@ -133,6 +133,11 @@
       "done": "Транзакция выполнена!",
       "error": "Ошибка транзакции"
     }
+  },
+  "selfAddressQRCodeDialog": {
+    "copyAddress": "Копировать адрес",
+    "shareAddress": "Отправить адрес",
+    "description": "Для того чтобы получить средства, отправителю достаточно отсканировать QR код и внести нужное количество средств через свой криптокошелек"
   },
   "appToasts": {
     "addressCopied": "Ваш публичный адрес скопирован"

@@ -44,11 +44,13 @@ export class AppStore extends Model({
   toast: p(t.object(() => ({
     display: t.boolean,
     type: t.enum(TOASTER_TYPE),
-    message: t.string
+    message: t.string,
+    position: t.string
   })), () => ({
     display: false,
     type: TOASTER_TYPE.PENDING,
-    message: ""
+    message: "",
+    position: "bottom"
   }))
 }) {
 

@@ -10,11 +10,12 @@ import { Dimensions } from "react-native";
 export const AppToast = observer(() => {
   const view = useInstance(RootStore)
   return <Toast
-      position={ "bottom" }
+      zIndex={ 2147483647 }
+      position={ view.appStore.toast.position }
       visible={ view.appStore.toast.display }
       backgroundColor={ Colors.transparent }
   >
-    <View marginV-65>
+    <View marginB-65 marginT-20>
       <View marginH-16 flex center>
         <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.dark10, 0.1) }
                 containerViewStyle={ { backgroundColor: Colors.white } }>
