@@ -134,6 +134,11 @@
       "error": "Error transaction"
     }
   },
+  "selfAddressQRCodeDialog": {
+    "copyAddress": "Copy address",
+    "shareAddress": "Share address",
+    "description": "For your replenishment, the sender just needs to scan the QR code and enter the desired amount."
+  },
   "appToasts": {
     "addressCopied": "Your public address copied"
   }
