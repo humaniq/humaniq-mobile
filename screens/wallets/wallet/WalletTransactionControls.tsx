@@ -41,7 +41,7 @@ export const WalletTransactionControls = () => {
         <Button br50 outlineColor={ Colors.white }
                 labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
                 style={ { backgroundColor: Colors.white } } primary outline marginH-10
-                label={ t("common.get") }
+                label={ t("common.receive") }
         >
           <ArrowLogoBottom height={ 14 } width={ 14 } style={ { color: Colors.primary } }/>
         </Button>

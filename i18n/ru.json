@@ -23,7 +23,8 @@
     "low": "Медленно",
     "medium": "Обычно",
     "fast": "Быстро",
-    "speedUp": "Ускорить"
+    "speedUp": "Ускорить",
+    "receive": "Получить"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -65,7 +66,7 @@
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес",
-    "transactionHistory": "Список транзакций"
+    "transactionHistory": "Транзакции"
   },
   "exportMnemonicDialog": {
     "title": "Ваша секретная фраза",
@@ -117,11 +118,11 @@
       "process": "В процессе"
     },
     "action": {
-      "outgoing": "Отправленние",
-      "incoming": "Поступленние",
+      "outgoing": "Отправлено",
+      "incoming": "Получено",
       "undefined": "Неустановлено",
-      "smartContract": "Смарт контракт",
-      "reject": "Отмена отправки"
+      "smartContract": "Контракт",
+      "reject": "Отмена"
     }
   },
   "sendTransaction": {

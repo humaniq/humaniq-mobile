@@ -9,7 +9,7 @@ Colors.loadColors({
   black: "#001833",
   "text-grey": "#BDBDBD",
   bg: "#F5FAFF",
-  white: "#FFFFFF",
+  // white: "#FFFFFF",
   grey: "#E0E0E0",
   greyLight: "#F2F3F6"
 })

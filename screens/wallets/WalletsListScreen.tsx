@@ -33,13 +33,13 @@ const WalletsList = observer(() => {
           {
             view.initialized &&
             <View flex>
-                <View paddingT-20 paddingL-16 left row centerV>
-                    <ArrowLeft height={ 16 } width={ 16 } style={ { color: Colors.textBlack } }/>
+                <View padding-20 paddingL-16 left row centerV>
+                    <ArrowLeft height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
                     <Button paddingL-30 link textM black text20 label={ t('walletScreen.allAddresses') }
                             onPress={ () => nav.goBack() }
                     />
                 </View>
-                <View padding-16>
+                <View padding-16 paddingT-0>
                     <View row spread centerV>
                         <View>
                             <Text h2>{ store.formatTotalAllWalletsFiatBalance }</Text>

@@ -19,6 +19,9 @@ export class ERC20Transaction extends Model({
   value: prop<string>(""),
   chainId: p(t.string, ""),
   walletAddress: p(t.string, ""),
+  prices: p(t.maybeNull(t.object(() => ({
+    usd: t.number
+  })))),
 }) {
   @computed
   get nonce() {
@@ -28,6 +31,23 @@ export class ERC20Transaction extends Model({
   @computed
   get formatValue() {
     return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) }`
+  }
+
+  @computed
+  get fiatValue() {
+    return this.prices?.usd ? preciseRound(this?.prices?.usd * +formatUnits(this.value, this.decimals)) : 0
+  }
+
+  @computed
+  get formatFiatValue() {
+    switch (this.action) {
+      case 1:
+        return `-$${ this.fiatValue }`
+      case 2:
+        return `+$${ this.fiatValue }`
+      default:
+        return `$${ this.fiatValue }`
+    }
   }
 
   @computed
@@ -42,7 +62,7 @@ export class ERC20Transaction extends Model({
 
   @computed
   get statusIcon() {
-    return "check-circle"
+    return require("../../../assets/images/finger-up.png")
   }
 
   @computed
@@ -56,6 +76,17 @@ export class ERC20Transaction extends Model({
         return 4
     }
   }
+
+  @computed
+  get actionColor() {
+    switch (this.action) {
+      case 2:
+        return Colors.success
+      default:
+        return Colors.black
+    }
+  }
+
   @computed
   get actionName() {
     switch (this.action) {

@@ -62,7 +62,7 @@ export function MainNavigator<PrimaryParamList>() {
                   icon = "cog"
                   break
               }
-              return <Ionicons name={ icon } size={ options.size }
+              return <Ionicons name={ icon } size={ 24 }
                                color={ options.focused ? Colors.bg : Colors.grey }/>
             },
           }) }

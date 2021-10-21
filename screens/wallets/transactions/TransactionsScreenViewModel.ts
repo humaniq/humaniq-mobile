@@ -18,6 +18,16 @@ export class TransactionsScreenViewModel {
         : this.wallet.transactionsList
   }
 
+  get token() {
+    return this.tokenAddress
+        ? this.wallet.erc20List.find(t => t.tokenAddress === this.tokenAddress) : {
+          name: "Ethereum",
+          symbol: "ETH",
+          formatFiatBalance: this.wallet?.formatFiatBalance,
+          formatBalance: this.wallet?.formatBalance
+        }
+  }
+
   async init(params) {
     try {
       this.currentWalletAddress = params.wallet
