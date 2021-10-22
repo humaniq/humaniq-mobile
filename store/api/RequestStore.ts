@@ -10,21 +10,21 @@ export class RequestStore extends Model({
   axios: ApisauceInstance;
 
   @modelFlow
-  * init() {
+  * init(url: string = DEFAULT_API_CONFIG.url) {
     this.axios = create({
-      baseURL: DEFAULT_API_CONFIG.url,
+      baseURL: url,
       timeout: DEFAULT_API_CONFIG.timeout
     });
     this.initialized = true;
   }
 
   @modelFlow
-  get = _async(function* (this: RequestStore, path) {
-    return yield* _await(this.axios.get(path));
-  });
+  get = _async(function* (this: RequestStore, path, params?: any) {
+    return yield* _await(this.axios.get<any>(path, params))
+  })
 
   @modelFlow
-  // eslint-disable-next-line @typescript-eslint/ban-types
+      // eslint-disable-next-line @typescript-eslint/ban-types
   post = _async(function* (this: RequestStore, path, body?: object) {
     return yield* _await(this.axios.post(path, body));
   });

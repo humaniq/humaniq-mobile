@@ -31,8 +31,6 @@ import { AuthNavigator } from "./navigators/auth-navigator"
 import { Locker } from "./components/locker/Locker"
 import { WalletStore } from "./store/wallet/WalletStore"
 import { RequestStore } from "./store/api/RequestStore"
-import { AuthRequestStore } from "./store/api/AuthRequestStore"
-import { AuthStore } from "./store/auth/AuthStore"
 import { DictionaryStore } from "./store/dictionary/DictionaryStore"
 import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
@@ -70,10 +68,6 @@ const moralisRequestStore = createContext<MoralisRequestStore>()
 export const getMoralisRequest = () => moralisRequestStore.getDefault()
 const requestStore = createContext<RequestStore>()
 export const getRequest = () => requestStore.getDefault()
-const authRequestStore = createContext<AuthRequestStore>()
-export const getAuthRequest = () => authRequestStore.getDefault()
-const authStore = createContext<AuthStore>()
-export const getAuthStore = () => authStore.getDefault()
 const dictionaryStore = createContext<DictionaryStore>()
 export const getDictionary = () => dictionaryStore.getDefault()
 const profileStore = createContext<ProfileStore>()
@@ -90,8 +84,6 @@ function createRootStore() {
   walletStore.setDefault(rootStore.walletStore)
   moralisRequestStore.setDefault(rootStore.moralisRequestStore)
   requestStore.setDefault(rootStore.requestStore)
-  authRequestStore.setDefault(rootStore.authRequestStore)
-  authStore.setDefault(rootStore.authStore)
   dictionaryStore.setDefault(rootStore.dictionaryStore)
   profileStore.setDefault(rootStore.profileStore)
   providerStore.setDefault(rootStore.providerStore)
@@ -115,8 +107,6 @@ const AppScreen = observer(() => {
   useEffect(() => {
     ;(async () => {
       await store.dictionaryStore.init()
-      await store.authStore.init()
-      await store.authRequestStore.init()
       await store.moralisRequestStore.init()
       await store.requestStore.init()
       await store.profileStore.init()

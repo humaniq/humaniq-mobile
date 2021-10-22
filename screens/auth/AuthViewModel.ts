@@ -8,7 +8,7 @@ import { NavigationProp } from "@react-navigation/native"
 import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
-import { getAppStore, getAuthStore, getWalletStore } from "../../App"
+import { getAppStore, getWalletStore } from "../../App"
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -172,7 +172,7 @@ export class AuthViewModel {
             getAppStore().lockerPreviousScreen = ""
             getAppStore().appState = APP_STATE.APP
             await getWalletStore().init(true)
-            getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
+            // getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
         })
         await getAppStore().init()
     }

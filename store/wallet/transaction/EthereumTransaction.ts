@@ -1,4 +1,4 @@
-import { model, Model, prop, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
+import { model, Model, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
 import { computed, observable } from "mobx"
 import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
@@ -22,7 +22,7 @@ export class EthereumTransaction extends Model({
   chainId: p(t.number, ""),
   receiptContractAddress: p(t.string, ""),
   receiptStatus: p(t.string, ""),
-  blockTimestamp: prop<number>().withTransform(timestampToDateTransform()),
+  blockTimestamp: p(t.number).withTransform(timestampToDateTransform()),
   prices: p(t.maybeNull(t.object(() => ({
     eur: t.number,
     usd: t.number

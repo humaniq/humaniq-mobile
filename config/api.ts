@@ -1,5 +1,4 @@
-const API_URL = "https://api.node.psec.pro"
-const API_AUTH_URL = "https://api.node.psec.pro"
+const API_URL = "https://api.coingecko.com/api/v3"
 const API_MORALIS_URL = "https://deep-index.moralis.io/api/v2"
 export const MORALIS_TOKEN = "ndvgmaxPzVSe5OM7cBRsHIMQDvqn5d7HX7Zoz9bBrilJyQCIYtjPHY8nsgx1hoe8"
 export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/assets/9af1b653778b5ee8f9207dc4440c7ee22e8ce5b7/blockchains/ethereum/tokenlist.json"
@@ -7,14 +6,12 @@ const timeout = 10000
 
 export interface ApiConfig {
     url: string;
-    authUrl: string;
     moralisUrl: string;
     timeout: number;
 }
 
 export const DEFAULT_API_CONFIG: ApiConfig = {
     url: API_URL,
-    authUrl: API_AUTH_URL,
     moralisUrl: API_MORALIS_URL,
     timeout
 }
@@ -54,4 +51,8 @@ export const MORALIS_ROUTES = {
         GET_ERC20_METADATA: '/erc20/metadata',
         GET_ERC20_PRICE: '/erc20/:address/price'
     }
+}
+
+export const COINGECKO_ROUTES = {
+    GET_TOKEN_PRICE: '/simple/price'
 }
