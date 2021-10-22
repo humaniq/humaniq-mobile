@@ -87,6 +87,7 @@
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
     "react-native-shadow-2": "^5.1.0",
+    "react-native-share": "^7.2.0",
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-sticky-parallax-header": "^0.4.1",
     "react-native-svg": "^12.1.1",

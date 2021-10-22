@@ -22,6 +22,8 @@ target 'HumaniqMobile' do
 
   pod 'react-native-webview', :path => '../node_modules/react-native-webview'
 
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
   target 'HumaniqMobileTests' do
     inherit! :complete
     # Pods for testing

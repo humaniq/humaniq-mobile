@@ -11,6 +11,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { runUnprotected } from "mobx-keystone";
 import { getAppStore } from "../../../App";
 import { TOASTER_TYPE } from "../../../store/app/AppStore";
+import Share from "react-native-share"
 
 export const SelfAddressQrCodeDialog = observer(() => {
   const view = useInstance(SelfAddressQrCodeDialogViewModel);
@@ -58,7 +59,19 @@ export const SelfAddressQrCodeDialog = observer(() => {
           </View>
           <View row center paddingT-20>
               <Button flex fullWidth style={ { borderRadius: 12 } }
-                      label={ t("selfAddressQRCodeDialog.shareAddress") }/>
+                      label={ t("selfAddressQRCodeDialog.shareAddress") }
+                      onPress={ async () => {
+                        try {
+                          await Share.open({
+                            message: view.wallet?.address,
+                            title: t("selfAddressQRCodeDialog.shareTitle"),
+                            subject: t("selfAddressQRCodeDialog.shareTitle")
+                          })
+                        } catch (e) {
+                          console.log(e)
+                        }
+                      } }
+              />
           </View>
       </View>
       }
