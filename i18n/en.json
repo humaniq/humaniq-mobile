@@ -111,6 +111,19 @@
   "transactionsScreen": {
     "name": "Transactions"
   },
+  "transactionScreen": {
+    "transactionDetails": "Transaction details",
+    "viewOnEtherScan": "View on Etherscan",
+    "status": "Status",
+    "date": "Date",
+    "from": "From",
+    "to": "To",
+    "amount": "Amount",
+    "suggestedFee": "Suggested fee",
+    "total": "Total",
+    "cancelTransaction": "Cancel transaction",
+    "speedUpTransaction": "Speed up transaction"
+  },
   "transactionModel": {
     "status": {
       "fail": "fail",

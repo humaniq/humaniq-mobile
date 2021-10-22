@@ -5,6 +5,7 @@ import { formatEther } from "ethers/lib/utils"
 import { Colors } from "react-native-ui-lib"
 import { ethers } from "ethers"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
+import dayjs from "dayjs";
 
 
 @model("EthereumTransaction")
@@ -46,6 +47,11 @@ export class EthereumTransaction extends Model({
   wait = null
 
   @computed
+  get formatDate() {
+    return dayjs(this.blockTimestamp).format("lll")
+  }
+
+  @computed
   get formatValue() {
     return `${ beautifyNumber(preciseRound(+formatEther(this.value))) }`
   }
@@ -53,6 +59,26 @@ export class EthereumTransaction extends Model({
   @computed
   get fiatValue() {
     return this.prices?.usd ? preciseRound(this?.prices?.usd * +formatEther(this.value)) : 0
+  }
+
+  @computed
+  get formatFee() {
+    return +formatEther(this.gasPrice * this.gas)
+  }
+
+  @computed
+  get fiatFee() {
+    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.formatFee) : 0
+  }
+
+  @computed
+  get formatTotal() {
+    return +formatEther(this.value) + (+formatEther(this.gasPrice * this.gas))
+  }
+
+  @computed
+  get fiatTotal() {
+    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.formatTotal) : 0
   }
 
   @computed

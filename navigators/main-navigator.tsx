@@ -14,7 +14,6 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
-import { TransactionsScreen } from "../screens/wallets/transactions/TransactionsScreen"
 import { WaitForEthTransaction } from "../components/toasts/waitForEthTransaction/WaitForEthTransaction"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
 
@@ -84,7 +83,6 @@ export function WalletStack() {
         headerShown: false,
       } }>
         <Stack.Screen name="wallet-main" component={ WalletsScreen }/>
-        <Stack.Screen name="wallet-eth-transactions" component={ TransactionsScreen }/>
       </Stack.Navigator>
         <WaitForEthTransaction/>
       </>

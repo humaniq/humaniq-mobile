@@ -17,21 +17,21 @@ export interface TokenItemProps {
 
 export const TokenItem = (props: TokenItemProps) => {
   return <Ripple onPress={ props.onPress } rippleColor={ Colors.primary }>
-    <View padding-10 paddingH-8
+    <View padding-10 paddingH-16 paddingL-0
           key={ props.symbol }>
       <View row centerV>
-        <View flex-2>
+        <View flex-2 center>
           {
             props.logo === "ethereum" &&
-            <Av size={ 40 } source={ require("../../assets/images/ethereum-logo.png") }/>
+            <Av size={ 44 } source={ require("../../assets/images/ethereum-logo.png") }/>
           }
           {
             props.logo !== "ethereum" &&
-            <Avatar address={ props.tokenAddress } size={ 40 }
+            <Avatar address={ props.tokenAddress } size={ 44 }
                     source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
           }
         </View>
-        <View flex-6>
+        <View flex-5>
           <View>
             <Text numberOfLines={ 1 } textM grey20>{ props.name }</Text>
           </View>
