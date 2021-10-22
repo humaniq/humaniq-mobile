@@ -8,8 +8,9 @@ import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
-import { Colors } from "react-native-ui-lib"
 import { WalletsListScreen } from "../screens/wallets/WalletsListScreen";
+import { TransactionsListScreen } from "../screens/transactions/transactionsList/TransactionsListScreen";
+import { TransactionScreen } from "../screens/transactions/transaction/TransactionScreen";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -23,7 +24,9 @@ import { WalletsListScreen } from "../screens/wallets/WalletsListScreen";
  */
 export type RootParamList = {
   mainStack: undefined
-  walletsList: undefined
+  walletsList: undefined,
+  walletTransactions: undefined,
+  walletTransaction: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -32,7 +35,6 @@ const RootStack = () => {
   return (
       <Stack.Navigator
           screenOptions={ {
-            cardStyle: { backgroundColor: Colors.bg },
             headerShown: false,
           } }
       >
@@ -41,9 +43,22 @@ const RootStack = () => {
             component={ MainNavigator }
         />
         <Stack.Screen name="walletsList" component={ WalletsListScreen }/>
+        <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }/>
+        <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
       </Stack.Navigator>
   )
 }
+
+// const SendTransactionsStack = () => {
+//   return <Stack.Navigator
+//       screenOptions={ {
+//         cardStyle: { backgroundColor: Colors.bg },
+//         headerShown: false,
+//       } }
+//   >
+//     <Stack.Screen name={}/>
+//   </Stack.Navigator>
+// }
 
 export const RootNavigator = React.forwardRef<NavigationContainerRef,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {

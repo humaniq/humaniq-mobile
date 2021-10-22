@@ -111,6 +111,19 @@
   "transactionsScreen": {
     "name": "Транзакции"
   },
+  "transactionScreen": {
+    "transactionDetails": "Детали транзакции",
+    "viewOnEtherScan": "Посмотреть на Etherscan",
+    "status": "Статус",
+    "date": "Дата",
+    "from": "От",
+    "to": "Кому",
+    "amount": "Сумма",
+    "suggestedFee": "Коммиссия",
+    "total": "Всего",
+    "cancelTransaction": "Отменить транзакцию",
+    "speedUpTransaction": "Ускорить транзакцию"
+  },
   "transactionModel": {
     "status": {
       "fail": "Неудачно",

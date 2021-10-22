@@ -30,14 +30,14 @@ export const ETHEREUM_NETWORKS = {
     infuraID: "14cb84fb0dbb47f8b5bfb44183e39319",
   },
   [ETH_NETWORKS.ROPSTEN]: {
-    name: ETH_NETWORKS,
+    name: ETH_NETWORKS.ROPSTEN,
     chainID: 3,
     networkID: 3,
     type: ETH_NETWORKS.ROPSTEN,
     infuraID: "14cb84fb0dbb47f8b5bfb44183e39319",
   },
   [ETH_NETWORKS.RINKEBY]: {
-    name: ETH_NETWORKS,
+    name: ETH_NETWORKS.RINKEBY,
     chainID: 4,
     networkID: 4,
     type: ETH_NETWORKS.RINKEBY,

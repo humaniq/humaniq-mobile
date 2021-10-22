@@ -2,7 +2,7 @@ import { getWalletStore } from "../../../App"
 import { makeAutoObservable } from "mobx"
 
 
-export class TransactionsScreenViewModel {
+export class TransactionsListScreenViewModel {
   initialized = false
   currentWalletAddress
   tokenAddress = null

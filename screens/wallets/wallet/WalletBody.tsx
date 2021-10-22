@@ -16,15 +16,9 @@ export const WalletBody = observer<any>(({ address }) => {
         {
           !!wallet.initialized && <>
               <TokenItem
-                  onPress={ () => RootNavigation.navigate("mainStack", {
-                    screen: "wallet",
-                    params: {
-                      screen: "wallet-eth-transactions",
-                      params: {
-                        wallet: wallet.address,
-                        symbol: 'ETH'
-                      }
-                    }
+                  onPress={ () => RootNavigation.navigate("walletTransactions", {
+                    wallet: wallet.address,
+                    symbol: 'ETH'
                   }) }
                   symbol={ "ETH" }
                   tokenAddress={ wallet.address }
@@ -40,16 +34,10 @@ export const WalletBody = observer<any>(({ address }) => {
                                   formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
                                   logo={ p.logo } name={ p.name } index={ i + 1 }
                                   onPress={
-                                    () => RootNavigation.navigate("mainStack", {
-                                      screen: "wallet",
-                                      params: {
-                                        screen: "wallet-eth-transactions",
-                                        params: {
-                                          wallet: wallet.address,
-                                          symbol: p.symbol,
-                                          tokenAddress: p.tokenAddress
-                                        }
-                                      }
+                                    () => RootNavigation.navigate("walletTransactions", {
+                                      wallet: wallet.address,
+                                      symbol: p.symbol,
+                                      tokenAddress: p.tokenAddress
                                     })
                                   }
                 />

@@ -5,6 +5,9 @@ import ru from "./ru.json"
 import dayjs from "dayjs";
 import 'dayjs/locale/en'
 import 'dayjs/locale/ru'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
+dayjs.extend(localizedFormat)
 
 i18n.fallbacks = true
 i18n.translations = { en, ru }

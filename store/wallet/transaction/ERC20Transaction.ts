@@ -4,6 +4,7 @@ import { formatUnits } from "@ethersproject/units/src.ts/index";
 import { t as tr } from "../../../i18n";
 import { Colors } from "react-native-ui-lib";
 import { beautifyNumber, preciseRound } from "../../../utils/number";
+import dayjs from "dayjs";
 
 @model("ERC20Transaction")
 export class ERC20Transaction extends Model({
@@ -29,8 +30,18 @@ export class ERC20Transaction extends Model({
   }
 
   @computed
+  get hash() {
+    return this.transactionHash
+  }
+
+  @computed
   get formatValue() {
     return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) }`
+  }
+
+  @computed
+  get formatDate() {
+    return dayjs(this.blockTimestamp).format("lll")
   }
 
   @computed
