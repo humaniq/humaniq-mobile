@@ -1,4 +1,4 @@
-import { Model, model, prop, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone";
+import { Model, model, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone";
 import { computed } from "mobx";
 import { formatUnits } from "@ethersproject/units/src.ts/index";
 import { t as tr } from "../../../i18n";
@@ -7,16 +7,16 @@ import { beautifyNumber, preciseRound } from "../../../utils/number";
 
 @model("ERC20Transaction")
 export class ERC20Transaction extends Model({
-  decimals: prop<number>(8),
-  symbol: prop<string>(""),
-  transactionHash: prop<string>(""),
-  address: prop<string>(""),
-  blockTimestamp: prop<number>().withTransform(timestampToDateTransform()),
-  blockNumber: prop<number>(0),
-  blockHash: prop<string>(""),
-  toAddress: prop<string>(""),
-  fromAddress: prop<string>(""),
-  value: prop<string>(""),
+  decimals: p(t.number, 8),
+  symbol: p(t.string, ""),
+  transactionHash: p(t.string, ""),
+  address: p(t.string, ""),
+  blockTimestamp: p(t.string).withTransform(timestampToDateTransform()),
+  blockNumber: p(t.number, 0),
+  blockHash: p(t.string, ""),
+  toAddress: p(t.string, ""),
+  fromAddress: p(t.string, ""),
+  value: p(t.string, ""),
   chainId: p(t.string, ""),
   walletAddress: p(t.string, ""),
   prices: p(t.maybeNull(t.object(() => ({

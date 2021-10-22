@@ -6,7 +6,7 @@ import { runUnprotected } from "mobx-keystone"
 import { t } from "../../i18n"
 import { inject } from "react-ioc"
 import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
-import { getAppStore, getEthereumProvider, getProfileStore } from "../../App"
+import { getAppStore, getEthereumProvider } from "../../App"
 
 export class SettingsScreenModel {
 

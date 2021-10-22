@@ -19,7 +19,7 @@ import HDKeyring from "eth-hd-keyring"
 import { normalize } from "eth-sig-util"
 import { ethers } from "ethers"
 import Cryptr from "react-native-cryptr"
-import { getAppStore, getAuthStore, getEthereumProvider, getWalletStore } from "../../App"
+import { getAppStore, getEthereumProvider } from "../../App"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { currencyFormat } from "../../utils/number";
 
@@ -94,8 +94,8 @@ export class WalletStore extends Model({
               const result = cryptr.decrypt(encrypted)
               this.storedWallets = JSON.parse(result)
               await this.init(true)
-              runUnprotected(() => this.initialized = uuid.v4())
-              getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
+              // runUnprotected(() => this.initialized = uuid.v4())
+              // getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
             })
           }
         })
@@ -155,6 +155,7 @@ export class WalletStore extends Model({
       yield* _await(localStorage.clear())
     }
     yield* _await(this.keyring.addAccounts())
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const mnemonic = (yield* _await(this.keyring.serialize())) as {}
     return {
       mnemonic,
