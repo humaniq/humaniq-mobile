@@ -38,7 +38,7 @@ import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
 import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel"
 import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
-import { SendTransactionViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import { SendTransactionViewModel as LegacySendTransactonViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
 import { WaitForEthTransactionViewModel } from "./components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
@@ -47,6 +47,9 @@ import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateW
 import { AppToast } from "./components/toasts/appToast/AppToast";
 import { SelfAddressQrCodeDialogViewModel } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
+import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
+import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import { SelectTransactionFeeDialogViewModel } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -155,9 +158,12 @@ App.register(
     [ RootStore, toFactory(createRootStore) ],
     WalletsScreenModel,
     SendWalletTransactionViewModel,
-    SendTransactionViewModel,
+    LegacySendTransactonViewModel,
     WaitForEthTransactionViewModel,
     SelfAddressQrCodeDialogViewModel,
-    WalletMenuDialogViewModel
+    WalletMenuDialogViewModel,
+    SendTransactionViewModel,
+    SelectWalletTokenViewModel,
+    SelectTransactionFeeDialogViewModel
 )
 export default App

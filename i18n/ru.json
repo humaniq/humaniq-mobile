@@ -21,6 +21,8 @@
     "wallet": "Кошелек",
     "balance": "Баланс",
     "low": "Медленно",
+    "slow": "Медленно",
+    "normal": "Нормально",
     "medium": "Обычно",
     "fast": "Быстро",
     "speedUp": "Ускорить",
@@ -91,6 +93,14 @@
     "successSendTx": "Транзакция успешно отправлена",
     "sendTransaction": "Отправить",
     "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
+  },
+  "selectValueScreen": {
+    "step": "Шаг 1 из 3",
+    "step2": "Шаг 2 из 3",
+    "nextBtn": "Далее"
+  },
+  "selectWalletTokenDialog": {
+    "title": "Выбрать токен"
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "хочет подключиться к",

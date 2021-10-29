@@ -21,6 +21,8 @@
     "wallet": "Wallet",
     "balance": "Balance",
     "low": "Low",
+    "slow": "Медленно",
+    "normal": "Нормально",
     "medium": "Medium",
     "fast": "Fast",
     "speedUp": "Speed up",
@@ -91,6 +93,14 @@
     "successSendTx": "Transaction successfully send",
     "sendTransaction": "Send",
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction"
+  },
+  "selectValueScreen": {
+    "step": "Step 1 of 3",
+    "step2": "Step 2 of 3",
+    "nextBtn": "Next"
+  },
+  "selectWalletTokenDialog": {
+    "title": "Select token"
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "want to connect",

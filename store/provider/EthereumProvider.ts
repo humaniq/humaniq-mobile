@@ -8,51 +8,54 @@ import uuid from "react-native-uuid"
 
 @model("EthereumProvider")
 export class EthereumProvider extends Model({
-    initialized: p(t.string, ""),
-    pending: p(t.boolean, false),
-    currentProviderType: p(t.enum(PROVIDER_TYPE), PROVIDER_TYPE.infura),
-    currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET)
+  initialized: p(t.string, ""),
+  pending: p(t.boolean, false),
+  currentProviderType: p(t.enum(PROVIDER_TYPE), PROVIDER_TYPE.infura),
+  currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET)
 }) {
 
-    currentProvider
+  currentProvider
 
-    @computed
-    get networks() {
-        return ETHEREUM_NETWORKS
-    }
+  @computed
+  get networks() {
+    return ETHEREUM_NETWORKS
+  }
 
-    @computed
-    get currentNetwork() {
-        return this.networks[this.currentNetworkName]
-    }
+  @computed
+  get currentNetwork() {
+    return this.networks[this.currentNetworkName]
+  }
 
-    @modelFlow
-    * init() {
-        try {
-            console.log("init-provider")
-            this.pending = true
-            let network
-            switch (this.currentProviderType) {
-                case PROVIDER_TYPE.infura:
-                    network = yield* _await(storage.load("currentNetworkName"))
-                    this.currentNetworkName = network || this.currentNetworkName
-                    this.currentProvider = ethers.getDefaultProvider(this.currentNetworkName, {
-                        infura: this.currentNetwork.infuraID
-                    })
-                    break
+  @modelFlow
+  * init() {
+    try {
+      console.log("init-provider")
+      this.pending = true
+      let network
+      switch (this.currentProviderType) {
+        case PROVIDER_TYPE.infura:
+          network = yield* _await(storage.load("currentNetworkName"))
+          this.currentNetworkName = network || this.currentNetworkName
+          this.currentProvider = ethers.getDefaultProvider(this.currentNetworkName, {
+            infura: {
+              projectId: this.currentNetwork.infuraID,
+              projectSecret: this.currentNetwork.infuraSecret
             }
-            if (!this.initialized) {
-                reaction(() => getSnapshot(this.currentNetworkName), () => {
-                    this.init()
-                })
-                reaction(() => getSnapshot(this.currentProviderType), () => {
-                    this.init()
-                })
-            }
-            this.initialized = uuid.v4()
-            this.pending = false
-        } catch (e) {
-            console.log("catch", e)
-        }
+          })
+          break
+      }
+      if (!this.initialized) {
+        reaction(() => getSnapshot(this.currentNetworkName), () => {
+          this.init()
+        })
+        reaction(() => getSnapshot(this.currentProviderType), () => {
+          this.init()
+        })
+      }
+      this.initialized = uuid.v4()
+      this.pending = false
+    } catch (e) {
+      console.log("catch", e)
     }
+  }
 }

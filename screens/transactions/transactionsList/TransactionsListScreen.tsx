@@ -46,8 +46,9 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                           <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>
                         }
                         {
-                          view.token.name !== 'Ethereum' && <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                                                    source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                          view.token.name !== 'Ethereum' &&
+                          <Avatar address={ view.token.tokenAddress } size={ 80 }
+                                  source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
                         }
                       </View>
                       <View row center>
@@ -76,41 +77,42 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                            transactionKey: i.nonce
                                          })
                                        } }
-                        ><View backgroundColor={ Colors.white } key={ i.nonce }>
-                          <View row spread padding-8 paddingH-16>
-                            <View center flex-1>
-                              <Av imageStyle={ { height: 24, width: 24, left: 10, top: 10, position: "absolute" } }
-                                  containerStyle={ { position: "relative" } }
-                                  size={ 44 } source={ i.statusIcon }/>
+                        >
+                          <View backgroundColor={ Colors.white } key={ i.nonce }>
+                            <View row spread padding-8 paddingH-16>
+                              <View center flex-1>
+                                <Av imageStyle={ { height: 24, width: 24, left: 10, top: 10, position: "absolute" } }
+                                    containerStyle={ { position: "relative" } }
+                                    size={ 44 } source={ i.statusIcon }/>
+                              </View>
+                              <View flex-5 paddingL-15>
+                                <View>
+                                  <Text text70 robotoM color={ i.actionColor }>{ i.actionName }</Text>
+                                </View>
+                                <View>
+                                  <Text
+                                      dark50>{ `${ i.blockTimestamp.toLocaleDateString() } ${ i.blockTimestamp.toLocaleTimeString() }` }</Text>
+                                </View>
+                              </View>
+                              <View right centerV flex-4>
+                                <View>
+                                  <Text numberOfLines={ 1 } text70 dark30 robotoM
+                                        color={ i.actionColor }>{ i.formatFiatValue }</Text>
+                                </View>
+                                <View>
+                                  <Text dark50>
+                                    { i.actionName }
+                                  </Text>
+                                </View>
+                              </View>
                             </View>
-                            <View flex-5 paddingL-15>
-                              <View>
-                                <Text text70 robotoM color={ i.actionColor }>{ i.actionName }</Text>
-                              </View>
-                              <View>
-                                <Text
-                                    dark50>{ `${ i.blockTimestamp.toLocaleDateString() } ${ i.blockTimestamp.toLocaleTimeString() }` }</Text>
-                              </View>
-                            </View>
-                            <View right centerV flex-4>
-                              <View>
-                                <Text numberOfLines={ 1 } text70 dark30 robotoM
-                                      color={ i.actionColor }>{ i.formatFiatValue }</Text>
-                              </View>
-                              <View>
-                                <Text dark50>
-                                  { i.actionName }
-                                </Text>
-                              </View>
-                            </View>
+                            { index !== 0 && <View absR style={ {
+                              borderWidth: 1,
+                              borderColor: Colors.grey,
+                              width: "83%",
+                              borderBottomColor: "transparent"
+                            } }/> }
                           </View>
-                          { index !== 0 && <View absR style={ {
-                            borderWidth: 1,
-                            borderColor: Colors.grey,
-                            width: "83%",
-                            borderBottomColor: "transparent"
-                          } }/> }
-                        </View>
                         </Ripple>
                       })
                     }

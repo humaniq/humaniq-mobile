@@ -45,7 +45,7 @@ export function MainNavigator<PrimaryParamList>() {
       <Tab.Navigator
           tabBarOptions={ {
             activeTintColor: Colors.bg,
-            inactiveTintColor: Colors.grey,
+            inactiveTintColor: Colors.textGrey,
             activeBackgroundColor: Colors.primary,
             showLabels: true
           } }
@@ -62,10 +62,10 @@ export function MainNavigator<PrimaryParamList>() {
                   break
               }
               return <Ionicons name={ icon } size={ 24 }
-                               color={ options.focused ? Colors.bg : Colors.grey }/>
+                               color={ options.focused ? Colors.bg : Colors.textGrey }/>
             },
           }) }
-          appearance={ { tabBarBackground: Colors.bg } }>
+          appearance={ { tabBarBackground: Colors.white, dotCornerRadius: 18 } }>
         <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet"
                     component={ WalletStack }/>
         <Tab.Screen options={ { tabBarLabel: t("browserScreen.name") } } name="browser"

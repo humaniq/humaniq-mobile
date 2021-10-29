@@ -1,4 +1,4 @@
-import { computed, makeAutoObservable } from "mobx"
+import { makeAutoObservable } from "mobx"
 import { getWalletStore } from "../../../App"
 import { runUnprotected } from "mobx-keystone"
 
@@ -6,7 +6,6 @@ export class SelectWalletDialogViewModel {
 
     display = false
 
-    @computed
     get options() {
         return getWalletStore().wallets.map((w, i) => ({
             label: {
