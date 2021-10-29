@@ -97,7 +97,15 @@
   "selectValueScreen": {
     "step": "Step 1 of 3",
     "step2": "Step 2 of 3",
+    "step3": "Step 3 of 3",
     "nextBtn": "Next"
+  },
+  "selectAddressScreen": {
+    "inputMessage": "Please enter address of the recipient or use a scanner",
+    "inputMessageError": "Not a valid address",
+    "transfer": "Transfer",
+    "betweenMyAddresses": "Between my addresses",
+    "toRecentAddress": "To recent address"
   },
   "selectWalletTokenDialog": {
     "title": "Select token"
@@ -132,7 +140,9 @@
     "suggestedFee": "Suggested fee",
     "total": "Total",
     "cancelTransaction": "Cancel transaction",
-    "speedUpTransaction": "Speed up transaction"
+    "speedUpTransaction": "Speed up transaction",
+    "howMany": "How many",
+    "adjustFee": "Adjust miner fee"
   },
   "transactionModel": {
     "status": {

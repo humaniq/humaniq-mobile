@@ -13,6 +13,7 @@ import { TransactionsListScreen } from "../screens/transactions/transactionsList
 import { TransactionScreen } from "../screens/transactions/transaction/TransactionScreen";
 import { SelectValueScreen } from "../screens/transactions/sendTransaction/SelectValueScreen";
 import { SelectAddressScreen } from "../screens/transactions/sendTransaction/SelectAddressScreen";
+import { ConfirmTransactionScreen } from "../screens/transactions/sendTransaction/ConfirmTransactionScreen";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -31,7 +32,8 @@ export type RootParamList = {
   walletTransaction: undefined,
   selectValue: undefined,
   sendTransaction: undefined,
-  selectAddress: undefined
+  selectAddress: undefined,
+  confirmTransaction: undefined
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -63,6 +65,7 @@ const SendTransactionStack = () => {
   >
     <Stack.Screen name="selectValue" component={ SelectValueScreen }/>
     <Stack.Screen name="selectAddress" component={ SelectAddressScreen }/>
+    <Stack.Screen name="confirmTransaction" component={ ConfirmTransactionScreen }/>
   </Stack.Navigator>
 }
 

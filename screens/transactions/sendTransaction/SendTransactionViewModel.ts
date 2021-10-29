@@ -6,9 +6,11 @@ import { inject } from "react-ioc";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { getSnapshot, runUnprotected } from "mobx-keystone";
 import { BigNumber, ethers } from "ethers";
-import { amountFormat, currencyFormat } from "../../../utils/number";
+import { currencyFormat } from "../../../utils/number";
 import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
 import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import { isValidAddress } from "ethereumjs-util/dist/account";
+import { t } from "../../../i18n";
 
 export class SendTransactionViewModel {
 
@@ -21,6 +23,8 @@ export class SendTransactionViewModel {
   symbol = "ETH"
   commissionSelectExpanded = false
   inputFiat = false
+
+  betweenMyAddress = true
 
   txData = {
     chainId: 0,
@@ -131,16 +135,35 @@ export class SendTransactionViewModel {
       fee: this.transactionFee,
       feeFiat: currencyFormat(this.transactionFee * this.wallet?.prices.usd),
       totalFiat: currencyFormat(+this.parsedValue * this.price + this.transactionFee * this.wallet?.prices.usd),
-      maxAmount: this.parsedValue ? +this.parsedValue + this.transactionMaxFee : 0
+      maxAmount: this.parsedValue ? +this.parsedValue + this.transactionMaxFee : 0,
+      total: this.token.symbol === "ETH" ? `${ this.transactionFee + this.parsedValue } ETH` :
+          `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ETH`
     }
   }
 
   get enoughBalance() {
     if (this.token.symbol === "ETH") {
-      return +amountFormat(this.wallet.valBalance - (this.txData.estimateGas && this.parsedValue ? +this.parsedValue + this.transactionFee : 0), 8) >= 0
+      return BigNumber.from(this.wallet.balances.amount)
+          .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
+                  BigNumber.from(this.estimateGasLimit * this.txData.gasPrice)
+              )
+          )
     } else {
-      return this.token.valBalance - (+this.parsedValue) >= 0 && this.wallet.valBalance - (this.txData.estimateGas ? this.transactionFee : 0) >= 0
+      return BigNumber.from(this.token.balance)
+              .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
+          BigNumber.from(this.wallet.balances.amount)
+              .gt(BigNumber.from(this.estimateGasLimit * this.txData.gasPrice))
     }
+  }
+
+  get inputAddressError() {
+    return this.txData.to && !isValidAddress(this.txData.to)
+  }
+
+  get inputAddressErrorMessage() {
+    return this.inputAddressError ?
+        t("selectAddressScreen.inputMessageError") :
+        !this.txData.to ? t("selectAddressScreen.inputMessage") : ""
   }
 
   get txBody() {
@@ -157,12 +180,7 @@ export class SendTransactionViewModel {
 
   get isTransferAllow() {
     try {
-      if (!this.wallet?.balances.amount || !this.parsedValue || !this.enoughBalance) return false
-      return BigNumber.from(this.wallet.balances.amount)
-          .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
-                  BigNumber.from(this.estimateGasLimit * this.txData.gasPrice)
-              )
-          )
+      return !(!this.wallet?.balances.amount || !this.parsedValue || !this.enoughBalance);
     } catch (e) {
       console.log(e)
       return false

@@ -97,7 +97,15 @@
   "selectValueScreen": {
     "step": "Шаг 1 из 3",
     "step2": "Шаг 2 из 3",
+    "step3": "Шаг 3 из 3",
     "nextBtn": "Далее"
+  },
+  "selectAddressScreen": {
+    "inputMessage": "Пожалуйста введите адрес или используйте сканер",
+    "inputMessageError": "Не действительный адрес",
+    "transfer": "Трансфер",
+    "betweenMyAddresses": "Между моими адресами",
+    "toRecentAddress": "Недавние адреса"
   },
   "selectWalletTokenDialog": {
     "title": "Выбрать токен"
@@ -132,7 +140,9 @@
     "suggestedFee": "Коммиссия",
     "total": "Всего",
     "cancelTransaction": "Отменить транзакцию",
-    "speedUpTransaction": "Ускорить транзакцию"
+    "speedUpTransaction": "Ускорить транзакцию",
+    "howMany": "Как много",
+    "adjustFee": "Настроить комиссию"
   },
   "transactionModel": {
     "status": {
