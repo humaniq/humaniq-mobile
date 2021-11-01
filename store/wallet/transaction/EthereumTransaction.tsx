@@ -1,11 +1,15 @@
+import React from "react";
 import { model, Model, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
 import { computed, observable } from "mobx"
 import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
-import { Colors } from "react-native-ui-lib"
+import { Avatar, Colors } from "react-native-ui-lib"
 import { ethers } from "ethers"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import dayjs from "dayjs";
+import PendingIcon from "../../../assets/icons/clock-arrows.svg"
+import DoneIcon from "../../../assets/icons/done.svg"
+import FailIcon from "../../../assets/icons/warning.svg"
 
 
 @model("EthereumTransaction")
@@ -94,28 +98,14 @@ export class EthereumTransaction extends Model({
   }
 
   @computed
-  get statusName() {
-    switch (this.receiptStatus) {
-      case "0":
-        return tr('transactionModel.status.fail')
-      case "1":
-        return tr('transactionModel.status.success')
-      case "":
-        return tr('transactionModel.status.process')
-    }
-  }
-
-  @computed
   get statusColor() {
     switch (this.receiptStatus) {
       case "0":
-        return Colors.purple40
+        return Colors.error
       case "1":
-        return Colors.primary
-      case "":
-        return Colors.yellow30
+        return Colors.textGrey
       default:
-        return Colors.dark70
+        return Colors.warning
     }
   }
 
@@ -123,13 +113,11 @@ export class EthereumTransaction extends Model({
   get statusIcon() {
     switch (this.receiptStatus) {
       case "0":
-        return require("../../../assets/images/fail.png")
+        return <Avatar size={ 44 }><FailIcon width={ 22 } height={ 22 } color={ Colors.error }/></Avatar>
       case "1":
-        return require("../../../assets/images/finger-up.png")
-      case "":
-        return require("../../../assets/images/sand-clocks.png")
+        return <Avatar size={ 44 }><DoneIcon width={ 22 } height={ 22 } color={ Colors.success }/></Avatar>
       default:
-        return require("../../../assets/images/clock.png")
+        return <Avatar size={ 44 }><PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar>
     }
   }
 
@@ -150,29 +138,35 @@ export class EthereumTransaction extends Model({
   }
 
   @computed
-  get actionColor() {
-    switch (this.action) {
-      case 2:
-        return Colors.success
-      case 5:
-        return Colors.error
-      default:
-        return Colors.black
+  title() {
+    switch (true) {
+      case this.action === 1:
+        return this.toAddress
+      case this.action === 2:
+        return this.fromAddress
+      case this.action === 3:
+        return this.toAddress
+      case this.action === 4:
+        return tr('transactionModel.action.undefined')
+      case this.action === 5:
+        return this.fromAddress
     }
   }
 
   @computed
   get actionName() {
-    switch (this.action) {
-      case 1:
+    switch (true) {
+      case this.receiptStatus === "0":
+        return tr('transactionModel.action.pending')
+      case this.action === 1:
         return tr('transactionModel.action.outgoing')
-      case 2:
+      case this.action === 2:
         return tr('transactionModel.action.incoming')
-      case 3:
+      case this.action === 3:
         return tr('transactionModel.action.smartContract')
-      case 4:
+      case this.action === 4:
         return tr('transactionModel.action.undefined')
-      case 5:
+      case this.action === 5:
         return tr('transactionModel.action.reject')
     }
   }

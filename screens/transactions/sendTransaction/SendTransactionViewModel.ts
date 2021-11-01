@@ -11,6 +11,8 @@ import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumT
 import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
+import { RootNavigation } from "../../../navigators";
+import { WaitForEthTransactionViewModel } from "../../../components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel";
 
 export class SendTransactionViewModel {
 
@@ -43,6 +45,7 @@ export class SendTransactionViewModel {
 
   selectWalletTokenDialog = inject(this, SelectWalletTokenViewModel)
   selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
+  ethTransactionToast = inject(this, WaitForEthTransactionViewModel)
 
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
     this.closeDialog()
@@ -62,10 +65,13 @@ export class SendTransactionViewModel {
     return 21000 * this.selectTransactionFeeDialog.selected
   }
 
-  init(route) {
+  async init(route) {
     this.tokenAddress = route?.tokenAddress
     this.walletAddress = route?.walletAddress
-    this.getTransactionData()
+    if (!this.initialized) {
+      await this.getTransactionData();
+      this.initialized = true
+    }
   }
 
   registerInput(inputRef) {
@@ -135,8 +141,8 @@ export class SendTransactionViewModel {
       fee: this.transactionFee,
       feeFiat: currencyFormat(this.transactionFee * this.wallet?.prices.usd),
       totalFiat: currencyFormat(+this.parsedValue * this.price + this.transactionFee * this.wallet?.prices.usd),
-      maxAmount: this.parsedValue ? +this.parsedValue + this.transactionMaxFee : 0,
-      total: this.token.symbol === "ETH" ? `${ this.transactionFee + this.parsedValue } ETH` :
+      maxAmount: this.parsedValue ? (+this.parsedValue) + this.transactionMaxFee : 0,
+      total: this.token.symbol === "ETH" ? `${ (+this.transactionFee + (+this.parsedValue)) } ETH` :
           `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ETH`
     }
   }
@@ -190,7 +196,10 @@ export class SendTransactionViewModel {
   sendTx = async () => {
     try {
       if (this.pendingTransaction) return
-      this.pendingTransaction = true
+
+      setTimeout(() => {
+        this.pendingTransaction = true
+      }, 10)
 
       const etxBody = {
         chainId: this.txBody.chainId.toString(),
@@ -202,9 +211,9 @@ export class SendTransactionViewModel {
         toAddress: this.txBody.to,
         fromAddress: this.txBody.from,
         input: "0x",
-        blockTimestamp: new Date()
+        blockTimestamp: new Date(),
+        prices: this.token.prices
       }
-
       const etx = new EthereumTransaction(etxBody)
       const tx = await this.wallet.ether.sendTransaction(this.txBody)
 
@@ -212,10 +221,14 @@ export class SendTransactionViewModel {
         etx.hash = tx.hash
         etx.wait = tx.wait
         this.wallet.transactions.set(tx.nonce, etx)
-        // this.ethTransactionToast.transaction = etx
+        this.ethTransactionToast.transaction = etx
+        this.closeDialog()
+        RootNavigation.navigate("walletTransactions", {
+          wallet: this.wallet.address,
+          tokenAddress: this.tokenAddress
+        })
       })
       this.pendingTransaction = false
-      // this.closeDialog()
     } catch (e) {
       this.txError = true
       console.log("ERROR", e)
@@ -223,8 +236,7 @@ export class SendTransactionViewModel {
   }
 
   closeDialog = () => {
-    if (this.pendingTransaction) return
-    this.pending = true
+    // if (this.pendingTransaction) return
     this.initialized = false
     this.txData = {
       chainId: 0,
@@ -235,7 +247,7 @@ export class SendTransactionViewModel {
       to: "",
       estimateGas: "",
     }
-    this.pendingTransaction = false
+    // this.pendingTransaction = false
     this.display = false
   }
 

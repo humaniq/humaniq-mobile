@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { Screen } from "../../../components";
-import { Button, Card, Colors, Text, TouchableOpacity, View } from "react-native-ui-lib";
+import { Button, Card, Colors, LoaderScreen, Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { t } from "../../../i18n";
 import { useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
@@ -86,12 +86,13 @@ export const ConfirmTransactionScreen = observer(() => {
       </Card>
     </View>
     <View style={ { width: "100%" } } center absB row padding-20 bg-bg>
-      <Button disabled={ view.inputAddressError || !view.txData.to } style={ { width: "100%", borderRadius: 12 } }
-              label={ `${ t("common.send") } ${ view.txHumanReadable.totalFiat }` }
-              onPress={ () => {
-
-              } }
-      />
+      <Button disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
+              style={ { width: "100%", borderRadius: 12 } }
+              label={ !view.pendingTransaction ? `${ t("common.send") } ${ view.txHumanReadable.totalFiat }` : "" }
+              onPress={ view.sendTx }
+      >
+        { view.pendingTransaction && <LoaderScreen color={ Colors.white }/> }
+      </Button>
     </View>
   </Screen>
 })
