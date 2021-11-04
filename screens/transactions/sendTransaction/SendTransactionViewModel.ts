@@ -12,7 +12,11 @@ import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
 import { RootNavigation } from "../../../navigators";
-import { WaitForEthTransactionViewModel } from "../../../components/toasts/waitForEthTransaction/WaitForEthTransactionViewModel";
+import { WaitForEthTransactionViewModel } from "./WaitForEthTransactionViewModel";
+import { CommonActions } from "@react-navigation/native";
+import { contractAbiErc20 } from "../../../utils/abi";
+import { ERC20Transaction } from "../../../store/wallet/transaction/ERC20Transaction";
+import { throttle } from "../../../utils/general";
 
 export class SendTransactionViewModel {
 
@@ -25,17 +29,17 @@ export class SendTransactionViewModel {
   symbol = "ETH"
   commissionSelectExpanded = false
   inputFiat = false
+  contract
 
   betweenMyAddress = true
 
   txData = {
     chainId: 0,
-    gas: 0,
     gasPrice: 0,
     nonce: "",
     value: "",
     to: "",
-    estimateGas: "",
+    gasLimit: 21000,
   }
 
   txError = false
@@ -48,21 +52,40 @@ export class SendTransactionViewModel {
   ethTransactionToast = inject(this, WaitForEthTransactionViewModel)
 
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
-    this.closeDialog()
+    console.log({ val })
+    this.txData.value = ""
     this.tokenAddress = val
     this.inputFiat = false
     this.getTransactionData()
     setTimeout(() => {
-      this.inputRef.current?.focus()
+      this.inputRef?.current?.focus()
     }, 100)
   })
+
+  changeReceiverAddress = reaction(() => this.txData.to, (val) => {
+    this.txData.to = val
+    this.inputFiat = false
+    this.getTransactionData()
+    setTimeout(() => {
+      this.inputRef?.current?.focus()
+    }, 100)
+  })
+
+  changeTokenValue = reaction(() => this.txData.value, throttle(async () => {
+    try {
+      this.txData.gasLimit = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))).toString()) : 21000
+    } catch (e) {
+      console.log("ERROR-estimate-gas", e)
+    }
+  }, 200))
 
   get wallet(): Wallet {
     return getWalletStore().allWallets.find(w => w.address === this.walletAddress)
   }
 
-  get estimateGasLimit() {
-    return 21000 * this.selectTransactionFeeDialog.selected
+
+  get selectedGasPrice() {
+    return (this.txData.gasPrice * this.selectTransactionFeeDialog.selected).toFixed(0)
   }
 
   async init(route) {
@@ -70,6 +93,12 @@ export class SendTransactionViewModel {
     this.walletAddress = route?.walletAddress
     if (!this.initialized) {
       await this.getTransactionData();
+
+      if (this.tokenAddress) {
+        this.wallet.getERC20Transactions()
+      } else {
+        this.wallet.getWalletTransactions()
+      }
       this.initialized = true
     }
   }
@@ -79,22 +108,38 @@ export class SendTransactionViewModel {
   }
 
   async getTransactionData() {
-    this.pending = true
-    this.txData.chainId = getEthereumProvider().currentNetwork.chainID
-    const [ nonce, estimateGas ] = await Promise.all([
-      await getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
-      await getEthereumProvider().currentProvider.getGasPrice(),
-    ])
-    this.txData.nonce = nonce
-    this.txData.estimateGas = estimateGas.toString()
-    this.pending = false
+    try {
+      this.pending = true
+      this.txData.chainId = getEthereumProvider().currentNetwork.chainID
+      if (this.tokenAddress) {
+        this.contract = new ethers.Contract(this.tokenAddress, contractAbiErc20, this.wallet.ether);
+      }
+
+      const [ nonce, gasPrice, gasLimit ] = await Promise.all([
+        getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
+        getEthereumProvider().currentProvider.getGasPrice(),
+        this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
+      ])
+      console.log({ gasLimit: gasLimit && gasLimit.toString() })
+      this.txData.nonce = nonce
+      this.txData.gasPrice = gasPrice.toString()
+      this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
+      this.pending = false
+      console.log(this.txData, this.parsedValue, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
+    } catch (e) {
+      console.log("ERROR-get-transaction-data", e)
+    }
   }
 
   setMaxValue() {
-    if (this.token.symbol === "ETH") {
-      this.txData.value = this.inputFiat ? ((this.wallet.valBalance - this.transactionFee) * this.price).toFixed(2).toString() : (this.wallet.valBalance - this.transactionFee).toFixed(6).toString()
-    } else {
-      this.txData.value = this.inputFiat ? (this.token.valBalance * this.price).toFixed(2).toString() : this.token.valBalance.toFixed(6).toString()
+    try {
+      if (this.token.symbol === "ETH") {
+        this.txData.value = this.inputFiat ? ((this.wallet.valBalance - this.transactionFee) * this.price).toFixed(2).toString() : (this.wallet.valBalance - this.transactionFee).toFixed(6).toString()
+      } else {
+        this.txData.value = this.inputFiat ? (this.token.valBalance * this.price).toFixed(2).toString() : this.token.valBalance.toFixed(6).toString()
+      }
+    } catch (e) {
+      console.log("ERROR", e)
     }
   }
 
@@ -103,11 +148,21 @@ export class SendTransactionViewModel {
   }
 
   get transactionMaxFee() {
-    return this.txData.gasPrice ? +ethers.utils.formatUnits(this.txData.gasPrice * this.txData.gas, 18) : 0
+    try {
+      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+    } catch (e) {
+      console.log("ERROR", e)
+      return 0
+    }
   }
 
   get transactionFee() {
-    return this.txData.estimateGas ? +ethers.utils.formatUnits(+this.txData.estimateGas * this.estimateGasLimit, 18) : 0
+    try {
+      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+    } catch (e) {
+      console.log("ERROR", e)
+      return 0
+    }
   }
 
   get transactionFiatFee() {
@@ -123,7 +178,12 @@ export class SendTransactionViewModel {
   }
 
   get parsedPrice() {
-    return Number(this.txData.value) ? this.inputFiat ? (Number(this.txData.value) / this.price).toFixed(6).toString() : (Number(this.txData.value) * this.price).toFixed(2).toString() : "0"
+    try {
+      return Number(this.txData.value) ? this.inputFiat ? (Number(this.txData.value) / this.price).toFixed(6).toString() : (Number(this.txData.value) * this.price).toFixed(2).toString() : "0"
+    } catch (e) {
+      console.log("ERROR", e)
+      return 0
+    }
   }
 
   swapInputType() {
@@ -148,17 +208,23 @@ export class SendTransactionViewModel {
   }
 
   get enoughBalance() {
-    if (this.token.symbol === "ETH") {
-      return BigNumber.from(this.wallet.balances.amount)
-          .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
-                  BigNumber.from(this.estimateGasLimit * this.txData.gasPrice)
-              )
-          )
-    } else {
-      return BigNumber.from(this.token.balance)
-              .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
-          BigNumber.from(this.wallet.balances.amount)
-              .gt(BigNumber.from(this.estimateGasLimit * this.txData.gasPrice))
+    console.log(this.txData.gasLimit, this.selectedGasPrice, this.txData.gasLimit * +this.selectedGasPrice)
+    try {
+      if (this.token.symbol === "ETH") {
+        return BigNumber.from(this.wallet.balances.amount)
+            .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
+                    BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
+                )
+            )
+      } else {
+        return BigNumber.from(this.token.balance)
+                .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
+            BigNumber.from(this.wallet.balances.amount)
+                .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))
+      }
+    } catch (e) {
+      console.log("ERROR-enough-balance", e)
+      return false
     }
   }
 
@@ -176,8 +242,8 @@ export class SendTransactionViewModel {
     return {
       chainId: this.txData.chainId,
       nonce: this.txData.nonce,
-      gasPrice: this.txData.estimateGas,
-      gasLimit: this.estimateGasLimit,
+      gasPrice: this.selectedGasPrice,
+      gasLimit: this.txData.gasLimit,
       to: this.txData.to,
       from: this.wallet?.address,
       value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals),
@@ -201,37 +267,111 @@ export class SendTransactionViewModel {
         this.pendingTransaction = true
       }, 10)
 
-      const etxBody = {
-        chainId: this.txBody.chainId.toString(),
-        nonce: this.txBody.nonce.toString(),
-        gasPrice: this.txBody.gasPrice.toString(),
-        gas: this.txBody.gasLimit.toString(),
-        value: this.txBody.value.toString(),
-        walletAddress: this.wallet.address,
-        toAddress: this.txBody.to,
-        fromAddress: this.txBody.from,
-        input: "0x",
-        blockTimestamp: new Date(),
-        prices: this.token.prices
-      }
-      const etx = new EthereumTransaction(etxBody)
-      const tx = await this.wallet.ether.sendTransaction(this.txBody)
+      if (!this.tokenAddress) {
+        const etxBody = {
+          chainId: this.txBody.chainId.toString(),
+          nonce: this.txBody.nonce.toString(),
+          gasPrice: this.txBody.gasPrice,
+          gas: this.txBody.gasLimit.toString(),
+          value: this.txBody.value.toString(),
+          walletAddress: this.wallet.address,
+          toAddress: this.txBody.to,
+          fromAddress: this.txBody.from,
+          input: "0x",
+          blockTimestamp: new Date(),
+          prices: { usd: this.token.prices?.usd, eur: this.token.prices.eur },
+          type: 0
+        }
 
-      runUnprotected(() => {
-        etx.hash = tx.hash
-        etx.wait = tx.wait
-        this.wallet.transactions.set(tx.nonce, etx)
-        this.ethTransactionToast.transaction = etx
-        this.closeDialog()
-        RootNavigation.navigate("walletTransactions", {
-          wallet: this.wallet.address,
-          tokenAddress: this.tokenAddress
+        const etx = new EthereumTransaction(etxBody)
+
+        const tx = await this.wallet.ether.sendTransaction(this.txBody)
+
+        runUnprotected(() => {
+          etx.hash = tx.hash
+          etx.wait = tx.wait
+          this.wallet.transactions.set(tx.nonce, etx)
+          this.ethTransactionToast.transaction = etx
+          this.closeDialog()
         })
-      })
+      } else {
+
+        const erc20body = {
+          nonce: this.txBody.nonce.toString(),
+          decimals: this.token.decimals,
+          address: this.tokenAddress,
+          symbol: this.token.symbol,
+          chainId: this.txBody.chainId.toString(),
+          gasPrice: this.txBody.gasPrice,
+          gas: this.txBody.gasLimit.toString(),
+          value: this.txBody.value.toString(),
+          walletAddress: this.wallet.address,
+          toAddress: this.txBody.to,
+          fromAddress: this.txBody.from,
+          blockTimestamp: new Date(),
+          prices: { usd: this.token.priceUSD },
+          receiptStatus: ""
+        }
+
+        const erc20 = new ERC20Transaction(erc20body)
+        const tx = await this.contract.transfer(erc20.toAddress, erc20.value,
+            {
+              gasPrice: erc20body.gasPrice,
+              gasLimit: erc20body.gas,
+              type: 0
+            }
+        )
+        runUnprotected(() => {
+          erc20.transactionHash = tx.hash
+          erc20.wait = tx.wait
+
+          this.token.transactions.set(tx.hash, erc20)
+
+          this.ethTransactionToast.transaction = erc20
+          try {
+            this.closeDialog()
+          } catch (e) {
+            console.log("ERROR", e)
+          }
+        })
+      }
+
+      RootNavigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              {
+                name: "walletsList",
+              },
+              // {
+              //   name: "mainStack",
+              //   params: {
+              //     screen: "wallet",
+              //     params: {
+              //       screen: "wallet-main",
+              //       params: {
+              //         index: 0
+              //       }
+              //     }
+              //   }
+              // },
+              {
+                name: "walletTransactions",
+                params: {
+                  wallet: this.wallet.address,
+                  tokenAddress: this.tokenAddress,
+                  initialized: true
+                }
+              }
+            ]
+          })
+      )
+
       this.pendingTransaction = false
     } catch (e) {
       this.txError = true
-      console.log("ERROR", e)
+      console.log("ERROR-send-tx", e)
+      this.pendingTransaction = false
     }
   }
 
@@ -240,12 +380,11 @@ export class SendTransactionViewModel {
     this.initialized = false
     this.txData = {
       chainId: 0,
-      gas: 0,
+      gasLimit: 0,
       gasPrice: 0,
       nonce: "",
       value: "",
       to: "",
-      estimateGas: "",
     }
     // this.pendingTransaction = false
     this.display = false
@@ -273,7 +412,8 @@ export class SendTransactionViewModel {
           logo: "ethereum",
           fiatBalance: this.wallet?.fiatBalance,
           decimals: 18,
-          priceUSD: this.wallet?.prices.usd
+          priceUSD: this.wallet?.prices.usd,
+          prices: this.wallet?.prices
         }
   }
 

@@ -10,14 +10,16 @@ import { t } from "../../../i18n";
 import { renderShortAddress } from "../../../utils/address";
 import { Linking } from "react-native";
 import { getEthereumProvider } from "../../../App";
+import { WaitForEthTransactionViewModel } from "../sendTransaction/WaitForEthTransactionViewModel";
 
 const Transaction = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionScreenViewModel)
+  const waitTransaction = useInstance(WaitForEthTransactionViewModel)
   const nav = useNavigation()
 
   useEffect(() => {
     view.init(route.params)
-    console.log(view.transaction)
+    console.log("TRANSACTION", view.transaction)
   }, [])
 
   return <Screen
@@ -149,6 +151,16 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                 }
               </Card>
           </View>
+        { view.transaction.receiptStatus === "" &&
+        <View flex bottom padding-20>
+            <Button disabled={ !waitTransaction.canRewriteTransaction } onPress={ waitTransaction.cancelTransaction }
+                    paddingB-20 link
+                    label={ t("transactionScreen.cancelTransaction") }/>
+            <Button disabled={ !waitTransaction.canRewriteTransaction } onPress={ waitTransaction.speedUpTransaction }
+                    br50
+                    label={ t("transactionScreen.speedUpTransaction") }/>
+        </View>
+        }
       </View>
     }
     {

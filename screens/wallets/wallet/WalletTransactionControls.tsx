@@ -10,7 +10,11 @@ import { WalletsScreenModel } from "../WalletsScreenModel";
 import Ripple from "react-native-material-ripple";
 import { RootNavigation } from "../../../navigators";
 
-export const WalletTransactionControls = () => {
+export interface IWalletTransactionControlsProps {
+  tokenAddress?: string
+}
+
+export const WalletTransactionControls = (props: IWalletTransactionControlsProps) => {
   const view = useInstance(WalletsScreenModel)
   const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
@@ -21,10 +25,10 @@ export const WalletTransactionControls = () => {
         <Ripple rippleColor={ Colors.primary }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {
-                    screen: "selectValue",
+                    screen: "selectAddress",
                     params: {
                       walletAddress: view.currentWallet.address,
-                      test: "test"
+                      tokenAddress: props.tokenAddress
                     }
                   })
                 } }

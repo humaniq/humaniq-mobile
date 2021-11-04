@@ -1,6 +1,6 @@
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Card, Colors, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
+import { Button, Card, Colors, LoaderScreen, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper";
@@ -18,22 +18,15 @@ import { SelectTransactionFeeDialog } from "../../../components/dialogs/selectTr
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
 
-const SelectValue = observer<{ route: any }>(({ route }) => {
+const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
   const nav = useNavigation()
   const inputRef = useRef<MutableRefObject<any>>()
 
   useEffect(() => {
-    // @ts-ignore
-    inputRef.current?.focus()
-    view.init(route.params)
-    selectWalletTokenView.init(view.walletAddress)
-  }, [])
-
-  useEffect(() => {
     view.registerInput(inputRef)
-  }, [ inputRef.current ])
+  }, [ inputRef?.current ])
 
 
   return <BlurWrapper before={
@@ -76,7 +69,6 @@ const SelectValue = observer<{ route: any }>(({ route }) => {
                   fontSize: 32,
                   fontFamily: "Roboto-Bold"
                 } }
-                ref={ inputRef }
                 keyboardType={ "numeric" }
                 floatingPlaceholder={ false }
                 centered={ true }
@@ -108,14 +100,17 @@ const SelectValue = observer<{ route: any }>(({ route }) => {
         </View>
       </View>
       <View style={ { width: "100%" } } center absB row padding-20>
-        <Button disabled={ !view.isTransferAllow } style={ { width: "100%", borderRadius: 12 } }
-                label={ t("selectValueScreen.nextBtn") }
+        <Button disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
+                style={ { width: "100%", borderRadius: 12 } }
+                label={ !view.pendingTransaction ? `${ t("common.sendTo") } ${ view.txHumanReadable.totalFiat }` : "" }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {
-                    screen: "selectAddress"
+                    screen: "confirmTransaction"
                   })
                 } }
-        />
+        >
+          { view.pendingTransaction && <LoaderScreen color={ Colors.white }/> }
+        </Button>
       </View>
     </Screen>
   } after={

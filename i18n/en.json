@@ -26,7 +26,8 @@
     "medium": "Medium",
     "fast": "Fast",
     "speedUp": "Speed up",
-    "receive": "Receive"
+    "receive": "Receive",
+    "sendTo": "Send to"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -155,7 +156,8 @@
       "incoming": "incoming",
       "undefined": "undefined",
       "smartContract": "Smart contract",
-      "reject": "rejected transaction"
+      "reject": "rejected transaction",
+      "pending": "Pending"
     }
   },
   "sendTransaction": {

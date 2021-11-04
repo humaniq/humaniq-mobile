@@ -14,7 +14,6 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
-import { WaitForEthTransaction } from "../components/toasts/waitForEthTransaction/WaitForEthTransaction"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
 
 const Stack = createStackNavigator()
@@ -76,7 +75,6 @@ export function MainNavigator<PrimaryParamList>() {
   )
 }
 
-
 export function WalletStack() {
   return (
       <><Stack.Navigator screenOptions={ {
@@ -84,7 +82,6 @@ export function WalletStack() {
       } }>
         <Stack.Screen name="wallet-main" component={ WalletsScreen }/>
       </Stack.Navigator>
-        <WaitForEthTransaction/>
       </>
   )
 }

@@ -61,7 +61,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                             { `${ view.token.formatBalance } ${ view.token.symbol }` }
                           </Text>
                       </View>
-                      <WalletTransactionControls/>
+                      <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
                   </View>
                   <View padding-16>
                       <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
@@ -69,38 +69,37 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                   <Card marginH-16 paddingV-8>
                     {
                       !!view.transactions && !!view.transactions.length && view.transactions.map((i, index) => {
-                        return <Ripple key={ i.nonce } rippleColor={ Colors.primary }
+                        return <Ripple key={ i.key } rippleColor={ Colors.primary }
                                        onPress={ () => {
                                          RootNavigation.navigate("walletTransaction", {
                                            wallet: route.params.wallet,
                                            tokenAddress: view.token.tokenAddress,
-                                           transactionKey: i.nonce
+                                           transactionKey: i.key
                                          })
                                        } }
                         >
-                          <View backgroundColor={ Colors.white } key={ i.nonce }>
+                          <View backgroundColor={ Colors.white } key={ i.key }>
                             <View row spread padding-8 paddingH-16>
                               <View center flex-1>
-                                <Av imageStyle={ { height: 24, width: 24, left: 10, top: 10, position: "absolute" } }
-                                    containerStyle={ { position: "relative" } }
-                                    size={ 44 } source={ i.statusIcon }/>
+                                {
+                                  i.statusIcon
+                                }
                               </View>
-                              <View flex-5 paddingL-15>
+                              <View flex-6 paddingL-15>
                                 <View>
-                                  <Text text70 robotoM color={ i.actionColor }>{ i.actionName }</Text>
+                                  <Text numberOfLines={ 1 } text70 robotoM>{ i.title }</Text>
                                 </View>
                                 <View>
                                   <Text
-                                      dark50>{ `${ i.blockTimestamp.toLocaleDateString() } ${ i.blockTimestamp.toLocaleTimeString() }` }</Text>
+                                      dark50>{ i.formatDate }</Text>
                                 </View>
                               </View>
-                              <View right centerV flex-4>
+                              <View right centerV flex-3>
                                 <View>
-                                  <Text numberOfLines={ 1 } text70 dark30 robotoM
-                                        color={ i.actionColor }>{ i.formatFiatValue }</Text>
+                                  <Text numberOfLines={ 1 } text70 dark30 robotoM>{ i.formatFiatValue }</Text>
                                 </View>
                                 <View>
-                                  <Text dark50>
+                                  <Text dark50 color={ i.actionColor }>
                                     { i.actionName }
                                   </Text>
                                 </View>

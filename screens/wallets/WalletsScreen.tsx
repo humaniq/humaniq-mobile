@@ -35,7 +35,8 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
   const carouselBodyRef = useRef<Carousel<any>>()
 
   useEffect(() => {
-    view.init()
+    console.log("HERE")
+    view.init(route.params?.force)
   }, [])
 
   useEffect(() => {

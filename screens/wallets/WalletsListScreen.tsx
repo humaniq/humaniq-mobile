@@ -13,7 +13,7 @@ import { Wallet } from "../../store/wallet/Wallet";
 import LogoWallet from '../../assets/icons/wallet.svg'
 import Ripple from "react-native-material-ripple";
 
-const WalletsList = observer(() => {
+const WalletsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(WalletsScreenModel)
   const store = getWalletStore()
   const nav = useNavigation()

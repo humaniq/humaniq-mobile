@@ -32,12 +32,15 @@ export class TransactionsListScreenViewModel {
     try {
       this.currentWalletAddress = params.wallet
       this.tokenAddress = params.tokenAddress
-      if (this.tokenAddress) {
-        await this.wallet.getERC20Transactions()
-      } else {
-        await this.wallet.getWalletTransactions()
+      this.initialized = !!params.initialized
+      if (!this.initialized) {
+        if (this.tokenAddress) {
+          await this.wallet.getERC20Transactions()
+        } else {
+          await this.wallet.getWalletTransactions()
+        }
+        this.initialized = true
       }
-      this.initialized = true
     } catch (e) {
       console.log("ERROR", e)
     }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BackHandler } from "react-native";
-import { PartialState, NavigationState, NavigationContainerRef } from "@react-navigation/native";
+import { NavigationContainerRef, NavigationState, PartialState } from "@react-navigation/native";
 
 export const RootNavigation = {
   navigate(name: string, params?: any) {
@@ -12,6 +12,8 @@ export const RootNavigation = {
   }, // eslint-disable-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   getRootState(): NavigationState {
     return {} as any;
+  },
+  dispatch(action: any): any {
   }
 };
 
@@ -43,8 +45,8 @@ export function getActiveRouteName(state: NavigationState | PartialState<Navigat
  * the navigation or allows exiting the app.
  */
 export function useBackButtonHandler(
-  ref: React.RefObject<NavigationContainerRef>,
-  canExit: (routeName: string) => boolean
+    ref: React.RefObject<NavigationContainerRef>,
+    canExit: (routeName: string) => boolean
 ) {
   const canExitRef = useRef(canExit);
 
@@ -160,9 +162,9 @@ export function formatRoute(routePath, params) {
             } else {
               let tokenName = `splat${ i }`;
               tokens[tokenName] = match === "*"
-                ? encodeURIComponent(val)
-                // don't escape slashes for double star, as "**" considered greedy by RR spec
-                : encodeURIComponent(val.toString().replace(/\//g, "_!slash!_")).replace(reSlashTokens, "/");
+                  ? encodeURIComponent(val)
+                  // don't escape slashes for double star, as "**" considered greedy by RR spec
+                  : encodeURIComponent(val.toString().replace(/\//g, "_!slash!_")).replace(reSlashTokens, "/");
               return `<${ tokenName }>`;
             }
           });
@@ -191,18 +193,18 @@ export function formatRoute(routePath, params) {
   }
 
   return routePath
-    // Remove braces around resolved optional params (i.e. "/path/(value)")
-    .replace(reResolvedOptionalParams, "$1")
-    // Remove all sequences containing at least one unresolved optional param
-    .replace(reUnresolvedOptionalParams, "")
-    // Remove all sequences containing at least one unresolved optional param in RR4
-    .replace(reUnresolvedOptionalParamsRR4, "")
-    // After everything related to RR syntax is removed, insert actual values
-    .replace(reTokens, (match, token) => tokens[token])
-    // Remove repeating slashes
-    .replace(reRepeatingSlashes, "/")
-    // Always remove ending slash for consistency
-    .replace(/\/+$/, "")
-    // If there was a single slash only, keep it
-    .replace(/^$/, "/");
+      // Remove braces around resolved optional params (i.e. "/path/(value)")
+      .replace(reResolvedOptionalParams, "$1")
+      // Remove all sequences containing at least one unresolved optional param
+      .replace(reUnresolvedOptionalParams, "")
+      // Remove all sequences containing at least one unresolved optional param in RR4
+      .replace(reUnresolvedOptionalParamsRR4, "")
+      // After everything related to RR syntax is removed, insert actual values
+      .replace(reTokens, (match, token) => tokens[token])
+      // Remove repeating slashes
+      .replace(reRepeatingSlashes, "/")
+      // Always remove ending slash for consistency
+      .replace(/\/+$/, "")
+      // If there was a single slash only, keep it
+      .replace(/^$/, "/");
 }
