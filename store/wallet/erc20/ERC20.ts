@@ -1,4 +1,4 @@
-import { Model, model, objectMap, prop, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import { Model, model, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
@@ -11,17 +11,17 @@ import { ERC20Transaction } from "../transaction/ERC20Transaction";
 @model("ERC20")
 export class ERC20 extends Model({
   walletAddress: p(t.string, ""),
-  initialized: prop<boolean>(false),
-  pending: prop<boolean>(false),
-  tokenAddress: prop<string>(""),
-  name: prop<string>(""),
-  symbol: prop<string>(""),
-  logo: prop<string>(""),
-  thumbnail: prop<string>(""),
-  decimals: prop<string>(""),
-  balance: prop<string>(""),
-  priceUSD: prop<string>(""),
-  priceEther: prop<string>(""),
+  initialized: p(t.boolean, false),
+  pending: p(t.boolean, false),
+  tokenAddress: p(t.string, ""),
+  name: p(t.string, ""),
+  symbol: p(t.string, ""),
+  logo: p(t.string, ""),
+  thumbnail: p(t.string, ""),
+  decimals: p(t.string, ""),
+  balance: p(t.string, ""),
+  priceUSD: p(t.string, ""),
+  priceEther: p(t.string, ""),
   transactions: p(t.objectMap(t.model<ERC20Transaction>(ERC20Transaction)), () => objectMap<ERC20Transaction>())
 }) {
 
@@ -66,11 +66,11 @@ export class ERC20 extends Model({
 
   @computed
   get fiatBalance() {
-    return this.priceUSD ? preciseRound(this.valBalance * this.priceUSD) : 0
+    return this.priceUSD ? preciseRound(this.valBalance * this.priceUSD) : null
   }
 
   @computed
   get formatFiatBalance() {
-    return this.fiatBalance ? `≈$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+    return this.fiatBalance ? `$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
   }
 }

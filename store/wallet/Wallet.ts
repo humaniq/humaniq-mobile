@@ -3,7 +3,7 @@ import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import uuid from "react-native-uuid"
-import { MORALIS_ROUTES, ROUTES } from "../../config/api"
+import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEthereumProvider, getMoralisRequest, getRequest } from "../../App"
 import { EthereumTransaction } from "./transaction/EthereumTransaction"
@@ -50,64 +50,6 @@ export class Wallet extends Model({
   @observable
   ether: Signer
 
-  @computed
-  get pendingTransaction() {
-    return Object.values<EthereumTransaction>(this.transactions).find(t => !t.receiptStatus)
-  }
-
-  @computed
-  get isConnected() {
-    return !!this.ether.provider
-  }
-
-  @computed
-  get erc20List() {
-    return Object.values<ERC20>(this.erc20.items)
-  }
-
-  @computed
-  get transactionsList() {
-    return Object.values<EthereumTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
-  }
-
-  @computed
-  get formatAddress() {
-    return this.address ? `${ this.address.slice(0, 4) }...${ this.address.substring(this.address.length - 4) }` : ""
-  }
-
-  @computed
-  get valBalance() {
-    return this?.balances?.amount ? preciseRound(+ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))) : 0
-  }
-
-  @computed
-  get formatBalance() {
-    return amountFormat(this.valBalance, 8)
-  }
-
-  @computed
-  get fiatBalance() {
-    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.valBalance) : 0
-  }
-
-  @computed
-  get formatFiatBalance() {
-    return this.fiatBalance ? `≈$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
-  }
-
-  @computed
-  get totalWalletFiatBalance() {
-    return this.fiatBalance + this.erc20List.reduce((acc, item) => {
-      acc += item.fiatBalance
-      return acc
-    }, 0)
-  }
-
-  @computed
-  get formatTotalWalletFiatBalance() {
-    return currencyFormat(+this.totalWalletFiatBalance)
-  }
-
   @modelFlow
   * init(force = false) {
     if (!this.initialized || force) {
@@ -116,9 +58,8 @@ export class Wallet extends Model({
         this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
 
         yield Promise.all([
-          getEthereumProvider().currentNetworkName !== 'mainnet' ?
-              this.updateBalanceFromProvider() :
-              this.updateBalanceFromApi(),
+          this.updateBalanceFromProvider(),
+          // this.updateBalanceFromApi(),
           this.getCoinCost(),
           this.getErc20Balances()
         ])
@@ -163,12 +104,12 @@ export class Wallet extends Model({
 
   @modelFlow
   * getCoinCost() {
-    const cost = yield getRequest().post(ROUTES.PRICES.GET_ALL_SUPPORT_COINS, {
-      coins: [ "ethereum" ],
-      withPrices: true
+    const cost = yield getRequest().get(COINGECKO_ROUTES.GET_TOKEN_PRICE, {
+      ids: "ethereum",
+      vs_currencies: "usd,eur"
     })
     if (cost.ok) {
-      this.prices = cost.data.items[0].prices
+      this.prices = cost.data.ethereum
     } else {
       this.isError = true
     }
@@ -188,7 +129,11 @@ export class Wallet extends Model({
           ...changeCaseObj(r),
           chainId: getEthereumProvider().currentNetwork.chainID,
           walletAddress: this.address.toLowerCase(),
-          blockTimestamp: new Date(r.block_timestamp)
+          blockTimestamp: new Date(r.block_timestamp),
+          prices: {
+            usd: this.prices?.usd,
+            eur: this.prices?.eur
+          }
         })
         runUnprotected(() => {
           this.transactions.set(tr.nonce, tr)
@@ -216,7 +161,10 @@ export class Wallet extends Model({
           decimals: currentToken.decimals,
           chainId: getEthereumProvider().currentNetwork.chainID,
           walletAddress: this.address.toLowerCase(),
-          blockTimestamp: new Date(r.block_timestamp)
+          blockTimestamp: new Date(r.block_timestamp),
+          prices: {
+            usd: currentToken.priceUSD,
+          }
         })
         if (currentToken) {
           runUnprotected(() => {
@@ -241,6 +189,66 @@ export class Wallet extends Model({
         this.erc20.set(t.token_address, erc20Token)
         erc20Token.init()
       })
+    } else {
+      console.log("ERROR-GET-ERC20")
     }
+  }
+
+  @computed
+  get pendingTransaction() {
+    return Object.values<EthereumTransaction>(this.transactions).find(t => !t.receiptStatus)
+  }
+
+  @computed
+  get isConnected() {
+    return !!this.ether.provider
+  }
+
+  @computed
+  get erc20List() {
+    return Object.values<ERC20>(this.erc20.items)
+  }
+
+  @computed
+  get transactionsList() {
+    return Object.values<EthereumTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+  }
+
+  @computed
+  get formatAddress() {
+    return this.address ? `${ this.address.slice(0, 4) }...${ this.address.substring(this.address.length - 4) }` : ""
+  }
+
+  @computed
+  get valBalance() {
+    return this?.balances?.amount ? preciseRound(+ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))) : 0
+  }
+
+  @computed
+  get formatBalance() {
+    return amountFormat(this.valBalance, 8)
+  }
+
+  @computed
+  get fiatBalance() {
+    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.valBalance) : 0
+  }
+
+  @computed
+  get formatFiatBalance() {
+    return this.fiatBalance ? `$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+  }
+
+  @computed
+  get totalWalletFiatBalance() {
+    return this.fiatBalance + this.erc20List.reduce((acc, item) => {
+      acc += item.fiatBalance
+      return acc
+    }, 0)
+  }
+
+  @computed
+  get formatTotalWalletFiatBalance() {
+    return currencyFormat(+this.totalWalletFiatBalance)
   }
 }

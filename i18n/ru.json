@@ -21,9 +21,13 @@
     "wallet": "Кошелек",
     "balance": "Баланс",
     "low": "Медленно",
+    "slow": "Медленно",
+    "normal": "Нормально",
     "medium": "Обычно",
     "fast": "Быстро",
-    "speedUp": "Ускорить"
+    "speedUp": "Ускорить",
+    "receive": "Получить",
+    "sendTo": "К отправке"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -47,11 +51,14 @@
     "correctPin": "Пин код подтвержден"
   },
   "walletScreen": {
-    "name": "Кошельки",
+    "allAddresses": "Все адреса",
+    "totalBalanceTittle": "Все ваши средства",
+    "name": "Кошелек",
     "menuDialog": {
       "createWallet": {
         "name": "Создать новый адрес",
-        "createWalletMessage": "Создается новый адрес, пожалуйста подождите…"
+        "createWalletMessage": "Создается новый адрес…",
+        "createWalletMessageDone": "Новый адрес создан!"
       }
     }
   },
@@ -62,7 +69,7 @@
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес",
-    "transactionHistory": "Список транзакций"
+    "transactionHistory": "Транзакции"
   },
   "exportMnemonicDialog": {
     "title": "Ваша секретная фраза",
@@ -88,6 +95,22 @@
     "sendTransaction": "Отправить",
     "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
   },
+  "selectValueScreen": {
+    "step": "Шаг 1 из 3",
+    "step2": "Шаг 2 из 3",
+    "step3": "Шаг 3 из 3",
+    "nextBtn": "Далее"
+  },
+  "selectAddressScreen": {
+    "inputMessage": "Пожалуйста введите адрес или используйте сканер",
+    "inputMessageError": "Не действительный адрес",
+    "transfer": "Трансфер",
+    "betweenMyAddresses": "Между моими адресами",
+    "toRecentAddress": "Недавние адреса"
+  },
+  "selectWalletTokenDialog": {
+    "title": "Выбрать токен"
+  },
   "approvalDappConnectDialog": {
     "wontToConnect": "хочет подключиться к",
     "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
@@ -107,6 +130,21 @@
   "transactionsScreen": {
     "name": "Транзакции"
   },
+  "transactionScreen": {
+    "transactionDetails": "Детали транзакции",
+    "viewOnEtherScan": "Посмотреть на Etherscan",
+    "status": "Статус",
+    "date": "Дата",
+    "from": "От",
+    "to": "Кому",
+    "amount": "Сумма",
+    "suggestedFee": "Коммиссия",
+    "total": "Всего",
+    "cancelTransaction": "Отменить транзакцию",
+    "speedUpTransaction": "Ускорить транзакцию",
+    "howMany": "Как много",
+    "adjustFee": "Настроить комиссию"
+  },
   "transactionModel": {
     "status": {
       "fail": "Неудачно",
@@ -114,11 +152,12 @@
       "process": "В процессе"
     },
     "action": {
-      "outgoing": "Отправленние",
-      "incoming": "Поступленние",
+      "outgoing": "Отправлено",
+      "incoming": "Получено",
       "undefined": "Неустановлено",
-      "smartContract": "Смарт контракт",
-      "reject": "Отмена отправки"
+      "smartContract": "Контракт",
+      "reject": "Отмена",
+      "pending": "Отправляется"
     }
   },
   "sendTransaction": {
@@ -129,5 +168,14 @@
       "done": "Транзакция выполнена!",
       "error": "Ошибка транзакции"
     }
+  },
+  "selfAddressQRCodeDialog": {
+    "copyAddress": "Копировать адрес",
+    "shareAddress": "Отправить адрес",
+    "description": "Для того чтобы получить средства, отправителю достаточно отсканировать QR код и внести нужное количество средств через свой криптокошелек",
+    "shareTitle": "Ethereum адрес"
+  },
+  "appToasts": {
+    "addressCopied": "Ваш публичный адрес скопирован"
   }
 }

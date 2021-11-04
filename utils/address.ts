@@ -26,7 +26,8 @@ export function renderFullAddress(address) {
 export function renderShortAddress(address, chars = 4) {
 	if (!address) return address;
 	const checksummedAddress = toChecksumAddress(address);
-	return `${checksummedAddress.substr(0, chars + 2)}...${checksummedAddress.substr(-chars)}`;
+	// return `${checksummedAddress.substr(0, chars + 2)}...${checksummedAddress.substr(-chars)}`;
+	return checksummedAddress ? `${checksummedAddress.slice(0, 4) }...${ checksummedAddress.substring(checksummedAddress.length - 4) }` : ""
 }
 
 /**

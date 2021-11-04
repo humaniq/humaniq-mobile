@@ -35,10 +35,10 @@ const Auth = observer(function () {
                             </View>
                             <View bottom flex paddingB-20>
                                 {
-                                    view.isSavedWallet && <Button bg-violet10 marginB-20 onPress={ view.goLogin }
+                                    view.isSavedWallet && <Button bg-primary20 marginB-20 onPress={ view.goLogin }
                                                                   label={ t("common.login") }/>
                                 }
-                                <Button bg-violet10 marginB-20 onPress={ view.goRegister }
+                                <Button bg-primary20 marginB-20 onPress={ view.goRegister }
                                         label={ t("common.register") }/>
                                 <TouchableOpacity onPress={ view.goRecover }>
                                     <View row center>
@@ -86,7 +86,7 @@ const Auth = observer(function () {
                                     <Text text70BO white>{ view.message }</Text>
                                 </Animatable.View>
                             </View>
-                            <View row bg-violet20 flex-3 margin-20>
+                            <View row bg-primary20 flex-3 margin-20>
                                 <TextArea errorMessage={ t("registerScreen.recoveryError") }
                                           value={ getAppStore().recoverPhrase }
                                           onChangeText={ view.onChangeRecoverPhrase }
@@ -94,7 +94,7 @@ const Auth = observer(function () {
                             </View>
                             <View>
                                 { view.isValidRecover &&
-                                <Button onPress={ view.recoveryWallet } link color={ Colors.violet80 }
+                                <Button onPress={ view.recoveryWallet } link color={ Colors.primary10 }
                                         label={ t("common.import") }/> }
                                 { !view.isValidRecover && getAppStore().recoverPhrase.length > 0 &&
                                 <Text color={ Colors.violet80 }>{ t("registerScreen.recoveryError") }
