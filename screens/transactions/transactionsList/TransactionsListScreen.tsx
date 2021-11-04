@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { ScrollView } from "react-native"
 import { Avatar as Av, Button, Card, Colors, LoaderScreen, Text, TouchableOpacity, View } from "react-native-ui-lib"
@@ -12,16 +12,33 @@ import { WalletTransactionControls } from "../../wallets/wallet/WalletTransactio
 import { getDictionary } from "../../../App";
 import { Avatar } from "../../../components/avatar/Avatar";
 import { t } from "../../../i18n";
-import Ripple from "react-native-material-ripple";
+import { TransactionItem } from "../../../components/transactionItem/TransactionItem";
 import { RootNavigation } from "../../../navigators";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionsListScreenViewModel)
   const nav = useNavigation()
+  const scrollRef = useRef()
+
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+    const paddingToBottom = 20;
+    return layoutMeasurement.height + contentOffset.y >=
+        contentSize.height - paddingToBottom;
+  };
 
   useEffect(() => {
     view.init(route.params)
   }, [])
+
+  const renderItem = ({ item, index }) => <TransactionItem key={ item.hash } item={ item } index={ index } onPress={
+    () => {
+      RootNavigation.navigate("walletTransaction", {
+        wallet: route.params.wallet,
+        tokenAddress: view.token.tokenAddress,
+        transactionKey: item.key
+      })
+    }
+  }/>
 
   return <BlurWrapper
       before={
@@ -29,7 +46,6 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
             backgroundColor={ Colors.bg }
             statusBarBg={ Colors.bg }
             preset="fixed"
-
         >
           <TouchableOpacity padding-20 paddingL-16 left row centerV onPress={ nav.goBack }>
             <ArrowLeft height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
@@ -38,7 +54,19 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
           </TouchableOpacity>
           { view.initialized &&
           <>
-              <ScrollView>
+              <ScrollView
+                  ref={ scrollRef }
+                  onScroll={ ({ nativeEvent }) => {
+                    if (isCloseToBottom(nativeEvent)) {
+                      if (!view.tokenAddress) {
+                        view.wallet.loadTransactions();
+                        // @ts-ignore
+                        scrollRef?.current.scrollToEnd();
+                      }
+                    }
+                  } }
+                  scrollEventThrottle={ 400 }
+              >
                   <View>
                       <View row center>
                         {
@@ -68,52 +96,16 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                   </View>
                   <Card marginH-16 paddingV-8>
                     {
-                      !!view.transactions && !!view.transactions.length && view.transactions.map((i, index) => {
-                        return <Ripple key={ i.key } rippleColor={ Colors.primary }
-                                       onPress={ () => {
-                                         RootNavigation.navigate("walletTransaction", {
-                                           wallet: route.params.wallet,
-                                           tokenAddress: view.token.tokenAddress,
-                                           transactionKey: i.key
-                                         })
-                                       } }
-                        >
-                          <View backgroundColor={ Colors.white } key={ i.key }>
-                            <View row spread padding-8 paddingH-16>
-                              <View center flex-1>
-                                {
-                                  i.statusIcon
-                                }
-                              </View>
-                              <View flex-6 paddingL-15>
-                                <View>
-                                  <Text numberOfLines={ 1 } text70 robotoM>{ i.title }</Text>
-                                </View>
-                                <View>
-                                  <Text
-                                      dark50>{ i.formatDate }</Text>
-                                </View>
-                              </View>
-                              <View right centerV flex-3>
-                                <View>
-                                  <Text numberOfLines={ 1 } text70 dark30 robotoM>{ i.formatFiatValue }</Text>
-                                </View>
-                                <View>
-                                  <Text dark50 color={ i.actionColor }>
-                                    { i.actionName }
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                            { index !== 0 && <View absR style={ {
-                              borderWidth: 1,
-                              borderColor: Colors.grey,
-                              width: "83%",
-                              borderBottomColor: "transparent"
-                            } }/> }
-                          </View>
-                        </Ripple>
-                      })
+                      !!view.transactions && !!view.transactions.length && <>
+                        { view.transactions.map((item, index) => renderItem({
+                          item,
+                          index
+                        }))
+                        }
+                        {
+                          view.loadingTransactions && <View padding-15><LoaderScreen/></View>
+                        }
+                      </>
                     }
                   </Card>
               </ScrollView>

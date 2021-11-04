@@ -97,7 +97,7 @@ export class SendTransactionViewModel {
       if (this.tokenAddress) {
         this.wallet.getERC20Transactions()
       } else {
-        this.wallet.getWalletTransactions()
+        this.wallet.loadTransactions()
       }
       this.initialized = true
     }

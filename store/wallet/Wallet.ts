@@ -1,4 +1,7 @@
-import { _await, Model, model, modelFlow, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+/* tslint:disable-next-line */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { _await, Model, model, modelFlow, objectMap, prop, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
@@ -11,6 +14,7 @@ import { intToHex } from "ethjs-util"
 import { changeCaseObj } from "../../utils/general"
 import { ERC20 } from "./erc20/ERC20"
 import { ERC20Transaction } from "./transaction/ERC20Transaction";
+import { EthereumTransactionStore } from "./transaction/EthereumTransactionStore";
 
 export interface TransactionsRequestResult {
   page: number,
@@ -21,17 +25,17 @@ export interface TransactionsRequestResult {
 
 @model("Wallet")
 export class Wallet extends Model({
-  isError: p(t.boolean, false),
-  pending: p(t.boolean, false),
-  initialized: p(t.string, ""),
-  address: p(t.string, ""),
-  name: p(t.string, ""),
-  balance: p(t.string, "0"),
-  mnemonic: p(t.string, ""),
-  path: p(t.string, ""),
-  hdPath: p(t.string, ""),
-  privateKey: p(t.string),
-  publicKey: p(t.string),
+  isError: prop<boolean>(false),
+  pending: prop<boolean>(false),
+  initialized: prop<string>(""),
+  address: prop<string>(""),
+  name: prop<string>(""),
+  balance: prop<string>(""),
+  mnemonic: prop<string>(""),
+  path: prop<string>(""),
+  hdPath: prop<string>(""),
+  privateKey: prop<string>(""),
+  publicKey: prop<string>(""),
   balances: p(t.maybeNull(t.object(() => ({
     // Address: t.string,
     amount: t.number,
@@ -43,7 +47,8 @@ export class Wallet extends Model({
     eur: t.number,
     usd: t.number
   })))),
-  transactions: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
+  // transactions: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
+  transactions: p(t.model<EthereumTransactionStore>(EthereumTransactionStore), () => new EthereumTransactionStore({})),
   erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>())
 }) {
 
@@ -116,15 +121,23 @@ export class Wallet extends Model({
   }
 
   @modelFlow
-  * getWalletTransactions() {
-    const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, {
-      address: this.address
-    })
+  * loadTransactions(init = false) {
+    console.log(!this.transactions.canLoad)
+    if (!this.transactions.canLoad && !init) return
+    if (init) {
+      this.transactions.page = 0
+      this.transactions.map.clear()
+    }
+    const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
     const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
-    const result = yield getMoralisRequest().get(route, { chain })
+    this.transactions.loading = true
+    const result = yield getMoralisRequest().get(route, {
+      chain,
+      offset: this.transactions.pageSize * this.transactions.page,
+      limit: this.transactions.pageSize
+    })
     if (result.ok && (result.data as TransactionsRequestResult).total) {
       (result.data as TransactionsRequestResult).result.forEach(r => {
-
         const tr = new EthereumTransaction({
           ...changeCaseObj(r),
           chainId: getEthereumProvider().currentNetwork.chainID,
@@ -136,9 +149,12 @@ export class Wallet extends Model({
           }
         })
         runUnprotected(() => {
-          this.transactions.set(tr.nonce, tr)
+          this.transactions.map.set(tr.hash, tr)
         })
       })
+      this.transactions.total = result.data.total
+      this.transactions.incrementOffset()
+      this.transactions.loading = false
     }
   }
 
@@ -211,7 +227,7 @@ export class Wallet extends Model({
 
   @computed
   get transactionsList() {
-    return Object.values<EthereumTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+    return this.transactions.list
   }
 
   @computed
