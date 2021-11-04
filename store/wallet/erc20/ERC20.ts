@@ -66,7 +66,7 @@ export class ERC20 extends Model({
 
   @computed
   get fiatBalance() {
-    return this.priceUSD ? preciseRound(this.valBalance * this.priceUSD) : 0
+    return this.priceUSD ? preciseRound(this.valBalance * this.priceUSD) : null
   }
 
   @computed

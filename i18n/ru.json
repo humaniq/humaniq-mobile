@@ -21,10 +21,13 @@
     "wallet": "Кошелек",
     "balance": "Баланс",
     "low": "Медленно",
+    "slow": "Медленно",
+    "normal": "Нормально",
     "medium": "Обычно",
     "fast": "Быстро",
     "speedUp": "Ускорить",
-    "receive": "Получить"
+    "receive": "Получить",
+    "sendTo": "К отправке"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -92,6 +95,22 @@
     "sendTransaction": "Отправить",
     "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
   },
+  "selectValueScreen": {
+    "step": "Шаг 1 из 3",
+    "step2": "Шаг 2 из 3",
+    "step3": "Шаг 3 из 3",
+    "nextBtn": "Далее"
+  },
+  "selectAddressScreen": {
+    "inputMessage": "Пожалуйста введите адрес или используйте сканер",
+    "inputMessageError": "Не действительный адрес",
+    "transfer": "Трансфер",
+    "betweenMyAddresses": "Между моими адресами",
+    "toRecentAddress": "Недавние адреса"
+  },
+  "selectWalletTokenDialog": {
+    "title": "Выбрать токен"
+  },
   "approvalDappConnectDialog": {
     "wontToConnect": "хочет подключиться к",
     "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
@@ -122,7 +141,9 @@
     "suggestedFee": "Коммиссия",
     "total": "Всего",
     "cancelTransaction": "Отменить транзакцию",
-    "speedUpTransaction": "Ускорить транзакцию"
+    "speedUpTransaction": "Ускорить транзакцию",
+    "howMany": "Как много",
+    "adjustFee": "Настроить комиссию"
   },
   "transactionModel": {
     "status": {
@@ -135,7 +156,8 @@
       "incoming": "Получено",
       "undefined": "Неустановлено",
       "smartContract": "Контракт",
-      "reject": "Отмена"
+      "reject": "Отмена",
+      "pending": "Отправляется"
     }
   },
   "sendTransaction": {

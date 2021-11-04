@@ -11,6 +11,7 @@ export class SendTransactionViewModel {
     txHash = ""
 
     approvalRequest
+
     meta: {
         url: ""
     }

@@ -6,7 +6,7 @@ import { amountFormat, currencyFormat } from "../../../utils/number"
 import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction"
 import { runUnprotected } from "mobx-keystone"
 import { inject } from "react-ioc"
-import { WaitForEthTransactionViewModel } from "../../toasts/waitForEthTransaction/WaitForEthTransactionViewModel"
+import { WaitForEthTransactionViewModel } from "../../../screens/transactions/sendTransaction/WaitForEthTransactionViewModel"
 
 export class SendWalletTransactionViewModel {
     display = false

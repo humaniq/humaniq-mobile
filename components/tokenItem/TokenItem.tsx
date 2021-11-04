@@ -6,13 +6,15 @@ import Ripple from "react-native-material-ripple";
 
 export interface TokenItemProps {
   symbol: string
-  tokenAddress: string
-  logo: any
-  name: string
-  formatBalance: string
-  formatFiatBalance: string
+  tokenAddress?: string
+  logo?: any
+  name?: string
+  formatBalance?: string
+  formatFiatBalance?: string
   onPress?: any,
-  index: number
+  index: number,
+  short?: boolean
+  single?: boolean
 }
 
 export const TokenItem = (props: TokenItemProps) => {
@@ -35,20 +37,22 @@ export const TokenItem = (props: TokenItemProps) => {
           <View>
             <Text numberOfLines={ 1 } textM grey20>{ props.name }</Text>
           </View>
-          <View>
-            <Text numberOfLines={ 1 } text90R grey40>{ props.symbol }</Text>
+          { !props.short && <View>
+              <Text numberOfLines={ 1 } text90R grey40>{ props.symbol }</Text>
           </View>
+          }
         </View>
         <View flex-3 right>
           <Text numberOfLines={ 1 } text16 robotoB grey20>
             { props.formatFiatBalance }
           </Text>
-          <Text numberOfLines={ 1 } text90 grey40 bold>
+          { !props.short && <Text numberOfLines={ 1 } text90 grey40 bold>
             { props.formatBalance }
           </Text>
+          }
         </View>
       </View>
-      { props.index !== 0 && <View absR style={ {
+      { props.index !== 0 && !props.single && <View absR style={ {
         borderWidth: 1,
         borderColor: Colors.grey,
         width: "85%",

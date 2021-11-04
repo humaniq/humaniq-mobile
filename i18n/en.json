@@ -21,10 +21,13 @@
     "wallet": "Wallet",
     "balance": "Balance",
     "low": "Low",
+    "slow": "Медленно",
+    "normal": "Нормально",
     "medium": "Medium",
     "fast": "Fast",
     "speedUp": "Speed up",
-    "receive": "Receive"
+    "receive": "Receive",
+    "sendTo": "Send to"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -92,6 +95,22 @@
     "sendTransaction": "Send",
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction"
   },
+  "selectValueScreen": {
+    "step": "Step 1 of 3",
+    "step2": "Step 2 of 3",
+    "step3": "Step 3 of 3",
+    "nextBtn": "Next"
+  },
+  "selectAddressScreen": {
+    "inputMessage": "Please enter address of the recipient or use a scanner",
+    "inputMessageError": "Not a valid address",
+    "transfer": "Transfer",
+    "betweenMyAddresses": "Between my addresses",
+    "toRecentAddress": "To recent address"
+  },
+  "selectWalletTokenDialog": {
+    "title": "Select token"
+  },
   "approvalDappConnectDialog": {
     "wontToConnect": "want to connect",
     "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
@@ -122,7 +141,9 @@
     "suggestedFee": "Suggested fee",
     "total": "Total",
     "cancelTransaction": "Cancel transaction",
-    "speedUpTransaction": "Speed up transaction"
+    "speedUpTransaction": "Speed up transaction",
+    "howMany": "How many",
+    "adjustFee": "Adjust miner fee"
   },
   "transactionModel": {
     "status": {
@@ -135,7 +156,8 @@
       "incoming": "incoming",
       "undefined": "undefined",
       "smartContract": "Smart contract",
-      "reject": "rejected transaction"
+      "reject": "rejected transaction",
+      "pending": "Pending"
     }
   },
   "sendTransaction": {

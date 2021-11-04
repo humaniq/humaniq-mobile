@@ -14,7 +14,6 @@ import { createStackNavigator } from "@react-navigation/stack"
 import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
-import { WaitForEthTransaction } from "../components/toasts/waitForEthTransaction/WaitForEthTransaction"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
 
 const Stack = createStackNavigator()
@@ -45,7 +44,7 @@ export function MainNavigator<PrimaryParamList>() {
       <Tab.Navigator
           tabBarOptions={ {
             activeTintColor: Colors.bg,
-            inactiveTintColor: Colors.grey,
+            inactiveTintColor: Colors.textGrey,
             activeBackgroundColor: Colors.primary,
             showLabels: true
           } }
@@ -62,10 +61,10 @@ export function MainNavigator<PrimaryParamList>() {
                   break
               }
               return <Ionicons name={ icon } size={ 24 }
-                               color={ options.focused ? Colors.bg : Colors.grey }/>
+                               color={ options.focused ? Colors.bg : Colors.textGrey }/>
             },
           }) }
-          appearance={ { tabBarBackground: Colors.bg } }>
+          appearance={ { tabBarBackground: Colors.white, dotCornerRadius: 18 } }>
         <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet"
                     component={ WalletStack }/>
         <Tab.Screen options={ { tabBarLabel: t("browserScreen.name") } } name="browser"
@@ -76,7 +75,6 @@ export function MainNavigator<PrimaryParamList>() {
   )
 }
 
-
 export function WalletStack() {
   return (
       <><Stack.Navigator screenOptions={ {
@@ -84,7 +82,6 @@ export function WalletStack() {
       } }>
         <Stack.Screen name="wallet-main" component={ WalletsScreen }/>
       </Stack.Navigator>
-        <WaitForEthTransaction/>
       </>
   )
 }
