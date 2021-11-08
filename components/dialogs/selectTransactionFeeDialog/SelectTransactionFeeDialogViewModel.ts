@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { t } from "../../../i18n";
 
 export enum TRANSACTION_MULTIPLICATOR {
-  SLOW = 1,
+  SLOW = 0.5,
   NORMAL = 1.25,
   FAST = 1.5
 }
@@ -10,7 +10,7 @@ export enum TRANSACTION_MULTIPLICATOR {
 export class SelectTransactionFeeDialogViewModel {
 
   display = false
-  selected = TRANSACTION_MULTIPLICATOR.NORMAL
+  selected = TRANSACTION_MULTIPLICATOR.SLOW
 
   get options(): any {
     return [

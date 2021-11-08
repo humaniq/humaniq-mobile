@@ -1,7 +1,15 @@
-/* tslint:disable-next-line */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { _await, Model, model, modelFlow, objectMap, prop, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import {
+  _await,
+  fromSnapshot,
+  Model,
+  model,
+  modelFlow,
+  objectMap,
+  prop,
+  runUnprotected,
+  tProp as p,
+  types as t
+} from "mobx-keystone"
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
@@ -15,6 +23,7 @@ import { changeCaseObj } from "../../utils/general"
 import { ERC20 } from "./erc20/ERC20"
 import { ERC20Transaction } from "./transaction/ERC20Transaction";
 import { EthereumTransactionStore } from "./transaction/EthereumTransactionStore";
+import { localStorage } from "../../utils/localStorage";
 
 export interface TransactionsRequestResult {
   page: number,
@@ -37,17 +46,14 @@ export class Wallet extends Model({
   privateKey: prop<string>(""),
   publicKey: prop<string>(""),
   balances: p(t.maybeNull(t.object(() => ({
-    // Address: t.string,
     amount: t.number,
     amountUnconfirmed: t.number,
     recomendedFee: t.number
-    // Transactions: t.maybeNull(t.)
   })))),
   prices: p(t.maybeNull(t.object(() => ({
     eur: t.number,
     usd: t.number
   })))),
-  // transactions: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
   transactions: p(t.model<EthereumTransactionStore>(EthereumTransactionStore), () => new EthereumTransactionStore({})),
   erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>())
 }) {
@@ -122,7 +128,6 @@ export class Wallet extends Model({
 
   @modelFlow
   * loadTransactions(init = false) {
-    console.log(!this.transactions.canLoad)
     if (!this.transactions.canLoad && !init) return
     if (init) {
       this.transactions.page = 0
@@ -131,6 +136,18 @@ export class Wallet extends Model({
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
     const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
     this.transactions.loading = true
+
+    // yield* _await(localStorage.remove(`humaniq-pending-transactions-eth-${ this.address }`))
+
+    const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.address }`))) || []
+    console.log({ pendingTransactions })
+    pendingTransactions.forEach(t => {
+      const pTx = fromSnapshot<EthereumTransaction>(t)
+      pTx.applyToWallet()
+      pTx.wait = () => getEthereumProvider().currentProvider.waitForTransaction(pTx.hash)
+      pTx.waitTransaction()
+    })
+
     const result = yield getMoralisRequest().get(route, {
       chain,
       offset: this.transactions.pageSize * this.transactions.page,

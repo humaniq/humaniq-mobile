@@ -80,12 +80,12 @@ export class SendTransactionViewModel {
   }, 200))
 
   get wallet(): Wallet {
-    return getWalletStore().allWallets.find(w => w.address === this.walletAddress)
+    return getWalletStore().walletsMap.get(this.walletAddress)
   }
 
 
   get selectedGasPrice() {
-    return (this.txData.gasPrice * this.selectTransactionFeeDialog.selected).toFixed(0)
+    return +(this.txData.gasPrice * this.selectTransactionFeeDialog.selected).toFixed(0)
   }
 
   async init(route) {
@@ -97,7 +97,7 @@ export class SendTransactionViewModel {
       if (this.tokenAddress) {
         this.wallet.getERC20Transactions()
       } else {
-        this.wallet.loadTransactions()
+        this.wallet.loadTransactions(true)
       }
       this.initialized = true
     }
@@ -238,24 +238,29 @@ export class SendTransactionViewModel {
         !this.txData.to ? t("selectAddressScreen.inputMessage") : ""
   }
 
-  get txBody() {
-    return {
-      chainId: this.txData.chainId,
-      nonce: this.txData.nonce,
-      gasPrice: this.selectedGasPrice,
-      gasLimit: this.txData.gasLimit,
-      to: this.txData.to,
-      from: this.wallet?.address,
-      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals),
-    }
-  }
-
   get isTransferAllow() {
     try {
       return !(!this.wallet?.balances.amount || !this.parsedValue || !this.enoughBalance);
     } catch (e) {
       console.log(e)
       return false
+    }
+  }
+
+  get txBody() {
+    return {
+      chainId: this.txData.chainId.toString(),
+      nonce: this.txData.nonce.toString(),
+      gasPrice: this.selectedGasPrice.toString(),
+      gas: this.txData.gasLimit.toString(),
+      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
+      walletAddress: this.wallet.address,
+      toAddress: this.txData.to,
+      fromAddress: this.wallet?.address,
+      input: "0x",
+      blockTimestamp: new Date(),
+      prices: { usd: this.token.prices?.usd, eur: this.token.prices.eur },
+      type: 0
     }
   }
 
@@ -268,34 +273,17 @@ export class SendTransactionViewModel {
       }, 10)
 
       if (!this.tokenAddress) {
-        const etxBody = {
-          chainId: this.txBody.chainId.toString(),
-          nonce: this.txBody.nonce.toString(),
-          gasPrice: this.txBody.gasPrice,
-          gas: this.txBody.gasLimit.toString(),
-          value: this.txBody.value.toString(),
-          walletAddress: this.wallet.address,
-          toAddress: this.txBody.to,
-          fromAddress: this.txBody.from,
-          input: "0x",
-          blockTimestamp: new Date(),
-          prices: { usd: this.token.prices?.usd, eur: this.token.prices.eur },
-          type: 0
-        }
+        const etx = new EthereumTransaction(this.txBody)
+        console.log("send")
+        await etx.sendTransaction()
+        console.log("apply")
+        etx.applyToWallet()
+        console.log("wait")
+        etx.waitTransaction()
+        console.log("close")
+        this.closeDialog()
 
-        const etx = new EthereumTransaction(etxBody)
-
-        const tx = await this.wallet.ether.sendTransaction(this.txBody)
-
-        runUnprotected(() => {
-          etx.hash = tx.hash
-          etx.wait = tx.wait
-          this.wallet.transactions.set(tx.nonce, etx)
-          this.ethTransactionToast.transaction = etx
-          this.closeDialog()
-        })
       } else {
-
         const erc20body = {
           nonce: this.txBody.nonce.toString(),
           decimals: this.token.decimals,
@@ -303,11 +291,11 @@ export class SendTransactionViewModel {
           symbol: this.token.symbol,
           chainId: this.txBody.chainId.toString(),
           gasPrice: this.txBody.gasPrice,
-          gas: this.txBody.gasLimit.toString(),
+          gas: this.txBody.gas.toString(),
           value: this.txBody.value.toString(),
           walletAddress: this.wallet.address,
-          toAddress: this.txBody.to,
-          fromAddress: this.txBody.from,
+          toAddress: this.txBody.toAddress,
+          fromAddress: this.txBody.fromAddress,
           blockTimestamp: new Date(),
           prices: { usd: this.token.priceUSD },
           receiptStatus: ""

@@ -1,4 +1,4 @@
-import { Model, model, objectMap, tProp as p, types as t } from "mobx-keystone";
+import { Model, model, modelAction, objectMap, tProp as p, types as t } from "mobx-keystone";
 import { EthereumTransaction } from "./EthereumTransaction";
 import { computed } from "mobx";
 
@@ -13,6 +13,11 @@ export class EthereumTransactionStore extends Model({
   @computed
   get list() {
     return Object.values<EthereumTransaction>(this.map.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+  }
+
+  @modelAction
+  set(key, tx) {
+    this.map.set(key, tx)
   }
 
   @computed

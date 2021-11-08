@@ -27,7 +27,9 @@
     "fast": "Fast",
     "speedUp": "Speed up",
     "receive": "Receive",
-    "sendTo": "Send to"
+    "sendTo": "Send to",
+    "refresh": "Refreshing",
+    "noData": "No data"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -152,12 +154,13 @@
       "process": "process"
     },
     "action": {
-      "outgoing": "outgoing",
-      "incoming": "incoming",
-      "undefined": "undefined",
+      "outgoing": "Outgoing",
+      "incoming": "Incoming",
+      "undefined": "Undefined",
       "smartContract": "Smart contract",
-      "reject": "rejected transaction",
-      "pending": "Pending"
+      "reject": "Rejected transaction",
+      "pending": "Pending",
+      "cancelling": "Cancelling"
     }
   },
   "sendTransaction": {

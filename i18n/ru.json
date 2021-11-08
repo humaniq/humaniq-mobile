@@ -27,7 +27,9 @@
     "fast": "Быстро",
     "speedUp": "Ускорить",
     "receive": "Получить",
-    "sendTo": "К отправке"
+    "sendTo": "К отправке",
+    "refresh": "Обновление",
+    "noData": "Нет данных"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -157,7 +159,8 @@
       "undefined": "Неустановлено",
       "smartContract": "Контракт",
       "reject": "Отмена",
-      "pending": "Отправляется"
+      "pending": "Отправляется",
+      "cancelling": "Отменяется"
     }
   },
   "sendTransaction": {

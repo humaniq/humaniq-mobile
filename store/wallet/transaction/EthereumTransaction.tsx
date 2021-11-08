@@ -1,17 +1,55 @@
 import React from "react";
-import { model, Model, timestampToDateTransform, tProp as p, types as t } from "mobx-keystone"
-import { computed } from "mobx"
+import {
+  _await,
+  getSnapshot,
+  model,
+  Model,
+  modelFlow,
+  timestampToDateTransform,
+  tProp as p,
+  types as t
+} from "mobx-keystone"
+import { action, computed, observable } from "mobx"
 import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
 import { Avatar, Colors } from "react-native-ui-lib"
-import { ethers } from "ethers"
-import { beautifyNumber, preciseRound } from "../../../utils/number"
+import { BigNumber, ethers } from "ethers"
+import { amountFormat, beautifyNumber, preciseRound } from "../../../utils/number"
 import dayjs from "dayjs";
 import PendingIcon from "../../../assets/icons/clock-arrows.svg"
 import DoneIcon from "../../../assets/icons/done.svg"
 import FailIcon from "../../../assets/icons/warning.svg"
 import { renderShortAddress } from "../../../utils/address";
+import { getWalletStore } from "../../../App";
+import { localStorage } from "../../../utils/localStorage";
 
+
+export interface IEthereumTransactionConstructor {
+  chainId: string
+  nonce: string
+  gasPrice: string
+  gas: string
+  value: string
+  walletAddress: string
+  toAddress: string
+  fromAddress: string
+  input: ""
+  blockTimestamp: Date
+  prices: {
+    usd: number,
+    eur?: number
+  }
+  type: number
+}
+
+
+export enum TRANSACTION_STATUS {
+  PENDING = "",
+  ERROR = "0",
+  SUCCESS = "1",
+  CANCELLING = "2",
+  CANCELLED = "3",
+}
 
 @model("EthereumTransaction")
 export class EthereumTransaction extends Model({
@@ -25,26 +63,133 @@ export class EthereumTransaction extends Model({
   input: p(t.string, ""),
   chainId: p(t.number, ""),
   receiptContractAddress: p(t.string, ""),
-  receiptStatus: p(t.string, ""),
+  receiptStatus: p(t.enum(TRANSACTION_STATUS), TRANSACTION_STATUS.PENDING),
   blockTimestamp: p(t.number).withTransform(timestampToDateTransform()),
   gas: p(t.string, ""),
   gasPrice: p(t.string, ""),
-  prices: p(t.maybeNull(t.object(() => ({
+  prices: p(t.maybeNull(t.frozen(() => ({
     eur: t.number,
     usd: t.number
   })))),
 }) {
 
+  @observable
+  waitingTransactions
+
   @computed
   get txBody() {
     return {
       chainId: +this.chainId,
-      nonce: this.nonce,
-      gasPrice: this.gasPrice,
-      gasLimit: this.gas,
+      nonce: +this.nonce,
+      gasPrice: +this.gasPrice,
+      gasLimit: +this.gas,
       to: this.toAddress,
       from: this.fromAddress,
-      value: this.value
+      value: BigNumber.from(this.value),
+      type: 0
+    }
+  }
+
+  @modelFlow
+  * sendTransaction() {
+    try {
+      console.log({ txBody: this.txBody })
+      const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
+      console.log({ tx })
+      this.hash = tx.hash
+      this.wait = tx.wait
+      return tx
+    } catch (e) {
+      console.log("ERROR-SEND-TRANSACTION", e)
+      return null
+    }
+  }
+
+  @action
+  cancelTx = async () => {
+    this.cancelTransaction.bind(this)
+    await this.cancelTransaction()
+  }
+
+  @modelFlow
+  * waitTransaction() {
+    console.log("wait-transaction")
+    try {
+      if (!this.wait) return
+      console.log("wait", this.wait)
+      const confirmedTx = (yield* _await(this.wait())) as ethers.providers.TransactionReceipt
+      console.log({ confirmedTx })
+      this.blockTimestamp = new Date()
+      this.transactionIndex = confirmedTx.transactionIndex
+      this.receiptContractAddress = confirmedTx.contractAddress
+      this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+      yield this.applyToWallet()
+    } catch (e) {
+      console.log("ERROR_WAIT_TRANSACTIONS", e)
+    }
+  }
+
+  @modelFlow
+  * cancelTransaction() {
+    console.log("cancelTransaction")
+    console.log(this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction)
+
+    if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+      try {
+        this.receiptStatus = TRANSACTION_STATUS.CANCELLING
+        this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
+        this.value = "0"
+        this.toAddress = ethers.constants.AddressZero
+        const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
+        yield this.removeFromStore()
+        this.hash = tx.hash
+        yield this.storeTransaction()
+        const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
+        console.log({ confirmedTx })
+        this.blockTimestamp = new Date()
+        this.transactionIndex = confirmedTx.transactionIndex
+        this.receiptContractAddress = confirmedTx.contractAddress
+        this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+        yield this.removeFromStore()
+        console.log({ canceled: confirmedTx })
+      } catch (e) {
+        console.log("ERROR-CANCELLING-TRANSACTION", e)
+      }
+    }
+  }
+
+
+  @modelFlow
+  * speedUpTransaction() {
+  }
+
+  @modelFlow
+  * storeTransaction() {
+    const saveTx = getSnapshot(this)
+    const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.walletAddress }`))) || []
+    pendingTransactions.push(saveTx)
+    _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.walletAddress }`, pendingTransactions))
+  }
+
+  @modelFlow
+  * removeFromStore() {
+    let pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.walletAddress }`))) || []
+    pendingTransactions = pendingTransactions.filter(t => t.hash !== this.key)
+    _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.walletAddress }`, pendingTransactions))
+  }
+
+  @modelFlow
+  * applyToWallet() {
+    try {
+      if (this.receiptStatus === TRANSACTION_STATUS.PENDING || this.receiptStatus === TRANSACTION_STATUS.CANCELLING) {
+        yield this.storeTransaction()
+      } else {
+        yield this.removeFromStore()
+      }
+      // this.wallet.transactions.delete(this.key)
+      this.wallet.transactions.set(this.key, this)
+    } catch (e) {
+      console.log("ERROR-APPLY-TO-WALLET", e)
     }
   }
 
@@ -52,7 +197,12 @@ export class EthereumTransaction extends Model({
 
   @computed
   get key() {
-    return this.nonce
+    return this.hash
+  }
+
+  @computed
+  get wallet() {
+    return getWalletStore().walletsMap.get(this.walletAddress)
   }
 
   @computed
@@ -85,6 +235,11 @@ export class EthereumTransaction extends Model({
   @computed
   get formatFee() {
     return +formatEther(this.gasPrice * this.gas)
+  }
+
+  @computed
+  get canRewriteTransaction() {
+    return +amountFormat(this.wallet.valBalance - this.formatFee * 1.5, 8) > 0
   }
 
   @computed
@@ -137,7 +292,8 @@ export class EthereumTransaction extends Model({
   @computed
   get actionColor() {
     switch (true) {
-      case this.receiptStatus === "":
+      case this.receiptStatus === TRANSACTION_STATUS.PENDING:
+      case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
         return Colors.warning
       case this.action === 5:
         return Colors.error
@@ -149,7 +305,8 @@ export class EthereumTransaction extends Model({
   @computed
   get statusIcon() {
     switch (true) {
-      case this.receiptStatus === "":
+      case this.receiptStatus === TRANSACTION_STATUS.PENDING:
+      case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
         return <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 44 }>
           <PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar>
       case this.action === 5:
@@ -164,7 +321,9 @@ export class EthereumTransaction extends Model({
   @computed
   get actionName() {
     switch (true) {
-      case this.receiptStatus === "":
+      case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
+        return tr('transactionModel.action.cancelling')
+      case this.receiptStatus === TRANSACTION_STATUS.PENDING:
         return tr('transactionModel.action.pending')
       case this.action === 1:
         return tr('transactionModel.action.outgoing')

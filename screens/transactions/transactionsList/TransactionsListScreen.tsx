@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
-import { ScrollView } from "react-native"
+import { RefreshControl, ScrollView } from "react-native"
 import { Avatar as Av, Button, Card, Colors, LoaderScreen, Text, TouchableOpacity, View } from "react-native-ui-lib"
 import { provider, useInstance } from "react-ioc"
 import { TransactionsListScreenViewModel } from "./TransactionsListScreenViewModel"
@@ -55,6 +55,16 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
           { view.initialized &&
           <>
               <ScrollView
+                  refreshControl={
+                    <RefreshControl
+                        refreshing={ view.refreshing }
+                        onRefresh={ async () => {
+                          view.refreshing = true
+                          await view.wallet.loadTransactions(true)
+                          view.refreshing = false
+                        } }
+                    />
+                  }
                   ref={ scrollRef }
                   onScroll={ ({ nativeEvent }) => {
                     if (isCloseToBottom(nativeEvent)) {
@@ -95,6 +105,9 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                       <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
                   </View>
                   <Card marginH-16 paddingV-8>
+                    { view.refreshing && <View center padding-15>
+                        <Text textM textGrey >{ `${t("common.refresh")}...` }</Text>
+                    </View> }
                     {
                       !!view.transactions && !!view.transactions.length && <>
                         { view.transactions.map((item, index) => renderItem({
@@ -106,6 +119,10 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                           view.loadingTransactions && <View padding-15><LoaderScreen/></View>
                         }
                       </>
+                    }
+                    {
+                      !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
+                      <View center padding-20><Text>{ t("common.noData") }</Text></View>
                     }
                   </Card>
               </ScrollView>

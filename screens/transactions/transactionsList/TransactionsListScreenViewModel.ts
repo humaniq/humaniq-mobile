@@ -9,7 +9,7 @@ export class TransactionsListScreenViewModel {
   refreshing = false
 
   get wallet() {
-    return getWalletStore().allWallets.find(w => w.address === this.currentWalletAddress)
+    return getWalletStore().walletsMap.get(this.currentWalletAddress)
   }
 
   get transactions() {

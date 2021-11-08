@@ -39,6 +39,14 @@ export class WalletStore extends Model({
   storedWallets
 
   @computed
+  get walletsMap() {
+    return this.allWallets.reduce((map, obj) => {
+      map.set(obj.address, obj);
+      return map;
+    }, new Map);
+  }
+
+  @computed
   get wallets() {
     return this.allWallets.filter(h => !this.hiddenWallets.includes(h.address))
   }
