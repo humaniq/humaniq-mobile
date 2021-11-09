@@ -131,9 +131,6 @@ export class EthereumTransaction extends Model({
 
   @modelFlow
   * cancelTransaction() {
-    console.log("cancelTransaction")
-    console.log(this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction)
-
     if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
       try {
         this.receiptStatus = TRANSACTION_STATUS.CANCELLING
@@ -143,6 +140,7 @@ export class EthereumTransaction extends Model({
         const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
         yield this.removeFromStore()
         this.hash = tx.hash
+        this.wait = null
         yield this.storeTransaction()
         const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
         console.log({ confirmedTx })
@@ -161,6 +159,26 @@ export class EthereumTransaction extends Model({
 
   @modelFlow
   * speedUpTransaction() {
+    if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+      try {
+        this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
+        const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
+        yield this.removeFromStore()
+        this.hash = tx.hash
+        this.wait = null
+        yield this.storeTransaction()
+        const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
+        console.log({ confirmedTx })
+        this.blockTimestamp = new Date()
+        this.transactionIndex = confirmedTx.transactionIndex
+        this.receiptContractAddress = confirmedTx.contractAddress
+        this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+        yield this.removeFromStore()
+        console.log({ speedUpd: confirmedTx })
+      } catch (e) {
+        console.log("ERROR-SPEED-UP-TRANSACTION", e)
+      }
+    }
   }
 
   @modelFlow
