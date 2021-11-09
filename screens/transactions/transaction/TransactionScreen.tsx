@@ -29,7 +29,12 @@ const Transaction = observer<{ route: any }>(({ route }) => {
       <Cross height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
     </TouchableOpacity>
     {
-      view.initialized && <View flex>
+      view.initialized && !view.transaction && <View flex centerH padding-40>
+          <Text>Transaction was not found</Text>
+      </View>
+    }
+    {
+      view.initialized && view.transaction && <View flex>
           <View row spread padding-16>
               <Text text16 robotoM>{
                 t("transactionScreen.transactionDetails")
@@ -154,7 +159,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
             <Button disabled={ !view.transaction.canRewriteTransaction } onPress={ view.transaction.cancelTx }
                     paddingB-20 link
                     label={ t("transactionScreen.cancelTransaction") }/>
-            <Button disabled={ !view.transaction.canRewriteTransaction } onPress={ view.transaction.speedUpTransaction }
+            <Button disabled={ !view.transaction.canRewriteTransaction } onPress={ view.transaction.speedUpTx }
                     br50
                     label={ t("transactionScreen.speedUpTransaction") }/>
         </View>

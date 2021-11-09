@@ -30,7 +30,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
     view.init(route.params)
   }, [])
 
-  const renderItem = ({ item, index }) => <TransactionItem key={ item.hash } item={ item } index={ index } onPress={
+  const renderItem = ({ item, index }) => <TransactionItem key={ item.hash + item.receiptStatus } item={ item } index={ index } onPress={
     () => {
       RootNavigation.navigate("walletTransaction", {
         wallet: route.params.wallet,
@@ -60,7 +60,11 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                         refreshing={ view.refreshing }
                         onRefresh={ async () => {
                           view.refreshing = true
-                          await view.wallet.loadTransactions(true)
+                          if (!view.tokenAddress) {
+                            await view.wallet.loadTransactions(true)
+                          } else {
+                            await view.wallet.getERC20Transactions(true)
+                          }
                           view.refreshing = false
                         } }
                     />

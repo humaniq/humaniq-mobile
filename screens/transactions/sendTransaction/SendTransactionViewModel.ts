@@ -4,10 +4,10 @@ import { getEthereumProvider, getWalletStore } from "../../../App";
 import { ERC20 } from "../../../store/wallet/erc20/ERC20";
 import { inject } from "react-ioc";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
-import { getSnapshot, runUnprotected } from "mobx-keystone";
+import { getSnapshot } from "mobx-keystone";
 import { BigNumber, ethers } from "ethers";
 import { currencyFormat } from "../../../utils/number";
-import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
+import { EthereumTransaction, TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
 import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
@@ -54,7 +54,7 @@ export class SendTransactionViewModel {
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
     console.log({ val })
     this.txData.value = ""
-    this.tokenAddress = val
+    this.tokenAddress = val !== "ETH" ? val : ""
     this.inputFiat = false
     this.getTransactionData()
     setTimeout(() => {
@@ -248,19 +248,29 @@ export class SendTransactionViewModel {
   }
 
   get txBody() {
-    return {
+    const baseBody = {
       chainId: this.txData.chainId.toString(),
       nonce: this.txData.nonce.toString(),
       gasPrice: this.selectedGasPrice.toString(),
       gas: this.txData.gasLimit.toString(),
-      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
+      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(), // this.txBody.value.toString(),
       walletAddress: this.wallet.address,
       toAddress: this.txData.to,
       fromAddress: this.wallet?.address,
       input: "0x",
       blockTimestamp: new Date(),
-      prices: { usd: this.token.prices?.usd, eur: this.token.prices.eur },
+      prices: !this.tokenAddress ? {
+        usd: this.token.prices?.usd,
+        eur: this.token.prices?.eur
+      } : { usd: this.token.priceUSD },
       type: 0
+    }
+    return !this.tokenAddress ? baseBody : {
+      ...baseBody,
+      decimals: this.token.decimals,
+      address: this.tokenAddress,
+      symbol: this.token.symbol,
+      receiptStatus: TRANSACTION_STATUS.PENDING
     }
   }
 
@@ -272,57 +282,15 @@ export class SendTransactionViewModel {
         this.pendingTransaction = true
       }, 10)
 
-      if (!this.tokenAddress) {
-        const etx = new EthereumTransaction(this.txBody)
-        console.log("send")
-        await etx.sendTransaction()
-        console.log("apply")
-        etx.applyToWallet()
-        console.log("wait")
-        etx.waitTransaction()
-        console.log("close")
+      const tx = !this.tokenAddress ?
+          new EthereumTransaction(this.txBody) :
+          new ERC20Transaction(this.txBody)
+      await tx.sendTransaction()
+      tx.applyToWallet()
+      setTimeout(() => {
+        tx.waitTransaction()
         this.closeDialog()
-
-      } else {
-        const erc20body = {
-          nonce: this.txBody.nonce.toString(),
-          decimals: this.token.decimals,
-          address: this.tokenAddress,
-          symbol: this.token.symbol,
-          chainId: this.txBody.chainId.toString(),
-          gasPrice: this.txBody.gasPrice,
-          gas: this.txBody.gas.toString(),
-          value: this.txBody.value.toString(),
-          walletAddress: this.wallet.address,
-          toAddress: this.txBody.toAddress,
-          fromAddress: this.txBody.fromAddress,
-          blockTimestamp: new Date(),
-          prices: { usd: this.token.priceUSD },
-          receiptStatus: ""
-        }
-
-        const erc20 = new ERC20Transaction(erc20body)
-        const tx = await this.contract.transfer(erc20.toAddress, erc20.value,
-            {
-              gasPrice: erc20body.gasPrice,
-              gasLimit: erc20body.gas,
-              type: 0
-            }
-        )
-        runUnprotected(() => {
-          erc20.transactionHash = tx.hash
-          erc20.wait = tx.wait
-
-          this.token.transactions.set(tx.hash, erc20)
-
-          this.ethTransactionToast.transaction = erc20
-          try {
-            this.closeDialog()
-          } catch (e) {
-            console.log("ERROR", e)
-          }
-        })
-      }
+      }, 10)
 
       RootNavigation.dispatch(
           CommonActions.reset({
@@ -331,18 +299,6 @@ export class SendTransactionViewModel {
               {
                 name: "walletsList",
               },
-              // {
-              //   name: "mainStack",
-              //   params: {
-              //     screen: "wallet",
-              //     params: {
-              //       screen: "wallet-main",
-              //       params: {
-              //         index: 0
-              //       }
-              //     }
-              //   }
-              // },
               {
                 name: "walletTransactions",
                 params: {

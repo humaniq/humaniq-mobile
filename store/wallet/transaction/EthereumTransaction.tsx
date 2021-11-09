@@ -61,7 +61,7 @@ export class EthereumTransaction extends Model({
   fromAddress: p(t.string, ""),
   value: p(t.string, ""),
   input: p(t.string, ""),
-  chainId: p(t.number, ""),
+  chainId: p(t.string, ""),
   receiptContractAddress: p(t.string, ""),
   receiptStatus: p(t.enum(TRANSACTION_STATUS), TRANSACTION_STATUS.PENDING),
   blockTimestamp: p(t.number).withTransform(timestampToDateTransform()),
@@ -75,6 +75,8 @@ export class EthereumTransaction extends Model({
 
   @observable
   waitingTransactions
+
+  wait = null
 
   @computed
   get txBody() {
@@ -105,12 +107,6 @@ export class EthereumTransaction extends Model({
     }
   }
 
-  @action
-  cancelTx = async () => {
-    this.cancelTransaction.bind(this)
-    await this.cancelTransaction()
-  }
-
   @modelFlow
   * waitTransaction() {
     console.log("wait-transaction")
@@ -127,6 +123,12 @@ export class EthereumTransaction extends Model({
     } catch (e) {
       console.log("ERROR_WAIT_TRANSACTIONS", e)
     }
+  }
+
+  @action
+  cancelTx = async () => {
+    this.cancelTransaction.bind(this)
+    await this.cancelTransaction()
   }
 
   @modelFlow
@@ -154,6 +156,12 @@ export class EthereumTransaction extends Model({
         console.log("ERROR-CANCELLING-TRANSACTION", e)
       }
     }
+  }
+
+  @action
+  speedUpTx = async () => {
+    this.speedUpTransaction.bind(this)
+    await this.speedUpTransaction()
   }
 
 
@@ -210,8 +218,6 @@ export class EthereumTransaction extends Model({
       console.log("ERROR-APPLY-TO-WALLET", e)
     }
   }
-
-  wait = null
 
   @computed
   get key() {

@@ -13,7 +13,6 @@ export class TransactionsListScreenViewModel {
   }
 
   get transactions() {
-    console.log()
     return this.tokenAddress
         ? this.wallet.erc20.get(this.tokenAddress).transactionsList
         : this.wallet.transactionsList

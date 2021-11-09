@@ -5,7 +5,6 @@ import { provider, useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper";
 import { Screen } from "../../../components";
-import CrossIcon from '../../../assets/icons/cross.svg'
 import { useNavigation } from "@react-navigation/native";
 import { t } from "../../../i18n";
 import MaxIcon from "../../../assets/icons/max.svg"
@@ -17,6 +16,7 @@ import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { SelectTransactionFeeDialog } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialog";
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
+import ArrowIcon from "../../../assets/icons/arrow-left.svg";
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -33,10 +33,9 @@ const SelectValue = observer(() => {
     <Screen>
       <TouchableOpacity padding-20 paddingB-0 left row centerV spread onPress={ () => {
         nav.goBack();
-        view.closeDialog()
       } }>
-        <CrossIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-        <Text robotoR text-grey>{ t('selectValueScreen.step') }</Text>
+        <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
+        <Text robotoR text-grey>{ t('selectValueScreen.step2') }</Text>
       </TouchableOpacity>
       <View padding-16>
         <Card>

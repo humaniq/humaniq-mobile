@@ -3,7 +3,8 @@ import { observer } from "mobx-react-lite";
 import {
   Button,
   Colors,
-  ExpandableSection, LoaderScreen,
+  ExpandableSection,
+  LoaderScreen,
   RadioButton,
   Text,
   TextField,
@@ -13,7 +14,6 @@ import {
 import { useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { Screen } from "../../../components";
-import ArrowIcon from "../../../assets/icons/arrow-left.svg";
 import { t } from "../../../i18n";
 import { useNavigation } from "@react-navigation/native";
 import UpIcon from '../../../assets/icons/up.svg'
@@ -23,6 +23,7 @@ import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
 import { ScrollView } from "react-native";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import CrossIcon from "../../../assets/icons/cross.svg";
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -45,8 +46,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
       nav.goBack();
       view.closeDialog()
     } }>
-      <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-      <Text robotoR text-grey>{ t('selectValueScreen.step2') }</Text>
+      <CrossIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
+      <Text robotoR text-grey>{ t('selectValueScreen.step') }</Text>
     </TouchableOpacity>
     { view.initialized && <>
         <View padding-16>
@@ -152,7 +153,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
         </View>
     </> }
     {
-      !view.initialized && <LoaderScreen />
+      !view.initialized && <LoaderScreen/>
     }
   </Screen>
 })

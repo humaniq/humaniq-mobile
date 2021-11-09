@@ -137,8 +137,6 @@ export class Wallet extends Model({
     const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
     this.transactions.loading = true
 
-    // yield* _await(localStorage.remove(`humaniq-pending-transactions-eth-${ this.address }`))
-
     const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.address }`))) || []
     console.log({ pendingTransactions })
     pendingTransactions.forEach(t => {
@@ -176,7 +174,10 @@ export class Wallet extends Model({
   }
 
   @modelFlow
-  * getERC20Transactions() {
+  * getERC20Transactions(init = false) {
+    if (init) {
+      this.erc20List.map(l => l.transactions.clear())
+    }
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
       address: this.address
     })

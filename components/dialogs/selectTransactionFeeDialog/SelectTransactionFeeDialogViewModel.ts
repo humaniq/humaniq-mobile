@@ -2,7 +2,7 @@ import { makeAutoObservable } from "mobx";
 import { t } from "../../../i18n";
 
 export enum TRANSACTION_MULTIPLICATOR {
-  SLOW = 0.5,
+  SLOW = 0.8,
   NORMAL = 1.25,
   FAST = 1.5
 }
