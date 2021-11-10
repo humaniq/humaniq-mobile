@@ -16,7 +16,6 @@ import { SelfAddressQrCodeDialogViewModel } from "../../components/dialogs/selfA
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog";
 import { SelfAddressQrCodeDialog } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
-import { SendWalletTransactionViewModel } from "../../components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel";
 import { useNavigation } from "@react-navigation/native";
 
 const renderBody = ({ item }) => <WalletBody { ...item } />
@@ -28,7 +27,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
   const view = useInstance(WalletsScreenModel)
   const nav = useNavigation()
   const walletMenu = useInstance(WalletMenuDialogViewModel)
-  const sendTransactionDialog = useInstance(SendWalletTransactionViewModel)
   const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
   const carouselTittleRef = useRef<Carousel<any>>()
@@ -105,7 +103,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
         <SelfAddressQrCodeDialog/>
       </View> }
       isBlurActive={ (walletMenu.display ||
-          sendTransactionDialog.display ||
           selfAddressQrCodeDialogViewModel.display) }
   />
 })

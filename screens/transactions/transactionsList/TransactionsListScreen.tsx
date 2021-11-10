@@ -14,7 +14,6 @@ import { Avatar } from "../../../components/avatar/Avatar";
 import { t } from "../../../i18n";
 import { TransactionItem } from "../../../components/transactionItem/TransactionItem";
 import { RootNavigation } from "../../../navigators";
-import { debounce, throttle } from "../../../utils/general";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionsListScreenViewModel)

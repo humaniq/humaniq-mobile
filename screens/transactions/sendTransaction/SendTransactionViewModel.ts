@@ -12,7 +12,6 @@ import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
 import { RootNavigation } from "../../../navigators";
-import { WaitForEthTransactionViewModel } from "./WaitForEthTransactionViewModel";
 import { CommonActions } from "@react-navigation/native";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { ERC20Transaction } from "../../../store/wallet/transaction/ERC20Transaction";
@@ -49,7 +48,6 @@ export class SendTransactionViewModel {
 
   selectWalletTokenDialog = inject(this, SelectWalletTokenViewModel)
   selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
-  ethTransactionToast = inject(this, WaitForEthTransactionViewModel)
 
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
     console.log({ val })

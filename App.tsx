@@ -36,12 +36,9 @@ import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
-import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel"
-import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
 import { SendTransactionViewModel as LegacySendTransactonViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
-import { WaitForEthTransactionViewModel } from "./screens/transactions/sendTransaction/WaitForEthTransactionViewModel"
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
 import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
@@ -133,7 +130,6 @@ const AppScreen = observer(() => {
                 <AppToast/>
                 <CreateWalletToast/>
                 <SigningDialog/>
-                <SendWalletTransactionDialog/>
                 <SendTransactionDialog/>
             </> }
           {
@@ -157,9 +153,7 @@ const App = provider()(AppScreen)
 App.register(
     [ RootStore, toFactory(createRootStore) ],
     WalletsScreenModel,
-    SendWalletTransactionViewModel,
     LegacySendTransactonViewModel,
-    WaitForEthTransactionViewModel,
     SelfAddressQrCodeDialogViewModel,
     WalletMenuDialogViewModel,
     SendTransactionViewModel,
