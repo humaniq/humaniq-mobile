@@ -53,7 +53,7 @@ export const BrowserHeader = observer<HeaderProps>((
             <View marginR-15>
                 <Ripple onPress={ onPressSearch } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
                     <Button style={ { height: 40, width: 40 } } round
-                            backgroundColor={ isSearchMode ? Colors.white : Colors.dark70 }>
+                            backgroundColor={ isSearchMode ? Colors.white : Colors.grey70 }>
                         <FAIcon size={ 20 } color={ Colors.primary } name={ "search" }/>
                     </Button></Ripple>
             </View>
@@ -65,7 +65,7 @@ export const BrowserHeader = observer<HeaderProps>((
                             margin: 0,
                             height: 40,
                             fontWeight: "bold",
-                            color: Colors.dark30,
+                            color: Colors.grey30,
                             overflow: 'hidden'
                         } }
                                    onSubmitEditing={ () => onSearchSubmit(value) }
@@ -99,7 +99,7 @@ export const BrowserHeader = observer<HeaderProps>((
         <View flex-1 right marginR-20>
             { onPressMenu &&
             <Ripple onPress={ onPressMenu } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
-                <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.dark70 }>
+                <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.grey70 }>
                     <FAIcon size={ 20 } color={ Colors.primary } name={ "redo-alt" }/>
                 </Button></Ripple> }
         </View>

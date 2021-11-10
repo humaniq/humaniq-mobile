@@ -37,7 +37,7 @@ const Browser = observer(() => {
     }, [ webViewRef.current ])
 
 
-    return <BlurWrapper before={ <Screen backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }
+    return <BlurWrapper before={ <Screen backgroundColor={ Colors.grey70 } statusBarBg={ Colors.grey70 }
                                          preset="scroll"
                                          style={ { height: "100%" } }
             // refreshing={ view.refreshing }
@@ -53,8 +53,8 @@ const Browser = observer(() => {
                                onSearchSubmit={ view.onSearchSubmit }
                 />
                 <View flex-10>
-                    <ProgressBar backgroundColor={ +view.progress >= 100 ? Colors.dark70 : Colors.violet60 }
-                                 progressBackgroundColor={ Colors.dark70 }
+                    <ProgressBar backgroundColor={ +view.progress >= 100 ? Colors.grey70 : Colors.violet60 }
+                                 progressBackgroundColor={ Colors.grey70 }
                                  height={ 5 } progress={ view.progress }/>
                     <WebView
                             ref={ webViewRef }

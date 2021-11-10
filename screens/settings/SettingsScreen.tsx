@@ -31,8 +31,8 @@ const Settings = observer(function () {
 
 
   return (
-      <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.dark70 }
-              statusBarBg={ Colors.dark70 }>
+      <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.grey70 }
+              statusBarBg={ Colors.grey70 }>
         {
           view.initialized &&
           <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>

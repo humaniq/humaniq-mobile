@@ -15,7 +15,7 @@ export const ExploreModal = observer(() => {
     return <Modal
             animationType={ "slide" }
             visible={ view.display }>
-        <View bg-primar padding-20 right style={ { borderBottomWidth: 1, borderBottomColor: Colors.dark70 } }>
+        <View bg-primar padding-20 right style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey70 } }>
             <Button link onPress={ () => {
                 view.display = false
             } }
@@ -60,7 +60,7 @@ export const ExploreModal = observer(() => {
                                     style={ { padding: 10 } }
                                     rippleContainerBorderRadius={ 20 }
                                     rippleColor={ Colors.primary }>
-                                <FAIcon style={ { color: Colors.dark30 } } size={ 20 } name={ "times-circle" }/>
+                                <FAIcon style={ { color: Colors.grey30 } } size={ 20 } name={ "times-circle" }/>
                             </Ripple>
                         </View>
                     </View>
