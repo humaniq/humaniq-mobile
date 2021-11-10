@@ -84,3 +84,20 @@ export function throttle(callback, limit) {
     }
   }
 }
+
+export function debounce(f, ms) {
+  let isCooldown = false;
+
+  return () => {
+    if (isCooldown) return;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    // eslint-disable-next-line prefer-rest-params
+    f.apply(this, arguments);
+
+    isCooldown = true;
+
+    setTimeout(() => isCooldown = false, ms);
+  };
+
+}

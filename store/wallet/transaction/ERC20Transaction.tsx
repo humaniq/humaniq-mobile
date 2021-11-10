@@ -170,7 +170,6 @@ export class ERC20Transaction extends Model({
         this.wait = null
         yield this.storeTransaction()
         const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
-        console.log({ confirmedTx })
         this.blockTimestamp = new Date()
         this.receiptStatus = TRANSACTION_STATUS.SUCCESS
         yield this.removeFromStore()

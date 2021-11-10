@@ -55,7 +55,8 @@ export class Wallet extends Model({
     usd: t.number
   })))),
   transactions: p(t.model<EthereumTransactionStore>(EthereumTransactionStore), () => new EthereumTransactionStore({})),
-  erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>())
+  erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>()),
+  erc20TransactionsInitialized: p(t.boolean, false)
 }) {
 
   @observable
@@ -170,6 +171,7 @@ export class Wallet extends Model({
       this.transactions.total = result.data.total
       this.transactions.incrementOffset()
       this.transactions.loading = false
+      this.transactions.initialized = true
     }
   }
 
@@ -202,6 +204,7 @@ export class Wallet extends Model({
         })
         if (currentToken) {
           runUnprotected(() => {
+            this.erc20TransactionsInitialized = true
             currentToken.transactions.set(tr.transactionHash, tr)
           })
         }

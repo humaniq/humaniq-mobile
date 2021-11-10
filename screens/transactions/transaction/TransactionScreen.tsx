@@ -10,6 +10,7 @@ import { t } from "../../../i18n";
 import { renderShortAddress } from "../../../utils/address";
 import { Linking } from "react-native";
 import { getEthereumProvider } from "../../../App";
+import { TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
 
 const Transaction = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionScreenViewModel)
@@ -154,7 +155,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                 }
               </Card>
           </View>
-        { view.transaction.receiptStatus === "" &&
+        { view.transaction.receiptStatus === TRANSACTION_STATUS.PENDING &&
         <View flex bottom padding-20>
             <Button disabled={ !view.transaction.canRewriteTransaction } onPress={ view.transaction.cancelTx }
                     paddingB-20 link

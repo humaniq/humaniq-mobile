@@ -14,6 +14,7 @@ import { Avatar } from "../../../components/avatar/Avatar";
 import { t } from "../../../i18n";
 import { TransactionItem } from "../../../components/transactionItem/TransactionItem";
 import { RootNavigation } from "../../../navigators";
+import { debounce, throttle } from "../../../utils/general";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionsListScreenViewModel)
@@ -30,7 +31,8 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
     view.init(route.params)
   }, [])
 
-  const renderItem = ({ item, index }) => <TransactionItem key={ item.hash + item.receiptStatus } item={ item } index={ index } onPress={
+  const renderItem = ({ item, index }) => <TransactionItem key={ item.hash + item.receiptStatus } item={ item }
+                                                           index={ index } onPress={
     () => {
       RootNavigation.navigate("walletTransaction", {
         wallet: route.params.wallet,
@@ -75,9 +77,10 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                       if (!view.tokenAddress) {
                         view.wallet.loadTransactions();
                         // @ts-ignore
-                        scrollRef?.current.scrollToEnd();
+                         scrollRef?.current.scrollToEnd()
                       }
                     }
+
                   } }
                   scrollEventThrottle={ 400 }
               >
@@ -110,7 +113,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                   </View>
                   <Card marginH-16 paddingV-8>
                     { view.refreshing && <View center padding-15>
-                        <Text textM textGrey >{ `${t("common.refresh")}...` }</Text>
+                        <Text textM textGrey>{ `${ t("common.refresh") }...` }</Text>
                     </View> }
                     {
                       !!view.transactions && !!view.transactions.length && <>
@@ -126,7 +129,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                     }
                     {
                       !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
-                      <View center padding-20><Text>{ t("common.noData") }</Text></View>
+                      <View absB center padding-20><Text>{ t("common.noData") }</Text></View>
                     }
                   </Card>
               </ScrollView>

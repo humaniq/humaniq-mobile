@@ -57,6 +57,11 @@ export class SendTransactionViewModel {
     this.tokenAddress = val !== "ETH" ? val : ""
     this.inputFiat = false
     this.getTransactionData()
+    if (this.tokenAddress && !this.wallet.erc20TransactionsInitialized) {
+      this.wallet.getERC20Transactions()
+    } else if (!this.wallet.transactions.initialized) {
+      this.wallet.loadTransactions()
+    }
     setTimeout(() => {
       this.inputRef?.current?.focus()
     }, 100)

@@ -8,7 +8,8 @@ export class EthereumTransactionStore extends Model({
   pageSize: p(t.number, 20),
   total: p(t.number, 0),
   map: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
-  loading: p(t.boolean, false)
+  loading: p(t.boolean, false),
+  initialized: p(t.boolean, false)
 }) {
   @computed
   get list() {

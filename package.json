@@ -123,6 +123,7 @@
     "@typescript-eslint/eslint-plugin": "4.10.0",
     "@typescript-eslint/parser": "4.10.0",
     "babel-jest": "^26.6.3",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "7.0.0",
@@ -173,7 +174,14 @@
           "loose": true
         }
       ]
-    ]
+    ],
+    "env": {
+      "production": {
+        "plugins": [
+          "transform-remove-console"
+        ]
+      }
+    }
   },
   "react-native": {
     "zlib": "browserify-zlib",
