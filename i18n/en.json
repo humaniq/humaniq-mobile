@@ -21,8 +21,8 @@
     "wallet": "Wallet",
     "balance": "Balance",
     "low": "Low",
-    "slow": "Медленно",
-    "normal": "Нормально",
+    "slow": "Slow",
+    "normal": "Normal",
     "medium": "Medium",
     "fast": "Fast",
     "speedUp": "Speed up",
@@ -115,7 +115,7 @@
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "want to connect",
-    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
+    "attention": "With you agreement, you allow DApp get address your wallet and connect Web3"
   },
   "profileScreen": {
     "name": "Profile",
