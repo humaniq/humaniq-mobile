@@ -32,6 +32,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
 
   useEffect(() => {
+    console.log("init")
     // @ts-ignore
     inputRef.current?.focus()
     view.init(route.params)
@@ -46,7 +47,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
       nav.goBack();
       view.closeDialog()
     } }>
-      <CrossIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
+      <CrossIcon height={ 16 } width={ 16 } style={ { color: Colors.black } }/>
       <Text robotoR text-grey>{ t('selectValueScreen.step') }</Text>
     </TouchableOpacity>
     { view.initialized && <>
@@ -67,6 +68,17 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                   style: {
                     alignSelf: "center",
                     marginRight: 15,
+                  },
+                  onPress: () => {
+                    nav.navigate("QRScanner", {
+                      onScanSuccess: meta => {
+                        console.log(meta)
+                        if (meta.action === "send-eth" && meta.target_address) {
+                          view.txData.to = meta.target_address
+                          console.log("set-value", view.txData.to)
+                        }
+                      }
+                    })
                   }
                 } }
                 floatingPlaceholderStyle={ !view.txData.to ? {

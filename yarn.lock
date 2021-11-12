@@ -3387,6 +3387,11 @@ big-integer@^1.6.44:
   resolved "https://registry.yarnpkg.com/big-integer/-/big-integer-1.6.48.tgz#8fd88bd1632cba4a1c8c3e3d7159f08bb95b4b9e"
   integrity sha512-j51egjPa7/i+RdiRuJbPdJ2FIUYYPhvYLjzoYbcMMm62ooO6F94fETG4MTs46zPAF9Brs04OajboA/qTGuz78w==
 
+bignumber.js@^7.2.1:
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-7.2.1.tgz#80c048759d826800807c4bfd521e50edbba57a5f"
+  integrity sha512-S4XzBk5sMB+Rcb/LNcpzXr57VRTxgAvaAEDAl1AwRx27j00hT84O6OkteE7u8UB3NuaaygCRrEpqox4uDOrbdQ==
+
 "bignumber.js@git+https://github.com/frozeman/bignumber.js-nolookahead.git":
   version "2.0.7"
   resolved "git+https://github.com/frozeman/bignumber.js-nolookahead.git#57692b3ecfc98bbdd6b3a516cb2353652ea49934"
@@ -5278,6 +5283,14 @@ eth-simple-keyring@^4.2.0:
     ethereumjs-util "^7.0.9"
     ethereumjs-wallet "^1.0.1"
     events "^1.1.1"
+
+eth-url-parser@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/eth-url-parser/-/eth-url-parser-1.0.4.tgz#310a99f331abdb8d603c74131568fb773e609cd8"
+  integrity sha512-2PTTyc9OXNxePTUlYfos1du6hytElYdubJbx2uF3wNMEsvHOg/P7ZpPFERub6vod2T8eGjDZtB8nkGsKEc4tIQ==
+  dependencies:
+    bignumber.js "^7.2.1"
+    qs "^6.5.2"
 
 ethereum-common@0.2.0:
   version "0.2.0"
@@ -9616,7 +9629,7 @@ prompts@^2.0.1, prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.6.0, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -9697,6 +9710,13 @@ qrcode@^1.4.4:
     isarray "^2.0.1"
     pngjs "^3.3.0"
     yargs "^13.2.4"
+
+qs@^6.5.2:
+  version "6.10.1"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.1.tgz#4931482fa8d647a5aab799c5271d2133b981fb6a"
+  integrity sha512-M528Hph6wsSVOBiYUnGf+K/7w0hNshs/duGsNXPUCLH5XAqjEtiPGwNONLV0tBH8NoGb0mvD5JubnUTrujKDTg==
+  dependencies:
+    side-channel "^1.0.4"
 
 qs@~6.5.2:
   version "6.5.2"
@@ -9818,6 +9838,13 @@ react-native-bip39@^2.3.0:
     react-native-crypto "^2.0.1"
     react-native-randombytes "^2.2.0"
     unorm "^1.3.3"
+
+react-native-camera@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-4.2.1.tgz#caf74081f055e89d7e9b0cd5108965d808c60e90"
+  integrity sha512-+Vkql24PFYQfsPRznJCvPwJQfyzCnjlcww/iZ4Ej80bgivKjL9eU0IMQIXp4yi6XCrKi4voWXxIDPMupQZKeIQ==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-clean-project@^3.6.3:
   version "3.6.4"

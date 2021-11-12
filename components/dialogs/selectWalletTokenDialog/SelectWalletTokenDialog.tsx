@@ -1,17 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useInstance } from "react-ioc";
 import { observer } from "mobx-react-lite";
-import { Colors, Dialog, Text, View } from "react-native-ui-lib";
+import { FlatList } from "react-native";
+import { Colors, Dialog, Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { SelectWalletTokenViewModel } from "./SelectWalletTokenViewModel";
 import { runInAction } from "mobx";
 import { DialogHeader } from "../dialogHeader/DalogHeader";
-import { ScrollView } from "react-native";
 import { TokenItem } from "../../tokenItem/TokenItem";
 import { t } from "../../../i18n";
 
 export const SelectWalletTokenDialog = observer(() => {
   const view = useInstance(SelectWalletTokenViewModel)
-  const scroll = useRef()
 
   return <Dialog
       width={ "100%" }
@@ -22,23 +21,27 @@ export const SelectWalletTokenDialog = observer(() => {
       }) }
       bottom
   >
-    <View style={ { maxHeight: 350 } }>
+    <TouchableOpacity style={ { maxHeight: 350 } } onPress={ (e) => console.log(e) }>
       <DialogHeader onPressIn={ () => {
         view.display = false
       } }/>
-      <ScrollView ref={ scroll }>
-        <View padding-16>
-          <Text textM>{ t("selectWalletTokenDialog.title") }</Text>
-        </View>
-        { view.options.map((i, index) => {
-          return <TokenItem key={ index } symbol={ i.symbol } tokenAddress={ i.tokenAddress } logo={ i.logo }
-                            name={ i.name }
-                            formatBalance={ i.formatBalance } formatFiatBalance={ i.formatFiatBalance }
-                            index={ index }
-                            onPress={ i.onPress }
-          />
-        }) }
-      </ScrollView>
-    </View>
+      <View padding-16>
+        <Text textM>{ t("selectWalletTokenDialog.title") }</Text>
+      </View>
+      <FlatList
+          data={ view.options }
+          keyExtractor={ (item) => item.symbol }
+          renderItem={ ({ item, index }) => {
+            return <TokenItem key={ index } symbol={ item.symbol } tokenAddress={ item.tokenAddress }
+                              logo={ item.logo }
+                              name={ item.name }
+                              formatBalance={ item.formatBalance } formatFiatBalance={ item.formatFiatBalance }
+                              index={ index }
+                              onPress={ item.onPress }
+            />
+          }
+          }
+      />
+    </TouchableOpacity>
   </Dialog>
 })
