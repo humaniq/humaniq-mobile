@@ -23,7 +23,7 @@ const Profile = observer(function () {
     }, [])
 
     return (
-            <Screen preset={ "fixed" } backgroundColor={ Colors.dark70 } statusBarBg={ Colors.dark70 }>
+            <Screen preset={ "fixed" } backgroundColor={ Colors.grey70 } statusBarBg={ Colors.grey70 }>
                 {
                     view.initialized && store.profileStore.initialized &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
@@ -64,7 +64,7 @@ const Profile = observer(function () {
                                     first_name: store.profileStore.firstName,
                                     last_name: store.profileStore.lastName
                                 })
-                                await store.authStore.login(store.walletStore.allWallets[0].address)
+                                // await store.authStore.login(store.walletStore.allWallets[0].address)
                                 nav.goBack()
                             } } label={ t("common.save") }/>
                         </View>

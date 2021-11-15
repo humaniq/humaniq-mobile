@@ -30,7 +30,7 @@ export const Header = observer<HeaderProps>((
     <View flex-2 right marginR-20>
       { onPressMenu &&
       <Ripple onPress={ onPressMenu } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
-        <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.dark70 }>
+        <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.grey70 }>
           <FAIcon size={ 20 } color={ Colors.primary } name={ "ellipsis-v" } />
         </Button></Ripple> }
     </View>

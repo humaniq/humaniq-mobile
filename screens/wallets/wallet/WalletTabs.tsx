@@ -10,10 +10,10 @@ export const WalletTabs = ({ index }) => {
       {
         allWallets.map((w, i) => (<View key={ i } height={ 2 } flex
                                         style={ index === i ? {
-                                          backgroundColor: Colors.dark10,
+                                          backgroundColor: Colors.grey10,
                                           borderRadius: 1
                                         } : {
-                                          backgroundColor: Colors.dark80,
+                                          backgroundColor: Colors.grey80,
                                           borderRadius: 1
                                         } }/>))
       }
