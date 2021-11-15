@@ -21,6 +21,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
           keyboardVerticalOffset={ offsets[props.keyboardOffset || "none"] }
       >
         <StatusBar
+            translucent
             barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
             backgroundColor={ props.statusBarBg || Colors.bg }/>
         <View style={ [ preset.inner, style, insetStyle ] }>{ props.children }</View>
@@ -47,6 +48,7 @@ function ScreenWithScrolling(props: ScreenProps) {
           keyboardVerticalOffset={ offsets[props.keyboardOffset || "none"] }
       >
         <StatusBar
+            translucent
             barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
             backgroundColor={ props.statusBarBg || Colors.bg }/>
         <View style={ [ preset.outer, backgroundStyle, insetStyle ] }>

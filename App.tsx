@@ -53,6 +53,7 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 LogBox.ignoreLogs([ "Setting a timer" ])
 LogBox.ignoreLogs([ "Require cycle" ])
 LogBox.ignoreLogs([ "componentWillReceiveProps" ])
+LogBox.ignoreLogs([ 'Non-serializable values were found in the navigation state', ]);
 
 enableScreens()
 
@@ -158,6 +159,7 @@ App.register(
     WalletMenuDialogViewModel,
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
-    SelectTransactionFeeDialogViewModel
+    SelectTransactionFeeDialogViewModel,
+    // QRScannerView
 )
 export default App

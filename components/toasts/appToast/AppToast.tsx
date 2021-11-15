@@ -1,11 +1,13 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Colors, Image, Text, Toast, View } from "react-native-ui-lib";
+import { Avatar, Colors, Text, Toast, View } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
 import { RootStore } from "../../../store/RootStore";
 import { TOASTER_TYPE } from "../../../store/app/AppStore";
 import { Shadow } from "react-native-shadow-2";
 import { Dimensions } from "react-native";
+import PendingIcon from "../../../assets/icons/clock-arrows.svg";
+import DoneIcon from "../../../assets/icons/done.svg";
 
 export const AppToast = observer(() => {
   const view = useInstance(RootStore)
@@ -22,11 +24,13 @@ export const AppToast = observer(() => {
           <View row centerV flex padding-15 width={ Dimensions.get("window").width - 32 }>
             {
               view.appStore.toast.type === TOASTER_TYPE.PENDING &&
-              <Image source={ require("../../../assets/images/sand-clocks.png") }/>
+              <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 44 }>
+                  <PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar>
             }
             {
               view.appStore.toast.type === TOASTER_TYPE.SUCCESS &&
-              <Image source={ require("../../../assets/images/finger-up.png") }/>
+              <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 44 }>
+                  <DoneIcon width={ 22 } height={ 22 } color={ Colors.success }/></Avatar>
             }
             <Text marginL-20 robotoM> { view.appStore.toast.message } </Text>
           </View>

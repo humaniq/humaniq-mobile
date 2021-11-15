@@ -34,7 +34,7 @@ const SelectValue = observer(() => {
       <TouchableOpacity padding-20 paddingB-0 left row centerV spread onPress={ () => {
         nav.goBack();
       } }>
-        <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
+        <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.black } }/>
         <Text robotoR text-grey>{ t('selectValueScreen.step2') }</Text>
       </TouchableOpacity>
       <View padding-16>

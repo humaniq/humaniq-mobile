@@ -1,9 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { Card, Colors, Image, Text, Toast, View } from "react-native-ui-lib";
+import { Avatar, Card, Colors, Text, Toast, View } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
 import { WalletsScreenModel } from "../../../screens/wallets/WalletsScreenModel";
 import { t } from "../../../i18n";
+import PendingIcon from "../../../assets/icons/clock-arrows.svg";
+import DoneIcon from "../../../assets/icons/done.svg";
 
 export const CreateWalletToast = observer(() => {
   const view = useInstance(WalletsScreenModel)
@@ -16,20 +18,15 @@ export const CreateWalletToast = observer(() => {
     <View marginV-16>
       <Card padding-15 marginH-16>
         <View row centerV>
-          <Image source={
-            !view.walletDialogs.pendingDialog.walletCreated ?
-                require("../../../assets/images/sand-clocks.png") :
-                require("../../../assets/images/finger-up.png")
-          }/>
+          { !view.walletDialogs.pendingDialog.walletCreated ?
+              <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 44 }>
+                <PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar> :
+              <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 44 }>
+                <DoneIcon width={ 22 } height={ 22 } color={ Colors.success }/></Avatar> }
           <Text marginL-20 robotoM> { !view.walletDialogs.pendingDialog.walletCreated ?
               t("walletScreen.menuDialog.createWallet.createWalletMessage") :
               t("walletScreen.menuDialog.createWallet.createWalletMessageDone")
           } </Text>
-          {/*<View right flex>*/}
-          {/*  <Button onPress={() => {*/}
-          {/*    */}
-          {/*  }} link label={t("common.cancellation")} />*/}
-          {/*</View>*/}
         </View>
       </Card>
     </View>
