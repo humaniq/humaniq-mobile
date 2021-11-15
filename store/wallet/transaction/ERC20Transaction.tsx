@@ -5,6 +5,7 @@ import {
   Model,
   model,
   modelFlow,
+  runUnprotected,
   timestampToDateTransform,
   tProp as p,
   types as t
@@ -22,7 +23,7 @@ import PendingIcon from "../../../assets/icons/clock-arrows.svg";
 import { TRANSACTION_STATUS } from "./EthereumTransaction";
 import { BigNumber, ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { getWalletStore } from "../../../App";
+import { getEthereumProvider, getWalletStore } from "../../../App";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { localStorage } from "../../../utils/localStorage";
 
@@ -79,7 +80,6 @@ export class ERC20Transaction extends Model({
       }))) as ethers.providers.TransactionResponse
       console.log({ tx })
       this.transactionHash = tx.hash
-      this.wait = tx.wait
       return tx
     } catch (e) {
       console.log("ERROR-SEND-TRANSACTION", e)
@@ -91,13 +91,17 @@ export class ERC20Transaction extends Model({
   * waitTransaction() {
     console.log("wait-transaction")
     try {
-      if (!this.wait) return
-      console.log("wait", this.wait)
-      const confirmedTx = (yield* _await(this.wait())) as ethers.providers.TransactionReceipt
-      console.log({ confirmedTx })
-      this.blockTimestamp = new Date()
-      this.receiptStatus = TRANSACTION_STATUS.SUCCESS
-      yield this.applyToWallet()
+      getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
+        const hash = this.hash
+        console.log("mined-transaction")
+        console.log(confirmedTx)
+        await runUnprotected(async () => {
+          this.blockTimestamp = new Date()
+          this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+          await this.applyToWallet()
+          getEthereumProvider().currentProvider.off(hash)
+        })
+      })
     } catch (e) {
       console.log("ERROR_WAIT_TRANSACTIONS", e)
     }
@@ -131,13 +135,18 @@ export class ERC20Transaction extends Model({
 
         yield this.removeFromStore()
         this.transactionHash = tx.hash
-        this.wait = null
         yield this.storeTransaction()
-        const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
-        this.blockTimestamp = new Date()
-        this.receiptStatus = TRANSACTION_STATUS.SUCCESS
-        yield this.removeFromStore()
-        console.log({ canceled: confirmedTx })
+
+        getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+          console.log("cancelled-transaction")
+          await runUnprotected(async () => {
+            this.blockTimestamp = new Date()
+            this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+            await this.removeFromStore()
+            console.log({ canceled: confirmedTx })
+            getEthereumProvider().currentProvider.off(tx.hash)
+          })
+        })
       } catch (e) {
         console.log("ERROR-CANCELLING-TRANSACTION", e)
         yield this.removeFromStore()
@@ -167,13 +176,18 @@ export class ERC20Transaction extends Model({
 
         yield this.removeFromStore()
         this.transactionHash = tx.hash
-        this.wait = null
         yield this.storeTransaction()
-        const confirmedTx = (yield* _await(tx.wait())) as ethers.providers.TransactionReceipt
-        this.blockTimestamp = new Date()
-        this.receiptStatus = TRANSACTION_STATUS.SUCCESS
-        yield this.removeFromStore()
-        console.log({ speedUpd: confirmedTx })
+
+        getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+          console.log("speed-up-transaction")
+          await runUnprotected(async () => {
+            this.blockTimestamp = new Date()
+            this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+            await this.removeFromStore()
+            console.log({ speedUpd: confirmedTx })
+            getEthereumProvider().currentProvider.off(tx.hash)
+          })
+        })
       } catch (e) {
         console.log("ERROR-SPEED-UP-TRANSACTION", e)
       }

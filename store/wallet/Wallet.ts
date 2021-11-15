@@ -143,7 +143,6 @@ export class Wallet extends Model({
     pendingTransactions.forEach(t => {
       const pTx = fromSnapshot<EthereumTransaction>(t)
       pTx.applyToWallet()
-      pTx.wait = () => getEthereumProvider().currentProvider.waitForTransaction(pTx.hash)
       pTx.waitTransaction()
     })
 
