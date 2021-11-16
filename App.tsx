@@ -50,10 +50,13 @@ import { SelectTransactionFeeDialogViewModel } from "./components/dialogs/select
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
-LogBox.ignoreLogs([ "Setting a timer" ])
-LogBox.ignoreLogs([ "Require cycle" ])
-LogBox.ignoreLogs([ "componentWillReceiveProps" ])
-LogBox.ignoreLogs([ 'Non-serializable values were found in the navigation state', ]);
+LogBox.ignoreLogs([
+  "Setting a timer",
+  "Require cycle",
+  "componentWillReceiveProps",
+  'Non-serializable values were found in the navigation state',
+  "new NativeEventEmitter()"
+])
 
 enableScreens()
 
