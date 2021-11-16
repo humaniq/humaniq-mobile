@@ -16,14 +16,27 @@ import { SelectTransactionFeeDialog } from "../../../components/dialogs/selectTr
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
 import { Header } from "../../../components/header/Header";
+import { throttle } from "../../../utils/general";
+import useKeyboard from '@rnhooks/keyboard';
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
   const inputRef = useRef<MutableRefObject<any>>()
 
+  const [ visible ] = useKeyboard();
+
+  // @ts-ignore
+  const thr = throttle(() => inputRef.current?.focus(), 100)
+
   useEffect(() => {
     view.registerInput(inputRef)
+    try {
+      // @ts-ignore
+      thr()
+    } catch (e) {
+      console.log("Error", e)
+    }
   }, [ inputRef?.current ])
 
 
@@ -56,6 +69,7 @@ const SelectValue = observer(() => {
           </View>
           <View center marginH-34 style={ { maxWidth: "50%" } }>
             <TextField
+                ref={ inputRef }
                 autoFocus
                 style={ {
                   fontSize: 32,
@@ -87,11 +101,14 @@ const SelectValue = observer(() => {
           <Text robotoM>{ `${ view.parsedPrice } ${ view.inputPrice }` }</Text>
         </View>
         <View row center>
-          <Button onPress={ () => view.selectTransactionFeeDialog.display = true } link
+          <Button onPress={ () => {
+            view.selectTransactionFeeDialog.display = true
+          } }
+                  link
                   label={ `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }/>
         </View>
       </View>
-      <View style={ { width: "100%" } } center absB row padding-20>
+      <View  center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
         <Button disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
                 style={ { width: "100%", borderRadius: 12 } }
                 label={ !view.pendingTransaction ? `${ t("common.sendTo") } ${ view.txHumanReadable.totalFiat }` : "" }

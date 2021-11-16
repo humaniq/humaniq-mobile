@@ -60,18 +60,26 @@ export class SendTransactionViewModel {
     } else if (!this.wallet.transactions.initialized) {
       this.wallet.loadTransactions()
     }
-    setTimeout(() => {
-      this.inputRef?.current?.focus()
-    }, 100)
+    // setTimeout(() => {
+    //   try {
+    //     this.inputRef?.current?.focus()
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, 100)
   })
 
   changeReceiverAddress = reaction(() => this.txData.to, (val) => {
     this.txData.to = val
     this.inputFiat = false
     this.getTransactionData()
-    setTimeout(() => {
-      this.inputRef?.current?.focus()
-    }, 100)
+    // setTimeout(() => {
+    //   try {
+    //     this.inputRef?.current?.focus()
+    //   } catch (e) {
+    //     console.log(e)
+    //   }
+    // }, 100)
   })
 
   changeTokenValue = reaction(() => this.txData.value, throttle(async () => {

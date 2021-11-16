@@ -39,7 +39,7 @@ export const Header = observer<HeaderProps>((
   return <TouchableOpacity padding-20 paddingB-0 left row centerV onPress={ canGoBack && nav.goBack } { ...props }>
     { canGoBack && icon === ICON_HEADER.ARROW ?
         <ArrowLeft height={ 16 } width={ 16 } style={ { color: isDark ? Colors.grey50 : Colors.black } }/> :
-        <CROSS height={ 16 } width={ 16 } style={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
+        <CROSS height={ 14 } width={ 14 } style={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
     { title && <Button onPress={ canGoBack && nav.goBack } paddingL-30 link textM black text20 label={ title }/> }
     { rightText && <Text robotoR text-grey>{ rightText }</Text> }
   </TouchableOpacity>;

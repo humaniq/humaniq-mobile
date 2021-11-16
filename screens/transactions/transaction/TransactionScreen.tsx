@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Card, Colors, LoaderScreen, Text, TouchableOpacity, View } from "react-native-ui-lib";
+import { Button, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { TransactionScreenViewModel } from "./TransactionScreenViewModel";
 import { Screen } from "../../../components";
-import Cross from "../../../assets/icons/cross.svg";
-import { useNavigation } from "@react-navigation/native";
 import { t } from "../../../i18n";
 import { renderShortAddress } from "../../../utils/address";
 import { Linking } from "react-native";
 import { getEthereumProvider } from "../../../App";
 import { TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
+import { Header, ICON_HEADER } from "../../../components/header/Header";
 
 const Transaction = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionScreenViewModel)
-  const nav = useNavigation()
+
 
   useEffect(() => {
     view.init(route.params)
@@ -26,9 +25,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
       statusBarBg={ Colors.bg }
       preset="fixed"
   >
-    <TouchableOpacity onPress={ nav.goBack } padding-20 paddingL-16 left row centerV>
-      <Cross height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-    </TouchableOpacity>
+    <Header icon={ ICON_HEADER.CROSS }/>
     {
       view.initialized && !view.transaction && <View flex centerH padding-40>
           <Text>Transaction was not found</Text>
@@ -53,52 +50,36 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                       <Text text-grey>
                         { t("transactionScreen.status") }
                       </Text>
-                      <Text black text16 robotoM>{ view.transaction.actionName }</Text>
+                      <Text black text16 robotoR>{ view.transaction.actionName }</Text>
                   </View>
+                  <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                   <View>
                       <View row spread margin-16>
                           <Text text-grey>
                             { t("transactionScreen.date") }
                           </Text>
-                          <Text black text16 robotoM>{ view.transaction.formatDate }</Text>
-
+                          <Text black robotoR robotoM>{ view.transaction.formatDate }</Text>
                       </View>
-                      <View absR style={ {
-                        borderWidth: 1,
-                        borderColor: Colors.grey,
-                        width: "100%",
-                        borderBottomColor: "transparent"
-                      } }/>
                   </View>
+                  <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                   <View>
                       <View row spread margin-16>
                           <Text text-grey>
                             { t("transactionScreen.from") }
                           </Text>
-                          <Text text16 robotoM black>{ renderShortAddress(view.transaction.fromAddress) }</Text>
+                          <Text text16 robotoR black>{ renderShortAddress(view.transaction.fromAddress) }</Text>
 
                       </View>
-                      <View absR style={ {
-                        borderWidth: 1,
-                        borderColor: Colors.grey,
-                        width: "100%",
-                        borderBottomColor: "transparent"
-                      } }/>
                   </View>
+                  <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                   <View>
                       <View row spread margin-16>
                           <Text text-grey>
                             { t("transactionScreen.to") }
                           </Text>
-                          <Text black text16 robotoM>{ renderShortAddress(view.transaction.toAddress) }</Text>
+                          <Text black text16 robotoR>{ renderShortAddress(view.transaction.toAddress) }</Text>
 
                       </View>
-                      <View absR style={ {
-                        borderWidth: 1,
-                        borderColor: Colors.grey,
-                        width: "100%",
-                        borderBottomColor: "transparent"
-                      } }/>
                   </View>
               </Card>
           </View>
@@ -111,11 +92,12 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                       <View right>
                           <Text black text16 robotoM>{ "$" + view.transaction.fiatValue }</Text>
                           <Text text-grey
-                                robotoM>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                robotoR text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
                       </View>
 
                   </View>
                 { !!view.transaction?.fiatFee && <View>
+                    <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                     <View row spread margin-16 centerV>
                         <Text black text16 robotoM>
                           { t("transactionScreen.suggestedFee") }
@@ -123,18 +105,13 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         <View right>
                             <Text black text16 robotoM>{ "$" + view.transaction.fiatFee }</Text>
                             <Text text-grey
-                                  robotoM>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                  robotoR text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || 'ETH' }` }</Text>
                         </View>
                     </View>
-                    <View absR style={ {
-                      borderWidth: 1,
-                      borderColor: Colors.grey,
-                      width: "100%",
-                      borderBottomColor: "transparent"
-                    } }/>
                 </View>
                 }
                 { !!view.transaction?.fiatTotal && <View>
+                    <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                     <View row spread margin-16 centerV>
                         <Text black text16 robotoM>
                           { t("transactionScreen.total") }
@@ -142,15 +119,9 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         <View right>
                             <Text black text16 robotoM>{ "$" + view.transaction.fiatTotal }</Text>
                             <Text text-grey
-                                  robotoM>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                  robotoR text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || 'ETH' }` }</Text>
                         </View>
                     </View>
-                    <View absR style={ {
-                      borderWidth: 1,
-                      borderColor: Colors.grey,
-                      width: "100%",
-                      borderBottomColor: "transparent"
-                    } }/>
                 </View>
                 }
               </Card>

@@ -23,6 +23,8 @@ import { RootNavigation } from "../../../navigators";
 import { ScrollView } from "react-native";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { Header, ICON_HEADER } from "../../../components/header/Header";
+import useKeyboard from '@rnhooks/keyboard';
+import { throttle } from "../../../utils/general";
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -30,13 +32,24 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const inputRef = useRef()
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
 
+  const [ visible ] = useKeyboard();
+
   useEffect(() => {
     view.init(route.params)
     selectWalletTokenView.init(view.walletAddress)
   }, [])
 
+  // @ts-ignore
+  const thr = throttle(() => inputRef.current?.focus(), 100)
+
   useEffect(() => {
-    inputRef.current?.focus()
+    try {
+      view.registerInput(inputRef)
+      // @ts-ignore
+      thr()
+    } catch (e) {
+      console.log("Error", e)
+    }
   }, [ inputRef?.current ])
 
   return <Screen
@@ -48,6 +61,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
     { view.initialized && <>
         <View padding-16>
             <TextField
+                autoFocus
                 multiline={ true }
                 errorColor={ view.inputAddressError ? Colors.error : Colors.textGrey }
                 error={ view.inputAddressErrorMessage }
@@ -139,7 +153,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                   <View margin-12 row spread paddingR-3>
                                     <Text text16>{ w.formatAddress }</Text>
                                     <RadioButton size={ 20 }
-                                                 color={ view.txData.to !== w.address ? Colors.textGrey : undefined }
+                                                 color={ view.txData.to !== w.address ? Colors.textGrey : Colors.primary }
                                                  selected={ view.txData.to === w.address }/>
                                   </View>
                                 </Ripple></View>
@@ -149,7 +163,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                     </ExpandableSection>
                 </View>
             </ScrollView>
-            <View style={ { width: "100%" } } center row padding-20 bg-bg paddingB-8>
+            <View center row padding-20 bg-bg style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                 <Button disabled={ view.inputAddressError || !view.txData.to }
                         style={ { width: "100%", borderRadius: 12 } }
                         label={ t("selectValueScreen.nextBtn") }
