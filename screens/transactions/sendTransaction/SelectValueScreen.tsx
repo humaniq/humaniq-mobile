@@ -1,11 +1,10 @@
 import React, { MutableRefObject, useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Card, Colors, LoaderScreen, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
+import { Button, Card, Colors, LoaderScreen, Text, TextField, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper";
 import { Screen } from "../../../components";
-import { useNavigation } from "@react-navigation/native";
 import { t } from "../../../i18n";
 import MaxIcon from "../../../assets/icons/max.svg"
 import DoubleArrows from "../../../assets/icons/double-arrows.svg"
@@ -16,12 +15,11 @@ import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { SelectTransactionFeeDialog } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialog";
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
-import ArrowIcon from "../../../assets/icons/arrow-left.svg";
+import { Header } from "../../../components/header/Header";
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
-  const nav = useNavigation()
   const inputRef = useRef<MutableRefObject<any>>()
 
   useEffect(() => {
@@ -31,12 +29,7 @@ const SelectValue = observer(() => {
 
   return <BlurWrapper before={
     <Screen>
-      <TouchableOpacity padding-20 paddingB-0 left row centerV spread onPress={ () => {
-        nav.goBack();
-      } }>
-        <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.black } }/>
-        <Text robotoR text-grey>{ t('selectValueScreen.step2') }</Text>
-      </TouchableOpacity>
+      <Header rightText={ t('selectValueScreen.step2') }/>
       <View padding-16>
         <Card>
           <TokenItem symbol={ view.token.symbol } tokenAddress={ view.tokenAddress } logo={ view.token.logo }

@@ -37,7 +37,7 @@ export const SelfAddressQrCodeDialog = observer(() => {
               </Text>
           </View>
           <View row center>
-              <Button labelStyle={ { fontFamily: "Roboto-Bold" } } link
+              <Button labelStyle={ { fontFamily: "Roboto-Medium" } } link
                       label={ t("selfAddressQRCodeDialog.copyAddress") }
                       onPress={ () => {
                         Clipboard.setString(view.wallet?.address)

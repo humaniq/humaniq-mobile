@@ -7,7 +7,6 @@
 import React from "react"
 
 import { Colors } from "react-native-ui-lib"
-import Ionicons from "react-native-vector-icons/FontAwesome5"
 import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
@@ -15,6 +14,9 @@ import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
+import WalletIcon from "../assets/icons/wallet.svg"
+import GlobeIcon from "../assets/icons/globe.svg"
+import CogIcon from "../assets/icons/cog.svg"
 
 const Stack = createStackNavigator()
 
@@ -46,22 +48,25 @@ export function MainNavigator<PrimaryParamList>() {
             activeTintColor: Colors.bg,
             inactiveTintColor: Colors.textGrey,
             activeBackgroundColor: Colors.primary,
-            showLabels: true
+            showLabels: true,
+            labelStyle: {
+              fontFamily: "Roboto-Medium"
+            }
           } }
           screenOptions={ ({ route }) => ({
             headerShown: false,
             tabBarIcon: (options) => {
-              let icon = "wallet"
               switch (route.name) {
                 case "browser":
-                  icon = "globe"
-                  break
+                  return <GlobeIcon width={ 18 } height={ 18 }
+                                    style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
                 case "settings":
-                  icon = "cog"
-                  break
+                  return <CogIcon width={ 18 } height={ 18 }
+                                  style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
+                default:
+                  return <WalletIcon width={ 18 } height={ 18 }
+                                     style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
               }
-              return <Ionicons name={ icon } size={ 24 }
-                               color={ options.focused ? Colors.bg : Colors.textGrey }/>
             },
           }) }
           appearance={ { tabBarBackground: Colors.white, dotCornerRadius: 18 } }>

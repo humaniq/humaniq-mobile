@@ -15,19 +15,18 @@ export const TransactionItem = ({ item, index, onPress }) => {
         </View>
         <View flex-6 paddingL-15>
           <View>
-            <Text numberOfLines={ 1 } text70 robotoM>{ item.title }</Text>
+            <Text numberOfLines={ 1 } black text16 robotoR>{ item.title }</Text>
           </View>
-          <View>
-            <Text
-                dark50>{ item.formatDate }</Text>
+          <View paddingT-5>
+            <Text textGrey text14 robotoR>{ item.formatDate }</Text>
           </View>
         </View>
         <View right centerV flex-3>
           <View>
-            <Text numberOfLines={ 1 } text70 dark30 robotoM>{ item.formatFiatValue }</Text>
+            <Text numberOfLines={ 1 } black text16 robotoR color={ item.valueColor }>{ item.formatFiatValue }</Text>
           </View>
-          <View>
-            <Text dark50 color={ item.actionColor }>
+          <View paddingT-5>
+            <Text  textGrey text14 robotoR color={ item.actionColor }>
               { item.actionName }
             </Text>
           </View>

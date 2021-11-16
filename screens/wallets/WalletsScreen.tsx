@@ -17,6 +17,7 @@ import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/Wall
 import { SelfAddressQrCodeDialog } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
 import { useNavigation } from "@react-navigation/native";
+import { getWalletStore } from "../../App";
 
 const renderBody = ({ item }) => <WalletBody { ...item } />
 
@@ -33,7 +34,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
   const carouselBodyRef = useRef<Carousel<any>>()
 
   useEffect(() => {
-    console.log("HERE")
     view.init(route.params?.force)
   }, [])
 
@@ -55,8 +55,8 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
           { !view.allInitialized && <View height={ "100%" } center><LoaderScreen/></View> }
           { view.allInitialized && <>
               <View paddingT-20 paddingL-16 left>
-                  <Button link textM primary label={ t('walletScreen.allAddresses') }
-                          onPress={ () => nav.navigate("walletsList") }
+                  <Button link textM primary label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
+                          onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog() }
                   />
               </View>
               <View paddingB-20>
@@ -79,7 +79,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                           } }
                       />
                   </View>
-                  <WalletTabs index={ view.activeIndex }/>
+                { getWalletStore().wallets.length > 1 && <WalletTabs index={ view.activeIndex }/> }
                   <WalletTransactionControls/>
                   <Carousel
                       vertical={ false }

@@ -35,18 +35,18 @@ export const TokenItem = (props: TokenItemProps) => {
         </View>
         <View flex-5>
           <View>
-            <Text numberOfLines={ 1 } textM grey20>{ props.name }</Text>
+            <Text numberOfLines={ 1 } robotoM black text16>{ props.name }</Text>
           </View>
-          { !props.short && <View>
-              <Text numberOfLines={ 1 } text90R grey40>{ props.symbol }</Text>
+          { !props.short && <View paddingT-5>
+              <Text numberOfLines={ 1 } robotoR textGrey text14>{ props.symbol }</Text>
           </View>
           }
         </View>
         <View flex-3 right>
-          <Text numberOfLines={ 1 } text16 robotoB grey20>
+          <Text numberOfLines={ 1 } text16 robotoM black>
             { props.formatFiatBalance }
           </Text>
-          { !props.short && <Text numberOfLines={ 1 } text90 grey40 bold>
+          { !props.short && <Text numberOfLines={ 1 }  robotoR textGrey text14 marginT-5>
             { props.formatBalance }
           </Text>
           }

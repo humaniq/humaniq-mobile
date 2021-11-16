@@ -20,8 +20,8 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
 
   return <View padding-20>
     <View row center>
-      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.primary, 0.05) }
-              containerViewStyle={ { backgroundColor: Colors.white } }>
+      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
+              containerViewStyle={ { backgroundColor: Colors.white, borderRadius: 15 } }>
         <Ripple rippleColor={ Colors.primary }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {
@@ -42,8 +42,8 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
           </Button>
         </Ripple>
       </Shadow>
-      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.primary, 0.05) }
-              containerViewStyle={ { backgroundColor: Colors.white, marginLeft: 20 } }>
+      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
+              containerViewStyle={ { backgroundColor: Colors.white, marginLeft: 20, borderRadius: 15 } }>
         <Ripple rippleColor={ Colors.primary } onPress={ async () => {
           selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
           selfAddressQrCodeDialogViewModel.display = true

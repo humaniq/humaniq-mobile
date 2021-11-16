@@ -1,23 +1,22 @@
 import React, { useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { RefreshControl, ScrollView } from "react-native"
-import { Avatar as Av, Button, Card, Colors, LoaderScreen, Text, TouchableOpacity, View } from "react-native-ui-lib"
+import { Avatar as Av, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { provider, useInstance } from "react-ioc"
 import { TransactionsListScreenViewModel } from "./TransactionsListScreenViewModel"
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper"
 import { Screen } from "../../../components"
-import ArrowLeft from "../../../assets/icons/arrow-left.svg";
-import { useNavigation } from "@react-navigation/native";
 import { WalletTransactionControls } from "../../wallets/wallet/WalletTransactionControls";
 import { getDictionary } from "../../../App";
 import { Avatar } from "../../../components/avatar/Avatar";
 import { t } from "../../../i18n";
 import { TransactionItem } from "../../../components/transactionItem/TransactionItem";
 import { RootNavigation } from "../../../navigators";
+import SearchPicture from "../../../assets/images/search.svg"
+import { Header } from "../../../components/header/Header";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionsListScreenViewModel)
-  const nav = useNavigation()
   const scrollRef = useRef()
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
@@ -48,11 +47,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
             statusBarBg={ Colors.bg }
             preset="fixed"
         >
-          <TouchableOpacity padding-20 paddingL-16 left row centerV onPress={ nav.goBack }>
-            <ArrowLeft height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-            <Button paddingL-30 link textM black text20 label={ view.token.name }
-            />
-          </TouchableOpacity>
+          <Header title={ view.token.name }/>
           { view.initialized &&
           <>
               <ScrollView
@@ -76,7 +71,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                       if (!view.tokenAddress) {
                         view.wallet.loadTransactions();
                         // @ts-ignore
-                         scrollRef?.current.scrollToEnd()
+                        scrollRef?.current.scrollToEnd()
                       }
                     }
 
@@ -110,27 +105,29 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                   <View padding-16>
                       <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
                   </View>
-                  <Card marginH-16 paddingV-8>
-                    { view.refreshing && <View center padding-15>
-                        <Text textM textGrey>{ `${ t("common.refresh") }...` }</Text>
-                    </View> }
-                    {
-                      !!view.transactions && !!view.transactions.length && <>
-                        { view.transactions.map((item, index) => renderItem({
-                          item,
-                          index
-                        }))
-                        }
-                        {
-                          view.loadingTransactions && <View padding-15><LoaderScreen/></View>
-                        }
-                      </>
+
+                { view.refreshing && <Card marginH-16 paddingV-8><View center padding-15>
+                    <Text textM textGrey>{ `${ t("common.refresh") }...` }</Text>
+                </View></Card> }
+                {
+                  !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
+                    { view.transactions.map((item, index) => renderItem({
+                      item,
+                      index
+                    }))
                     }
                     {
-                      !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
-                      <View absB center padding-20><Text>{ t("common.noData") }</Text></View>
+                      view.loadingTransactions && <View padding-15><LoaderScreen/></View>
                     }
                   </Card>
+                }
+                {
+                  !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
+                  <View center padding-20>
+                      <SearchPicture width={ 200 } height={ 200 }/>
+                      <Text robotoR textGrey text16>{ t("walletMenuDialog.noTransactions") }</Text>
+                  </View>
+                }
               </ScrollView>
           </>
           }

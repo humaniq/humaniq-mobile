@@ -8,10 +8,10 @@ import { Screen } from "../../components";
 import { t } from "../../i18n";
 import { getWalletStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
-import ArrowLeft from '../../assets/icons/arrow-left.svg'
 import { Wallet } from "../../store/wallet/Wallet";
 import LogoWallet from '../../assets/icons/wallet.svg'
 import Ripple from "react-native-material-ripple";
+import { Header } from "../../components/header/Header";
 
 const WalletsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(WalletsScreenModel)
@@ -29,16 +29,12 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
             preset="scroll"
             refreshing={ view.refreshing }
             onRefresh={ view.onRefresh }
+            style={ { height: "100%" } }
         >
           {
             view.initialized &&
             <View flex>
-                <View padding-20 paddingL-16 left row centerV>
-                    <ArrowLeft height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-                    <Button paddingL-30 link textM black text20 label={ t('walletScreen.allAddresses') }
-                            onPress={ () => nav.goBack() }
-                    />
-                </View>
+                <Header title={ t('walletScreen.allAddresses') }/>
                 <View padding-16 paddingT-0>
                     <View row spread centerV>
                         <View>
@@ -94,10 +90,10 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
             </View>
           }
           { !view.initialized && <LoaderScreen/> }
-        </Screen>
           <Button margin-16 absB br40 label={ t("walletScreen.menuDialog.createWallet.name") }
                   onPress={ view.createWalletDialog }
           />
+        </Screen>
         </> }
       after={ <View/> }
       isBlurActive={ false }

@@ -71,7 +71,8 @@
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес",
-    "transactionHistory": "Транзакции"
+    "transactionHistory": "Транзакции",
+    "noTransactions": "Транзакции появятся здесь"
   },
   "exportMnemonicDialog": {
     "title": "Ваша секретная фраза",

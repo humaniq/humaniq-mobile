@@ -8,7 +8,6 @@ import {
   RadioButton,
   Text,
   TextField,
-  TouchableOpacity,
   View
 } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
@@ -23,7 +22,7 @@ import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
 import { ScrollView } from "react-native";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
-import CrossIcon from "../../../assets/icons/cross.svg";
+import { Header, ICON_HEADER } from "../../../components/header/Header";
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -32,24 +31,20 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
 
   useEffect(() => {
-    console.log("init")
-    // @ts-ignore
-    inputRef.current?.focus()
     view.init(route.params)
     selectWalletTokenView.init(view.walletAddress)
   }, [])
 
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [ inputRef?.current ])
+
   return <Screen
       backgroundColor={ Colors.white }
       statusBarBg={ Colors.white }
+      style={ { height: "100%" } }
   >
-    <TouchableOpacity padding-20 paddingB-0 left row centerV spread onPress={ () => {
-      nav.goBack();
-      view.closeDialog()
-    } }>
-      <CrossIcon height={ 16 } width={ 16 } style={ { color: Colors.black } }/>
-      <Text robotoR text-grey>{ t('selectValueScreen.step') }</Text>
-    </TouchableOpacity>
+    <Header icon={ ICON_HEADER.CROSS } rightText={ t('selectValueScreen.step') }/>
     { view.initialized && <>
         <View padding-16>
             <TextField
@@ -132,7 +127,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                           {
                             getWalletStore().allWallets.map(w => {
                               return <View key={ w.address }>
-                                <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey } }/>
+                                <View
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 10 } }/>
                                 <Ripple onPress={ () => {
                                   if (view.txData.to === w.address) {
                                     view.txData.to = ""
@@ -140,9 +136,11 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                     view.txData.to = w.address
                                   }
                                 } } rippleColor={ Colors.primary }>
-                                  <View margin-12 row spread>
+                                  <View margin-12 row spread paddingR-3>
                                     <Text text16>{ w.formatAddress }</Text>
-                                    <RadioButton selected={ view.txData.to === w.address }/>
+                                    <RadioButton size={ 20 }
+                                                 color={ view.txData.to !== w.address ? Colors.textGrey : undefined }
+                                                 selected={ view.txData.to === w.address }/>
                                   </View>
                                 </Ripple></View>
                             })
@@ -151,7 +149,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                     </ExpandableSection>
                 </View>
             </ScrollView>
-            <View style={ { width: "100%" } } center absB row padding-20 bg-bg>
+            <View style={ { width: "100%" } } center row padding-20 bg-bg paddingB-8>
                 <Button disabled={ view.inputAddressError || !view.txData.to }
                         style={ { width: "100%", borderRadius: 12 } }
                         label={ t("selectValueScreen.nextBtn") }

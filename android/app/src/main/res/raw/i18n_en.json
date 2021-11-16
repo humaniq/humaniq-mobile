@@ -47,7 +47,7 @@
     "correctPin": "PIN code verified"
   },
   "walletScreen": {
-    "name": "Wallets",
+    "name": "Wallet",
     "menuDialog": {
       "createWallet": {
         "name": "Create new address",

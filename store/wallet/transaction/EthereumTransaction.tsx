@@ -335,18 +335,28 @@ export class EthereumTransaction extends Model({
   }
 
   @computed
+  get valueColor() {
+    switch (this.action) {
+      case 2:
+        return Colors.success
+      default:
+        return Colors.black
+    }
+  }
+
+  @computed
   get statusIcon() {
     switch (true) {
       case this.receiptStatus === TRANSACTION_STATUS.PENDING:
       case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
-        return <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 44 }>
-          <PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar>
+        return <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
+          <PendingIcon width={ 20 } height={ 20 } color={ Colors.warning }/></Avatar>
       case this.action === 5:
-        return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 44 }>
-          <FailIcon width={ 22 } height={ 22 } color={ Colors.error }/></Avatar>
+        return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
+          <FailIcon width={ 20 } height={ 20 } color={ Colors.error }/></Avatar>
       default:
-        return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 44 }>
-          <DoneIcon width={ 22 } height={ 22 } color={ Colors.success }/></Avatar>
+        return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
+          <DoneIcon width={ 20 } height={ 20 } color={ Colors.success }/></Avatar>
     }
   }
 
