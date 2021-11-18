@@ -55,7 +55,8 @@ LogBox.ignoreLogs([
   "Require cycle",
   "componentWillReceiveProps",
   'Non-serializable values were found in the navigation state',
-  "new NativeEventEmitter()"
+  "new NativeEventEmitter()",
+  "rightButtonProps.iconSource"
 ])
 
 enableScreens()

@@ -1,5 +1,9 @@
+import React from "react";
 import { makeAutoObservable } from "mobx";
 import { t } from "../../../i18n";
+import SlowImage from "../../../assets/images/snail.svg"
+import MediumImage from "../../../assets/images/clock.svg"
+import FastImage from "../../../assets/images/fast.svg"
 
 export enum TRANSACTION_MULTIPLICATOR {
   SLOW = 1,
@@ -17,7 +21,7 @@ export class SelectTransactionFeeDialogViewModel {
       {
         label: {
           name: t("common.slow"),
-          icon: require("../../../assets/images/slow.png"),
+          icon: <SlowImage width={ 20 } height={ 20 }/>,
           data: TRANSACTION_MULTIPLICATOR.SLOW
         },
         onPress: () => {
@@ -30,7 +34,7 @@ export class SelectTransactionFeeDialogViewModel {
       {
         label: {
           name: t("common.normal"),
-          icon: require("../../../assets/images/clock.png"),
+          icon: <MediumImage width={ 20 } height={ 20 }/>,
           data: TRANSACTION_MULTIPLICATOR.NORMAL
         },
         onPress: () => {
@@ -43,7 +47,7 @@ export class SelectTransactionFeeDialogViewModel {
       {
         label: {
           name: t("common.fast"),
-          icon: require("../../../assets/images/fast.png"),
+          icon: <FastImage width={ 20 } height={ 20 }/>,
           data: TRANSACTION_MULTIPLICATOR.FAST
         },
         onPress: () => {

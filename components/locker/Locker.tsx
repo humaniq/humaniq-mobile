@@ -6,11 +6,11 @@ import { provider, useInstance } from "react-ioc"
 import { LockerViewModel } from "./LockerViewModel"
 import Ripple from "react-native-material-ripple"
 import { t } from "../../i18n"
-import Ionicons from "react-native-vector-icons/Ionicons"
 import { RootStore } from "../../store/RootStore"
 import { reaction } from "mobx"
 import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
+import BackSpaceIcon from "../../assets/icons/backspace.svg"
 
 // export interface LockerProps {
 //   mode: "set|check";
@@ -134,9 +134,7 @@ const L = observer(function (props) {
                   <View margin-5 center row>
                       <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
                           <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                              <Text bg-primary white>
-                                  <Ionicons size={ 25 } name={ "backspace" }/>
-                              </Text>
+                              <BackSpaceIcon height={ 25 } width={ 25 } color={ Colors.grey50 }/>
                           </View>
                       </Ripple>
                   </View>

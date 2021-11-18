@@ -5,7 +5,6 @@ import { WalletMenuDialogViewModel } from "./WalletMenuDialogViewModel"
 import { observer } from "mobx-react-lite"
 import { DialogHeader } from "../dialogHeader/DalogHeader"
 import Ripple from "react-native-material-ripple"
-import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { runInAction } from "mobx"
 
 
@@ -30,7 +29,6 @@ export const WalletMenuDialog = observer(() => {
                             onPress={ i.action }
                     >
                         <View padding-20 row>
-                            <FAIcon size={ 20 } color={ Colors.primary } name={ i.icon }/>
                             <Text marginL-20 text60R dark20>{ i.name }</Text>
                         </View>
 

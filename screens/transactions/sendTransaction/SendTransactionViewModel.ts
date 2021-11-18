@@ -219,7 +219,6 @@ export class SendTransactionViewModel {
   }
 
   get enoughBalance() {
-    console.log(this.txData.gasLimit, this.selectedGasPrice, this.txData.gasLimit * +this.selectedGasPrice)
     try {
       if (this.token.symbol === "ETH") {
         return BigNumber.from(this.wallet.balances.amount)

@@ -15,7 +15,6 @@ import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { SettingsScreenModel } from "./SettingsScreenModel"
 import * as Animatable from "react-native-animatable"
-import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { ExportMnemonicDialog } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialog"
@@ -41,7 +40,6 @@ const Settings = observer(function () {
                 <View row center paddingV-60>
                   <View flex-2/>
                   <View center>
-                    <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
                     <View style={ { position: "absolute", right: -15 } }>
                     </View>
                   </View>
@@ -62,7 +60,6 @@ const Settings = observer(function () {
                             height={ 50 }
                         >
                           <ListItem.Part left paddingL-20>
-                            <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
                           </ListItem.Part>
                           <ListItem.Part middle column paddingL-20>
                             <ListItem.Part>

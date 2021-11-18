@@ -92,11 +92,11 @@
     "suggestedFee": "Предлагаемая комиссия",
     "maxFee": "Комиссия",
     "maxAmount": "Максимум",
-    "insufficientBalance": "Вам нужно еще %{balance} для совершения этой транзакции",
     "outerSuggestion": "TX data",
     "successSendTx": "Транзакция успешно отправлена",
     "sendTransaction": "Отправить",
-    "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
+    "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию",
+    "insufficientBalance": "Недостаточно средств"
   },
   "selectValueScreen": {
     "step": "Шаг 1 из 3",

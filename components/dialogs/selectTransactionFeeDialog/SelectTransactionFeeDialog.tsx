@@ -18,7 +18,7 @@ export const SelectTransactionFeeDialog = observer(() => {
                           <TouchableOpacity onPressIn={ () => {
                             view.display = false
                           } }>
-                            <View row paddingV-2 center>
+                            <View paddingV-2 center>
                               <View flex center paddingH-20 paddingV-5>
                                 <Button onPressIn={ () => {
                                   view.display = false
@@ -30,6 +30,10 @@ export const SelectTransactionFeeDialog = observer(() => {
                                           backgroundColor: Colors.grey40
                                         } }/>
                               </View>
+                              <View>
+                                <Text>dfd</Text>
+                                <Text>dfd</Text>
+                              </View>
                             </View>
                           </TouchableOpacity>
                       }
@@ -37,9 +41,12 @@ export const SelectTransactionFeeDialog = observer(() => {
                         return <Ripple onPress={ () => onOptionPress(index) } key={ index }>
                           <View paddingH-30 paddingV-20 row width={ '100%' } spread>
                             <View row flex-1>
-                              <Avatar imageStyle={ { height: 22, width: 22, position: "absolute", left: 10, top: 10 } }
+                              <Avatar imageStyle={ { height: 24, width: 24, position: "absolute", left: 10, top: 10 } }
                                       backgroundColor={ Colors.greyLight } size={ 44 }
-                                      source={ (option.label as any).icon }/>
+                                  // source={ (option.label as any).icon }
+                              >
+                                { (option.label as any).icon }
+                              </Avatar>
                             </View>
                             <View row flex-5 centerV>
                               <Text text16 robotoM>{ (option.label as any).name }</Text>

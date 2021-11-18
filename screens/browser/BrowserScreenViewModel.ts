@@ -22,6 +22,7 @@ export class BrowserScreenViewModel {
     backEnabled = false
     forwardEnabled = false
     progress = 0
+    homePage = "https://home.metamask.io/"
     initialUrl = "https://home.metamask.io/" // https://metamask.github.io/test-dapp/" // 'https://dap.ps' // 'https://app.uniswap.org/'
     firstUrlLoaded = false
     autocompleteValue = ''
@@ -564,7 +565,7 @@ export class BrowserScreenViewModel {
     }
 
     get isHomePage() {
-        return this.initialUrl === this.url
+        return this.homePage === this.url
     }
 
     isAllowedUrl(hostName) {

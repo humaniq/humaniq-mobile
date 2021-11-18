@@ -117,7 +117,7 @@
       "outgoing": "outgoing",
       "incoming": "incoming",
       "undefined": "undefined",
-      "smartContract": "Smart contract",
+      "smartContract": "Contract",
       "reject": "rejected transaction"
     }
   },

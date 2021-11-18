@@ -25,6 +25,7 @@ import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWa
 import { Header, ICON_HEADER } from "../../../components/header/Header";
 import useKeyboard from '@rnhooks/keyboard';
 import { throttle } from "../../../utils/general";
+import CameraIcon from "../../../assets/images/camera.svg"
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -73,7 +74,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                 hideUnderline
                 floatingPlaceholder
                 rightButtonProps={ {
-                  iconSource: require("../../../assets/images/camera.png"),
+                  iconSource: CameraIcon, // require("../../../assets/images/camera.png"),
                   style: {
                     alignSelf: "center",
                     marginRight: 15,

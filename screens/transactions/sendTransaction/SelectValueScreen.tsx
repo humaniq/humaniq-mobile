@@ -53,6 +53,9 @@ const SelectValue = observer(() => {
                        selectWalletTokenView.display = true
                      } }
           />
+          <View>
+            <Text> {  }</Text>
+          </View>
         </Card>
       </View>
       <View padding-40 center>

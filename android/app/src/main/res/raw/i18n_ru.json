@@ -117,7 +117,7 @@
       "outgoing": "Отправленние",
       "incoming": "Поступленние",
       "undefined": "Неустановлено",
-      "smartContract": "Смарт контракт",
+      "smartContract": "Контракт",
       "reject": "Отмена отправки"
     }
   },
