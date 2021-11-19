@@ -3,11 +3,10 @@ import { observer } from "mobx-react-lite";
 import { Appearance, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { RNCamera } from 'react-native-camera';
 import { Colors, Text, TouchableOpacity, View } from "react-native-ui-lib";
-import FrameIcon from "../../assets/icons/frame.svg"
-import CrossIcon from "../../assets/icons/cross.svg"
 import { t } from "../../i18n";
 import { provider, useInstance } from "react-ioc";
 import { QRScannerView } from "./QRScannerView";
+import { HIcon } from "../icon";
 
 const styles = StyleSheet.create({
   closeIcon: {
@@ -56,7 +55,7 @@ const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
   return <>
     <StatusBar
         barStyle={ Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
-        translucent backgroundColor="transparent" />
+        translucent backgroundColor="transparent"/>
     <View style={ styles.container }>
       <RNCamera
           onMountError={ view.onError }
@@ -75,10 +74,10 @@ const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
       >
         <SafeAreaView style={ styles.innerView }>
           <TouchableOpacity style={ styles.closeIcon } onPress={ view.goBack }>
-            <CrossIcon name={ 'ios-close' } width={ 16 } height={ 16 } color={ Colors.white }/>
+            <HIcon name={ 'cross' } size={ 16 } color={ Colors.white }/>
           </TouchableOpacity>
           <View flex bottom centerH paddingT-100>
-            <FrameIcon width={ 244 } height={ 244 } color={ Colors.white }/>
+            <HIcon name={ "frame" } size={ 244 } color={ Colors.white }/>
           </View>
           <View flex paddingH-90>
             <Text style={ styles.text }>{ t('qRScanner.scanning') }</Text>

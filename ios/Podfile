@@ -24,6 +24,8 @@ target 'HumaniqMobile' do
 
   pod 'RNShare', :path => '../node_modules/react-native-share'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'HumaniqMobileTests' do
     inherit! :complete
     # Pods for testing

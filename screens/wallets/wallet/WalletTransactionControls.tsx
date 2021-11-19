@@ -1,14 +1,13 @@
 import React from "react";
 import { Button, Colors, View } from "react-native-ui-lib";
 import { t } from "../../../i18n";
-import ArrowLogoTop from "../../../assets/icons/arrow-to-top.svg"
-import ArrowLogoBottom from "../../../assets/icons/arrow-to-bottom.svg"
 import { Shadow } from "react-native-shadow-2";
 import { useInstance } from "react-ioc";
 import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletsScreenModel } from "../WalletsScreenModel";
 import Ripple from "react-native-material-ripple";
 import { RootNavigation } from "../../../navigators";
+import { HIcon } from "../../../components/icon"
 
 export interface IWalletTransactionControlsProps {
   tokenAddress?: string
@@ -38,7 +37,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                   style={ { backgroundColor: Colors.white } } primary outline marginH-10
                   label={ t("common.send") }
           >
-            <ArrowLogoTop height={ 14 } width={ 14 } style={ { color: Colors.primary } }/>
+            <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
           </Button>
         </Ripple>
       </Shadow>
@@ -53,7 +52,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                   style={ { backgroundColor: Colors.white } } primary outline marginH-10
                   label={ t("common.receive") }
           >
-            <ArrowLogoBottom height={ 14 } width={ 14 } style={ { color: Colors.primary } }/>
+            <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>
           </Button>
         </Ripple>
       </Shadow>

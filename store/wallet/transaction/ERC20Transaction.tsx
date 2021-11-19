@@ -17,15 +17,13 @@ import { Avatar, Colors } from "react-native-ui-lib";
 import { amountFormat, beautifyNumber, preciseRound } from "../../../utils/number";
 import dayjs from "dayjs";
 import { renderShortAddress } from "../../../utils/address";
-import FailIcon from "../../../assets/icons/warning.svg";
-import DoneIcon from "../../../assets/icons/done.svg";
-import PendingIcon from "../../../assets/icons/clock-arrows.svg";
 import { TRANSACTION_STATUS } from "./EthereumTransaction";
 import { BigNumber, ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
 import { getEthereumProvider, getWalletStore } from "../../../App";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { localStorage } from "../../../utils/localStorage";
+import { HIcon } from "../../../components/icon"
 
 
 @model("ERC20Transaction")
@@ -338,14 +336,16 @@ export class ERC20Transaction extends Model({
       case this.receiptStatus === TRANSACTION_STATUS.PENDING:
       case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
         return <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
-          <PendingIcon width={ 20 } height={ 20 } color={ Colors.warning }/></Avatar>
+          <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/>
+        </Avatar>
       case this.action === 4:
       case this.action === 5:
         return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
-          <FailIcon width={ 20 } height={ 20 } color={ Colors.error }/></Avatar>
+          <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/>
+        </Avatar>
       default:
         return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
-          <DoneIcon width={ 20 } height={ 20 } color={ Colors.success }/></Avatar>
+          <HIcon name={ "done" } size={ 20 } color={ Colors.success }/></Avatar>
     }
   }
 

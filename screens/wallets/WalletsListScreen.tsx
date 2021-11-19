@@ -9,9 +9,9 @@ import { t } from "../../i18n";
 import { getWalletStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { Wallet } from "../../store/wallet/Wallet";
-import LogoWallet from '../../assets/icons/wallet.svg'
 import Ripple from "react-native-material-ripple";
 import { Header } from "../../components/header/Header";
+import { HIcon } from "../../components/icon";
 
 const WalletsList = observer<{ route: any }>(({ route }) => {
   const view = useInstance(WalletsScreenModel)
@@ -63,7 +63,7 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
                                 <View flex-2>
                                   {
                                     <Avatar size={ 44 } backgroundColor={ Colors.greyLight }>
-                                      <LogoWallet height={ 20 } width={ 20 } style={ { color: Colors.primary } }/>
+                                      <HIcon name={"wallet"} size={ 20 } style={ { color: Colors.primary } }/>
                                     </Avatar>
                                   }
                                 </View>

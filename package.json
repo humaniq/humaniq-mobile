@@ -21,6 +21,7 @@
   "dependencies": {
     "@ethersproject/shims": "^5.5.0",
     "@metamask/controllers": "git+https://github.com/humaniq/controllers.git#rn-compatability-4",
+    "humaniq-icon-set":  "git+https://github.com/humaniq/humaniq-icon-set.git#0.0.1",
     "@react-native-async-storage/async-storage": "^1.15.11",
     "@react-native-clipboard/clipboard": "^1.9.0",
     "@react-native-community/blur": "^3.6.0",
@@ -99,6 +100,7 @@
     "react-native-ui-lib": "^6.3.0",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-uuid": "^2.0.1",
+    "react-native-vector-icons": "^9.0.0",
     "react-native-webview": "git+https://github.com/humaniq/react-native-webview.git#v11.3.0-status",
     "readable-stream": "^1.0.33",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",

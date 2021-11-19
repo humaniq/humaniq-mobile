@@ -10,7 +10,7 @@ import { RootStore } from "../../store/RootStore"
 import { reaction } from "mobx"
 import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
-import BackSpaceIcon from "../../assets/icons/backspace.svg"
+import { HIcon } from "../icon";
 
 // export interface LockerProps {
 //   mode: "set|check";
@@ -134,7 +134,7 @@ const L = observer(function (props) {
                   <View margin-5 center row>
                       <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
                           <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                              <BackSpaceIcon height={ 25 } width={ 25 } color={ Colors.grey50 }/>
+                              <HIcon name={"backspace"} size={ 25 }  color={ Colors.grey50 }/>
                           </View>
                       </Ripple>
                   </View>

@@ -15,8 +15,6 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { Screen } from "../../../components";
 import { t } from "../../../i18n";
 import { useNavigation } from "@react-navigation/native";
-import UpIcon from '../../../assets/icons/up.svg'
-import DownIcon from '../../../assets/icons/down.svg'
 import { getWalletStore } from "../../../App";
 import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
@@ -26,6 +24,7 @@ import { Header, ICON_HEADER } from "../../../components/header/Header";
 import useKeyboard from '@rnhooks/keyboard';
 import { throttle } from "../../../utils/general";
 import CameraIcon from "../../../assets/images/camera.svg"
+import { HIcon } from "../../../components/icon";
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -128,8 +127,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                         view.betweenMyAddress = !view.betweenMyAddress
                                       } }
                               >
-                                { !view.betweenMyAddress && <UpIcon width={ 14 } style={ { color: Colors.black } }/> }
-                                { view.betweenMyAddress && <DownIcon width={ 14 } style={ { color: Colors.black } }/> }
+                                { !view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
+                                { view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
                               </Button>
                             </View>)() }
                     >

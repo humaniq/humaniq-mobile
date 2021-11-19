@@ -14,9 +14,8 @@ import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
-import WalletIcon from "../assets/icons/wallet.svg"
-import GlobeIcon from "../assets/icons/globe.svg"
-import CogIcon from "../assets/icons/cog.svg"
+import { HIcon } from "../components/icon";
+
 
 const Stack = createStackNavigator()
 
@@ -58,14 +57,14 @@ export function MainNavigator<PrimaryParamList>() {
             tabBarIcon: (options) => {
               switch (route.name) {
                 case "browser":
-                  return <GlobeIcon width={ 18 } height={ 18 }
-                                    style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
+                  return <HIcon name={ "globe" } size={ 18 }
+                                style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
                 case "settings":
-                  return <CogIcon width={ 18 } height={ 18 }
-                                  style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
+                  return <HIcon name={ "cog" } size={ 18 }
+                                style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
                 default:
-                  return <WalletIcon width={ 18 } height={ 18 }
-                                     style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
+                  return <HIcon name={ "wallet" } size={ 18 }
+                                style={ { color: options.focused ? Colors.bg : Colors.textGrey } }/>
               }
             },
           }) }

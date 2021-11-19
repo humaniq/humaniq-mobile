@@ -6,7 +6,8 @@ import { ExploreModalViewModel } from "./ExploreModalViewModel"
 import { t } from "../../i18n"
 import Ripple from "react-native-material-ripple"
 import { BrowserScreenViewModel } from "./BrowserScreenViewModel"
-import CrossIcon from "../../assets/icons/cross.svg"
+import { HIcon } from "../../components/icon";
+
 
 export const ExploreModal = observer(() => {
   const view = useInstance(ExploreModalViewModel)
@@ -60,7 +61,7 @@ export const ExploreModal = observer(() => {
                       style={ { padding: 10 } }
                       rippleContainerBorderRadius={ 20 }
                       rippleColor={ Colors.primary }>
-                <CrossIcon width={ 20 } height={ 20 }/>
+                <HIcon size={ 20 } color={ Colors.primary }/>
               </Ripple>
             </View>
           </View>

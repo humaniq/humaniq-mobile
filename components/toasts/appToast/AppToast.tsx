@@ -6,8 +6,7 @@ import { RootStore } from "../../../store/RootStore";
 import { TOASTER_TYPE } from "../../../store/app/AppStore";
 import { Shadow } from "react-native-shadow-2";
 import { Dimensions } from "react-native";
-import PendingIcon from "../../../assets/icons/clock-arrows.svg";
-import DoneIcon from "../../../assets/icons/done.svg";
+import { HIcon } from "../../icon";
 
 export const AppToast = observer(() => {
   const view = useInstance(RootStore)
@@ -25,12 +24,12 @@ export const AppToast = observer(() => {
             {
               view.appStore.toast.type === TOASTER_TYPE.PENDING &&
               <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 44 }>
-                  <PendingIcon width={ 22 } height={ 22 } color={ Colors.warning }/></Avatar>
+                  <HIcon name={ "clock-arrows" } size={ 22 } color={ Colors.warning }/></Avatar>
             }
             {
               view.appStore.toast.type === TOASTER_TYPE.SUCCESS &&
               <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 44 }>
-                  <DoneIcon width={ 22 } height={ 22 } color={ Colors.success }/></Avatar>
+                  <HIcon name={ "done" } size={ 22 } color={ Colors.success }/></Avatar>
             }
             <Text marginL-20 robotoM> { view.appStore.toast.message } </Text>
           </View>

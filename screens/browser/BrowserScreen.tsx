@@ -17,10 +17,7 @@ import { BrowserHeader } from "../../components/browserHeader/BrowserHeader"
 import Ripple from "react-native-material-ripple"
 import { ExploreModalViewModel } from "./ExploreModalViewModel"
 import { ExploreModal } from "./ExploreModal"
-import ArrowLeftIcon from "../../assets/icons/arrow-left.svg"
-import ArrowRightIcon from "../../assets/icons/arrow-right.svg"
-import HomeIcon from "../../assets/icons/home.svg"
-import CloneIcon from "../../assets/icons/clone.svg"
+import { HIcon } from "../../components/icon"
 
 const Browser = observer(() => {
   const view = useInstance(BrowserScreenViewModel)
@@ -82,17 +79,19 @@ const Browser = observer(() => {
                             style={ { width: 40, marginLeft: 20, padding: 10, paddingLeft: 13 } }
                             rippleContainerBorderRadius={ 20 }
                             rippleColor={ Colors.primary }>
-                        <ArrowLeftIcon width={ 20 } height={ 20 } color="#0066DA" />
+                        <HIcon name={ "arrow-left" } size={ 20 } color="#0066DA"/>
                     </Ripple>
                     <Ripple onPress={ view.goForward }
                             style={ { width: 40, marginLeft: 20, padding: 10, paddingLeft: 13 } }
                             rippleContainerBorderRadius={ 20 }
                             rippleColor={ Colors.primary }>
-                        <ArrowRightIcon width={ 20 } height={ 20 } color="#0066DA"/>
+                        <HIcon name={ "arrow-right" } size={ 20 } color="#0066DA"/>
                     </Ripple>
                 </View>
                 <View flex-2 center>
-                    <Button onPress={ () => { selectDialog.display = true } } bg-purple40
+                    <Button onPress={ () => {
+                      selectDialog.display = true
+                    } } bg-purple40
                             label={ getWalletStore().selectedWallet.formatAddress.split('...')[1] }/>
                 </View>
                 <View flex-4 row>
@@ -100,13 +99,15 @@ const Browser = observer(() => {
                             style={ { width: 40, marginLeft: 20, padding: 10 } }
                             rippleContainerBorderRadius={ 20 }
                             rippleColor={ Colors.primary }>
-                        <HomeIcon width={ 20 } height={ 20 } color="#0066DA"/>
+                        <HIcon name={ "home" } size={ 20 } color="#0066DA"/>
                     </Ripple>
-                    <Ripple onPress={ () => { exploreModal.display = true } }
+                    <Ripple onPress={ () => {
+                      exploreModal.display = true
+                    } }
                             style={ { width: 40, marginLeft: 20, padding: 10 } }
                             rippleContainerBorderRadius={ 20 }
                             rippleColor={ Colors.primary }>
-                        <CloneIcon width={ 20 } height={ 20 } color="#0066DA"/>
+                        <HIcon name={ "clone" } size={ 20 } color="#0066DA"/>
                     </Ripple>
                 </View>
             </View>

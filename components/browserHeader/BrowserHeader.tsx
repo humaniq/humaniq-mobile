@@ -5,10 +5,7 @@ import { RootNavigation } from "../../navigators"
 import Ripple from "react-native-material-ripple"
 import { t } from "../../i18n"
 import { Dimensions } from "react-native"
-import LockIcon from "../../assets/icons/lock.svg"
-import RedoIcon from "../../assets/icons/redo-alt.svg"
-import ArrowLeftIcon from "../../assets/icons/arrow-left.svg"
-import SearchIcon from "../../assets/icons/search.svg"
+import { HIcon } from "../icon";
 
 export interface HeaderProps {
   title: string;
@@ -49,7 +46,7 @@ export const BrowserHeader = observer<HeaderProps>((
   return <View flex row center>
     <View flex-1 left>
       <TouchableOpacity paddingL-20 center onPress={ RootNavigation.goBack }>
-        { backButton && <ArrowLeftIcon width={ 24 } height={ 24 } color="#0066DA"/> }
+        { backButton && <HIcon name={ "arrow-left" } size={ 24 } color="#0066DA"/> }
       </TouchableOpacity>
     </View>
     <View marginH-10 flex-8 row style={ isSearchMode && { backgroundColor: Colors.white, borderRadius: 20 } }>
@@ -57,7 +54,7 @@ export const BrowserHeader = observer<HeaderProps>((
         <Ripple onPress={ onPressSearch } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
           <Button style={ { height: 40, width: 40 } } round
                   backgroundColor={ isSearchMode ? Colors.white : Colors.grey70 }>
-            <SearchIcon width={ 20 } height={ 20 } color="#0066DA"/>
+            <HIcon name={ "search" } size={ 20 } color="#0066DA"/>
           </Button></Ripple>
       </View>
       <View left>
@@ -91,7 +88,7 @@ export const BrowserHeader = observer<HeaderProps>((
                                style={ { height: 16, width: 16 } }
                                source={ { uri: icon } }/> }
                         { !!url && <Text grey20 marginR-4> { new URL(url).host }</Text> }
-                        { !!isHttps && <LockIcon width={ 12 } height={ 12 } color="#0066DA"/> }
+                        { !!isHttps && <HIcon name={ "search" } size={ 12 } color="#0066DA"/> }
                       </View>
                   </View>
               </View>
@@ -103,7 +100,7 @@ export const BrowserHeader = observer<HeaderProps>((
       { onPressMenu &&
       <Ripple onPress={ onPressMenu } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
           <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.grey70 }>
-              <RedoIcon width={ 20 } height={ 20 }/>
+              <HIcon name={ "redo-alt" } size={ 20 } color={ Colors.primary }/>
           </Button></Ripple> }
     </View>
   </View>

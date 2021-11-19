@@ -6,8 +6,6 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper";
 import { Screen } from "../../../components";
 import { t } from "../../../i18n";
-import MaxIcon from "../../../assets/icons/max.svg"
-import DoubleArrows from "../../../assets/icons/double-arrows.svg"
 import Ripple from "react-native-material-ripple";
 import { SelectWalletTokenDialog } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenDialog";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
@@ -18,6 +16,7 @@ import { RootNavigation } from "../../../navigators";
 import { Header } from "../../../components/header/Header";
 import { throttle } from "../../../utils/general";
 import useKeyboard from '@rnhooks/keyboard';
+import { HIcon } from "../../../components/icon";
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -66,7 +65,7 @@ const SelectValue = observer(() => {
           <View center>
             <Ripple rippleColor={ Colors.primary } rippleContainerBorderRadius={ 22 } onPress={ view.setMaxValue }>
               <Button round backgroundColor={ Colors.white } style={ { height: 44, width: 44 } }>
-                <MaxIcon width={ 24 } style={ { color: Colors.primary } }/>
+                <HIcon name={"max"} size={ 24 } style={ { color: Colors.primary } }/>
               </Button>
             </Ripple>
           </View>
@@ -95,7 +94,7 @@ const SelectValue = observer(() => {
                     onPress={ view.swapInputType }
             >
               <Button round backgroundColor={ Colors.white } style={ { height: 44, width: 44 } }>
-                <DoubleArrows width={ 20 } style={ { color: Colors.primary } }/>
+                <HIcon name="double-arrows" size={ 20 } style={ { color: Colors.primary } }/>
               </Button>
             </Ripple>
           </View>

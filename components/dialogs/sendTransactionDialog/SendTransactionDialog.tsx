@@ -7,7 +7,7 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel"
 import { t } from "../../../i18n"
 import { getWalletStore } from "../../../App"
 import { amountFormat } from "../../../utils/number"
-import CheckCircleIcon from "../../../assets/icons/check-circle.svg"
+import { HIcon } from "../../icon";
 
 export const SendTransactionDialog = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -30,7 +30,7 @@ export const SendTransactionDialog = observer(() => {
       { view.initialized && !!view.txHash &&
       <View center padding-20>
           <View row>
-              <CheckCircleIcon width={ 80 } heigth={ 80 }/>
+              <HIcon name={ "check-circle" } size={ 80 } color={ Colors.primary }/>
           </View>
           <View>
               <Text text50 center grey30>{ t("sendTransactionDialog.successSendTx") }</Text>
