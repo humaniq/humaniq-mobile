@@ -38,7 +38,7 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
                 <View padding-16 paddingT-0>
                     <View row spread centerV>
                         <View>
-                            <Text h2>{ store.formatTotalAllWalletsFiatBalance }</Text>
+                            <Text h2 black>{ store.formatTotalAllWalletsFiatBalance }</Text>
                             <Text text-grey>{ t("walletScreen.totalBalanceTittle") }</Text>
                         </View>
                     </View>

@@ -86,6 +86,10 @@
       "exportMnemonic": "Export recovery phrase"
     }
   },
+  "selectTransactionFeeDialog": {
+    "name": "Speed up transaction by adjusting miner fee",
+    "description": "Estimated times based on each price"
+  },
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
     "errorTx": "Error submitting transaction",

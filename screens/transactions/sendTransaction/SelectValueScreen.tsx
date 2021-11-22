@@ -17,16 +17,18 @@ import { Header } from "../../../components/header/Header";
 import { throttle } from "../../../utils/general";
 import useKeyboard from '@rnhooks/keyboard';
 import { HIcon } from "../../../components/icon";
+import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
+  const selectFeeDialog = useInstance(SelectTransactionFeeDialogViewModel)
   const inputRef = useRef<MutableRefObject<any>>()
 
   const [ visible ] = useKeyboard();
 
   // @ts-ignore
-  const thr = throttle(() => inputRef.current?.focus(), 100)
+  const thr = throttle(() => inputRef.current?.focus(), 300)
 
   useEffect(() => {
     view.registerInput(inputRef)
@@ -52,9 +54,17 @@ const SelectValue = observer(() => {
                        selectWalletTokenView.display = true
                      } }
           />
-          <View>
-            <Text> {  }</Text>
+          { !view.isTransferAllow && <View center>
+              <View paddingB-30 absR style={ {
+                borderWidth: 1,
+                borderColor: Colors.transparent,
+                borderTopColor: Colors.grey,
+                width: "80%",
+                borderBottomColor: "transparent"
+              } }/>
+              <Text error margin-10> { t("sendTransactionDialog.insufficientBalance") }</Text>
           </View>
+          }
         </Card>
       </View>
       <View padding-40 center>
@@ -65,7 +75,7 @@ const SelectValue = observer(() => {
           <View center>
             <Ripple rippleColor={ Colors.primary } rippleContainerBorderRadius={ 22 } onPress={ view.setMaxValue }>
               <Button round backgroundColor={ Colors.white } style={ { height: 44, width: 44 } }>
-                <HIcon name={"max"} size={ 24 } style={ { color: Colors.primary } }/>
+                <HIcon name={ "max" } size={ 24 } style={ { color: Colors.primary } }/>
               </Button>
             </Ripple>
           </View>
@@ -110,7 +120,7 @@ const SelectValue = observer(() => {
                   label={ `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }/>
         </View>
       </View>
-      <View  center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
+      <View center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
         <Button disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
                 style={ { width: "100%", borderRadius: 12 } }
                 label={ !view.pendingTransaction ? `${ t("common.sendTo") } ${ view.txHumanReadable.totalFiat }` : "" }
@@ -130,7 +140,7 @@ const SelectValue = observer(() => {
       <SelectTransactionFeeDialog/>
     </>
   } isBlurActive={
-    selectWalletTokenView.display
+    selectWalletTokenView.display || selectFeeDialog.display
   }/>
 })
 

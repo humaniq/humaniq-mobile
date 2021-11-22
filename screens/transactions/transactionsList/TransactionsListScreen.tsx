@@ -79,7 +79,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                   scrollEventThrottle={ 400 }
               >
                   <View>
-                      <View row center>
+                      <View row center paddingT-10>
                         {
                           view.token.name === 'Ethereum' &&
                           <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>

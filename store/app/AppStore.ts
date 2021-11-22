@@ -5,6 +5,7 @@ import { localStorage } from "../../utils/localStorage"
 import { getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
+import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -45,12 +46,12 @@ export class AppStore extends Model({
     display: t.boolean,
     type: t.enum(TOASTER_TYPE),
     message: t.string,
-    position: t.string
+    position: t.enum(TOAST_POSITION)
   })), () => ({
     display: false,
     type: TOASTER_TYPE.PENDING,
     message: "",
-    position: "bottom"
+    position: TOAST_POSITION.UNDER_TAB_BAR
   }))
 }) {
 

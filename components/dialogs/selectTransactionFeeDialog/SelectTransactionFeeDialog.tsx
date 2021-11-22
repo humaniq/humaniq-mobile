@@ -4,6 +4,7 @@ import { ActionSheet, Avatar, Button, Colors, RadioButton, Text, TouchableOpacit
 import { useInstance } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "./SelectTransactionFeeDialogViewModel";
 import Ripple from "react-native-material-ripple"
+import { t } from "../../../i18n";
 
 export const SelectTransactionFeeDialog = observer(() => {
   const view = useInstance(SelectTransactionFeeDialogViewModel)
@@ -30,16 +31,16 @@ export const SelectTransactionFeeDialog = observer(() => {
                                           backgroundColor: Colors.grey40
                                         } }/>
                               </View>
-                              <View>
-                                <Text>dfd</Text>
-                                <Text>dfd</Text>
+                              <View center padding-16>
+                                <Text text16 black robotoM>{ t("selectTransactionFeeDialog.name") }</Text>
+                                <Text textGrey robotoR> { t("selectTransactionFeeDialog.description") }</Text>
                               </View>
                             </View>
                           </TouchableOpacity>
                       }
                       renderAction={ (option, index, onOptionPress) => {
                         return <Ripple onPress={ () => onOptionPress(index) } key={ index }>
-                          <View paddingH-30 paddingV-20 row width={ '100%' } spread>
+                          <View paddingH-30 paddingV-10 row width={ '100%' } spread>
                             <View row flex-1>
                               <Avatar imageStyle={ { height: 24, width: 24, position: "absolute", left: 10, top: 10 } }
                                       backgroundColor={ Colors.greyLight } size={ 44 }

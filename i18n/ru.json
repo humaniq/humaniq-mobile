@@ -86,6 +86,10 @@
       "exportMnemonic": "Экспорт фразы восстановления"
     }
   },
+  "selectTransactionFeeDialog": {
+    "name": "Выбор скорости транзакции",
+    "description":"Выберите время в соответствии со стоимостью"
+  },
   "sendTransactionDialog": {
     "successTx": "Средства успешно отправлены",
     "errorTx": "Ошибка создания транзакции",

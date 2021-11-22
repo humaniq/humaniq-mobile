@@ -40,7 +40,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   }, [])
 
   // @ts-ignore
-  const thr = throttle(() => inputRef.current?.focus(), 100)
+  const thr = throttle(() => inputRef.current?.focus(), 300)
 
   useEffect(() => {
     try {
