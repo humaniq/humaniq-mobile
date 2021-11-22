@@ -53,7 +53,9 @@ export const SelectTransactionFeeDialog = observer(() => {
                               <Text text16 robotoM>{ (option.label as any).name }</Text>
                             </View>
                             <RadioButton selected={ (option.label as any).data === view.selected }/>
-                          </View></Ripple>
+                          </View>
+                          <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 80 } }/>
+                        </Ripple>
                       } }
                       onDismiss={ () => {
                         view.display = false
