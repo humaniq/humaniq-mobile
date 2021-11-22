@@ -28,6 +28,18 @@ export class GasStation extends Model({
   pending: p(t.boolean, false)
 }) {
 
+  get fastFee() {
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fast : this.gasPrice * 1.25
+  }
+
+  get fastestFee() {
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fastest : this.gasPrice * 1.5
+  }
+
+  get safeLowFee() {
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.safeLow : this.gasPrice
+  }
+
   axios: ApisauceInstance;
 
   init() {
