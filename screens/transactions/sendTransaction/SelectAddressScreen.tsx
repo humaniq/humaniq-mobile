@@ -35,6 +35,12 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const [ visible ] = useKeyboard();
 
   useEffect(() => {
+    return () => {
+      view.closeDialog()
+    }
+  }, [])
+
+  useEffect(() => {
     view.init(route.params)
     selectWalletTokenView.init(view.walletAddress)
   }, [])

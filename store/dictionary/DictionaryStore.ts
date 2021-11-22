@@ -28,7 +28,7 @@ export class DictionaryStore extends Model({
     decimals: t.number,
     type: t.string
   }))), () => objectMap()),
-  ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap())
+  ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap()),
 }) {
 
   @modelFlow

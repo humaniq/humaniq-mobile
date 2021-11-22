@@ -8,6 +8,9 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { renderShortAddress } from "../../../utils/address";
 import { Header } from "../../../components/header/Header";
+import * as Animatable from "react-native-animatable";
+import { getEthereumProvider } from "../../../App";
+import { currencyFormat } from "../../../utils/number";
 
 export const ConfirmTransactionScreen = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -42,9 +45,20 @@ export const ConfirmTransactionScreen = observer(() => {
     <View centerV padding-16 paddingT-0>
       <View row spread centerV marginB-16>
         <Text text16 robotoM>{ t("transactionScreen.howMany") }</Text>
-        <Button text14 link label={ t("transactionScreen.adjustFee") } labelStyle={ { fontFamily: "Roboto-Medium" } }
-                onPress={ () => view.selectTransactionFeeDialog.display = true }
-        />
+        <Button onPress={ () => {
+          view.selectTransactionFeeDialog.wallet = view.walletAddress
+          view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
+          view.selectTransactionFeeDialog.display = true
+        } }
+                link
+        >
+          <Animatable.Text style={ { color: Colors.primary } }
+                           animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
+                           iterationCount={ "infinite" }
+                           direction="alternate">
+            { `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
+          </Animatable.Text>
+        </Button>
       </View>
       <Card>
         <View row spread padding-12 centerV>

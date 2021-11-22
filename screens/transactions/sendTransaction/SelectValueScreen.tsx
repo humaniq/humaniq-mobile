@@ -18,6 +18,8 @@ import { throttle } from "../../../utils/general";
 import useKeyboard from '@rnhooks/keyboard';
 import { HIcon } from "../../../components/icon";
 import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import { getEthereumProvider } from "../../../App";
+import * as Animatable from "react-native-animatable"
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -29,6 +31,10 @@ const SelectValue = observer(() => {
 
   // @ts-ignore
   const thr = throttle(() => inputRef.current?.focus(), 300)
+
+  useEffect(() => {
+    getEthereumProvider().gasStation.setEnableAutoUpdate(true)
+  }, [])
 
   useEffect(() => {
     view.registerInput(inputRef)
@@ -114,10 +120,19 @@ const SelectValue = observer(() => {
         </View>
         <View row center>
           <Button onPress={ () => {
+            view.selectTransactionFeeDialog.wallet = view.walletAddress
+            view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
             view.selectTransactionFeeDialog.display = true
           } }
                   link
-                  label={ `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }/>
+          >
+            <Animatable.Text style={ { color: Colors.primary } }
+                             animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
+                             iterationCount={ "infinite" }
+                             direction="alternate">
+              { `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
+            </Animatable.Text>
+          </Button>
         </View>
       </View>
       <View center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>

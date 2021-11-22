@@ -1,12 +1,14 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { ActionSheet, Avatar, Button, Colors, RadioButton, Text, TouchableOpacity, View } from "react-native-ui-lib";
+import { ActionSheet, Avatar, Button, Colors, Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "./SelectTransactionFeeDialogViewModel";
 import Ripple from "react-native-material-ripple"
 import { t } from "../../../i18n";
+import { currencyFormat } from "../../../utils/number";
 
 export const SelectTransactionFeeDialog = observer(() => {
+
   const view = useInstance(SelectTransactionFeeDialogViewModel)
   return <ActionSheet visible={ view.display }
                       dialogStyle={ {
@@ -41,7 +43,7 @@ export const SelectTransactionFeeDialog = observer(() => {
                       renderAction={ (option, index, onOptionPress) => {
                         return <Ripple onPress={ () => onOptionPress(index) } key={ index }>
                           <View paddingH-30 paddingV-10 row width={ '100%' } spread>
-                            <View row flex-1>
+                            <View flex-2>
                               <Avatar imageStyle={ { height: 24, width: 24, position: "absolute", left: 10, top: 10 } }
                                       backgroundColor={ Colors.greyLight } size={ 44 }
                                   // source={ (option.label as any).icon }
@@ -49,10 +51,22 @@ export const SelectTransactionFeeDialog = observer(() => {
                                 { (option.label as any).icon }
                               </Avatar>
                             </View>
-                            <View row flex-5 centerV>
-                              <Text text16 robotoM>{ (option.label as any).name }</Text>
+                            <View flex-4 centerV left>
+                              <View>
+                                <Text black text16 robotoM>{ (option.label as any).name }</Text>
+                              </View>
+                              <View>
+                                <Text text14 robotoR textGrey>{ `< ${ (option.label as any).time } min` }</Text>
+                              </View>
                             </View>
-                            <RadioButton selected={ (option.label as any).data === view.selected }/>
+                            <View flex-4 centerV right>
+                              <View>
+                                <Text black text16 robotoM>{ currencyFormat(`${ (option.label as any).feeFiat }`) }</Text>
+                              </View>
+                              <View>
+                                <Text text14 robotoR textGrey>{ `${ (option.label as any).fee } ETH` }</Text>
+                              </View>
+                            </View>
                           </View>
                           <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 80 } }/>
                         </Ripple>

@@ -34,7 +34,6 @@ export class SendTransactionViewModel {
 
   txData = {
     chainId: 0,
-    gasPrice: 0,
     nonce: "",
     value: "",
     to: "",
@@ -60,26 +59,12 @@ export class SendTransactionViewModel {
     } else if (!this.wallet.transactions.initialized) {
       this.wallet.loadTransactions()
     }
-    // setTimeout(() => {
-    //   try {
-    //     this.inputRef?.current?.focus()
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }, 100)
   })
 
   changeReceiverAddress = reaction(() => this.txData.to, (val) => {
     this.txData.to = val
     this.inputFiat = false
     this.getTransactionData()
-    // setTimeout(() => {
-    //   try {
-    //     this.inputRef?.current?.focus()
-    //   } catch (e) {
-    //     console.log(e)
-    //   }
-    // }, 100)
   })
 
   changeTokenValue = reaction(() => this.txData.value, throttle(async () => {
@@ -96,7 +81,7 @@ export class SendTransactionViewModel {
 
 
   get selectedGasPrice() {
-    return +(this.txData.gasPrice * this.selectTransactionFeeDialog.selected).toFixed(0)
+    return +getEthereumProvider().gasStation.selectedGasPrice
   }
 
   async init(route) {
@@ -126,14 +111,12 @@ export class SendTransactionViewModel {
         this.contract = new ethers.Contract(this.tokenAddress, contractAbiErc20, this.wallet.ether);
       }
 
-      const [ nonce, gasPrice, gasLimit ] = await Promise.all([
+      const [ nonce, gasLimit ] = await Promise.all([
         getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
-        getEthereumProvider().currentProvider.getGasPrice(),
         this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
       ])
       console.log({ gasLimit: gasLimit && gasLimit.toString() })
       this.txData.nonce = nonce
-      this.txData.gasPrice = gasPrice.toString()
       this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
       this.pending = false
       console.log(this.txData, this.parsedValue, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
@@ -160,7 +143,7 @@ export class SendTransactionViewModel {
 
   get transactionMaxFee() {
     try {
-      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+      return  +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
     } catch (e) {
       console.log("ERROR", e)
       return 0
@@ -169,7 +152,7 @@ export class SendTransactionViewModel {
 
   get transactionFee() {
     try {
-      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+      return +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
     } catch (e) {
       console.log("ERROR", e)
       return 0
@@ -335,12 +318,12 @@ export class SendTransactionViewModel {
     this.txData = {
       chainId: 0,
       gasLimit: 0,
-      gasPrice: 0,
       nonce: "",
       value: "",
       to: "",
     }
-    // this.pendingTransaction = false
+    this.pendingTransaction = false
+    getEthereumProvider().gasStation.setEnableAutoUpdate(false)
     this.display = false
   }
 

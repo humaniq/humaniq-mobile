@@ -4,17 +4,24 @@ import { t } from "../../../i18n";
 import SlowImage from "../../../assets/images/snail.svg"
 import MediumImage from "../../../assets/images/clock.svg"
 import FastImage from "../../../assets/images/fast.svg"
-
-export enum TRANSACTION_MULTIPLICATOR {
-  SLOW = 1,
-  NORMAL = 1.25,
-  FAST = 1.5
-}
+import { getEthereumProvider, getWalletStore } from "../../../App";
+import { GAS_PRICE_SPEED } from "../../../store/provider/GasStation";
+import { ethers } from "ethers";
+import { Wallet } from "../../../store/wallet/Wallet";
 
 export class SelectTransactionFeeDialogViewModel {
 
   display = false
-  selected = TRANSACTION_MULTIPLICATOR.NORMAL
+  wallet: string
+  gasLimit = 21000
+
+  get selectedSpeed() {
+    return getEthereumProvider().gasStation.selectedSpeed
+  }
+
+  get wa(): Wallet {
+    return getWalletStore().walletsMap.get(this.wallet)
+  }
 
   get options(): any {
     return [
@@ -22,39 +29,48 @@ export class SelectTransactionFeeDialogViewModel {
         label: {
           name: t("common.slow"),
           icon: <SlowImage width={ 20 } height={ 20 }/>,
-          data: TRANSACTION_MULTIPLICATOR.SLOW
+          data: GAS_PRICE_SPEED.SAFE_LOW,
+          time: getEthereumProvider().gasStation.safeLowWait,
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLow * this.gasLimit, 18),
+          feeFiat: +(ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLow * this.gasLimit, 18)) * this.wa?.prices.usd
         },
         onPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.SLOW
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.SAFE_LOW)
         },
         onOptionPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.SLOW
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.SAFE_LOW)
         }
       },
       {
         label: {
           name: t("common.normal"),
           icon: <MediumImage width={ 20 } height={ 20 }/>,
-          data: TRANSACTION_MULTIPLICATOR.NORMAL
+          data: GAS_PRICE_SPEED.FAST,
+          time: getEthereumProvider().gasStation.fastWait,
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fast * this.gasLimit, 18),
+          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fast * this.gasLimit, 18) * this.wa?.prices.usd
         },
         onPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.NORMAL
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FAST)
         },
         onOptionPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.NORMAL
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FAST)
         }
       },
       {
         label: {
           name: t("common.fast"),
           icon: <FastImage width={ 20 } height={ 20 }/>,
-          data: TRANSACTION_MULTIPLICATOR.FAST
+          data: GAS_PRICE_SPEED.FASTEST,
+          time: getEthereumProvider().gasStation.fastestWait,
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastest * this.gasLimit, 18),
+          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastest * this.gasLimit, 18) * this.wa?.prices.usd
         },
         onPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.FAST
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FASTEST)
         },
         onOptionPress: () => {
-          this.selected = TRANSACTION_MULTIPLICATOR.FAST
+          getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FASTEST)
         }
       }
     ]

@@ -4,6 +4,7 @@ import { computed, reaction } from "mobx"
 import * as storage from "../../utils/localStorage"
 import { ethers } from "ethers"
 import uuid from "react-native-uuid"
+import { GasStation } from "./GasStation";
 
 
 @model("EthereumProvider")
@@ -11,7 +12,12 @@ export class EthereumProvider extends Model({
   initialized: p(t.string, ""),
   pending: p(t.boolean, false),
   currentProviderType: p(t.enum(PROVIDER_TYPE), PROVIDER_TYPE.infura),
-  currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET)
+  currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET),
+  gasStation: p(t.model<GasStation>(GasStation), () => {
+    const gs = new GasStation({});
+    gs.init();
+    return gs
+  })
 }) {
 
   currentProvider
