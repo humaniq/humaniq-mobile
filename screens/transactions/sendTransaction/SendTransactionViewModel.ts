@@ -84,6 +84,10 @@ export class SendTransactionViewModel {
     return +getEthereumProvider().gasStation.selectedGasPrice
   }
 
+  get selectedGasPriceLabel() {
+    return getEthereumProvider().gasStation.selectedGasPriceLabel
+  }
+
   async init(route) {
     this.tokenAddress = route?.tokenAddress
     this.walletAddress = route?.walletAddress

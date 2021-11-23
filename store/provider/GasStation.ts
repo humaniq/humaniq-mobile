@@ -5,6 +5,7 @@ import { reaction } from "mobx";
 import { getEthereumProvider } from "../../App";
 import { ETH_NETWORKS } from "../../config/network";
 import { ethers } from "ethers";
+import { t as tr } from "../../i18n"
 
 export enum GAS_PRICE_SPEED {
   FASTEST = 'FASTEST',
@@ -29,15 +30,15 @@ export class GasStation extends Model({
 }) {
 
   get fastFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fast : this.gasPrice * 1.25
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fast : (this.gasPrice * 1.25).toFixed(0)
   }
 
   get fastestFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fastest : this.gasPrice * 1.5
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fastest : (this.gasPrice * 1.5).toFixed(0)
   }
 
   get safeLowFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.safeLow : this.gasPrice
+    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.safeLow : (this.gasPrice * 1).toFixed(0)
   }
 
   axios: ApisauceInstance;
@@ -73,8 +74,19 @@ export class GasStation extends Model({
         case GAS_PRICE_SPEED.FASTEST:
           return (this.gasPrice * 1.50).toFixed(0)
         default:
-          return this.gasPrice
+          return (this.gasPrice * 1).toFixed(0)
       }
+    }
+  }
+
+  get selectedGasPriceLabel() {
+    switch (this.selectedSpeed) {
+      case GAS_PRICE_SPEED.FAST:
+        return tr("common.normal")
+      case GAS_PRICE_SPEED.FASTEST:
+        return tr("common.fast")
+      default:
+        return tr("common.low")
     }
   }
 

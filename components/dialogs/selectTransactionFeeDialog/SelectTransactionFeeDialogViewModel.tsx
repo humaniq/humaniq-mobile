@@ -31,7 +31,7 @@ export class SelectTransactionFeeDialogViewModel {
           icon: <SlowImage width={ 20 } height={ 20 }/>,
           data: GAS_PRICE_SPEED.SAFE_LOW,
           time: getEthereumProvider().gasStation.safeLowWait,
-          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLow * this.gasLimit, 18),
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLowFee * this.gasLimit, 18),
           feeFiat: +(ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLowFee * this.gasLimit, 18)) * this.wa?.prices.usd
         },
         onPress: () => {
@@ -47,7 +47,7 @@ export class SelectTransactionFeeDialogViewModel {
           icon: <MediumImage width={ 20 } height={ 20 }/>,
           data: GAS_PRICE_SPEED.FAST,
           time: getEthereumProvider().gasStation.fastWait,
-          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fast * this.gasLimit, 18),
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastFee * this.gasLimit, 18),
           feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastFee * this.gasLimit, 18) * this.wa?.prices.usd
         },
         onPress: () => {
@@ -63,7 +63,7 @@ export class SelectTransactionFeeDialogViewModel {
           icon: <FastImage width={ 20 } height={ 20 }/>,
           data: GAS_PRICE_SPEED.FASTEST,
           time: getEthereumProvider().gasStation.fastestWait,
-          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastest * this.gasLimit, 18),
+          fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastestFee * this.gasLimit, 18),
           feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastestFee * this.gasLimit, 18) * this.wa?.prices.usd
         },
         onPress: () => {

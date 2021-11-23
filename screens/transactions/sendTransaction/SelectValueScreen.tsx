@@ -130,7 +130,7 @@ const SelectValue = observer(() => {
                              animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
                              iterationCount={ "infinite" }
                              direction="alternate">
-              { `${ t("sendTransactionDialog.maxFee").toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
+              { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
             </Animatable.Text>
           </Button>
         </View>

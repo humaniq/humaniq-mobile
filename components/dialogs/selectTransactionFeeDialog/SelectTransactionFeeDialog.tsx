@@ -40,7 +40,7 @@ export const SelectTransactionFeeDialog = observer(() => {
                                 { (option.label as any).icon }
                               </Avatar>
                             </View>
-                            <View flex-5 paddingL-25 centerV left>
+                            <View flex-3 paddingL-25 centerV left>
                               <View>
                                 <Text black text16 robotoM>{ (option.label as any).name }</Text>
                               </View>
@@ -48,7 +48,7 @@ export const SelectTransactionFeeDialog = observer(() => {
                                 <Text text14 robotoR textGrey>{ `< ${ (option.label as any).time } min` }</Text>
                               </View>
                             </View>
-                            <View flex-4 centerV right>
+                            <View flex-6 centerV right>
                               <View>
                                 <Text black text16
                                       robotoM>{ currencyFormat(`${ (option.label as any).feeFiat }`) }</Text>

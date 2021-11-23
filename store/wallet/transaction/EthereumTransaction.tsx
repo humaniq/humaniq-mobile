@@ -18,9 +18,12 @@ import { BigNumber, ethers } from "ethers"
 import { amountFormat, beautifyNumber, preciseRound } from "../../../utils/number"
 import dayjs from "dayjs";
 import { renderShortAddress } from "../../../utils/address";
-import { getEthereumProvider, getWalletStore } from "../../../App";
+import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon";
+import { TOASTER_TYPE } from "../../app/AppStore";
+import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
+import { setPendingAppToast, closeToast } from "./utils";
 
 
 export interface IEthereumTransactionConstructor {
@@ -117,6 +120,8 @@ export class EthereumTransaction extends Model({
           this.transactionIndex = confirmedTx.transactionIndex
           this.receiptContractAddress = confirmedTx.contractAddress
           this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+          // TODO: обработать обгон транзакции над перезаписываемой
+          getAppStore().toast.display = false
           await this.applyToWallet()
           getEthereumProvider().currentProvider.off(hash)
         })
@@ -136,6 +141,7 @@ export class EthereumTransaction extends Model({
   * cancelTransaction() {
     if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
       try {
+        setPendingAppToast(tr("transactionScreen.cancelTransaction"))
         this.receiptStatus = TRANSACTION_STATUS.CANCELLING
         this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
         this.value = "0"
@@ -154,6 +160,7 @@ export class EthereumTransaction extends Model({
             await this.removeFromStore()
             console.log({ canceled: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
+            closeToast()
           })
         })
       } catch (e) {
@@ -173,6 +180,7 @@ export class EthereumTransaction extends Model({
   * speedUpTransaction() {
     if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
       try {
+        setPendingAppToast(tr("transactionScreen.speedUpTransaction"))
         this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
         const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
         yield this.removeFromStore()
@@ -188,6 +196,7 @@ export class EthereumTransaction extends Model({
             await this.removeFromStore()
             console.log({ speedUpd: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
+            closeToast()
           })
         })
       } catch (e) {

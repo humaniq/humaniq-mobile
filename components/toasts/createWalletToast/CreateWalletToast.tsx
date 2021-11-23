@@ -16,10 +16,9 @@ export const CreateWalletToast = observer(() => {
       visible={ view.walletDialogs.pendingDialog.display }
       backgroundColor={ Colors.transparent }
   >
-    <View marginV-16>
-      <Card padding-15 marginH-16
-            style={ { marginVertical: view.walletDialogs.pendingDialog.position === TOAST_POSITION.UNDER_TAB_BAR ? 60 : 5 } }
-      >
+    <View
+        style={ { marginBottom: view.walletDialogs.pendingDialog.position === TOAST_POSITION.UNDER_TAB_BAR ? 65 : 10 } }>
+      <Card padding-15 marginH-16>
         <View row centerV>
           { !view.walletDialogs.pendingDialog.walletCreated ?
               <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>

@@ -63,5 +63,6 @@ module.exports = {
     "no-return-assign": 2,
     "no-extra-parens": 2,
     "prefer-promise-reject-errors": 0,
+    "react-native/no-color-literals": 0
   },
 }

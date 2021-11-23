@@ -27,6 +27,7 @@ import { localStorage } from "../../utils/localStorage";
 
 export interface TransactionsRequestResult {
   page: number,
+  // eslint-disable-next-line camelcase
   page_size: number
   total: number
   result: Array<any>

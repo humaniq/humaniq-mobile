@@ -17,12 +17,10 @@ export enum LOCKER_MODE {
   CHECK = "CHECK"
 }
 
-
 export enum TOASTER_TYPE {
   SUCCESS = 'SUCCESS',
   PENDING = 'PENDING'
 }
-
 
 @model("AppStore")
 export class AppStore extends Model({
@@ -52,7 +50,7 @@ export class AppStore extends Model({
     type: TOASTER_TYPE.PENDING,
     message: "",
     position: TOAST_POSITION.UNDER_TAB_BAR
-  }))
+  })).withSetter()
 }) {
 
   messageManager = new MessageManager()

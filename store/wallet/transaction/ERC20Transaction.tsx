@@ -20,11 +20,13 @@ import { renderShortAddress } from "../../../utils/address";
 import { TRANSACTION_STATUS } from "./EthereumTransaction";
 import { BigNumber, ethers } from "ethers";
 import { formatEther } from "ethers/lib/utils";
-import { getEthereumProvider, getWalletStore } from "../../../App";
+import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon"
-
+import { TOASTER_TYPE } from "../../app/AppStore";
+import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
+import { setPendingAppToast, closeToast } from "./utils";
 
 @model("ERC20Transaction")
 export class ERC20Transaction extends Model({
@@ -96,6 +98,8 @@ export class ERC20Transaction extends Model({
         await runUnprotected(async () => {
           this.blockTimestamp = new Date()
           this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+          // TODO: обработать обгон транзакции над перезаписываемой
+          getAppStore().toast.display = false
           await this.applyToWallet()
           getEthereumProvider().currentProvider.off(hash)
         })
@@ -115,6 +119,7 @@ export class ERC20Transaction extends Model({
   * cancelTransaction() {
     if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
       try {
+        setPendingAppToast(tr("transactionScreen.cancelTransaction"))
         this.receiptStatus = TRANSACTION_STATUS.CANCELLING
         this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
         this.value = "0"
@@ -143,10 +148,12 @@ export class ERC20Transaction extends Model({
             await this.removeFromStore()
             console.log({ canceled: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
+            closeToast()
           })
         })
       } catch (e) {
         console.log("ERROR-CANCELLING-TRANSACTION", e)
+        getAppStore().toast.display = false
         yield this.removeFromStore()
       }
     }
@@ -162,8 +169,8 @@ export class ERC20Transaction extends Model({
   * speedUpTransaction() {
     if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
       try {
+        setPendingAppToast(tr("transactionScreen.speedUpTransaction"))
         this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
-
         const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
         const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
           gasPrice: this.txBody.gasPrice,
@@ -184,6 +191,7 @@ export class ERC20Transaction extends Model({
             await this.removeFromStore()
             console.log({ speedUpd: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
+            closeToast()
           })
         })
       } catch (e) {
