@@ -24,9 +24,7 @@ import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon"
-import { TOASTER_TYPE } from "../../app/AppStore";
-import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
-import { setPendingAppToast, closeToast } from "./utils";
+import { closeToast, setPendingAppToast } from "./utils";
 
 @model("ERC20Transaction")
 export class ERC20Transaction extends Model({
