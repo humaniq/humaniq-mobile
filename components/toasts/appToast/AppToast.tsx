@@ -23,7 +23,7 @@ export const AppToast = observer(() => {
   >
     <View marginB-65 marginT-20>
       <View marginH-16 flex center
-            style={ { marginHorizontal: view.appStore.toast.position === TOAST_POSITION.UNDER_TAB_BAR ? 65 : 8 } }>
+            style={ { marginVertical: view.appStore.toast.position === TOAST_POSITION.UNDER_TAB_BAR ? 60 : 5 } }>
         <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.grey10, 0.1) }
                 containerViewStyle={ { backgroundColor: Colors.white } }>
           <View row centerV flex padding-15 width={ Dimensions.get("window").width - 32 }>

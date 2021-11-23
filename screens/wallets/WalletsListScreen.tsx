@@ -68,10 +68,10 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
                                   }
                                 </View>
                                 <View flex-6>
-                                  <Text numberOfLines={ 1 } textM text16 grey20>{ w.formatAddress }</Text>
+                                  <Text numberOfLines={ 1 } textM text16 black>{ w.formatAddress }</Text>
                                 </View>
                                 <View flex-3 right>
-                                  <Text numberOfLines={ 1 } text16 robotoB grey20>
+                                  <Text numberOfLines={ 1 } text16 robotoB black>
                                     { w.formatTotalWalletFiatBalance }
                                   </Text>
                                 </View>

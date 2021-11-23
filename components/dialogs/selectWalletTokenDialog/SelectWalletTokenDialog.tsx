@@ -16,7 +16,7 @@ export const SelectWalletTokenDialog = observer(() => {
       width={ "100%" }
       height={ 350 }
       visible={ view.display }
-      containerStyle={ { backgroundColor: Colors.white, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
+      containerStyle={ { backgroundColor: Colors.white, borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingBottom: 16 } }
       onDismiss={ () => runInAction(() => {
         view.display = false
       }) }
