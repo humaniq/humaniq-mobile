@@ -9895,10 +9895,10 @@ react-native-udp@^2.7.0:
     ip-regex "^1.0.3"
     util "^0.10.3"
 
-react-native-ui-lib@^6.3.0:
-  version "6.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.3.0.tgz#6c4f16c0b58bb70ed7d0daec26a9d0ca2a906fa6"
-  integrity sha512-OcQ74R0bAEPwkgL6ac26opff/dtMnu8QG/odDUcuDNTj0lRVdZL0Np5bNWJQp+tiw5iBcD6QlQEk+zN9nAlRCQ==
+react-native-ui-lib@^6.4.0:
+  version "6.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-ui-lib/-/react-native-ui-lib-6.4.2.tgz#14dfdcc24b8dbe858b9cd6ba87d8769b2e763573"
+  integrity sha512-7IzIOVVcOf1JBgi6b14pu66gtleGR5CiZblwOklgQZT5SXvB1nVYUavEkHkCcdbCPAhKPR+3T9CSm1rw3i5+tQ==
   dependencies:
     babel-plugin-transform-inline-environment-variables "^0.0.2"
     color "^3.1.0"
