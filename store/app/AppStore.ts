@@ -52,7 +52,6 @@ export class AppStore extends Model({
     position: TOAST_POSITION.UNDER_TAB_BAR
   })).withSetter()
 }) {
-
   messageManager = new MessageManager()
   personalMessageManager = new PersonalMessageManager()
   typedMessageManager = new TypedMessageManager()

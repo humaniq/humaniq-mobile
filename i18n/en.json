@@ -29,7 +29,8 @@
     "receive": "Receive",
     "sendTo": "Send to",
     "refresh": "Refreshing",
-    "noData": "No data"
+    "noData": "No data",
+    "next": "Next"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -37,19 +38,24 @@
   },
   "registerScreen": {
     "registration": "Registration",
-    "recoverFromMnemonicOne": "Recover",
+    "recoverFromMnemonicOne": "I already have a wallet",
+    "recoverPhrase": "Recovery phrase",
     "recoverFromMnemonicTwo": "from recovery phrase",
     "walletCreating": "Wallet is being created",
     "walletRecoverTitle": "Enter your recovery phrase",
-    "recoveryError": "Invalid recovery phrase"
+    "recoveryError": "Incorrect recovery phrase, please try again",
+    "recoveryDescription": "Please enter a 12 word recovery phrase",
+    "createNewWallet": "Create a new wallet"
   },
   "lockerScreen": {
     "incorrectPin": "Invalid PIN",
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
     "pinFormLoginAction": "Enter PIN code",
-    "pinFormRegisterAction": "Enter PIN code",
+    "pinFormRegisterAction": "Create PIN code",
     "pinFormConfirmationAction": "Confirm PIN code",
+    "pinFormRegisterActionDescription": "For quick access to the application",
+    "pinFormConfirmationActionDescription": "And remember your code",
     "correctPin": "PIN code verified"
   },
   "walletScreen": {

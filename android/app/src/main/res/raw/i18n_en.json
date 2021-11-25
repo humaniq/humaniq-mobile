@@ -42,7 +42,7 @@
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
     "pinFormLoginAction": "Enter PIN code",
-    "pinFormRegisterAction": "Enter PIN code",
+    "pinFormRegisterAction": "Create PIN code",
     "pinFormConfirmationAction": "Confirm PIN code",
     "correctPin": "PIN code verified"
   },

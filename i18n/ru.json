@@ -29,7 +29,8 @@
     "receive": "Получить",
     "sendTo": "К отправке",
     "refresh": "Обновление",
-    "noData": "Нет данных"
+    "noData": "Нет данных",
+    "next": "Next"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -37,19 +38,24 @@
   },
   "registerScreen": {
     "registration": "Регистрация",
-    "recoverFromMnemonicOne": "Восстановить",
+    "recoverFromMnemonicOne": "У меня уже есть кошелек",
     "recoverFromMnemonicTwo": "по секретной фразе",
+    "recoverPhrase": "Фраза восстановления",
     "walletCreating": "Кошелек создается",
     "walletRecoverTitle": "Введите фразу восстановления",
-    "recoveryError": "Неправильная фраза восстановления"
+    "recoveryError": "Неправильная фраза восстановления",
+    "recoveryDescription": "Пожалуйста введите фразу восстановления",
+    "createNewWallet": "Создать новый кошелек"
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",
     "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
     "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
     "pinFormLoginAction": "Введите пин код",
-    "pinFormRegisterAction": "Придумайте пин код",
+    "pinFormRegisterAction": "Создайте ПИН код",
     "pinFormConfirmationAction": "Подтвердите пин код",
+    "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
+    "pinFormConfirmationActionDescription": "И вспомните свой код",
     "correctPin": "Пин код подтвержден"
   },
   "walletScreen": {

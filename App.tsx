@@ -16,7 +16,6 @@ import 'react-native-url-polyfill/auto'
 import { provider, toFactory, useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
 import { NavigationContainerRef } from "@react-navigation/native"
-import { LoaderScreen } from "react-native-ui-lib"
 import * as storage from "./utils/localStorage"
 import { canExit, RootNavigator, setRootNavigation, useBackButtonHandler, useNavigationPersistence } from "./navigators"
 import { enableScreens } from "react-native-screens"
@@ -47,6 +46,7 @@ import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog
 import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
 import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { SelectTransactionFeeDialogViewModel } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import { Splash } from "./components/splash/Splash";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -148,7 +148,7 @@ const AppScreen = observer(() => {
             store.appStore.isLocked &&
             <Locker/>
           }
-          { !store.appStore.initialized && <LoaderScreen/> }
+          { !store.appStore.initialized && <Splash/> }
         </SafeAreaProvider>
       </>
   )

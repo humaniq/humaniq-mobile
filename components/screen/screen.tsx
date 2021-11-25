@@ -14,6 +14,8 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : { backgroundColor: Colors.bg };
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
 
+  console.log(props.statusBar)
+
   return (
       <KeyboardAvoidingView
           style={ [ preset.outer, backgroundStyle ] }
