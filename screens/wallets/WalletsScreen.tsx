@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Colors, LoaderScreen, View } from "react-native-ui-lib";
+import { Button, Colors, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { WalletsScreenModel } from "./WalletsScreenModel";
 import { WalletMenuDialogViewModel } from "../../components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
@@ -53,10 +53,10 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
           style={ !view.allInitialized ? { height: "100%" } : {} }
       >
         <>
-          { !view.allInitialized && <View height={ "100%" } center><LoaderScreen/></View> }
           { view.allInitialized && <>
               <View paddingT-20 paddingL-16 left>
-                  <Button link textM primary label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
+                  <Button link textM primary
+                          label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
                           onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                   />
               </View>

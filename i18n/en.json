@@ -89,7 +89,24 @@
     "editProfile": "Edit",
     "menu": {
       "ethNetwork": "Ethereum network",
-      "exportMnemonic": "Export recovery phrase"
+      "exportMnemonic": "Export recovery phrase",
+      "recoveryPhrase": "Recovery phrase",
+      "changePinCode": "Change pincode",
+      "currency": "Currency",
+      "network": "Network",
+      "aboutApplication": "About application",
+      "signOut": "Sign Out",
+      "recoveryDescription": "The recovery phrase proves wallet ownership, never diclose it to anyone. \n\nIf you lose your recovery phrase, even Humaniq will not be able to get your resources back.",
+      "recoveryWarning": "I understand the risks",
+      "recoveryBtn": "View recovery phrase",
+      "recoveryPhraseDescription": "Write these words in the right order on paper and store in a safe place . \nIf you lose device or reinstall wallet, you would need it.",
+      "recoveryPhraseWarning": "Never share your recovery phrase with anyone, store it securely!",
+      "testNets": "ETH Testnets",
+      "mainNets": "ETH Mainnet",
+      "privacyPolicyName": "Privacy policy",
+      "privacyPolicyDescription": "",
+      "termsOfServiceName": "Terms of service",
+      "termsOfServiceDescription": ""
     }
   },
   "selectTransactionFeeDialog": {

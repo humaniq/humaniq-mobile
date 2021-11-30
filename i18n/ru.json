@@ -89,12 +89,29 @@
     "editProfile": "Редактировать",
     "menu": {
       "ethNetwork": "Сеть эфира",
-      "exportMnemonic": "Экспорт фразы восстановления"
+      "exportMnemonic": "Экспорт фразы восстановления",
+      "recoveryPhrase": "Фраза восстановления",
+      "changePinCode": "Сменить пин код",
+      "currency": "Валюта",
+      "network": "Сеть",
+      "aboutApplication": "О приложении",
+      "signOut": "Выйти",
+      "recoveryDescription": "Фраза восстановления дает полный доступ к кошельку, не передавайте ее третьим лицам. \n\nЕсли вы потеряете фразу восстановления, Humaniq не сможет помочь Вам вернуть доступ к данному кошельку.",
+      "recoveryWarning": "Я понимаю риски",
+      "recoveryBtn": "Посмотреть фразу восстановления",
+      "recoveryPhraseDescription": "Запишите эти слова в точном порядке и сохраните в надежном месте . \nЕсли вы потеряете телефон или переустановите приложение - Вам понадобится фраза восстановления",
+      "recoveryPhraseWarning": "Не показывайте свою фразу восстановления кому либо, храните ее в секрете!",
+      "testNets": "ETH Тестовые сети",
+      "mainNets": "ETH Основные сети",
+      "privacyPolicyName": "Политика конфиденциальности",
+      "privacyPolicyDescription": "",
+      "termsOfServiceName": "Условия использования",
+      "termsOfServiceDescription": ""
     }
   },
   "selectTransactionFeeDialog": {
     "name": "Выбор скорости транзакции",
-    "description":"Выберите время в соответствии со стоимостью"
+    "description": "Выберите время в соответствии со стоимостью"
   },
   "sendTransactionDialog": {
     "successTx": "Средства успешно отправлены",

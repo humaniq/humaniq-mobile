@@ -100,6 +100,7 @@ function createRootStore() {
 const AppScreen = observer(() => {
   const navigationRef = useRef<NavigationContainerRef>(null)
   const store = useInstance(RootStore)
+  const view = useInstance(WalletsScreenModel)
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -118,6 +119,7 @@ const AppScreen = observer(() => {
       await store.providerStore.init()
       await store.walletStore.init()
       await store.appStore.init()
+      await view.init()
     })()
   }, [])
 
@@ -127,6 +129,7 @@ const AppScreen = observer(() => {
             store.appStore.initialized &&
             store.appStore.appState === APP_STATE.APP &&
             !store.appStore.isLocked &&
+            view.allInitialized &&
             <><RootNavigator
                 ref={ navigationRef }
                 initialState={ initialNavigationState }
@@ -148,7 +151,7 @@ const AppScreen = observer(() => {
             store.appStore.isLocked &&
             <Locker/>
           }
-          { !store.appStore.initialized && <Splash/> }
+          { !store.appStore.initialized || !view.allInitialized && <Splash/> }
         </SafeAreaProvider>
       </>
   )
