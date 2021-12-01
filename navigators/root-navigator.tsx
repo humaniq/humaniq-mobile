@@ -17,6 +17,7 @@ import { ConfirmTransactionScreen } from "../screens/transactions/sendTransactio
 import { QRScanner } from "../components/qRScanner/QRScanner";
 import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrasePage";
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
+import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -39,7 +40,10 @@ export type RootParamList = {
   confirmTransaction: undefined,
   QRScanner: undefined,
   recoveryPhrase: undefined,
-  selectNetwork: undefined
+  selectNetwork: undefined,
+  termsOfServicePage,
+  privacyPolicyPage,
+  aboutPage
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -62,6 +66,9 @@ const RootStack = () => {
         <Stack.Screen name="QRScanner" component={ QRScanner }/>
         <Stack.Screen name="recoveryPhrase" component={ RecoveryPhrasePage }/>
         <Stack.Screen name="selectNetwork" component={ SelectNetworkPage }/>
+        <Stack.Screen name="aboutPage" component={ AboutPage }/>
+        <Stack.Screen name="privacyPolicyPage" component={ PrivacyPolicyPage }/>
+        <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
       </Stack.Navigator>
   )
 }

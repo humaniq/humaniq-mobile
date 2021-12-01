@@ -7,6 +7,7 @@ export class SettingsScreenModel {
 
   initialized = false
   recoveryRead = false
+  exitDialogVisible = false
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true })

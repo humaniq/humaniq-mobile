@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Colors, View } from "react-native-ui-lib";
+import { Button, Colors, LoaderScreen, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { WalletsScreenModel } from "./WalletsScreenModel";
 import { WalletMenuDialogViewModel } from "../../components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
@@ -97,6 +97,9 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                   />
               </View>
           </> }
+          {
+            !view.allInitialized && <LoaderScreen />
+          }
         </>
       </Screen> }
       after={ <View>

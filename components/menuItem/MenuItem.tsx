@@ -5,7 +5,7 @@ import Ripple from "react-native-material-ripple";
 import { Animated, StyleProp, ViewStyle } from "react-native";
 
 export interface MenuItemProps {
-  icon: string,
+  icon?: string,
   iconStyle?: StyleProp<ViewStyle | Animated.AnimatedProps<ViewStyle>>
   name: string
   value?: string | JSX.Element,
@@ -14,22 +14,23 @@ export interface MenuItemProps {
 }
 
 export const MenuItem = ({ icon, iconStyle, name, value, onPress, showArrow = true }: MenuItemProps) => {
-  return <Ripple onPress={ onPress } rippleColor={ Colors.primary } style={ { padding: 10 } }>
+  return <Ripple onPress={ onPress && onPress } rippleColor={ Colors.primary } style={ { padding: 10 } }>
     <View row center>
-      <View flex-1>
-        <View bg-greyLight padding-9 br100 style={ iconStyle }>
-          <HIcon
-              name={ icon }
-              size={ 14 }
-              color={ Colors.primary }/>
-        </View>
+      { icon && <View flex-1>
+          <View bg-greyLight padding-9 br100 style={ iconStyle }>
+              <HIcon
+                  name={ icon }
+                  size={ 14 }
+                  color={ Colors.primary }/>
+          </View>
       </View>
-      <View flex-5 paddingL-10>
+      }
+      <View flex-6 paddingL-10>
         <Text text16 numberOfLines={ 1 }>
           { name }
         </Text>
       </View>
-      <View flex-3 right>
+      <View flex-2 right>
         { value }
       </View>
       <View flex-1>

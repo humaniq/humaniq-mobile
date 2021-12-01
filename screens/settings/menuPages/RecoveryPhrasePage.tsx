@@ -29,7 +29,7 @@ export const RecoveryPhrase = observer(() => {
   const view = useInstance(RecoveryPhraseViewModel)
 
   return <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.white }
-                 statusBarBg={ Colors.bg }>
+                 statusBarBg={ Colors.white }>
     <Header title={ !view.showRecoveryPhrase ? t("settingsScreen.menu.recoveryPhrase") : undefined }/>
     { !view.showRecoveryPhrase && <View flex paddingV-20>
         <View row center>

@@ -5,6 +5,7 @@
     "back": "Back",
     "register": "Sign up",
     "login": "Sign in",
+    "signOut": "Sign out",
     "import": "Import",
     "cancellation": "Cancel",
     "send": "Send",
@@ -112,6 +113,10 @@
   "selectTransactionFeeDialog": {
     "name": "Speed up transaction by adjusting miner fee",
     "description": "Estimated times based on each price"
+  },
+  "exitDialog": {
+    "title": "Have you secured your recovery phrase",
+    "description": "Without this you will not be able to recover your account or sign back"
   },
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",

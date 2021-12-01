@@ -35,17 +35,23 @@ import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
-import { SendTransactionViewModel as LegacySendTransactonViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import {
+  SendTransactionViewModel as LegacySendTransactonViewModel
+} from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
 import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
-import { SelfAddressQrCodeDialogViewModel } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import {
+  SelfAddressQrCodeDialogViewModel
+} from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
 import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
 import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
-import { SelectTransactionFeeDialogViewModel } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import {
+  SelectTransactionFeeDialogViewModel
+} from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { Splash } from "./components/splash/Splash";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
@@ -119,39 +125,37 @@ const AppScreen = observer(() => {
       await store.providerStore.init()
       await store.walletStore.init()
       await store.appStore.init()
-      await view.init()
     })()
   }, [])
 
   return (<>
         <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
           {
-            store.appStore.initialized &&
-            store.appStore.appState === APP_STATE.APP &&
-            !store.appStore.isLocked &&
-            view.allInitialized &&
-            <><RootNavigator
-                ref={ navigationRef }
-                initialState={ initialNavigationState }
-                onStateChange={ onNavigationStateChange }
-            />
-                <AppToast/>
-                <CreateWalletToast/>
-                <SigningDialog/>
-                <SendTransactionDialog/>
-            </> }
+              store.appStore.initialized &&
+              store.appStore.appState === APP_STATE.APP &&
+              !store.appStore.isLocked &&
+              <><RootNavigator
+                  ref={ navigationRef }
+                  initialState={ initialNavigationState }
+                  onStateChange={ onNavigationStateChange }
+              />
+                  <AppToast/>
+                  <CreateWalletToast/>
+                  <SigningDialog/>
+                  <SendTransactionDialog/>
+              </> }
           {
-            store.appStore.initialized &&
-            store.appStore.appState === APP_STATE.AUTH &&
-            !store.appStore.isLocked &&
-            <AuthNavigator/>
+              store.appStore.initialized &&
+              store.appStore.appState === APP_STATE.AUTH &&
+              !store.appStore.isLocked &&
+              <AuthNavigator/>
           }
           {
-            store.appStore.initialized &&
-            store.appStore.isLocked &&
-            <Locker/>
+              store.appStore.initialized &&
+              store.appStore.isLocked &&
+              <Locker/>
           }
-          { !store.appStore.initialized || !view.allInitialized && <Splash/> }
+          { !store.appStore.initialized && <Splash/> }
         </SafeAreaProvider>
       </>
   )
