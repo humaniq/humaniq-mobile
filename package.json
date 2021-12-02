@@ -52,7 +52,7 @@
     "ethereumjs-util": "^7.1.0",
     "ethers": "^5.5.1",
     "https-browserify": "0.0.1",
-    "humaniq-icon-set": "git+https://github.com/humaniq/humaniq.github.io.git#1.0.5",
+    "humaniq-icon-set": "git+https://github.com/humaniq/humaniq-icon-set.git#0.3.0",
     "i18n-js": "3.8.0",
     "is-url": "^1.2.4",
     "json-rpc-engine": "^6.1.0",
