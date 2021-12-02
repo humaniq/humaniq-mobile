@@ -1,81 +1,25 @@
-## Humaniq Mobile App
+![Humaniq logo](./docs/logo-brand.png)
 
-- based on React Native
-- used Mobx-keystone as state manager
-- used mobx for Component view models
-- used React-ioc for dependency injection
+# Humaniq Mobile
+Humaniq Mobile is a "Cold" ethereum networks compatible crypto wallet that provides easy access to next functions
+- Generate or import cold storage for ethereum deterministic wallet [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki)
+- Show Ethereum and all ERC20 tokens balances (with it fiat values), associated with wallet addresses
+- Send and receive Ethereum and ERC20 tokens on to other addresses (includes self other addresses)
+- Show Ethereum and ERC20 tokens transactions history
+- Dapps browser with full functionality (connect wallet, sign messages, sign transactions, send transactions)
 
-### Generate key once
+# Technology
 
-- `keytool -genkey -v -keystore humaniqmobile.keystore -alias com.humaniqmobile -keyalg RSA -keysize 2048 -validity 10000`
+- Based on React Native
+- Mobx for MVVM pattern
+- React-ioc for DI pattern
+- Mobx-keystone as global state manager
 
-- `mv humaniqmobile.keystore ./android/app`
-- `android\app\build.gradle`
-```
-    ...
-    signingConfigs {
-        debug {
-            storeFile file('humaniqmobile.keystore')
-            storePassword '123456'
-            keyAlias 'com.humaniqmobile'
-            keyPassword '123456'
-        }
-        release {
-            storeFile file('humaniqmobile.keystore')
-            storePassword '123456'
-            keyAlias 'com.humaniqmobile'
-            keyPassword '123456'
-        }
-    }
-    ...
-```
+# Building locally
+- install dependencies `yarn`
+- start development mode `yarn start` and second terminal `yarn android`
+- build release `yarn build android` & `yarn release-android`
 
-### Troubleshooting
-
-https://stackoverflow.com/questions/53239705/react-native-error-duplicate-resources-android
-
-In this solution you no need to delete any drawable folder.
-Just add the following code in the react.gradle file which you could find under
-node_modules/react-native/react.gradle path
-
-```
-    doLast {
-        def moveFolderFunc = { folderName ->
-            File originalDir = file("$buildDir/generated/res/react/release/${folderName}");
-            if (originalDir.exists()) {
-                File destDir = file("$buildDir/../src/main/res/${folderName}");
-                ant.move(file: originalDir, tofile: destDir);
-            }
-        }
-
-        moveFolderFunc.curry("drawable-ldpi").call()
-        moveFolderFunc.curry("drawable-mdpi").call()
-        moveFolderFunc.curry("drawable-hdpi").call()
-        moveFolderFunc.curry("drawable-xhdpi").call()
-        moveFolderFunc.curry("drawable-xxhdpi").call()
-        moveFolderFunc.curry("drawable-mdpi-v4").call()
-        moveFolderFunc.curry("drawable-xxxhdpi").call()
-        moveFolderFunc.curry("raw").call()
-    }
-
-```
-
-- crypto - https://www.npmjs.com/package/react-native-crypto
-
-```
-    npm i --save react-native-crypto
-    # install peer deps
-    npm i --save react-native-randombytes
-    react-native link react-native-randombytes
-    # install latest rn-nodeify
-    npm i --save-dev tradle/rn-nodeify
-    # install node core shims and recursively hack package.json files
-    # in ./node_modules to add/update the "browser"/"react-native" field with relevant mappings
-    ./node_modules/.bin/rn-nodeify --hack --install
-
-```
-
-
-### Накопленные проблемы
-WaitForEthTransactionViewModel - если ускорять или отменять транзакцию, через некоторое время
-вылазит ошибка переполнения памяти. А затем вывод ошибки от апи провайдера. Возможно надо зманить метод wait на waitForTransaction
+### Development plans
+- Split application on bundles (for fast start)
+- Refactoring auth flow
