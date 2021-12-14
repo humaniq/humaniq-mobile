@@ -22,8 +22,8 @@ export class BrowserScreenViewModel {
     backEnabled = false
     forwardEnabled = false
     progress = 0
-    homePage = "https://home.metamask.io/"
-    initialUrl = "https://home.metamask.io/" // https://metamask.github.io/test-dapp/" // 'https://dap.ps' // 'https://app.uniswap.org/'
+    homePage = "https://humaniq.github.io/humaniq-dapps-home"
+    initialUrl = "https://humaniq.github.io/humaniq-dapps-home" // https://metamask.github.io/test-dapp/" // 'https://dap.ps' // 'https://app.uniswap.org/'
     firstUrlLoaded = false
     autocompleteValue = ''
     error = null
@@ -73,7 +73,7 @@ export class BrowserScreenViewModel {
         this.initialized = true
         const entryScriptWeb3 = await dappsProvider.get()
         this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
-        const result = this.go("https://home.metamask.io/", true)
+        const result = this.go(this.homePage, true)
         if (result) {
             this.exploreModal.tabs[0] = { url: result, title: "", icon: "" }
             this.exploreModal.selectedTab = 0
