@@ -53,6 +53,7 @@ import {
   SelectTransactionFeeDialogViewModel
 } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { Splash } from "./components/splash/Splash";
+import { BrowserStore } from "./store/browser/BrowserStore";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -87,6 +88,8 @@ const providerStore = createContext<ProviderStore>()
 export const getProviderStore = () => providerStore.getDefault()
 const ethereumProvider = createContext<EthereumProvider>()
 export const getEthereumProvider = () => ethereumProvider.getDefault()
+const browserStore = createContext<BrowserStore>()
+export const getBrowserStore = () => browserStore.getDefault()
 
 function createRootStore() {
   const rootStore = new RootStore({})
@@ -99,14 +102,14 @@ function createRootStore() {
   profileStore.setDefault(rootStore.profileStore)
   providerStore.setDefault(rootStore.providerStore)
   ethereumProvider.setDefault(rootStore.providerStore.eth)
+  browserStore.setDefault(rootStore.browserStore)
   return rootStore
 }
 
 
 const AppScreen = observer(() => {
-  const navigationRef = useRef<NavigationContainerRef>(null)
+  const navigationRef = useRef<NavigationContainerRef<any>>(null)
   const store = useInstance(RootStore)
-  const view = useInstance(WalletsScreenModel)
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)

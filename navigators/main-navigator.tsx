@@ -53,17 +53,6 @@ export function MainNavigator<PrimaryParamList>() {
           labeled={ false }
           activeColor={ Colors.primary }
           inactiveColor={ Colors.textGrey }
-          // renderLabel={ (route) => {
-          //   switch (route.name) {
-          //     case "browser":
-          //       return <Text center marginT-5 text12>{ t("browserScreen.name") }
-          //       </Text>
-          //     case "settings":
-          //       return <Text center marginT-5 text12>{ t("settingsScreen.name") }</Text>
-          //     default:
-          //       return <Text center marginT-5 text12>{ t("walletScreen.name") }</Text>
-          //   }
-          // } }
           barStyle={ { backgroundColor: Colors.white, paddingBottom: 5 } }
           screenOptions={ ({ route }) => ({
             tabBarLabelStyle: { marginTop: 10 },

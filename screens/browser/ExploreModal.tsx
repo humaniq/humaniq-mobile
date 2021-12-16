@@ -5,13 +5,13 @@ import { useInstance } from "react-ioc"
 import { ExploreModalViewModel } from "./ExploreModalViewModel"
 import { t } from "../../i18n"
 import Ripple from "react-native-material-ripple"
-import { BrowserScreenViewModel } from "./BrowserScreenViewModel"
+import { BrowserTabScreenViewModel } from "./browserTab/BrowserTabScreenViewModel"
 import { HIcon } from "../../components/icon";
 
 
 export const ExploreModal = observer(() => {
   const view = useInstance(ExploreModalViewModel)
-  const browserView = useInstance(BrowserScreenViewModel)
+  const browserView = useInstance(BrowserTabScreenViewModel)
 
   return <Modal
       animationType={ "slide" }
