@@ -17,10 +17,10 @@ export const AboutPage = () => {
     <Header title={ t("settingsScreen.menu.aboutApplication") }/>
     <View flex paddingT-20 paddingH-16>
       <View row center>
-        <HumaniqLogo width={ 100 } height={ 50 }/>
+        <HumaniqLogo width={ 122 } height={ 50 }/>
       </View>
       <View row center>
-        <Text text12>
+        <Text text12 textGrey>
           v { pack.version }
         </Text>
       </View>
@@ -39,7 +39,7 @@ export const AboutPage = () => {
 
 export const PrivacyPolicyPage = () => {
   return <Screen preset={ "scroll" } backgroundColor={ Colors.white }
-                 statusBarBg={ Colors.bg }>
+                 statusBarBg={ Colors.white }>
     <Header title={ t("settingsScreen.menu.privacyPolicyName") }/>
     <View flex paddingT-20 paddingH-16>
       <Text robotoM>
@@ -164,7 +164,7 @@ export const PrivacyPolicyPage = () => {
 
 export const TermsOfServicePage = () => {
   return <Screen preset={ "scroll" } backgroundColor={ Colors.white }
-                 statusBarBg={ Colors.bg }>
+                 statusBarBg={ Colors.white }>
     <Header title={ t("settingsScreen.menu.termsOfServiceName") }/>
     <View flex paddingT-20 paddingH-16>
       <Text robotoM>

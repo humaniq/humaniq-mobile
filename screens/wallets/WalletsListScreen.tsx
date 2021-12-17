@@ -29,13 +29,13 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
             preset="scroll"
             refreshing={ view.refreshing }
             onRefresh={ view.onRefresh }
-            style={ { height: "100%" } }
+            style={ { minHeight: "100%" } }
         >
           {
             view.initialized &&
             <View flex>
                 <Header title={ t('walletScreen.allAddresses') }/>
-                <View padding-16 paddingT-0>
+                <View padding-16>
                     <View row spread centerV>
                         <View>
                             <Text h2 black>{ store.formatTotalAllWalletsFiatBalance }</Text>

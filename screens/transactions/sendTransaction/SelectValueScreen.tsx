@@ -8,18 +8,25 @@ import { Screen } from "../../../components";
 import { t } from "../../../i18n";
 import Ripple from "react-native-material-ripple";
 import { SelectWalletTokenDialog } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenDialog";
-import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import {
+  SelectWalletTokenViewModel
+} from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
-import { SelectTransactionFeeDialog } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialog";
+import {
+  SelectTransactionFeeDialog
+} from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialog";
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
 import { Header } from "../../../components/header/Header";
 import { throttle } from "../../../utils/general";
 import useKeyboard from '@rnhooks/keyboard';
 import { HIcon } from "../../../components/icon";
-import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import {
+  SelectTransactionFeeDialogViewModel
+} from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { getEthereumProvider } from "../../../App";
 import * as Animatable from "react-native-animatable"
+import { InteractionManager } from "react-native";
 
 const SelectValue = observer(() => {
   const view = useInstance(SendTransactionViewModel)
@@ -30,7 +37,11 @@ const SelectValue = observer(() => {
   const [ visible ] = useKeyboard();
 
   // @ts-ignore
-  const thr = throttle(() => inputRef.current?.focus(), 300)
+  const thr = throttle(() => {
+    InteractionManager.runAfterInteractions(() => {
+      inputRef.current?.focus();
+    })
+  }, 300)
 
   useEffect(() => {
     getEthereumProvider().gasStation.setEnableAutoUpdate(true)
@@ -40,7 +51,7 @@ const SelectValue = observer(() => {
     view.registerInput(inputRef)
     try {
       // @ts-ignore
-      thr()
+      inputRef?.current && thr()
     } catch (e) {
       console.log("Error", e)
     }
@@ -155,7 +166,7 @@ const SelectValue = observer(() => {
       <SelectTransactionFeeDialog/>
     </>
   } isBlurActive={
-    selectWalletTokenView.display || selectFeeDialog.display
+      selectWalletTokenView.display || selectFeeDialog.display
   }/>
 })
 

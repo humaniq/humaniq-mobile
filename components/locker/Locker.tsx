@@ -47,11 +47,11 @@ const L = observer(function (props) {
         <View flex-1 center>
             <View row flex bottom>
               { view.mode === LOCKER_MODE.CHECK &&
-              <Text robotoM text16>{ t("lockerScreen.pinFormLoginAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormLoginAction") }</Text> }
               { view.mode === LOCKER_MODE.SET && view.step === 0 &&
-              <Text robotoM text16>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
               { view.mode === LOCKER_MODE.SET && view.step === 1 &&
-              <Text robotoM text16>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
             </View>
             <View row flex paddingT-10>
               { view.mode === LOCKER_MODE.SET && view.step === 0 &&
@@ -108,7 +108,7 @@ const L = observer(function (props) {
                                     onPress={ () => view.handleClick(`${ (col - 1) * 3 + row }`) }>
                               <View padding-10 width={ 80 } center
                                     style={ { borderRadius: 40 } }>
-                                <Text robotoR text30>
+                                <Text robotoR text30 black>
                                   { `${ (col - 1) * 3 + row }` }
                                 </Text>
                               </View>

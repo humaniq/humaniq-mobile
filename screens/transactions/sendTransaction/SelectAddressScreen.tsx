@@ -18,7 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { getWalletStore } from "../../../App";
 import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
-import { ScrollView } from "react-native";
+import { InteractionManager, ScrollView } from "react-native";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { Header, ICON_HEADER } from "../../../components/header/Header";
 import useKeyboard from '@rnhooks/keyboard';
@@ -46,13 +46,17 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   }, [])
 
   // @ts-ignore
-  const thr = throttle(() => inputRef.current?.focus(), 300)
+  const thr = throttle(() => {
+    InteractionManager.runAfterInteractions(() => {
+      inputRef.current?.focus();
+    })
+  }, 300)
 
   useEffect(() => {
     try {
       view.registerInput(inputRef)
       // @ts-ignore
-      thr()
+      inputRef?.current && thr()
     } catch (e) {
       console.log("Error", e)
     }
@@ -87,10 +91,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                   onPress: () => {
                     nav.navigate("QRScanner", {
                       onScanSuccess: meta => {
-                        console.log(meta)
                         if (meta.action === "send-eth" && meta.target_address) {
                           view.txData.to = meta.target_address
-                          console.log("set-value", view.txData.to)
                         }
                       }
                     })

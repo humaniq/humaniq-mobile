@@ -28,25 +28,25 @@ export const RecoveryPhrase = observer(() => {
 
   const view = useInstance(RecoveryPhraseViewModel)
 
-  return <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.white }
+  return <Screen preset={ "scroll" } backgroundColor={ Colors.white }
                  statusBarBg={ Colors.white }>
     <Header title={ !view.showRecoveryPhrase ? t("settingsScreen.menu.recoveryPhrase") : undefined }/>
     { !view.showRecoveryPhrase && <View flex paddingV-20>
         <View row center>
             <RecoveryImage/>
         </View>
-        <View row padding-16>
+        <View row padding-16 paddingT-30>
             <Text text16 robotoR>
               { t("settingsScreen.menu.recoveryDescription") }
             </Text>
         </View>
-        <View row padding-16>
+        <View row paddingH-16>
             <Checkbox value={ view.understandRisc } onValueChange={ () => {
               view.understandRisc = !view.understandRisc
             }
             } label={ t("settingsScreen.menu.recoveryWarning") }/>
         </View>
-        <View flex bottom paddingH-16>
+        <View flex bottom paddingH-16 paddingT-16>
             <Button onPress={ async () => {
               view.showRecoveryPhrase = true
               await localStorage.save("hm-wallet-recovery-read", true)

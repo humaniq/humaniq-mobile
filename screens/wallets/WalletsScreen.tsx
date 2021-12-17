@@ -12,7 +12,9 @@ import { WalletTittle } from "./wallet/WalletTittle";
 import { WalletBody } from "./wallet/WalletBody";
 import { WalletTabs } from "./wallet/WalletTabs";
 import { WalletTransactionControls } from "./wallet/WalletTransactionControls";
-import { SelfAddressQrCodeDialogViewModel } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import {
+  SelfAddressQrCodeDialogViewModel
+} from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog";
 import { SelfAddressQrCodeDialog } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
@@ -60,7 +62,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                           onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                   />
               </View>
-              <View paddingB-20>
+              <View paddingB-10>
                   <View height={ 100 }>
                       <Carousel
                           vertical={ false }
@@ -98,7 +100,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
               </View>
           </> }
           {
-            !view.allInitialized && <LoaderScreen />
+              !view.allInitialized && <LoaderScreen/>
           }
         </>
       </Screen> }
