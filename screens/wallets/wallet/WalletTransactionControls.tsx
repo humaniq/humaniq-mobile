@@ -34,7 +34,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
         >
           <Button br50 outlineColor={ Colors.white }
                   labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                  style={ { backgroundColor: Colors.white } } primary outline marginH-10
+                  style={ { backgroundColor: Colors.white, minWidth: 120 } } primary outline marginH-10
                   label={ t("common.send") }
           >
             <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
@@ -49,7 +49,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
         } }>
           <Button br50 outlineColor={ Colors.white }
                   labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                  style={ { backgroundColor: Colors.white } } primary outline marginH-10
+                  style={ { backgroundColor: Colors.white, minWidth: 120 } } primary outline marginH-10
                   label={ t("common.receive") }
           >
             <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>

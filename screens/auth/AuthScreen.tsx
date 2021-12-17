@@ -37,7 +37,7 @@ const Auth = observer(function () {
                   <View bottom flex paddingB-20>
                       <View bottom row flex style={ { width: "100%" } }>
                           <View style={ { width: "100%" } } paddingH-16>
-                              <Button link br50 bg-primary marginB-20 onPress={ view.goRecover }
+                              <Button link br50 bg-primary marginB-20 robotoM onPress={ view.goRecover }
                                       label={ t("registerScreen.recoverFromMnemonicOne") }/>
                             {
                                 view.isSavedWallet && <Button fullWidth bg-primary marginV-10
@@ -82,9 +82,10 @@ const Auth = observer(function () {
                     </View>
                     <View flex-3 marginH-16>
                         <TextField
+                            autocapitalize={ 'none' }
                             autoFocus
                             multiline={ true }
-                            errorColor={ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? Colors.error : Colors.textGrey }
+                            errorColor={ !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.textGrey }
                             error={ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }
                             onChangeText={ view.onChangeRecoverPhrase }
                             value={ getAppStore().recoverPhrase }
@@ -107,7 +108,7 @@ const Auth = observer(function () {
                             } : {} }
                             floatingPlaceholderColor={ {
                               focus: Colors.primary,
-                              error: !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? Colors.error : Colors.primary,
+                              error: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary,
                               default: Colors.primary,
                               disabled: Colors.primary
                             } }
@@ -116,7 +117,7 @@ const Auth = observer(function () {
                               paddingRight: 50,
                               padding: 10,
                               borderRadius: 5,
-                              borderColor: !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? Colors.error : Colors.primary
+                              borderColor: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary
                             } }
                         />
                     </View>

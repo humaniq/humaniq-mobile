@@ -6449,9 +6449,9 @@ human-standard-token-abi@^2.0.0:
   resolved "https://registry.yarnpkg.com/human-standard-token-abi/-/human-standard-token-abi-2.0.0.tgz#e0c2057596d0a1d4a110f91f974a37f4b904f008"
   integrity sha512-m1f5DiIvqaNmpgphNqx2OziyTCj4Lvmmk28uMSxGWrOc9/lMpAKH8UcMPhvb13DMNZPzxn07WYFhxOGKuPLryg==
 
-"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.3.0":
+"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.6.0":
   version "1.0.0"
-  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#913cb3b675da2feb797e6a118233febbc64ac7b9"
+  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#15afc643e18e99e04d989c12f8cb28369193bb07"
 
 i18n-js@3.8.0:
   version "3.8.0"
