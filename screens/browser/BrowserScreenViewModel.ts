@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { computed, makeAutoObservable } from "mobx";
 import { getBrowserStore } from "../../App";
 import { DAPPS_CONFIG } from "../../config/dapp";
 import { BrowserTab } from "../../store/browser/BrowserStore";
@@ -8,34 +8,50 @@ export class BrowserScreenViewModel {
     makeAutoObservable(this)
   }
 
+  initialized = false
+
+  @computed
+  get tabs() {
+    return getBrowserStore().tabs
+  }
+
+  @computed
+  get activeTab() {
+    return getBrowserStore().activeTab
+  }
 
   init() {
-    if (!getBrowserStore().tabs.length) {
-      this.newTab()
-    }
-    const activeTab = getBrowserStore().activeTab
-    if (activeTab) {
-      this.switchToTab(activeTab)
-    } else {
-      getBrowserStore().tabs.length > 0 && this.switchToTab(getBrowserStore().tabs[0])
+    try {
+      if (!getBrowserStore().tabs.length) {
+        this.newTab()
+      }
+      const activeTab = getBrowserStore().activeTab
+      if (activeTab) {
+        getBrowserStore().setActiveTab(activeTab)
+      } else {
+        getBrowserStore().tabs.length > 0 && getBrowserStore().setActiveTab(getBrowserStore().tabs[0].id)
+      }
+    } catch (e) {
+      console.log("ERROR", e)
+    } finally {
+      this.initialized = true
     }
   }
 
   newTab(url: string = DAPPS_CONFIG.HOMEPAGE_HOST) {
-    getBrowserStore().createNewTab(new BrowserTab({ url, id: Date.now() }))
-    this.switchToTab(getBrowserStore().tabs[getBrowserStore().tabs.length - 1])
-  }
-
-  switchToTab(tab: BrowserTab) {
-    getBrowserStore().setActiveTab(tab)
+    console.log("newTab")
+    const tab = new BrowserTab({ url, id: Date.now() })
+    console.log(tab)
+    getBrowserStore().createNewTab(tab)
+    getBrowserStore().setActiveTab(tab.id)
   }
 
   async showTabs() {
-    const activeTab = getBrowserStore().activeTab
+    const activeTab = getBrowserStore().tabs.find(tab => tab.id === getBrowserStore().activeTab)
     await activeTab.takeScreenShot()
+
     getBrowserStore().removeActiveTab()
   }
-
 
 
 }

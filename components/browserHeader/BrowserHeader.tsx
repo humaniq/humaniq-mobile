@@ -1,21 +1,24 @@
 import React, { useEffect, useRef, useState } from "react"
 import { observer } from "mobx-react-lite"
-import { Button, Colors, Image, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib"
-import { RootNavigation } from "../../navigators"
+import { Colors, Hint, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib"
 import Ripple from "react-native-material-ripple"
-import { t } from "../../i18n"
-import { Dimensions } from "react-native"
 import { HIcon } from "../icon";
+import { t } from "../../i18n";
 
 export interface HeaderProps {
   title: string;
   url: string;
   icon: string
-  backButton?: boolean;
-  onPressMenu?: (any) => any | Promise<any>;
+  reloadPage?: (props?: any) => void
   onPressSearch?: (any) => any | Promise<any>
   isSearchMode: boolean,
   onSearchSubmit?: (val: string) => any | Promise<any>
+  goHomePage: () => void,
+  numOfTabs: number,
+  openTabs: () => void
+  openNewTab: () => void
+  changeAddress: () => void
+  changeNetwork: () => void
 }
 
 export const BrowserHeader = observer<HeaderProps>((
@@ -23,11 +26,16 @@ export const BrowserHeader = observer<HeaderProps>((
       title,
       url,
       icon,
-      backButton = true,
-      onPressMenu = true,
+      reloadPage,
       onPressSearch,
       isSearchMode,
       onSearchSubmit,
+      goHomePage,
+      numOfTabs,
+      openTabs,
+      openNewTab,
+      changeAddress,
+      changeNetwork
     }) => {
 
   const inputRef = useRef()
@@ -41,67 +49,121 @@ export const BrowserHeader = observer<HeaderProps>((
   }, [ isSearchMode ])
 
   const [ value, setValue ] = useState("")
+  const [ visible, setVisible ] = useState(false)
 
   const isHttps = url && new URL(url).protocol === "https:"
-  return <View flex row center>
-    <View flex-1 left>
-      <TouchableOpacity paddingL-20 center onPress={ RootNavigation.goBack }>
-        { backButton && <HIcon name={ "arrow-left" } size={ 24 } color="#0066DA"/> }
-      </TouchableOpacity>
-    </View>
-    <View marginH-10 flex-8 row style={ isSearchMode && { backgroundColor: Colors.white, borderRadius: 20 } }>
-      <View marginR-15>
-        <Ripple onPress={ onPressSearch } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
-          <Button style={ { height: 40, width: 40 } } round
-                  backgroundColor={ isSearchMode ? Colors.white : Colors.grey70 }>
-            <HIcon name={ "search" } size={ 20 } color="#0066DA"/>
-          </Button></Ripple>
-      </View>
-      <View left>
-        {
-          isSearchMode && <View flex row>
-              <TextField width={ Dimensions.get('window').width * 0.5 } autoCapitalize='none' hideUnderline style={ {
-                padding: 0,
-                margin: 0,
-                height: 40,
-                fontWeight: "bold",
-                color: Colors.grey30,
-                overflow: 'hidden'
+  return <View row center bg-bg paddingV-10>
+    { !isSearchMode &&
+        <View left paddingH-8>
+            <Ripple center onPress={ goHomePage } style={ { padding: 10 } }>
+                <HIcon name={ "home" } size={ 20 }/>
+            </Ripple>
+        </View>
+    }
+    { !isSearchMode &&
+        <TouchableOpacity flex-6 row onPress={ onPressSearch }>
+            <View row centerV bg-greyLightSecond paddingH-10 paddingV-10 br30 flexG>
+              { !!isHttps && <HIcon name={ "lock" } size={ 12 }/> }
+              { !!url && <Text grey20 marginR-4> { new URL(url).host }</Text> }
+            </View>
+        </TouchableOpacity>
+    }
+    { isSearchMode &&
+        <View flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
+              style={ {
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
               } }
-                         onSubmitEditing={ () => onSearchSubmit(value) }
-                         ref={ inputRef }
-                         onChangeText={ setValue }
-                         value={ value }
-                         placeholder={ t("browserScreen.searchPlaceholder") }/>
-          </View>
-        }
-        {
-          !isSearchMode && <>
-              <View left>
-                  <View center>
-                      <Text numberOfLines={ 1 } bold primary>{ title || "" }</Text>
-                  </View>
-                  <View center>
-                      <View row center>
-                        { !!icon &&
-                        <Image key={ icon } marginR-4 height={ 16 } width={ 16 }
-                               style={ { height: 16, width: 16 } }
-                               source={ { uri: icon } }/> }
-                        { !!url && <Text grey20 marginR-4> { new URL(url).host }</Text> }
-                        { !!isHttps && <HIcon name={ "search" } size={ 12 } color="#0066DA"/> }
-                      </View>
-                  </View>
-              </View>
-          </>
-        }
-      </View>
+        >
+            <HIcon size={ 18 } name={ "arrow-left" } onPress={ onPressSearch }/>
+            <TextField
+                autoCapitalize='none'
+                hideUnderline
+                style={ {
+                  fontSize: 14,
+                  // width: "90%",
+                  padding: 0,
+                  paddingLeft: 20,
+                  margin: 0,
+                  color: Colors.dark30,
+                  overflow: 'hidden',
+                } }
+                onSubmitEditing={ () => onSearchSubmit(value) }
+                ref={ inputRef }
+                onChangeText={ setValue }
+                value={ value }
+                placeholder={ t("browserScreen.searchPlaceholder") }
+                enableErrors={ false }
+            />
+        </View>
+    }
+    <View flex-1 row paddingL-10 center>
+      <Ripple
+          rippleColor={ Colors.primary }
+          onPress={ openTabs }
+      >
+        <View center paddingH-6 paddingV-1 style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8 } }>
+          <Text center>
+            { numOfTabs }
+          </Text>
+        </View>
+      </Ripple>
     </View>
-    <View flex-1 right marginR-20>
-      { onPressMenu &&
-      <Ripple onPress={ onPressMenu } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
-          <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.grey70 }>
-              <HIcon name={ "redo-alt" } size={ 20 } color={ Colors.primary }/>
-          </Button></Ripple> }
+    <View flex-1 center paddingR-8>
+      <Hint
+          position={ Hint.positions.BOTTOM }
+          visible={ visible }
+          borderRadius={ 4 }
+          color={ Colors.white }
+          enableShadow={ true }
+          offset={ 5 }
+          useSideTip={ false }
+          customContent={
+            <View>
+              <TouchableOpacity row centerV left onPress={ reloadPage } padding-10>
+                <HIcon name={ "redo-alt" } size={ 16 }/>
+                <Text marginL-10 text16>{ t("browserScreen.reloadPage") }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity row centerV left onPress={ () => {
+                setVisible(false);
+                openNewTab()
+              } } padding-10>
+                <HIcon name={ "squared-plus" } size={ 16 }/>
+                <Text marginL-10 text16>{ t("browserScreen.openNewTab") }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity row centerV left onPress={ () => {
+                setVisible(false);
+                changeAddress()
+              } } padding-10>
+                <HIcon name={ "wallet-alt" } size={ 16 }/>
+                <Text marginL-10 text16>{ t("browserScreen.changeAddress") }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity row centerV left onPress={ () => {
+                setVisible(false);
+                changeNetwork()
+              } } padding-10>
+                <HIcon name={ "network" } size={ 16 }/>
+                <Text marginL-10 text16>{ t("browserScreen.changeNetwork") }</Text>
+              </TouchableOpacity>
+            </View>
+          }
+          onBackgroundPress={ () => setVisible(!visible) }
+      >
+        <View>
+          <Ripple onPress={ () => setVisible(!visible) } rippleContainerBorderRadius={ 20 }
+                  rippleColor={ Colors.primary }
+                  style={ { padding: 10 } }
+          >
+            <HIcon name={ "circles" } size={ 18 }/>
+          </Ripple>
+        </View>
+      </Hint>
     </View>
   </View>
 })

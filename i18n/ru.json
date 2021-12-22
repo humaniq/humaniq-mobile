@@ -74,7 +74,13 @@
   "browserScreen": {
     "name": "Браузер",
     "searchPlaceholder": "Введите URL-адрес",
-    "closeAllTabs": "Закрыть все вкладки"
+    "closeAllTabs": "Закрыть все вкладки",
+    "newTab": "Новая вкладка",
+    "reloadPage": "Перезагрузить",
+    "openNewTab": "Новая вкладка",
+    "addToBookmarks": "Добавить в закладки",
+    "changeAddress": "Сменить кошелек",
+    "changeNetwork": "Сменить сеть"
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес",

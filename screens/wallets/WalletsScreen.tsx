@@ -78,6 +78,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                           renderItem={ renderTittle }
                           onSnapToItem={ index => {
                             view.activeIndex = index
+                            getWalletStore().setSelectedWalletIndex(index)
                             carouselBodyRef.current.snapToItem(index)
                           } }
                       />

@@ -74,7 +74,13 @@
   "browserScreen": {
     "name": "Browser",
     "searchPlaceholder": "Input URL-address",
-    "closeAllTabs": "Close all tabs"
+    "closeAllTabs": "Close all tabs",
+    "newTab": "New tab",
+    "reloadPage": "Reload page",
+    "openNewTab": "Open new tab",
+    "addToBookmarks": "Add to bookmarks",
+    "changeAddress": "Change address",
+    "changeNetwork": "Change network"
   },
   "walletMenuDialog": {
     "hideWallet": "Hide address",

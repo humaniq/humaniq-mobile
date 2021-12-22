@@ -48,6 +48,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   // @ts-ignore
   const thr = throttle(() => {
     InteractionManager.runAfterInteractions(() => {
+      // @ts-ignore
       inputRef.current?.focus();
     })
   }, 300)
@@ -95,7 +96,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                           view.txData.to = meta.target_address
                         }
                       }
-                    })
+                    }, undefined, undefined)
                   }
                 } }
                 floatingPlaceholderStyle={ !view.txData.to ? {

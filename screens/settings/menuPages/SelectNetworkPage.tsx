@@ -11,6 +11,7 @@ import Ripple from "react-native-material-ripple";
 import { getEthereumProvider } from "../../../App";
 import * as storage from "../../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone";
+import { useNavigation } from "@react-navigation/native";
 
 export class SelectNetworkPageViewModel {
   constructor() {
@@ -27,8 +28,9 @@ export class SelectNetworkPageViewModel {
 
 }
 
-export const SelectNetwork = observer(() => {
+export const SelectNetwork = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SelectNetworkPageViewModel)
+  const nav = useNavigation()
   return <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                  statusBarBg={ Colors.bg }>
     <Header title={ t("settingsScreen.menu.network") }/>
@@ -46,6 +48,7 @@ export const SelectNetwork = observer(() => {
                                  getEthereumProvider().currentNetworkName = n.name
                                })
                                storage.save("currentNetworkName", n.name)
+                               nav.goBack()
                              } }
               >
                 <View row>
@@ -84,6 +87,7 @@ export const SelectNetwork = observer(() => {
                                  getEthereumProvider().currentNetworkName = n.name
                                })
                                storage.save("currentNetworkName", n.name)
+                               nav.goBack()
                              } }
               >
                 <View row>

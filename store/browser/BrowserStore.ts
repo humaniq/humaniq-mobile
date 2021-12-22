@@ -18,7 +18,7 @@ export class HistoryItem extends Model({
 
 @model("BrowserTab")
 export class BrowserTab extends Model({
-  url: p(t.string),
+  url: p(t.string).withSetter(),
   id: p(t.string),
   image: p(t.string)
 }) {
@@ -38,7 +38,7 @@ export class BrowserStore extends Model({
   history: p(t.array(t.model<HistoryItem>(HistoryItem)), () => []),
   whitelist: p(t.array(t.string), () => []),
   tabs: p(t.array(t.model<BrowserTab>(BrowserTab)), () => []),
-  activeTab: p(t.model<BrowserTab>(BrowserTab), () => null)
+  activeTab: p(t.string, () => null)
 }) {
 
   @computed
@@ -47,13 +47,13 @@ export class BrowserStore extends Model({
   }
 
   @modelAction
-  removeActiveTab() {
+  removeActiveTab = () => {
     this.activeTab = null
   }
 
   @modelAction
-  setActiveTab(tab: BrowserTab) {
-    this.activeTab = tab
+  setActiveTab = (id) => {
+    this.activeTab = id
   }
 
   @modelAction
@@ -72,19 +72,20 @@ export class BrowserStore extends Model({
   }
 
   @modelAction
-  closeAllTabs() {
+  closeAllTabs = () => {
     this.tabs = []
   }
 
   @modelAction
-  createNewTab(tab: BrowserTab) {
+  createNewTab = (tab: BrowserTab) => {
     this.tabs.push(tab)
   }
 
   @modelAction
-  closeTab(item: BrowserTab) {
-    this.tabs.filter(tab => tab.id !== item.id)
-    if (this.activeTab.id === item.id) {
+  closeTab = (id: string) => {
+    this.tabs = this.tabs.filter(tab => tab.id !== id)
+    console.log(this.tabs)
+    if (this.activeTab === id) {
       this.removeActiveTab()
     }
   }

@@ -29,7 +29,7 @@ export class WalletStore extends Model({
   initialized: p(t.string, ""),
   allWallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
   hiddenWallets: p(t.array(t.string), []),
-  selectedWalletIndex: p(t.number, 0)
+  selectedWalletIndex: p(t.number, 0).withSetter()
 }) {
 
   @observable
