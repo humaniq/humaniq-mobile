@@ -22,6 +22,8 @@ export interface IBrowserTab {
   key: string,
   showTabs: () => any
   newTab: () => any,
+  changeAddress: () => void
+  changeNetwork: () => void
 }
 
 const BrowserTab = observer<IBrowserTab>((props) => {
@@ -31,6 +33,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
 
   useEffect(() => {
     view.init(nav, props)
+    return () => view.disposeAll()
   }, [])
 
   useEffect(() => {
@@ -56,8 +59,8 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            goHomePage={ view.goHomePage }
                            numOfTabs={ getBrowserStore().tabs.length }
                            openTabs={ props.showTabs }
-                           changeAddress={ () => nav.navigate("walletsList", { goBack: true }, null, null) }
-                           changeNetwork={ () => nav.navigate("selectNetwork", { goBack: true }, null, null) }
+                           changeAddress={ props.changeAddress }
+                           changeNetwork={ props.changeNetwork }
                            openNewTab={ props.newTab }
             />
             <View flex-10 flexG-10>

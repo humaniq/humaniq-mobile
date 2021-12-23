@@ -23,7 +23,7 @@ const AuthStack = () => {
   );
 };
 
-export const AuthNavigator = React.forwardRef<NavigationContainerRef,
+export const AuthNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {
   return (
       <NavigationContainer { ...props } ref={ ref }>

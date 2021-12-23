@@ -18,6 +18,8 @@ import { QRScanner } from "../components/qRScanner/QRScanner";
 import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrasePage";
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
+import ErrorBoundary from 'react-native-error-boundary'
+import { Button, Text, View } from "react-native-ui-lib";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -50,15 +52,8 @@ const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
   return (
-      <Stack.Navigator
-          screenOptions={ {
-            headerShown: false,
-          } }
-      >
-        <Stack.Screen
-            name="mainStack"
-            component={ MainNavigator }
-        />
+      <Stack.Navigator screenOptions={ { headerShown: false } }>
+        <Stack.Screen name="mainStack" component={ MainNavigator }/>
         <Stack.Screen name="walletsList" component={ WalletsListScreen }/>
         <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }/>
         <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
@@ -85,12 +80,23 @@ const SendTransactionStack = () => {
   </Stack.Navigator>
 }
 
-export const RootNavigator = React.forwardRef<NavigationContainerRef,
+
+const CustomFallback = (props: { error: Error, resetError: () => void }) => (
+    <View>
+      <Text>Something happened!</Text>
+      <Text>{ props.error.toString() }</Text>
+      <Button onPress={ props.resetError } label={ 'Try again' }/>
+    </View>
+)
+
+export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {
   return (
-      <NavigationContainer { ...props } ref={ ref }>
-        <RootStack/>
-      </NavigationContainer>
+      <ErrorBoundary FallbackComponent={ CustomFallback }>
+        <NavigationContainer { ...props } ref={ ref }>
+          <RootStack/>
+        </NavigationContainer>
+      </ErrorBoundary>
   )
 })
 

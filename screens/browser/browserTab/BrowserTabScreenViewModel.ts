@@ -17,7 +17,6 @@ import { ethErrors } from 'eth-json-rpc-errors'
 import { SendTransactionViewModel } from "../../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { IBrowserTab } from "./BrowserTabScreen";
 
-
 export class BrowserTabScreenViewModel {
 
   navigation: NavigationProp<any>
@@ -67,6 +66,9 @@ export class BrowserTabScreenViewModel {
   approvalDialog = inject(this, ApprovalDappConnectDialogViewModel)
   sendTransactionDialog = inject(this, SendTransactionViewModel)
 
+  disposerChangeNetwork
+  disposerChangeAddress
+
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true })
@@ -91,13 +93,18 @@ export class BrowserTabScreenViewModel {
     this.url = this.storedTab.url
     this.go(props.initialUrl, true)
 
-    reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
+    this.disposerChangeNetwork = reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
       this.reloadWebView()
     })
 
-    reaction(() => getSnapshot(getWalletStore().selectedWallet.address), () => {
+    this.disposerChangeAddress = reaction(() => getSnapshot(getWalletStore().selectedWallet.address), () => {
       this.reloadWebView()
     })
+  }
+
+  disposeAll() {
+    this.disposerChangeAddress()
+    this.disposerChangeNetwork()
   }
 
   reloadWebView() {
