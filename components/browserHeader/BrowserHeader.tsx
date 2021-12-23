@@ -4,6 +4,7 @@ import { Colors, Hint, Text, TextField, TouchableOpacity, View } from "react-nat
 import Ripple from "react-native-material-ripple"
 import { HIcon } from "../icon";
 import { t } from "../../i18n";
+import { CSSShadows } from "../../utils/ui";
 
 export interface HeaderProps {
   title: string;
@@ -70,16 +71,7 @@ export const BrowserHeader = observer<HeaderProps>((
     }
     { isSearchMode &&
         <View flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
-              style={ {
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-                elevation: 5,
-              } }
+              style={ CSSShadows }
         >
             <HIcon size={ 18 } name={ "arrow-left" } onPress={ onPressSearch }/>
             <TextField

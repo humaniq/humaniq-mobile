@@ -235,7 +235,7 @@ export class BrowserTabScreenViewModel {
         this.url = data.navState.url
         this.title = data.navState.title
         this.icon = data.navState.icon.replace("svg", "png")
-        this.backEnabled = !!(data.navState.canGoBack - 1)
+        // this.backEnabled = !!(data.navState.canGoBack - 1)
       }
       if (data.permission === "web3") {
         console.log("web3-permission", this.url, new URL(data.params?.url).host)
@@ -598,6 +598,7 @@ export class BrowserTabScreenViewModel {
   navChanged(nav) {
     console.log("NAV-CHANGED", nav)
     this.backEnabled = nav.canGoBack
+    console.log(this.backEnabled)
     this.forwardEnabled = nav.canGoForward
     this.url = nav.url
     this.title = nav.title

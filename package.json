@@ -98,6 +98,7 @@
     "react-native-snap-carousel": "^4.0.0-beta.6",
     "react-native-sticky-parallax-header": "^0.4.1",
     "react-native-svg": "^12.1.1",
+    "react-native-swipe-gestures": "^1.0.5",
     "react-native-tcp": "^3.3.2",
     "react-native-udp": "^2.7.0",
     "react-native-ui-lib": "^6.4.0",

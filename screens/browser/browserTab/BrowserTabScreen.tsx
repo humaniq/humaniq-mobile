@@ -2,27 +2,21 @@ import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
 import { BrowserTabScreenViewModel } from "./BrowserTabScreenViewModel"
 import React, { useEffect, useRef } from "react"
-import { View } from "react-native-ui-lib"
+import { Colors, TouchableOpacity, View } from "react-native-ui-lib"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
 import WebView from "react-native-webview"
-import {
-  ApprovalDappConnectDialogViewModel
-} from "../../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialogViewModel"
-import {
-  ApprovalDappConnectDialog
-} from "../../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialog"
 import { BrowserHeader } from "../../../components/browserHeader/BrowserHeader"
-import { ExploreModalViewModel } from "../ExploreModalViewModel"
 import { getBrowserStore } from "../../../App";
-import { SelectWalletDialog } from "../../../components/dialogs/selectWalletDialog/SelectWalletDialog";
 import {
   SelectWalletDialogViewModel
 } from "../../../components/dialogs/selectWalletDialog/SelectWalletDialogViewModel";
 import {
   SelectNetworkDialogViewModel
 } from "../../../components/dialogs/selectNetworkDialog/SelectNetworkDialogViewModel";
-import { SelectNetworkDialog } from "../../../components/dialogs/selectNetworkDialog/SelectNetworkDialog";
+import { BackHandler } from "react-native";
+import { HIcon } from "../../../components/icon";
+import { CSSShadows } from "../../../utils/ui";
 
 export interface IBrowserTab {
   initialUrl: string
@@ -49,6 +43,28 @@ const BrowserTab = observer<IBrowserTab>((props) => {
       view.webviewRef = webViewRef.current
     }
   }, [ webViewRef.current ])
+
+  useEffect(() => {
+    const handleAndroidBackPress = () => {
+      if (!view.isTabActive) return false;
+      view.backEnabled ? view.goBack() : nav.goBack();
+      return true;
+    };
+
+    BackHandler.addEventListener('hardwareBackPress', handleAndroidBackPress);
+
+    // Handle hardwareBackPress event only for browser, not components rendered on top
+    nav.addListener('focus', () => {
+      BackHandler.addEventListener('hardwareBackPress', handleAndroidBackPress);
+    });
+    nav.addListener('blur', () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleAndroidBackPress);
+    });
+
+    return function cleanup() {
+      BackHandler.removeEventListener('hardwareBackPress', handleAndroidBackPress);
+    };
+  })
 
 
   return <>
@@ -89,6 +105,28 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                     source={ { uri: view.initialUrl } }
                 />
             </View>
+          { view.forwardEnabled &&
+              <View absR absV center>
+                  <TouchableOpacity padding-10 br60 marginR-8 onPress={ view.goForward }
+                                    style={ {
+                                      backgroundColor: Colors.rgba(Colors.white, 0.9), shadowColor: "#000",
+                                      ...CSSShadows
+                                    } }>
+                      <HIcon name={ "arrow-right" } size={ 18 }/>
+                  </TouchableOpacity>
+              </View>
+          }
+          { view.backEnabled &&
+              <View absL absV center>
+                  <TouchableOpacity padding-10 br60 marginL-8 onPress={ view.goBack }
+                                    style={ {
+                                      backgroundColor: Colors.rgba(Colors.white, 0.9), shadowColor: "#000",
+                                      ...CSSShadows
+                                    } }>
+                      <HIcon name={ "arrow-left" } size={ 18 }/>
+                  </TouchableOpacity>
+              </View>
+          }
         </View>
     </Animatable.View> }
   </>

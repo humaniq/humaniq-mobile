@@ -4,7 +4,7 @@ import React from "react"
 import { useInstance } from "react-ioc"
 import { SelectNetworkDialogViewModel } from "./SelectNetworkDialogViewModel"
 import Ripple from "react-native-material-ripple"
-import { getEthereumProvider, getWalletStore } from "../../../App"
+import { getEthereumProvider } from "../../../App"
 import { HIcon } from "../../icon";
 
 export const SelectNetworkDialog = observer(() => {
@@ -39,7 +39,7 @@ export const SelectNetworkDialog = observer(() => {
               <View flex-2>
                 {
                   <Avatar size={ 44 } backgroundColor={ Colors.greyLight }>
-                    <HIcon name={ "wallet" } size={ 20 } style={ { color: Colors.primary } }/>
+                    <HIcon name={ "network" } size={ 20 } style={ { color: Colors.primary } }/>
                   </Avatar>
                 }
               </View>
