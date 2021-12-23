@@ -16,7 +16,7 @@ export const ExploreModal = observer(() => {
   return <Modal
       animationType={ "slide" }
       visible={ view.display }>
-    <View bg-primar padding-20 right style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey70 } }>
+    <View padding-20 right style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey70 } }>
       <Button link onPress={ () => {
         view.display = false
       } }

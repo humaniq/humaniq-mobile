@@ -15,6 +15,14 @@ import {
 import { BrowserHeader } from "../../../components/browserHeader/BrowserHeader"
 import { ExploreModalViewModel } from "../ExploreModalViewModel"
 import { getBrowserStore } from "../../../App";
+import { SelectWalletDialog } from "../../../components/dialogs/selectWalletDialog/SelectWalletDialog";
+import {
+  SelectWalletDialogViewModel
+} from "../../../components/dialogs/selectWalletDialog/SelectWalletDialogViewModel";
+import {
+  SelectNetworkDialogViewModel
+} from "../../../components/dialogs/selectNetworkDialog/SelectNetworkDialogViewModel";
+import { SelectNetworkDialog } from "../../../components/dialogs/selectNetworkDialog/SelectNetworkDialog";
 
 export interface IBrowserTab {
   initialUrl: string
@@ -22,13 +30,13 @@ export interface IBrowserTab {
   key: string,
   showTabs: () => any
   newTab: () => any,
-  changeAddress: () => void
-  changeNetwork: () => void
 }
 
 const BrowserTab = observer<IBrowserTab>((props) => {
   const view = useInstance(BrowserTabScreenViewModel)
   const nav = useNavigation()
+  const selectAddress = useInstance(SelectWalletDialogViewModel)
+  const selectNetwork = useInstance(SelectNetworkDialogViewModel)
   const webViewRef = useRef()
 
   useEffect(() => {
@@ -59,8 +67,8 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            goHomePage={ view.goHomePage }
                            numOfTabs={ getBrowserStore().tabs.length }
                            openTabs={ props.showTabs }
-                           changeAddress={ props.changeAddress }
-                           changeNetwork={ props.changeNetwork }
+                           changeAddress={ () => selectAddress.display = true }
+                           changeNetwork={ () => selectNetwork.display = true }
                            openNewTab={ props.newTab }
             />
             <View flex-10 flexG-10>
@@ -83,17 +91,10 @@ const BrowserTab = observer<IBrowserTab>((props) => {
             </View>
         </View>
     </Animatable.View> }
-    { view.isTabActive &&
-        <>
-            <ApprovalDappConnectDialog/>
-        </>
-    }
   </>
 })
 
 export const BrowserTabScreen = provider()(BrowserTab)
 BrowserTabScreen.register(
     BrowserTabScreenViewModel,
-    ApprovalDappConnectDialogViewModel,
-    ExploreModalViewModel
 )

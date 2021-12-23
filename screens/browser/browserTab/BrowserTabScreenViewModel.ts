@@ -109,7 +109,7 @@ export class BrowserTabScreenViewModel {
 
   reloadWebView() {
     try {
-      this.webviewRef.reload()
+      this.webviewRef?.reload()
     } catch (e) {
       console.log(e)
     }

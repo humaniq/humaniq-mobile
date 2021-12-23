@@ -8,21 +8,27 @@ import { getBrowserStore } from "../../App";
 import { TabsScreen } from "./tabs/TabsScreen";
 import { BrowserTabScreen } from "./browserTab/BrowserTabScreen";
 import { useNavigation } from "@react-navigation/native";
+import { SelectWalletDialogViewModel } from "../../components/dialogs/selectWalletDialog/SelectWalletDialogViewModel";
+import {
+  SelectNetworkDialogViewModel
+} from "../../components/dialogs/selectNetworkDialog/SelectNetworkDialogViewModel";
+import { SelectWalletDialog } from "../../components/dialogs/selectWalletDialog/SelectWalletDialog";
+import { SelectNetworkDialog } from "../../components/dialogs/selectNetworkDialog/SelectNetworkDialog";
+import {
+  ApprovalDappConnectDialogViewModel
+} from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialogViewModel";
+import { ExploreModalViewModel } from "./ExploreModalViewModel";
+import {
+  ApprovalDappConnectDialog
+} from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialog";
 
 const Browser = observer(() => {
 
   const { setActiveTab, closeTab, closeAllTabs, removeActiveTab } = getBrowserStore()
   const view = useInstance(BrowserScreenViewModel)
-  const nav = useNavigation()
-  const [ showWebViews, setShowWebViews ] = useState(true)
 
   useEffect(() => {
-    // Web Views crashing if they multiple in one moment. this is fix
-    const unsubscribe = nav.addListener('focus', async () => {
-      setTimeout(() => setShowWebViews(true), 10)
-    })
     view.init()
-    return () => unsubscribe()
   }, [])
 
   return <Screen backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }
@@ -42,26 +48,27 @@ const Browser = observer(() => {
           />
       }
       {
-          view.initialized && showWebViews && view.tabs.map(tab => <BrowserTabScreen
+          view.initialized && view.tabs.map(tab => <BrowserTabScreen
               key={ `tab_${ tab.id }` }
               id={ tab.id }
               initialUrl={ tab.url }
               showTabs={ view.showTabs }
               newTab={ view.newTab }
-              changeAddress={ () => {
-                setShowWebViews(false);
-                nav.navigate("walletsList", { goBack: true }, null, null)
-              } }
-              changeNetwork={ () => {
-                setShowWebViews(false);
-                nav.navigate("selectNetwork", { goBack: true }, null, null)
-              } }
           />)
       }
+      <SelectWalletDialog/>
+      <SelectNetworkDialog/>
+      <ApprovalDappConnectDialog/>
     </View>
     { !view.initialized && <LoaderScreen/> }
   </Screen>
 })
 
 export const BrowserScreen = provider()(Browser)
-BrowserScreen.register(BrowserScreenViewModel)
+BrowserScreen.register(
+    BrowserScreenViewModel,
+    SelectWalletDialogViewModel,
+    SelectNetworkDialogViewModel,
+    ApprovalDappConnectDialogViewModel,
+    ExploreModalViewModel,
+)
