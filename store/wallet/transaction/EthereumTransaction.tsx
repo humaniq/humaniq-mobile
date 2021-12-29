@@ -88,7 +88,8 @@ export class EthereumTransaction extends Model({
       to: this.toAddress,
       from: this.fromAddress,
       value: BigNumber.from(this.value),
-      type: 0
+      type: 0,
+      data: this.input
     }
   }
 

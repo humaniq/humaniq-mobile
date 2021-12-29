@@ -21,6 +21,16 @@ export enum NETWORK_TYPE {
   TEST = "test"
 }
 
+export interface ETHEREUM_NETWORK {
+  name: ETH_NETWORKS
+  chainID: number
+  networkID: number,
+  type: ETH_NETWORKS,
+  infuraID: string
+  infuraSecret: string
+  env: NETWORK_TYPE
+}
+
 export const ETHEREUM_NETWORKS = {
   [ETH_NETWORKS.MAINNET]: {
     name: ETH_NETWORKS.MAINNET,

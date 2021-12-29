@@ -16,6 +16,8 @@ import { resemblesAddress } from "../../../utils/address"
 import { ethErrors } from 'eth-json-rpc-errors'
 import { SendTransactionViewModel } from "../../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { IBrowserTab } from "./BrowserTabScreen";
+import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
+import { InteractionManager } from "react-native";
 
 export class BrowserTabScreenViewModel {
 
@@ -93,12 +95,23 @@ export class BrowserTabScreenViewModel {
     this.url = this.storedTab.url
     this.go(props.initialUrl, true)
 
+
     this.disposerChangeNetwork = reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
-      this.reloadWebView()
+      // this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
+      // this.reloadWebView()
+
+      this.postMessage({
+        type: "networkChanged",
+        data: getEthereumProvider().currentNetwork.networkID,
+      })
     })
 
     this.disposerChangeAddress = reaction(() => getSnapshot(getWalletStore().selectedWallet.address), () => {
-      this.reloadWebView()
+      // this.reloadWebView()
+      this.postMessage({
+        type: "accountsChanged",
+        data: [ getWalletStore().selectedWallet.address ],
+      })
     })
   }
 
@@ -107,9 +120,28 @@ export class BrowserTabScreenViewModel {
     this.disposerChangeNetwork()
   }
 
-  reloadWebView() {
+  async reloadWebView() {
+    console.log("reload-web-view")
     try {
+      // this.postMessage({
+      //   type: "networkChanged",
+      //   data: getEthereumProvider().currentNetwork.networkID,
+      // })
+      // this.postMessage({
+      //   type: "accountsChanged",
+      //   data: [ getWalletStore().selectedWallet.address ],
+      // })
       this.webviewRef?.reload()
+
+      this.postMessage({
+        type: "networkChanged",
+        data: getEthereumProvider().currentNetwork.networkID,
+      })
+      this.postMessage({
+        type: "accountsChanged",
+        data: [ getWalletStore().selectedWallet.address ],
+      })
+
     } catch (e) {
       console.log(e)
     }
@@ -226,7 +258,7 @@ export class BrowserTabScreenViewModel {
   async onMessage({ nativeEvent }) {
     let data = nativeEvent.data
     try {
-      console.log(data)
+      // console.log(data)
       data = typeof data === 'string' ? JSON.parse(data) : data
       if (!data || !data.type) {
         return
@@ -279,23 +311,16 @@ export class BrowserTabScreenViewModel {
       }
 
       if (data.type === "web3-send-async-read-only") {
-        console.log(data.payload.method)
         switch (data.payload.method) {
-          case 'eth_getTransactionByHash':
+          case 'eth_blockNumber':
             this.postAsyncCallbackMessage({
-              result: await this.polyfillGasPrice('getTransactionByHash', data.params),
+              result: await getEthereumProvider().currentProvider.getBlockNumber(),
               data
             })
             break
-          case 'eth_getTransactionByBlockHashAndIndex':
+          case 'eth_call':
             this.postAsyncCallbackMessage({
-              result: await this.polyfillGasPrice('eth_getTransactionByBlockHashAndIndex', data.params),
-              data
-            })
-            break
-          case 'eth_getTransactionByBlockNumberAndIndex':
-            this.postAsyncCallbackMessage({
-              result: await this.polyfillGasPrice('eth_getTransactionByBlockNumberAndIndex', data.params),
+              result: await getEthereumProvider().currentProvider.call(data.payload.params[0]),
               data
             })
             break
@@ -321,6 +346,7 @@ export class BrowserTabScreenViewModel {
           case 'eth_sendTransaction': {
             if (this.sendTransactionDialog.display) return
             await this.sendTransactionDialog.init(data.payload.params[0], data.meta)
+
             const approved = await new Promise((resolve, reject) => {
               this.sendTransactionDialog.approvalRequest = {
                 resolve,
@@ -328,25 +354,38 @@ export class BrowserTabScreenViewModel {
               }
             })
 
-            if (approved) {
-              try {
-                // @ts-ignore
-                const result = await getWalletStore().selectedWallet.ether.sendTransaction(approved.tx)
-                this.sendTransactionDialog.txHash = result.hash
+            console.log({ approved })
+            this.sendTransactionDialog.display = false
+            InteractionManager.runAfterInteractions(async () => {
+              if (approved) {
+                try {
+                  const tx = new EthereumTransaction(approved.tx)
+                  console.log(tx)
+                  await tx.sendTransaction()
+                  console.log("hash", tx.hash)
+                  this.postAsyncCallbackMessage({
+                    result: tx.hash,
+                    data
+                  })
+
+                  tx.applyToWallet()
+                  setTimeout(() => {
+                    tx.waitTransaction()
+                  }, 10)
+
+                } catch (e) {
+                  console.log("ERROR", e)
+                  this.postAsyncCallbackMessage({
+                    result: e,
+                    data
+                  })
+                }
+              } else {
                 this.postAsyncCallbackMessage({
-                  result: { hash: result.hash, message: "success" },
-                  data
-                })
-              } catch (e) {
-                this.postAsyncCallbackMessage({
-                  result: { message: 'error', error: e },
+                  result: "user rejected request",
                   data
                 })
               }
-            }
-            this.postAsyncCallbackMessage({
-              result: { message: 'rejected' },
-              data
             })
             break
           }
@@ -398,8 +437,6 @@ export class BrowserTabScreenViewModel {
             break
           }
           case "eth_signTypedData": {
-            const firstParam = data.payload.params[0]
-            const secondParam = data.payload.params[1]
             const pageMeta = {
               meta: {
                 url: this.url,
@@ -408,13 +445,8 @@ export class BrowserTabScreenViewModel {
               }
             }
             const params = {
-              data: firstParam,
-              from: secondParam
-            }
-
-            if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
-              params.data = secondParam
-              params.from = firstParam
+              data: data.payload.params[1],
+              from: data.payload.params[0]
             }
             this.postAsyncCallbackMessage({
               result: await getAppStore().typedMessageManager.addUnapprovedMessageAsync(
@@ -429,12 +461,9 @@ export class BrowserTabScreenViewModel {
             break
           }
           case 'eth_signTypedData_v3': {
-
-            const firstParam = data.payload.params[0]
-            const secondParam = data.payload.params[1]
             const params = {
-              data: firstParam,
-              from: secondParam
+              from: data.payload.params[0],
+              data: JSON.parse(data.payload.params[1])
             }
 
             const pageMeta = {
@@ -445,19 +474,16 @@ export class BrowserTabScreenViewModel {
               }
             }
 
-            if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
-              params.data = secondParam
-              params.from = firstParam
-            }
-
-            const chainId = JSON.parse(params.data).domain.chainId
+            const chainId = params.data.domain.chainId
             const activeChainId = getEthereumProvider().currentNetwork.chainID
 
-            // eslint-disable-next-line
-            if (chainId && chainId != activeChainId) {
-              throw ethErrors.rpc.invalidRequest(
-                  `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
-              )
+            if (chainId && chainId !== activeChainId) {
+              this.postAsyncCallbackMessage({
+                result: ethErrors.rpc.invalidRequest(
+                    `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
+                ),
+                data
+              })
             }
 
             this.postAsyncCallbackMessage({
@@ -473,11 +499,9 @@ export class BrowserTabScreenViewModel {
             break
           }
           case 'eth_signTypedData_v4': {
-            const firstParam = data.payload.params[0]
-            const secondParam = data.payload.params[1]
             const params = {
-              data: firstParam,
-              from: secondParam
+              from: data.payload.params[0],
+              data: JSON.parse(data.payload.params[1])
             }
 
             const pageMeta = {
@@ -488,19 +512,16 @@ export class BrowserTabScreenViewModel {
               }
             }
 
-            if (resemblesAddress(firstParam) && !resemblesAddress(secondParam)) {
-              params.data = secondParam
-              params.from = firstParam
-            }
-
-            const chainId = JSON.parse(params.data).domain.chainId
+            const chainId = params.data.domain.chainId
             const activeChainId = getEthereumProvider().currentNetwork.chainID
 
-            // eslint-disable-next-line
-            if (chainId && chainId != activeChainId) {
-              throw ethErrors.rpc.invalidRequest(
-                  `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
-              )
+            if (chainId && chainId !== activeChainId) {
+              this.postAsyncCallbackMessage({
+                result: ethErrors.rpc.invalidRequest(
+                    `Provided chainId (${ chainId }) must match the active chainId (${ activeChainId })`
+                ),
+                data
+              })
             }
 
             this.postAsyncCallbackMessage({
@@ -515,6 +536,11 @@ export class BrowserTabScreenViewModel {
             })
             break
           }
+          default:
+            this.postAsyncCallbackMessage({
+              result: await getEthereumProvider().jsonRPCProvider.send(data.payload.method, data.payload.params),
+              data
+            })
         }
       }
     } catch (e) {
@@ -561,6 +587,14 @@ export class BrowserTabScreenViewModel {
     if (nativeEvent.loading) return
     console.log("END-LOADING")
     this.webviewRef.injectJavaScript(JS_POST_MESSAGE_TO_PROVIDER(JSON.stringify({ type: 'getPageInfo' })))
+    this.postMessage({
+      type: "networkChanged",
+      data: getEthereumProvider().currentNetwork.networkID,
+    })
+    this.postMessage({
+      type: "accountsChanged",
+      data: [ getWalletStore().selectedWallet.address ],
+    })
     const { hostname: currentHostname } = this.url ? new URL(this.url) : { hostname: this.initialUrl }
     const { hostname } = new URL(nativeEvent.url)
     if (currentHostname === hostname) {

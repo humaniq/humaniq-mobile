@@ -38,6 +38,12 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
 
   useEffect(() => {
     view.init(route.params?.force)
+    nav.addListener('focus', async () => {
+      if (!carouselBodyRef.current) return
+      if (carouselBodyRef?.current.currentIndex !== getWalletStore().selectedWalletIndex) {
+        carouselTittleRef?.current.snapToItem(getWalletStore().selectedWalletIndex)
+      }
+    })
   }, [])
 
   useEffect(() => {

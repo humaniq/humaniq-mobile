@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Colors, LoaderScreen, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
@@ -7,7 +7,6 @@ import { Screen } from "../../components";
 import { getBrowserStore } from "../../App";
 import { TabsScreen } from "./tabs/TabsScreen";
 import { BrowserTabScreen } from "./browserTab/BrowserTabScreen";
-import { useNavigation } from "@react-navigation/native";
 import { SelectWalletDialogViewModel } from "../../components/dialogs/selectWalletDialog/SelectWalletDialogViewModel";
 import {
   SelectNetworkDialogViewModel

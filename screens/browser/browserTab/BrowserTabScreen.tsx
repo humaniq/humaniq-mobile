@@ -78,7 +78,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            title={ view.title }
                            url={ view.storedTab.url }
                            icon={ view.icon }
-                           reloadPage={ view.webviewRef?.reload }
+                           reloadPage={ view.reloadWebView }
                            onSearchSubmit={ view.onSearchSubmit }
                            goHomePage={ view.goHomePage }
                            numOfTabs={ getBrowserStore().tabs.length }
@@ -103,6 +103,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                     onShouldStartLoadWithRequest={ view.onShouldStartLoadWithRequest }
                     injectedJavaScriptBeforeContentLoaded={ view.entryScriptWeb3 }
                     source={ { uri: view.initialUrl } }
+                    onError={ console.log }
                 />
             </View>
           { view.forwardEnabled &&

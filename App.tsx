@@ -8,6 +8,7 @@
  * @format
  */
 import "./shim"
+import "react-native-get-random-values"
 import "react-native-gesture-handler"
 import React, { useEffect, useRef } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"

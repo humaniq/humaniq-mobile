@@ -49,9 +49,9 @@ export const MessageSign = observer(() => {
                   text60>{ t('signatureRequest.signing') }</Text>
         </View>
         <View row spread>
-            <Button onPress={ rejectMessage } outline outlineColor={ Colors.purple40 } marginH-10
+            <Button onPress={ rejectMessage } outline outlineColor={ Colors.error } marginH-10
                     label={ t('common.deny') }/>
-            <Button onPress={ signMessage } outline outlineColor={ Colors.green40 } marginH-10
+            <Button onPress={ signMessage } outline outlineColor={ Colors.primary } marginH-10
                     label={ t('common.sign') }/>
         </View>
     </View>

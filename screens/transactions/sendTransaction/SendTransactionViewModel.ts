@@ -34,7 +34,7 @@ export class SendTransactionViewModel {
 
   txData = {
     chainId: 0,
-    nonce: "",
+    nonce: undefined,
     value: "",
     to: "",
     gasLimit: 21000,
@@ -208,16 +208,16 @@ export class SendTransactionViewModel {
   get enoughBalance() {
     try {
       if (this.token.symbol === "ETH") {
-        return BigNumber.from(this.wallet.balances.amount)
+        return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
             .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                     BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
                 )
-            )
+            ): false
       } else {
-        return BigNumber.from(this.token.balance)
+        return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
                 .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
-            BigNumber.from(this.wallet.balances.amount)
-                .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))
+            BigNumber.from(this.wallet.balances?.amount)
+                .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)) : false
       }
     } catch (e) {
       console.log("ERROR-enough-balance", e)
@@ -237,7 +237,7 @@ export class SendTransactionViewModel {
 
   get isTransferAllow() {
     try {
-      return !(!this.wallet?.balances.amount || !this.parsedValue || !this.enoughBalance);
+      return !(!this.wallet?.balances?.amount || !this.parsedValue || !this.enoughBalance);
     } catch (e) {
       console.log(e)
       return false

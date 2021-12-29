@@ -12,7 +12,7 @@ export const SigningDialog = observer(() => {
     return <Dialog
             ignoreBackgroundPress
             width={ "100%" }
-            containerStyle={ { backgroundColor: Colors.grey80, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
+            containerStyle={ { backgroundColor: Colors.bg, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
             visible={ getAppStore().signMessageDialogDisplay }
             bottom
     >

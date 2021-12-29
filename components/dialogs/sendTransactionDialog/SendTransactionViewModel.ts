@@ -1,136 +1,146 @@
 import { makeAutoObservable } from "mobx"
 import { getEthereumProvider, getWalletStore } from "../../../App"
-import { ethers } from "ethers"
-import { amountFormat, currencyFormat } from "../../../utils/number"
+import { BigNumber, ethers } from "ethers"
+import { currencyFormat } from "../../../utils/number"
 
 export class SendTransactionViewModel {
-    display = false
-    pending = false
-    initialized = false
-    symbol = "ETH"
-    txHash = ""
+  display = false
+  pending = false
+  initialized = false
+  sending = false
+  symbol = "ETH"
+  txHash = ""
 
-    approvalRequest
+  approvalRequest
 
-    meta: {
-        url: ""
+  meta: {
+    url: ""
+  }
+
+  txData = {
+    data: undefined,
+    chainId: 0,
+    gasPrice: 0,
+    gasLimit: 21000,
+    nonce: undefined,
+    value: 0,
+    to: "",
+    from: ""
+  }
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  async init(txData, meta) {
+    this.pending = true
+    this.meta = meta
+    this.txData = {
+      ...this.txData,
+      ...txData
     }
+    this.display = true
+    this.initialized = true
+    this.txData.chainId = getEthereumProvider().currentNetwork.chainID
+    const [ nonce, gasPrice ] = await Promise.all([
+      await getEthereumProvider().currentProvider.getTransactionCount(this.selectedWallet.address, "pending"),
+      await getEthereumProvider().currentProvider.getGasPrice()
+    ])
+    this.txData.nonce = nonce
+    this.txData.gasLimit = +(txData.gas.toString())
+    this.txData.gasPrice = gasPrice && +(gasPrice.toString())
+    this.pending = false
+    console.log(txData, this.txData)
+  }
 
-    txData = {
-        chainId: 0,
-        gas: 0,
-        gasPrice: 0,
-        nonce: "",
-        value: "",
-        to: "",
-        estimateGas: "",
-        estimateGasLimit: 21000,
-        from: ""
-    }
+  get hostname() {
+    return this.meta?.url ? new URL(this.meta.url).hostname : ""
+  }
 
-    constructor() {
-        makeAutoObservable(this)
-    }
+  get selectedWallet() {
+    return getWalletStore().selectedWallet
+  }
 
-    async init(txData, meta) {
-        this.pending = true
-        this.meta = meta
-        this.txData = {
-            ...this.txData,
-            ...txData
-        }
-        this.display = true
-        this.initialized = true
-        this.txData.chainId = getEthereumProvider().currentNetwork.chainID
-        const [ nonce, estimateGas ] = await Promise.all([
-            await getEthereumProvider().currentProvider.getTransactionCount(this.selectedWallet.address, "pending"),
-            await getEthereumProvider().currentProvider.getGasPrice()
-        ])
-        this.txData.nonce = nonce
-        this.txData.estimateGas = estimateGas
-        this.pending = false
-    }
+  get transactionMaxFee() {
+    return this.txData.gasLimit ? +ethers.utils.formatEther(this.txData.gasLimit * this.txData.gasPrice) : 0
+  }
 
-    get hostname() {
-        return this.meta?.url ? new URL(this.meta.url).hostname : ""
-    }
+  get transactionFee() {
+    return this.txData.gasLimit ? +ethers.utils.formatEther(+this.txData.gasLimit * this.txData.gasPrice) : 0
+  }
 
-    get selectedWallet() {
-        return getWalletStore().selectedWallet
-    }
+  get transactionTotalAmount() {
+    return this.txData.gasLimit ? +ethers.utils.formatEther(this.txData.value) + this.transactionFee : 0
+  }
 
-    get transactionMaxFee() {
-        return this.txData.gasPrice ? +ethers.utils.formatEther(this.txData.gasPrice * this.txData.gas) : 0
-    }
+  get price() {
+    return getWalletStore().selectedWallet.prices?.usd || 0
+  }
 
-    get transactionFee() {
-        return this.txData.estimateGas ? +ethers.utils.formatEther(+this.txData.estimateGas * this.txData.estimateGasLimit) : 0
-    }
+  get isPriseLoading() {
+    return !this.price
+  }
 
-    get transactionTotalAmount() {
-        return this.txData.estimateGas ? +ethers.utils.formatEther(this.txData.value) + this.transactionFee : 0
+  get txHumanReadable() {
+    return {
+      value: +ethers.utils.formatEther(this.txData.value),
+      valueFiat: currencyFormat(+ethers.utils.formatEther(this.txData.value) * this.price),
+      feeMax: this.transactionMaxFee,
+      fee: this.transactionFee,
+      feeFiat: currencyFormat(this.transactionFee * this.price),
+      total: this.transactionTotalAmount,
+      totalFiat: currencyFormat(+this.transactionTotalAmount * this.price),
+      maxAmount: +ethers.utils.formatEther(this.txData.value) + this.transactionMaxFee,
     }
+  }
 
-    get price() {
-        return getWalletStore().selectedWallet.prices?.usd || 0
+  get txBody() {
+    return {
+      chainId: this.txData.chainId.toString(),
+      nonce: this.txData.nonce.toString(),
+      gasPrice: this.txData.gasPrice.toString(),
+      gas: this.txData.gasLimit.toString(),
+      toAddress: this.txData.to,
+      walletAddress: this.selectedWallet.address,
+      fromAddress: this.txData.from,
+      value: this.txData.value.toString(),
+      input: this.txData.data,
+      blockTimestamp: new Date(),
+      prices: {
+        usd: this.price
+      },
+      type: 0
     }
+  }
 
-    get isPriseLoading() {
-        return !this.price
-    }
+  get enoughBalance() {
+    return this.selectedWallet.balances?.amount ? BigNumber.from(this.selectedWallet.balances?.amount)
+        .gt(BigNumber.from((+this.txData.value).toString()).add(
+                BigNumber.from(this.txData.gasLimit * +this.txData.gasPrice)
+            )
+        ) : false
+  }
 
-    get txHumanReadable() {
-        return {
-            value: +ethers.utils.formatEther(this.txData.value),
-            valueFiat: currencyFormat(+ethers.utils.formatEther(this.txData.value) * this.price),
-            feeMax: this.transactionMaxFee,
-            fee: this.transactionFee,
-            feeFiat: currencyFormat(this.transactionFee * this.price),
-            total: this.transactionTotalAmount,
-            totalFiat: currencyFormat(+this.transactionTotalAmount * this.price),
-            maxAmount: +ethers.utils.formatEther(this.txData.value) + this.transactionMaxFee
-        }
-    }
+  /**
+   * When user clicks on approve to connect with a dapp
+   */
+  onAccountsConfirm = async () => {
+    this.pending = true
+    this.approvalRequest.resolve({ tx: this.txBody, meta: this.meta })
+  }
 
-    get txBody() {
-        return {
-            chainId: this.txData.chainId,
-            nonce: this.txData.nonce,
-            gasPrice: this.txData.estimateGas,
-            gasLimit: this.txData.estimateGasLimit,
-            to: this.txData.to,
-            from: this.txData.from,
-            value: this.txData.value
-        }
-    }
+  /**
+   * When user clicks on reject to connect with a dapp
+   */
+  onAccountsRejected = () => {
+    // this.clear()
+    this.display = false
+    this.approvalRequest.resolve(false)
+  }
 
-    get diffBalanceTotal() {
-        return +amountFormat(this.selectedWallet.ethBalance - this.transactionTotalAmount, 8)
-    }
-
-    get enoughBalance() {
-        return this.diffBalanceTotal >= 0
-    }
-
-    /**
-     * When user clicks on approve to connect with a dapp
-     */
-    onAccountsConfirm = () => {
-        this.approvalRequest.resolve({ tx: this.txBody, meta: this.meta })
-    }
-
-    /**
-     * When user clicks on reject to connect with a dapp
-     */
-    onAccountsRejected = () => {
-        // this.clear()
-        this.display = false
-        this.approvalRequest.resolve(false)
-    }
-
-    clear() {
-        this.txData = null
-        this.txHash = null
-        this.meta = null
-    }
+  clear() {
+    this.txData = null
+    this.txHash = null
+    this.meta = null
+  }
 }

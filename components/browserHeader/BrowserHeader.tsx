@@ -95,12 +95,14 @@ export const BrowserHeader = observer<HeaderProps>((
             />
         </View>
     }
-    <View flex-1 row paddingL-10 center>
+    <View flex-1 row center paddingL-10>
       <Ripple
+          style={ { padding: 10 } }
           rippleColor={ Colors.primary }
           onPress={ openTabs }
       >
-        <View center paddingH-6 paddingV-1 style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8 } }>
+        <View center paddingH-6 paddingV-2
+              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 28 } }>
           <Text center>
             { numOfTabs }
           </Text>
@@ -118,7 +120,10 @@ export const BrowserHeader = observer<HeaderProps>((
           useSideTip={ false }
           customContent={
             <View>
-              <TouchableOpacity row centerV left onPress={ reloadPage } padding-10>
+              <TouchableOpacity row centerV left onPress={ () => {
+                setVisible(false);
+                reloadPage()
+              } } padding-10>
                 <HIcon name={ "redo-alt" } size={ 16 }/>
                 <Text marginL-10 text16>{ t("browserScreen.reloadPage") }</Text>
               </TouchableOpacity>

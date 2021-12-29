@@ -1,5 +1,5 @@
 import { _await, Model, model, modelFlow, objectMap, tProp as p, types as t } from "mobx-keystone"
-import uuid from "react-native-uuid"
+import { v4 as uuidv4 } from 'uuid';
 import { create } from "apisauce";
 import { TOKEN_LOGO_URL } from "../../config/api";
 import { localStorage } from "../../utils/localStorage";
@@ -55,6 +55,6 @@ export class DictionaryStore extends Model({
       decimals: t.decimals,
       type: t.type
     }))
-    this.initialized = uuid.v4()
+    this.initialized = uuidv4()
   }
 }

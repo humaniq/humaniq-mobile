@@ -3,8 +3,11 @@ import { ETH_NETWORKS, ETHEREUM_NETWORKS, PROVIDER_TYPE } from "../../config/net
 import { computed, reaction } from "mobx"
 import * as storage from "../../utils/localStorage"
 import { ethers } from "ethers"
-import uuid from "react-native-uuid"
+import { v4 as uuidv4 } from 'uuid';
 import { GasStation } from "./GasStation";
+import { BaseProvider } from "@ethersproject/providers/src.ts/base-provider";
+import { JsonRpcProvider } from "@ethersproject/providers/src.ts/json-rpc-provider";
+import { getEthereumProvider } from "../../App";
 
 
 @model("EthereumProvider")
@@ -20,7 +23,8 @@ export class EthereumProvider extends Model({
   })
 }) {
 
-  currentProvider
+  currentProvider: BaseProvider
+  jsonRPCProvider: JsonRpcProvider
 
   @computed
   get networks() {
@@ -48,6 +52,11 @@ export class EthereumProvider extends Model({
               projectSecret: this.currentNetwork.infuraSecret
             }
           })
+          this.jsonRPCProvider = new ethers.providers.JsonRpcProvider({
+            url: `https://${ getEthereumProvider().currentNetworkName }.infura.io/v3/${ this.currentNetwork.infuraID }`,
+            user: this.currentNetwork.infuraID,
+            password: this.currentNetwork.infuraSecret
+          })
           break
       }
       if (!this.initialized) {
@@ -58,7 +67,7 @@ export class EthereumProvider extends Model({
           this.init()
         })
       }
-      this.initialized = uuid.v4()
+      this.initialized = uuidv4()
       this.pending = false
     } catch (e) {
       console.log("catch", e)

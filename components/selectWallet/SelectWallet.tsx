@@ -14,8 +14,8 @@ export interface IWalletsListProps {
   onBackPress?: () => void
 }
 
-export const WalletsList: React.FC<IWalletsListProps> = (props) => {
-  return <View flex>
+export const SelectWallet: React.FC<IWalletsListProps> = (props) => {
+  return <View flex bg-bg>
     <Header title={ t('walletScreen.allAddresses') } onBackPress={ props.onBackPress }/>
     <View padding-16>
       <View row spread centerV>

@@ -11,7 +11,7 @@ import {
 } from "mobx-keystone"
 import { computed, observable, reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
-import uuid from "react-native-uuid"
+import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from "./Wallet"
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -88,7 +88,7 @@ export class WalletStore extends Model({
           wallet.init()
           return wallet
         }) || []
-        this.initialized = uuid.v4()
+        this.initialized = uuidv4()
       }
       if (!this.initialized) {
         reaction(() => getSnapshot(getEthereumProvider().initialized), () => {

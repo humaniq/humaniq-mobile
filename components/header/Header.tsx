@@ -14,13 +14,15 @@ export interface HeaderProps {
   title?: string;
   rightText?: string,
   icon?: ICON_HEADER
+  onBackPress?: () => void
 }
 
 export const Header = observer<HeaderProps>((
     {
       title,
       rightText,
-      icon = ICON_HEADER.ARROW
+      icon = ICON_HEADER.ARROW,
+      onBackPress
     }) => {
 
   const [ isDark, setDark ] = useState(false)
@@ -35,11 +37,13 @@ export const Header = observer<HeaderProps>((
 
   const props = rightText ? { spread: true } : {}
 
-  return <TouchableOpacity padding-20 paddingB-0 left row centerV onPress={ canGoBack && nav.goBack } { ...props }>
+  return <TouchableOpacity padding-20 paddingB-0 left row centerV onPress={ onBackPress || canGoBack && nav.goBack
+  } { ...props }>
     { canGoBack && icon === ICON_HEADER.ARROW ?
         <HIcon name={ "arrow-left" } size={ 16 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> :
         <HIcon name={ "cross" } size={ 14 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
-    { title && <Button onPress={ canGoBack && nav.goBack } paddingL-30 link textM black text20 label={ title }/> }
+    { title && <Button onPress={ onBackPress || canGoBack && nav.goBack } paddingL-30 link textM black text20
+                       label={ title }/> }
     { rightText && <Text robotoR text-grey>{ rightText }</Text> }
   </TouchableOpacity>;
 });

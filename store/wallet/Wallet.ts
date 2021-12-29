@@ -13,7 +13,7 @@ import {
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
-import uuid from "react-native-uuid"
+import { v4 as uuidv4 } from 'uuid';
 import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEthereumProvider, getMoralisRequest, getRequest } from "../../App"
@@ -80,7 +80,7 @@ export class Wallet extends Model({
         console.log("ERROR", e)
         this.isError = true
       } finally {
-        this.initialized = uuid.v4()
+        this.initialized = uuidv4()
         this.pending = false
       }
     }
@@ -92,7 +92,7 @@ export class Wallet extends Model({
       const bn = yield* _await(this.ether.getBalance())
       this.balance = this.isConnected ? bn.toString() : this.balance
       this.balances = {
-        amount: this.isConnected ? bn.toString() : this.balances.amount,
+        amount: this.isConnected ? bn.toString() : this.balances?.amount,
         amountUnconfirmed: 0,
         recomendedFee: 0
       }
@@ -136,7 +136,6 @@ export class Wallet extends Model({
       this.transactions.map.clear()
     }
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
-    const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
     this.transactions.loading = true
 
     const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.address }`))) || []
@@ -148,7 +147,7 @@ export class Wallet extends Model({
     })
 
     const result = yield getMoralisRequest().get(route, {
-      chain,
+      chain: getEthereumProvider().currentNetworkName,
       offset: this.transactions.pageSize * this.transactions.page,
       limit: this.transactions.pageSize
     })
@@ -183,8 +182,7 @@ export class Wallet extends Model({
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
       address: this.address
     })
-    const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
-    const result = yield getMoralisRequest().get(route, { chain })
+    const result = yield getMoralisRequest().get(route, { chain:  getEthereumProvider().currentNetworkName })
 
     if (result.ok && (result.data as TransactionsRequestResult).total) {
       (result.data as TransactionsRequestResult).result.forEach(r => {
@@ -218,8 +216,7 @@ export class Wallet extends Model({
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
       address: this.address
     })
-    const chain = intToHex(getEthereumProvider().currentNetwork.chainID)
-    const erc20 = yield getMoralisRequest().get(route, { chain })
+    const erc20 = yield getMoralisRequest().get(route, { chain:  getEthereumProvider().currentNetworkName })
     if (erc20.ok) {
       erc20.data.forEach(t => {
         const erc20Token = new ERC20({ ...changeCaseObj(t), walletAddress: this.address })
@@ -258,7 +255,7 @@ export class Wallet extends Model({
 
   @computed
   get valBalance() {
-    return this?.balances?.amount ? preciseRound(+ethers.utils.formatEther(ethers.BigNumber.from(this.balances.amount.toString()))) : 0
+    return this?.balances?.amount ? preciseRound(+ethers.utils.formatEther(ethers.BigNumber.from(this.balances?.amount.toString()))) : 0
   }
 
   @computed

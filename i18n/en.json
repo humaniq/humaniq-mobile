@@ -153,8 +153,10 @@
     "title": "Select token"
   },
   "approvalDappConnectDialog": {
-    "wontToConnect": "want to connect",
-    "attention": "With you agreement, you allow DApp get address your wallet and connect Web3"
+    "wontToConnect": "Connect to",
+    "attention": "With you agreement, you allow DApp get address your wallet and connect Web3",
+    "deny": "Maybe later",
+    "allow": "Yes, connect this address"
   },
   "profileScreen": {
     "name": "Profile",

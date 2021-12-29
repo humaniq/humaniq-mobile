@@ -64,7 +64,7 @@ const Auth = observer(function () {
                                                                        white>{ view.message }</Text></Animatable.View>
                       </View>
                       <View flex bottom paddingB-20>
-                          <Button onPress={ () => view.state = AUTH_STATE.MAIN } label={ t("common.back") }/>
+                          <Button onPress={ () => { view.state = AUTH_STATE.MAIN } } label={ t("common.back") }/>
                       </View>
                   </View>
               </Animatable.View> }
@@ -74,6 +74,7 @@ const Auth = observer(function () {
                     <View row padding-16 paddingT-25>
                         <HIcon onPress={ () => {
                           view.state = AUTH_STATE.MAIN;
+                          // @ts-ignore
                           getAppStore().setRecoverPhrase("")
                         } } name={ "arrow-left" } size={ 14 }/>
                     </View>
@@ -98,6 +99,7 @@ const Auth = observer(function () {
                                 marginRight: 15,
                               },
                               onPress: () => {
+                                // @ts-ignore
                                 getAppStore().setRecoverPhrase("")
                               }
                             } : {} }
