@@ -101,12 +101,19 @@
           return
         }
 
+        if(data.type === 'accountsChanged') {
+          window.ethereum.emit("accountsChanged", data.data)
+        }
+        if(data.type === 'networkChanged') {
+          window.ethereum.emit("networkChanged", data.data)
+        }
+
         if (callback) {
           if (data.type === "api-response") {
-            if (data.permission == 'qr-code') {
+            if (data.permission === 'qr-code') {
               qrCodeResponse(data, callback)
             } else if (data.isAllowed) {
-              if (data.permission == 'web3') {
+              if (data.permission === 'web3') {
                 var selectedAddress = data.data[0]
                 window.humaniqAppcurrentAccountAddress = selectedAddress
                 // Set deprecated metamask fields
@@ -122,7 +129,7 @@
           } else if (data.type === "web3-send-async-callback") {
             if (callback.beta) {
               if (data.error) {
-                if (data.error.code == 4100)
+                if (data.error.code === 4100)
                   callback.reject(new Unauthorized())
                 else
                   callback.reject(data.error)
@@ -172,8 +179,9 @@
       var EthereumProvider = function () {
       }
 
-      EthereumProvider.prototype.isMetaMask = true
-      EthereumProvider.prototype.isStatus = true
+      // EthereumProvider.prototype.isMetaMask = false
+      // EthereumProvider.prototype.isStatus = false
+      EthereumProvider.prototype.isHumaniq = true
       EthereumProvider.prototype.status = new StatusAPI()
       EthereumProvider.prototype.isConnected = function () {
         return false
@@ -181,6 +189,7 @@
       // Set legacy metamask fields https://docs.metamask.io/guide/ethereum-provider.html#legacy-api
       EthereumProvider.prototype.networkVersion = window.humaniqAppNetworkId
       EthereumProvider.prototype.chainId = "0x" + Number(window.humaniqAppNetworkId).toString(16)
+      EthereumProvider.prototype.networkId = window.humaniqAppNetworkId
 
       EthereumProvider.prototype._events = {}
 
@@ -230,7 +239,7 @@
             return this.sendSync(method)
           }
 
-          if (method == 'eth_requestAccounts') {
+          if (method === 'eth_requestAccounts') {
             return sendAPIrequest('web3', { url: location.href })
           }
 

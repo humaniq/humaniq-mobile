@@ -1,38 +1,49 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Colors, Text, TouchableOpacity, View } from "react-native-ui-lib";
-import FAIcon from "react-native-vector-icons/FontAwesome5";
-import { RootNavigation } from "../../navigators";
-import Ripple from "react-native-material-ripple";
+import { Button, Colors, Text, TouchableOpacity } from "react-native-ui-lib";
+import { isDarkMode } from "../../utils/ui";
+import { useNavigation } from "@react-navigation/native";
+import { HIcon } from "../icon";
+
+export enum ICON_HEADER {
+  CROSS = 'cross',
+  ARROW = 'arrow'
+}
 
 export interface HeaderProps {
-  title: string;
-  backButton?: boolean;
-  onPressMenu?: (any) => any | Promise<any>;
+  title?: string;
+  rightText?: string,
+  icon?: ICON_HEADER
+  onBackPress?: () => void
 }
 
 export const Header = observer<HeaderProps>((
-  {
-    title,
-    backButton = true,
-    onPressMenu = true
-  }) => {
-  return <View marginT-15 row center>
-    <View flex-2 left marginR-20>
-      <TouchableOpacity padding-10 paddingH-20 center onPress={ RootNavigation.goBack }>
-        { backButton &&
-        <FAIcon color={ Colors.primary } size={ 24 } name={ "angle-left" } /> }
-      </TouchableOpacity>
-    </View>
-    <View flex-6 center>
-      <Text h5 center primary>{ title }</Text>
-    </View>
-    <View flex-2 right marginR-20>
-      { onPressMenu &&
-      <Ripple onPress={ onPressMenu } rippleContainerBorderRadius={ 20 } rippleColor={ Colors.primary }>
-        <Button style={ { height: 40, width: 40 } } round backgroundColor={ Colors.dark70 }>
-          <FAIcon size={ 20 } color={ Colors.primary } name={ "ellipsis-v" } />
-        </Button></Ripple> }
-    </View>
-  </View>;
+    {
+      title,
+      rightText,
+      icon = ICON_HEADER.ARROW,
+      onBackPress
+    }) => {
+
+  const [ isDark, setDark ] = useState(false)
+  const [ canGoBack, setBack ] = useState(true)
+
+  const nav = useNavigation()
+
+  useEffect(() => {
+    setDark(isDarkMode())
+    setBack(nav.canGoBack())
+  }, [ title ])
+
+  const props = rightText ? { spread: true } : {}
+
+  return <TouchableOpacity padding-20 paddingB-0 left row centerV onPress={ onBackPress || canGoBack && nav.goBack
+  } { ...props }>
+    { canGoBack && icon === ICON_HEADER.ARROW ?
+        <HIcon name={ "arrow-left" } size={ 16 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> :
+        <HIcon name={ "cross" } size={ 14 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
+    { title && <Button onPress={ onBackPress || canGoBack && nav.goBack } paddingL-30 link textM black text20
+                       label={ title }/> }
+    { rightText && <Text robotoR text-grey>{ rightText }</Text> }
+  </TouchableOpacity>;
 });

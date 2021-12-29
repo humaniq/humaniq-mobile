@@ -4,17 +4,18 @@
  *
  * You'll likely spend most of your time in this file.
  */
-import React from "react"
+import React, { useEffect, useState } from "react"
 
-import { Colors } from "react-native-ui-lib"
-import Ionicons from "react-native-vector-icons/FontAwesome5"
-import { AnimatedTabBarNavigator } from "react-native-animated-nav-tab-bar"
+import { Colors, View } from "react-native-ui-lib"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
-import { t } from "../i18n"
 import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
+import { HIcon } from "../components/icon";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { localStorage } from "../utils/localStorage";
+
 
 const Stack = createStackNavigator()
 
@@ -36,41 +37,58 @@ export type PrimaryParamList = {
   settings: undefined
 }
 
-
-const Tab = AnimatedTabBarNavigator()
+const Tab = createMaterialBottomTabNavigator()
 
 export function MainNavigator<PrimaryParamList>() {
+  const [ seedStored, setSeedStored ] = useState(true)
+
+  useEffect(() => {
+    localStorage.load("hm-wallet-recovery-read").then(res => {
+      setSeedStored(res || false)
+    })
+  })
+
   return (
       <Tab.Navigator
-          tabBarOptions={ {
-            activeTintColor: Colors.bg,
-            inactiveTintColor: Colors.textGrey,
-            activeBackgroundColor: Colors.primary,
-            showLabels: true
-          } }
+          labeled={ false }
+          activeColor={ Colors.primary }
+          inactiveColor={ Colors.textGrey }
+          barStyle={ { backgroundColor: Colors.white, paddingBottom: 5 } }
           screenOptions={ ({ route }) => ({
+            tabBarLabelStyle: { marginTop: 10 },
             headerShown: false,
             tabBarIcon: (options) => {
-              let icon = "wallet"
               switch (route.name) {
                 case "browser":
-                  icon = "globe"
-                  break
+                  return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 } height={ 30 }
+                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                  >
+                    <HIcon name={ "globe" } size={ 20 }
+                           style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
                 case "settings":
-                  icon = "cog"
-                  break
+                  return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 } height={ 30 }
+                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                  >
+                    <HIcon
+                        name={ "cog" } size={ 20 }
+                        style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
+                default:
+                  return <View padding-5 paddingL-20 marginB-5 br50
+                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                               width={ 60 } height={ 30 }><HIcon
+                      name={ "wallet" } size={ 20 }
+                      style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
               }
-              return <Ionicons name={ icon } size={ 24 }
-                               color={ options.focused ? Colors.bg : Colors.textGrey }/>
             },
-          }) }
-          appearance={ { tabBarBackground: Colors.white, dotCornerRadius: 18 } }>
-        <Tab.Screen options={ { tabBarLabel: t("walletScreen.name") } } name="wallet"
+          }) }>
+        <Tab.Screen name="wallet"
                     component={ WalletStack }/>
-        <Tab.Screen options={ { tabBarLabel: t("browserScreen.name") } } name="browser"
+        <Tab.Screen name="browser"
                     component={ BrowserScreen }/>
-        <Tab.Screen options={ { tabBarLabel: t("settingsScreen.name") } } name="settings"
-                    component={ SettingsStack }/>
+        <Tab.Screen name="settings"
+                    component={ SettingsStack }
+                    options={ { tabBarBadge: !seedStored } }
+        />
       </Tab.Navigator>
   )
 }

@@ -12,7 +12,7 @@ export const WalletBody = observer<any>(({ address }) => {
   // const wallet = store.walletStore.allWallets.find(w => w.address === address)
   const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
   return (
-      <Card marginH-16>
+      <Card marginH-16 marginB-10>
         {
           !!wallet.initialized && <>
               <TokenItem

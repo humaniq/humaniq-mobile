@@ -5,6 +5,7 @@ import { localStorage } from "../../utils/localStorage"
 import { getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
+import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -16,12 +17,10 @@ export enum LOCKER_MODE {
   CHECK = "CHECK"
 }
 
-
 export enum TOASTER_TYPE {
   SUCCESS = 'SUCCESS',
   PENDING = 'PENDING'
 }
-
 
 @model("AppStore")
 export class AppStore extends Model({
@@ -45,19 +44,29 @@ export class AppStore extends Model({
     display: t.boolean,
     type: t.enum(TOASTER_TYPE),
     message: t.string,
-    position: t.string
+    position: t.enum(TOAST_POSITION)
   })), () => ({
     display: false,
     type: TOASTER_TYPE.PENDING,
     message: "",
-    position: "bottom"
-  }))
+    position: TOAST_POSITION.UNDER_TAB_BAR
+  })).withSetter()
 }) {
-
   messageManager = new MessageManager()
   personalMessageManager = new PersonalMessageManager()
   typedMessageManager = new TypedMessageManager()
   phishingController = new PhishingController()
+
+
+  @modelFlow
+  * logout() {
+    console.log("logout")
+    yield* _await(localStorage.remove("hm-wallet"))
+    this.setAppState(APP_STATE.AUTH)
+    this.storedPin = null
+    this.isLockerDirty = true
+    this.isLocked = false
+  }
 
   @modelFlow
   * init() {

@@ -4,15 +4,14 @@ import { getEthereumProvider, getWalletStore } from "../../../App";
 import { ERC20 } from "../../../store/wallet/erc20/ERC20";
 import { inject } from "react-ioc";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
-import { getSnapshot, runUnprotected } from "mobx-keystone";
+import { getSnapshot } from "mobx-keystone";
 import { BigNumber, ethers } from "ethers";
 import { currencyFormat } from "../../../utils/number";
-import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
+import { EthereumTransaction, TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
 import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
 import { RootNavigation } from "../../../navigators";
-import { WaitForEthTransactionViewModel } from "./WaitForEthTransactionViewModel";
 import { CommonActions } from "@react-navigation/native";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { ERC20Transaction } from "../../../store/wallet/transaction/ERC20Transaction";
@@ -35,8 +34,7 @@ export class SendTransactionViewModel {
 
   txData = {
     chainId: 0,
-    gasPrice: 0,
-    nonce: "",
+    nonce: undefined,
     value: "",
     to: "",
     gasLimit: 21000,
@@ -49,26 +47,24 @@ export class SendTransactionViewModel {
 
   selectWalletTokenDialog = inject(this, SelectWalletTokenViewModel)
   selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
-  ethTransactionToast = inject(this, WaitForEthTransactionViewModel)
 
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
     console.log({ val })
     this.txData.value = ""
-    this.tokenAddress = val
+    this.tokenAddress = val !== "ETH" ? val : ""
     this.inputFiat = false
     this.getTransactionData()
-    setTimeout(() => {
-      this.inputRef?.current?.focus()
-    }, 100)
+    if (this.tokenAddress && !this.wallet.erc20TransactionsInitialized) {
+      this.wallet.getERC20Transactions()
+    } else if (!this.wallet.transactions.initialized) {
+      this.wallet.loadTransactions()
+    }
   })
 
   changeReceiverAddress = reaction(() => this.txData.to, (val) => {
     this.txData.to = val
     this.inputFiat = false
     this.getTransactionData()
-    setTimeout(() => {
-      this.inputRef?.current?.focus()
-    }, 100)
   })
 
   changeTokenValue = reaction(() => this.txData.value, throttle(async () => {
@@ -80,12 +76,16 @@ export class SendTransactionViewModel {
   }, 200))
 
   get wallet(): Wallet {
-    return getWalletStore().allWallets.find(w => w.address === this.walletAddress)
+    return getWalletStore().walletsMap.get(this.walletAddress)
   }
 
 
   get selectedGasPrice() {
-    return (this.txData.gasPrice * this.selectTransactionFeeDialog.selected).toFixed(0)
+    return +getEthereumProvider().gasStation.selectedGasPrice
+  }
+
+  get selectedGasPriceLabel() {
+    return getEthereumProvider().gasStation.selectedGasPriceLabel
   }
 
   async init(route) {
@@ -97,7 +97,7 @@ export class SendTransactionViewModel {
       if (this.tokenAddress) {
         this.wallet.getERC20Transactions()
       } else {
-        this.wallet.getWalletTransactions()
+        this.wallet.loadTransactions(true)
       }
       this.initialized = true
     }
@@ -115,14 +115,12 @@ export class SendTransactionViewModel {
         this.contract = new ethers.Contract(this.tokenAddress, contractAbiErc20, this.wallet.ether);
       }
 
-      const [ nonce, gasPrice, gasLimit ] = await Promise.all([
+      const [ nonce, gasLimit ] = await Promise.all([
         getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
-        getEthereumProvider().currentProvider.getGasPrice(),
         this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
       ])
       console.log({ gasLimit: gasLimit && gasLimit.toString() })
       this.txData.nonce = nonce
-      this.txData.gasPrice = gasPrice.toString()
       this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
       this.pending = false
       console.log(this.txData, this.parsedValue, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
@@ -149,7 +147,7 @@ export class SendTransactionViewModel {
 
   get transactionMaxFee() {
     try {
-      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+      return  +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
     } catch (e) {
       console.log("ERROR", e)
       return 0
@@ -158,7 +156,7 @@ export class SendTransactionViewModel {
 
   get transactionFee() {
     try {
-      return this.txData.gasPrice ? +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18) : 0
+      return +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
     } catch (e) {
       console.log("ERROR", e)
       return 0
@@ -208,19 +206,18 @@ export class SendTransactionViewModel {
   }
 
   get enoughBalance() {
-    console.log(this.txData.gasLimit, this.selectedGasPrice, this.txData.gasLimit * +this.selectedGasPrice)
     try {
       if (this.token.symbol === "ETH") {
-        return BigNumber.from(this.wallet.balances.amount)
+        return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
             .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                     BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
                 )
-            )
+            ): false
       } else {
-        return BigNumber.from(this.token.balance)
+        return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
                 .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
-            BigNumber.from(this.wallet.balances.amount)
-                .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))
+            BigNumber.from(this.wallet.balances?.amount)
+                .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)) : false
       }
     } catch (e) {
       console.log("ERROR-enough-balance", e)
@@ -238,24 +235,39 @@ export class SendTransactionViewModel {
         !this.txData.to ? t("selectAddressScreen.inputMessage") : ""
   }
 
-  get txBody() {
-    return {
-      chainId: this.txData.chainId,
-      nonce: this.txData.nonce,
-      gasPrice: this.selectedGasPrice,
-      gasLimit: this.txData.gasLimit,
-      to: this.txData.to,
-      from: this.wallet?.address,
-      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals),
-    }
-  }
-
   get isTransferAllow() {
     try {
-      return !(!this.wallet?.balances.amount || !this.parsedValue || !this.enoughBalance);
+      return !(!this.wallet?.balances?.amount || !this.parsedValue || !this.enoughBalance);
     } catch (e) {
       console.log(e)
       return false
+    }
+  }
+
+  get txBody() {
+    const baseBody = {
+      chainId: this.txData.chainId.toString(),
+      nonce: this.txData.nonce.toString(),
+      gasPrice: this.selectedGasPrice.toString(),
+      gas: this.txData.gasLimit.toString(),
+      value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(), // this.txBody.value.toString(),
+      walletAddress: this.wallet.address,
+      toAddress: this.txData.to,
+      fromAddress: this.wallet?.address,
+      input: "0x",
+      blockTimestamp: new Date(),
+      prices: !this.tokenAddress ? {
+        usd: this.token.prices?.usd,
+        eur: this.token.prices?.eur
+      } : { usd: this.token.priceUSD },
+      type: 0
+    }
+    return !this.tokenAddress ? baseBody : {
+      ...baseBody,
+      decimals: this.token.decimals,
+      address: this.tokenAddress,
+      symbol: this.token.symbol,
+      receiptStatus: TRANSACTION_STATUS.PENDING
     }
   }
 
@@ -267,74 +279,15 @@ export class SendTransactionViewModel {
         this.pendingTransaction = true
       }, 10)
 
-      if (!this.tokenAddress) {
-        const etxBody = {
-          chainId: this.txBody.chainId.toString(),
-          nonce: this.txBody.nonce.toString(),
-          gasPrice: this.txBody.gasPrice,
-          gas: this.txBody.gasLimit.toString(),
-          value: this.txBody.value.toString(),
-          walletAddress: this.wallet.address,
-          toAddress: this.txBody.to,
-          fromAddress: this.txBody.from,
-          input: "0x",
-          blockTimestamp: new Date(),
-          prices: { usd: this.token.prices?.usd, eur: this.token.prices.eur },
-          type: 0
-        }
-
-        const etx = new EthereumTransaction(etxBody)
-
-        const tx = await this.wallet.ether.sendTransaction(this.txBody)
-
-        runUnprotected(() => {
-          etx.hash = tx.hash
-          etx.wait = tx.wait
-          this.wallet.transactions.set(tx.nonce, etx)
-          this.ethTransactionToast.transaction = etx
-          this.closeDialog()
-        })
-      } else {
-
-        const erc20body = {
-          nonce: this.txBody.nonce.toString(),
-          decimals: this.token.decimals,
-          address: this.tokenAddress,
-          symbol: this.token.symbol,
-          chainId: this.txBody.chainId.toString(),
-          gasPrice: this.txBody.gasPrice,
-          gas: this.txBody.gasLimit.toString(),
-          value: this.txBody.value.toString(),
-          walletAddress: this.wallet.address,
-          toAddress: this.txBody.to,
-          fromAddress: this.txBody.from,
-          blockTimestamp: new Date(),
-          prices: { usd: this.token.priceUSD },
-          receiptStatus: ""
-        }
-
-        const erc20 = new ERC20Transaction(erc20body)
-        const tx = await this.contract.transfer(erc20.toAddress, erc20.value,
-            {
-              gasPrice: erc20body.gasPrice,
-              gasLimit: erc20body.gas,
-              type: 0
-            }
-        )
-        runUnprotected(() => {
-          erc20.transactionHash = tx.hash
-          erc20.wait = tx.wait
-
-          this.token.transactions.set(tx.hash, erc20)
-
-          this.ethTransactionToast.transaction = erc20
-          try {
-            this.closeDialog()
-          } catch (e) {
-            console.log("ERROR", e)
-          }
-        })
-      }
+      const tx = !this.tokenAddress ?
+          new EthereumTransaction(this.txBody) :
+          new ERC20Transaction(this.txBody)
+      await tx.sendTransaction()
+      tx.applyToWallet()
+      setTimeout(() => {
+        tx.waitTransaction()
+        this.closeDialog()
+      }, 10)
 
       RootNavigation.dispatch(
           CommonActions.reset({
@@ -343,18 +296,6 @@ export class SendTransactionViewModel {
               {
                 name: "walletsList",
               },
-              // {
-              //   name: "mainStack",
-              //   params: {
-              //     screen: "wallet",
-              //     params: {
-              //       screen: "wallet-main",
-              //       params: {
-              //         index: 0
-              //       }
-              //     }
-              //   }
-              // },
               {
                 name: "walletTransactions",
                 params: {
@@ -381,12 +322,12 @@ export class SendTransactionViewModel {
     this.txData = {
       chainId: 0,
       gasLimit: 0,
-      gasPrice: 0,
       nonce: "",
       value: "",
       to: "",
     }
-    // this.pendingTransaction = false
+    this.pendingTransaction = false
+    getEthereumProvider().gasStation.setEnableAutoUpdate(false)
     this.display = false
   }
 

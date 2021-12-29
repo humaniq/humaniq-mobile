@@ -39,6 +39,7 @@ module.exports = {
     "no-inline-comments": 0,
     "react-native/no-inline-styles": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
+    "@typescript-eslint/ban-ts-comment": 0,
     "@typescript-eslint/explicit-function-return-type": 0,
     "@typescript-eslint/explicit-member-accessibility": 0,
     "@typescript-eslint/explicit-module-boundary-types": 0,
@@ -62,5 +63,6 @@ module.exports = {
     "no-return-assign": 2,
     "no-extra-parens": 2,
     "prefer-promise-reject-errors": 0,
+    "react-native/no-color-literals": 0
   },
 }

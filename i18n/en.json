@@ -5,6 +5,7 @@
     "back": "Back",
     "register": "Sign up",
     "login": "Sign in",
+    "signOut": "Sign out",
     "import": "Import",
     "cancellation": "Cancel",
     "send": "Send",
@@ -21,13 +22,16 @@
     "wallet": "Wallet",
     "balance": "Balance",
     "low": "Low",
-    "slow": "Медленно",
-    "normal": "Нормально",
+    "slow": "Slow",
+    "normal": "Normal",
     "medium": "Medium",
     "fast": "Fast",
     "speedUp": "Speed up",
     "receive": "Receive",
-    "sendTo": "Send to"
+    "sendTo": "Send to",
+    "refresh": "Refreshing",
+    "noData": "No data",
+    "next": "Next"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
@@ -35,25 +39,30 @@
   },
   "registerScreen": {
     "registration": "Registration",
-    "recoverFromMnemonicOne": "Recover",
+    "recoverFromMnemonicOne": "I already have a wallet",
+    "recoverPhrase": "Recovery phrase",
     "recoverFromMnemonicTwo": "from recovery phrase",
     "walletCreating": "Wallet is being created",
     "walletRecoverTitle": "Enter your recovery phrase",
-    "recoveryError": "Invalid recovery phrase"
+    "recoveryError": "Incorrect recovery phrase, please try again",
+    "recoveryDescription": "Please enter a 12 word recovery phrase",
+    "createNewWallet": "Create a new wallet"
   },
   "lockerScreen": {
     "incorrectPin": "Invalid PIN",
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
     "pinFormLoginAction": "Enter PIN code",
-    "pinFormRegisterAction": "Enter PIN code",
+    "pinFormRegisterAction": "Create PIN code",
     "pinFormConfirmationAction": "Confirm PIN code",
+    "pinFormRegisterActionDescription": "For quick access to the application",
+    "pinFormConfirmationActionDescription": "And remember your code",
     "correctPin": "PIN code verified"
   },
   "walletScreen": {
     "allAddresses": "All addresses",
     "totalBalanceTittle": "Your total balance",
-    "name": "Wallets",
+    "name": "Wallet",
     "menuDialog": {
       "createWallet": {
         "name": "Create new address",
@@ -65,11 +74,18 @@
   "browserScreen": {
     "name": "Browser",
     "searchPlaceholder": "Input URL-address",
-    "closeAllTabs": "Close all tabs"
+    "closeAllTabs": "Close all tabs",
+    "newTab": "New tab",
+    "reloadPage": "Reload page",
+    "openNewTab": "Open new tab",
+    "addToBookmarks": "Add to bookmarks",
+    "changeAddress": "Change address",
+    "changeNetwork": "Change network"
   },
   "walletMenuDialog": {
     "hideWallet": "Hide address",
-    "transactionHistory": "Transactions"
+    "transactionHistory": "Transactions",
+    "noTransactions": "Transactions will appear here"
   },
   "exportMnemonicDialog": {
     "title": "Your secret phrase",
@@ -80,8 +96,33 @@
     "editProfile": "Edit",
     "menu": {
       "ethNetwork": "Ethereum network",
-      "exportMnemonic": "Export recovery phrase"
+      "exportMnemonic": "Export recovery phrase",
+      "recoveryPhrase": "Recovery phrase",
+      "changePinCode": "Change pincode",
+      "currency": "Currency",
+      "network": "Network",
+      "aboutApplication": "About application",
+      "signOut": "Sign Out",
+      "recoveryDescription": "The recovery phrase proves wallet ownership, never diclose it to anyone. \n\nIf you lose your recovery phrase, even Humaniq will not be able to get your resources back.",
+      "recoveryWarning": "I understand the risks",
+      "recoveryBtn": "View recovery phrase",
+      "recoveryPhraseDescription": "Write these words in the right order on paper and store in a safe place . \nIf you lose device or reinstall wallet, you would need it.",
+      "recoveryPhraseWarning": "Never share your recovery phrase with anyone, store it securely!",
+      "testNets": "ETH Testnets",
+      "mainNets": "ETH Mainnet",
+      "privacyPolicyName": "Privacy policy",
+      "privacyPolicyDescription": "",
+      "termsOfServiceName": "Terms of service",
+      "termsOfServiceDescription": ""
     }
+  },
+  "selectTransactionFeeDialog": {
+    "name": "Speed up transaction by adjusting miner fee",
+    "description": "Estimated times based on each price"
+  },
+  "exitDialog": {
+    "title": "Have you secured your recovery phrase",
+    "description": "Without this you will not be able to recover your account or sign back"
   },
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
@@ -89,7 +130,7 @@
     "suggestedFee": "Suggested fee",
     "maxFee": "Max fee",
     "maxAmount": "Max amount",
-    "insufficientBalance": "You need {0} for send transaction",
+    "insufficientBalance": "Insufficient balance",
     "outerSuggestion": "TX data",
     "successSendTx": "Transaction successfully send",
     "sendTransaction": "Send",
@@ -102,7 +143,7 @@
     "nextBtn": "Next"
   },
   "selectAddressScreen": {
-    "inputMessage": "Please enter address of the recipient or use a scanner",
+    "inputMessage": "Please enter address or use a scanner",
     "inputMessageError": "Not a valid address",
     "transfer": "Transfer",
     "betweenMyAddresses": "Between my addresses",
@@ -112,8 +153,10 @@
     "title": "Select token"
   },
   "approvalDappConnectDialog": {
-    "wontToConnect": "want to connect",
-    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
+    "wontToConnect": "Connect to",
+    "attention": "With you agreement, you allow DApp get address your wallet and connect Web3",
+    "deny": "Maybe later",
+    "allow": "Yes, connect this address"
   },
   "profileScreen": {
     "name": "Profile",
@@ -152,12 +195,13 @@
       "process": "process"
     },
     "action": {
-      "outgoing": "outgoing",
-      "incoming": "incoming",
-      "undefined": "undefined",
-      "smartContract": "Smart contract",
-      "reject": "rejected transaction",
-      "pending": "Pending"
+      "outgoing": "Outgoing",
+      "incoming": "Incoming",
+      "undefined": "Undefined",
+      "smartContract": "Contract",
+      "reject": "Canceled",
+      "pending": "Pending",
+      "cancelling": "Cancelling"
     }
   },
   "sendTransaction": {
@@ -177,5 +221,12 @@
   },
   "appToasts": {
     "addressCopied": "Your public address copied"
+  },
+  "qRScanner": {
+    "allowDialog": {
+      "title": "\"Humaniq\" application requests access to the camera",
+      "message": "Required to scan codes for adding contacts and payments"
+    },
+    "scanning": "Point the camera of your phone to the QR code "
   }
 }

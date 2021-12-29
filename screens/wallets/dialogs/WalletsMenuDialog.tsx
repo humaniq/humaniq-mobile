@@ -4,7 +4,6 @@ import React from "react"
 import { useInstance } from "react-ioc"
 import { WalletsScreenModel } from "../WalletsScreenModel"
 import { observer } from "mobx-react-lite"
-import FAIcon from "react-native-vector-icons/FontAwesome5"
 import Ripple from "react-native-material-ripple"
 import { DialogHeader } from "../../../components/dialogs/dialogHeader/DalogHeader"
 
@@ -29,7 +28,6 @@ export const WalletsMenuDialog = observer(() => {
                     >
 
                         <View padding-20 row>
-                            <FAIcon size={ 20 } color={ Colors.primary } name={ i.icon }/>
                             <Text marginL-20 text60R dark20>{ i.name }</Text>
                         </View>
 

@@ -26,7 +26,7 @@ export class SelectWalletTokenViewModel {
         formatBalance: this.wallet?.formatBalance,
         onPress: () => {
           console.log("PRESS")
-          this.tokenAddress = ""
+          this.tokenAddress = "ETH"
           this.display = false
         }
       }
@@ -41,7 +41,7 @@ export class SelectWalletTokenViewModel {
       formatFiatBalance: i.formatFiatBalance,
       onPress: () => {
         console.log("PRESS")
-        this.tokenAddress = i.tokenAddress
+        this.tokenAddress = i.tokenAddress || "ETH"
         this.display = false
       },
     })))

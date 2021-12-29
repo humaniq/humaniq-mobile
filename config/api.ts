@@ -3,6 +3,7 @@ const API_MORALIS_URL = "https://deep-index.moralis.io/api/v2"
 export const MORALIS_TOKEN = "ndvgmaxPzVSe5OM7cBRsHIMQDvqn5d7HX7Zoz9bBrilJyQCIYtjPHY8nsgx1hoe8"
 export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/assets/9af1b653778b5ee8f9207dc4440c7ee22e8ce5b7/blockchains/ethereum/tokenlist.json"
 const timeout = 10000
+export const GAS_STATION_URL = "https://ethgasstation.info/api"
 
 export interface ApiConfig {
     url: string;
@@ -14,6 +15,10 @@ export const DEFAULT_API_CONFIG: ApiConfig = {
     url: API_URL,
     moralisUrl: API_MORALIS_URL,
     timeout
+}
+
+export const GAS_STATION_ROUTES = {
+    GET_GAS_FEE: "ethgasAPI.json"
 }
 
 export const ROUTES = {

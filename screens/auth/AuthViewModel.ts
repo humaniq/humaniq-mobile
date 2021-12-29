@@ -35,7 +35,6 @@ export class AuthViewModel {
             getAppStore().recoverPhrase = val
         })
         this.isValidRecover = bip39.validateMnemonic(getAppStore().recoverPhrase)
-        console.log(this.isValidRecover)
     }
 
     async recoveryWallet() {

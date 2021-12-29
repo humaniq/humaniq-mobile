@@ -1,16 +1,16 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../screen/screen"
-import { Colors, Image, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { provider, useInstance } from "react-ioc"
 import { LockerViewModel } from "./LockerViewModel"
 import Ripple from "react-native-material-ripple"
 import { t } from "../../i18n"
-import Ionicons from "react-native-vector-icons/Ionicons"
 import { RootStore } from "../../store/RootStore"
 import { reaction } from "mobx"
 import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
+import { HIcon } from "../icon";
 
 // export interface LockerProps {
 //   mode: "set|check";
@@ -35,23 +35,30 @@ const L = observer(function (props) {
 
   }, [])
 
-  return <Screen backgroundColor={ Colors.primary } statusBarBg={ Colors.primary }>
+  return <Screen backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
       { view.initialized &&
       <View flex-1>
-          <View flex bottom center>
-              <Image width={ 100 } height={ 20 }
-                     source={ require("../../assets/images/logo-brand-white.png") }/>
+          <View row padding-16 paddingT-25>
+              <HIcon onPress={ view.exit } name={ "arrow-left" } size={ 14 }/>
           </View>
+          <View flex bottom center/>
         { !view.message &&
         <View flex-1 center>
             <View row flex bottom>
               { view.mode === LOCKER_MODE.CHECK &&
-              <Text white>{ t("lockerScreen.pinFormLoginAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormLoginAction") }</Text> }
               { view.mode === LOCKER_MODE.SET && view.step === 0 &&
-              <Text white>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
               { view.mode === LOCKER_MODE.SET && view.step === 1 &&
-              <Text white>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
+              <Text robotoM text16 black>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
+            </View>
+            <View row flex paddingT-10>
+              { view.mode === LOCKER_MODE.SET && view.step === 0 &&
+              <Text robotoR marginH-80 center textGrey>{ t("lockerScreen.pinFormRegisterActionDescription") }</Text> }
+              { view.mode === LOCKER_MODE.SET && view.step === 1 &&
+              <Text robotoR marginH-80 center
+                    textGrey>{ t("lockerScreen.pinFormConfirmationActionDescription") }</Text> }
             </View>
         </View>
         }
@@ -68,25 +75,25 @@ const L = observer(function (props) {
                     width: 20,
                     height: 20,
                     borderRadius: 10,
-                    backgroundColor: view.pin.length > 0 ? "white" : Colors.primary10
+                    backgroundColor: view.pin.length > 0 ? Colors.primary : Colors.grey
                   } }/>
                   <View marginH-5 style={ {
                     width: 20,
                     height: 20,
                     borderRadius: 10,
-                    backgroundColor: view.pin.length > 1 ? "white" : Colors.primary10
+                    backgroundColor: view.pin.length > 1 ? Colors.primary : Colors.grey
                   } }/>
                   <View marginH-5 style={ {
                     width: 20,
                     height: 20,
                     borderRadius: 10,
-                    backgroundColor: view.pin.length > 2 ? "white" : Colors.primary10
+                    backgroundColor: view.pin.length > 2 ? Colors.primary : Colors.grey
                   } }/>
                   <View marginH-5 style={ {
                     width: 20,
                     height: 20,
                     borderRadius: 10,
-                    backgroundColor: view.pin.length > 3 ? "white" : Colors.primary10
+                    backgroundColor: view.pin.length > 3 ? Colors.primary : Colors.grey
                   } }/>
               </View>
           </View>
@@ -101,7 +108,7 @@ const L = observer(function (props) {
                                     onPress={ () => view.handleClick(`${ (col - 1) * 3 + row }`) }>
                               <View padding-10 width={ 80 } center
                                     style={ { borderRadius: 40 } }>
-                                <Text bg-primary text40BL white>
+                                <Text robotoR text30 black>
                                   { `${ (col - 1) * 3 + row }` }
                                 </Text>
                               </View>
@@ -116,16 +123,16 @@ const L = observer(function (props) {
                   <View margin-5 center row>
                       <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.exit }>
                           <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                              <Text bg-primary text80BL white>
-                                { t("common.cancel") }
-                              </Text>
+                              {/*<Text text80BL>*/}
+                              {/*  { t("common.cancel") }*/}
+                              {/*</Text>*/}
                           </View>
                       </Ripple>
                   </View>
                   <View margin-5 center row>
                       <Ripple onPress={ () => view.handleClick("0") } rippleColor={ "rgb(0, 0, 102)" }>
                           <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                              <Text bg-primary text40BL white>
+                              <Text robotoR text30>
                                   0
                               </Text>
                           </View>
@@ -134,9 +141,7 @@ const L = observer(function (props) {
                   <View margin-5 center row>
                       <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
                           <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                              <Text bg-primary white>
-                                  <Ionicons size={ 25 } name={ "backspace" }/>
-                              </Text>
+                              <HIcon name={ "backspace" } size={ 22 } color={ Colors.black }/>
                           </View>
                       </Ripple>
                   </View>

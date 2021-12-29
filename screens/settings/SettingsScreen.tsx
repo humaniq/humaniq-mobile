@@ -1,121 +1,117 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import {
-  ActionSheet,
-  Button,
-  Colors,
-  ListItem,
-  LoaderScreen,
-  Switch,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native-ui-lib"
+import { Button, Card, Colors, Dialog, LoaderScreen, Switch, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { SettingsScreenModel } from "./SettingsScreenModel"
-import * as Animatable from "react-native-animatable"
-import FAIcon from "react-native-vector-icons/FontAwesome5"
 import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
-import { ExportMnemonicDialog } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialog"
-import { ExportMnemonicDialogViewModel } from "../../components/dialogs/exportMnemonicDialog/ExportMnemonicDialogViewModel"
+import { HIcon } from "../../components/icon";
+import { MenuItem } from "../../components/menuItem/MenuItem";
+import { getAppStore, getEthereumProvider } from "../../App";
+import { useNavigation } from "@react-navigation/native";
+import { runUnprotected } from "mobx-keystone";
+import { localStorage } from "../../utils/localStorage";
 
-
-const Settings = observer(function () {
+const Settings = observer<{ route: any }>(function ({ route }) {
   const view = useInstance(SettingsScreenModel)
+  const nav = useNavigation()
 
   useEffect(() => {
-    view.init()
+    nav.addListener('focus', async () => {
+      view.init()
+    })
   }, [])
 
 
   return (
-      <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.dark70 }
-              statusBarBg={ Colors.dark70 }>
-        {
-          view.initialized &&
-          <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
-              <Header title={ t("settingsScreen.name") }/>
-            { view.isAllInitialized ?
-                <View row center paddingV-60>
-                  <View flex-2/>
-                  <View center>
-                    <FAIcon color={ Colors.purple40 } size={ 190 } name={ "user-circle" }/>
-                    <View style={ { position: "absolute", right: -15 } }>
-                    </View>
-                  </View>
-                  <View flex-2/>
-                </View> : <View row center paddingV-60 height={ 190 }><LoaderScreen/></View>
-            }
-              <View flex top bg-white>
-                {
-                  view.settingsMenu.map(item => {
-                    console.log(item)
-                    return <Animatable.View key={ item.id } animation={ "fadeIn" }>
-                      <TouchableOpacity
-                          accessible={ true }
-                          activeOpacity={ 0.5 }
-                      >
-                        <ListItem
-                            onPress={ (item.type === "actionSheet" || item.type === "dialog") ? item.onPress : () => null }
-                            height={ 50 }
-                        >
-                          <ListItem.Part left paddingL-20>
-                            <FAIcon color={ Colors.primary } size={ 20 } name={ item.icon }/>
-                          </ListItem.Part>
-                          <ListItem.Part middle column paddingL-20>
-                            <ListItem.Part>
-                              <Text dark10 text70 style={ { flex: 1, marginRight: 10 } }
-                                    numberOfLines={ 1 }>{ item.name }</Text>
-                            </ListItem.Part>
-                          </ListItem.Part>
-                          <ListItem.Part paddingH-20>
-                            { item.currentValue && item.type === "actionSheet" &&
-                            <Text dark10>{ item.currentValue }</Text> }
-                            { item.type === "toggle" &&
-                            <Switch onValueChange={ item.onPress }
-                                    value={ item.currentValue }/> }
-                          </ListItem.Part>
-                        </ListItem>
-                      </TouchableOpacity>
-                    </Animatable.View>
-                  })
-                }
-              </View>
-              <ActionSheet
-                  renderTitle={ () =>
-                      <TouchableOpacity onPressIn={ () => view.settingsDialog.display = false }>
-                        <View row paddingV-2 center>
-                          <View flex center paddingH-20 paddingV-5>
-                            <Button onPressIn={ () => view.settingsDialog.display = false }
-                                    avoidInnerPadding avoidMinWidth
-                                    style={ {
-                                      padding: 4,
-                                      paddingHorizontal: 20,
-                                      backgroundColor: Colors.grey40
-                                    } }/>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                  }
-                  dialogStyle={ { borderTopRightRadius: 30, borderTopLeftRadius: 30, paddingBottom: 10 } }
-                  title={ view.settingsDialog.title }
-                  message={ "Message of action sheet" }
-                  options={ view.settingsDialog.options }
-                  visible={ view.settingsDialog.display }
-                  onDismiss={ () => view.settingsDialog.display = false }
-              />
-              <ExportMnemonicDialog/>
-          </Animatable.View>
-        }
-        {
+      <>
+        <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
+                statusBarBg={ Colors.bg }>
+          {
+              view.initialized &&
+              <>
+                  <Header title={ t("settingsScreen.name") }/>
 
-          !view.initialized && <View flex center><LoaderScreen/></View>
-        }
-      </Screen>
+                  <View flex paddingT-20 paddingH-16>
+                      <Card padding-10 padding-0>
+                          <MenuItem icon={ "key" }
+                                    name={ t("settingsScreen.menu.recoveryPhrase") }
+                                    value={ !view.recoveryRead &&
+                                        <View style={ { backgroundColor: Colors.rgba(Colors.error, 0.07) } }
+                                              width={ 18 }
+                                              height={ 18 }
+                                              padding-4
+                                              br100>
+                                            <HIcon
+                                                name="warning"
+                                                size={ 9 }
+                                                color={ Colors.error }/>
+                                        </View>
+                                    }
+                                    onPress={ () => nav.navigate("recoveryPhrase") }
+                          />
+                      </Card>
+                      <Card padding-10 padding-0 marginT-16>
+                          <MenuItem icon={ "network" }
+                                    name={ t("settingsScreen.menu.network") }
+                                    value={ <Text text16
+                                                  textGrey> { getEthereumProvider().currentNetworkName } </Text> }
+                                    onPress={ () => nav.navigate("selectNetwork") }
+                          />
+                          <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                          <MenuItem icon={ "switch" }
+                                    name={ t("settingsScreen.menu.aboutApplication") }
+                                    onPress={ () => nav.navigate("aboutPage") }
+                          />
+                      </Card>
+                      <Card padding-10 padding-0 marginT-16>
+                          <MenuItem icon={ "logout" }
+                                    name={ t("settingsScreen.menu.signOut") }
+                                    showArrow={ false }
+                                    onPress={ () => view.exitDialogVisible = !view.exitDialogVisible }
+                          />
+                        { __DEV__ && <>
+                            <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                            <View row padding-16 spread>
+                                <Text>Отключить пин код?</Text>
+                                <Switch onValueChange={ (val?: boolean) => {
+                                  console.log(getAppStore().storedPin)
+                                  runUnprotected(() => {
+                                    getAppStore().storedPin = val ? getAppStore().savedPin : false
+                                  })
+                                  localStorage.save("hm-wallet-settings", getAppStore().storedPin)
+                                } }
+                                        value={ !!getAppStore().storedPin }/>
+                            </View>
+                        </> }
+                      </Card>
+                  </View>
+              </>
+          }
+          {
+
+              !view.initialized && <View flex center><LoaderScreen/></View>
+          }
+        </Screen>
+        <Dialog center visible={ view.exitDialogVisible }
+                containerStyle={ { backgroundColor: Colors.white, padding: 24 } }
+                ignoreBackgroundPress
+        >
+          <Text text16>{ t("exitDialog.title") }</Text>
+          <Text marginV-20>{ t("exitDialog.description") }</Text>
+          <View row right>
+            <Button link label={ t("common.signOut") }
+                    onPress={ () => {
+                      getAppStore().logout()
+                    } }
+            />
+            <Button marginL-20 link label={ t("common.cancel") } onPress={ () => view.exitDialogVisible = false }/>
+          </View>
+        </Dialog>
+      </>
   )
 })
 
 export const SettingsScreen = provider()(Settings)
-SettingsScreen.register(SettingsScreenModel, ExportMnemonicDialogViewModel)
+SettingsScreen.register(SettingsScreenModel)

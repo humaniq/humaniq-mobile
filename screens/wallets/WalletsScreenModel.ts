@@ -4,6 +4,7 @@ import "@ethersproject/shims";
 import { t } from "../../i18n";
 import { getAppStore, getWalletStore } from "../../App"
 import { runUnprotected } from "mobx-keystone";
+import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
 
 export class WalletsScreenModel {
@@ -18,7 +19,8 @@ export class WalletsScreenModel {
       display: false,
       message: t("walletScreen.menuDialog.createWallet.createWalletMessage"),
       walletCreated: false,
-      cancellation: false
+      cancellation: false,
+      position: TOAST_POSITION.BOTTOM
     },
     menu: {
       display: false,
@@ -71,9 +73,10 @@ export class WalletsScreenModel {
     this.refreshing = false
   }
 
-  async createWalletDialog() {
+  async createWalletDialog(position = TOAST_POSITION.BOTTOM) {
     try {
       this.walletDialogs.menu.display = false;
+      this.walletDialogs.pendingDialog.position = position
       this.walletDialogs.pendingDialog.display = true;
       setTimeout(async () => {
         await getWalletStore().addWallet()
@@ -81,12 +84,14 @@ export class WalletsScreenModel {
           this.walletDialogs.pendingDialog.walletCreated = true
           setTimeout(() => {
             this.walletDialogs.pendingDialog.display = false;
+            this.walletDialogs.pendingDialog.position = TOAST_POSITION.BOTTOM
             this.walletDialogs.pendingDialog.walletCreated = false
           }, 3000)
         }, 10)
       }, 10)
     } catch (e) {
       console.log("ERROR", e);
+      this.walletDialogs.pendingDialog.position = TOAST_POSITION.BOTTOM
       this.walletDialogs.pendingDialog.display = false;
       this.walletDialogs.pendingDialog.walletCreated = false
     }

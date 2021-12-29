@@ -12,12 +12,15 @@ import { WalletTittle } from "./wallet/WalletTittle";
 import { WalletBody } from "./wallet/WalletBody";
 import { WalletTabs } from "./wallet/WalletTabs";
 import { WalletTransactionControls } from "./wallet/WalletTransactionControls";
-import { SelfAddressQrCodeDialogViewModel } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import {
+  SelfAddressQrCodeDialogViewModel
+} from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialog } from "../../components/dialogs/menuWalletDialog/WalletMenuDialog";
 import { SelfAddressQrCodeDialog } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
-import { SendWalletTransactionViewModel } from "../../components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel";
 import { useNavigation } from "@react-navigation/native";
+import { getWalletStore } from "../../App";
+import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
 const renderBody = ({ item }) => <WalletBody { ...item } />
 
@@ -28,15 +31,19 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
   const view = useInstance(WalletsScreenModel)
   const nav = useNavigation()
   const walletMenu = useInstance(WalletMenuDialogViewModel)
-  const sendTransactionDialog = useInstance(SendWalletTransactionViewModel)
   const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
   const carouselTittleRef = useRef<Carousel<any>>()
   const carouselBodyRef = useRef<Carousel<any>>()
 
   useEffect(() => {
-    console.log("HERE")
     view.init(route.params?.force)
+    nav.addListener('focus', async () => {
+      if (!carouselBodyRef.current) return
+      if (carouselBodyRef?.current.currentIndex !== getWalletStore().selectedWalletIndex) {
+        carouselTittleRef?.current.snapToItem(getWalletStore().selectedWalletIndex)
+      }
+    })
   }, [])
 
   useEffect(() => {
@@ -54,14 +61,14 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
           style={ !view.allInitialized ? { height: "100%" } : {} }
       >
         <>
-          { !view.allInitialized && <View height={ "100%" } center><LoaderScreen/></View> }
           { view.allInitialized && <>
               <View paddingT-20 paddingL-16 left>
-                  <Button link textM primary label={ t('walletScreen.allAddresses') }
-                          onPress={ () => nav.navigate("walletsList") }
+                  <Button link textM primary
+                          label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
+                          onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                   />
               </View>
-              <View paddingB-20>
+              <View paddingB-10>
                   <View height={ 100 }>
                       <Carousel
                           vertical={ false }
@@ -77,11 +84,12 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                           renderItem={ renderTittle }
                           onSnapToItem={ index => {
                             view.activeIndex = index
+                            getWalletStore().setSelectedWalletIndex(index)
                             carouselBodyRef.current.snapToItem(index)
                           } }
                       />
                   </View>
-                  <WalletTabs index={ view.activeIndex }/>
+                { getWalletStore().wallets.length > 1 && <WalletTabs index={ view.activeIndex }/> }
                   <WalletTransactionControls/>
                   <Carousel
                       vertical={ false }
@@ -98,6 +106,9 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                   />
               </View>
           </> }
+          {
+              !view.allInitialized && <LoaderScreen/>
+          }
         </>
       </Screen> }
       after={ <View>
@@ -105,7 +116,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
         <SelfAddressQrCodeDialog/>
       </View> }
       isBlurActive={ (walletMenu.display ||
-          sendTransactionDialog.display ||
           selfAddressQrCodeDialogViewModel.display) }
   />
 })

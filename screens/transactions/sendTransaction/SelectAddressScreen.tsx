@@ -3,26 +3,28 @@ import { observer } from "mobx-react-lite";
 import {
   Button,
   Colors,
-  ExpandableSection, LoaderScreen,
+  ExpandableSection,
+  LoaderScreen,
   RadioButton,
   Text,
   TextField,
-  TouchableOpacity,
   View
 } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
 import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { Screen } from "../../../components";
-import ArrowIcon from "../../../assets/icons/arrow-left.svg";
 import { t } from "../../../i18n";
 import { useNavigation } from "@react-navigation/native";
-import UpIcon from '../../../assets/icons/up.svg'
-import DownIcon from '../../../assets/icons/down.svg'
 import { getWalletStore } from "../../../App";
 import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
-import { ScrollView } from "react-native";
+import { InteractionManager, ScrollView } from "react-native";
 import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import { Header, ICON_HEADER } from "../../../components/header/Header";
+import useKeyboard from '@rnhooks/keyboard';
+import { throttle } from "../../../utils/general";
+import CameraIcon from "../../../assets/images/camera.svg"
+import { HIcon } from "../../../components/icon";
 
 export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const view = useInstance(SendTransactionViewModel)
@@ -30,27 +32,47 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
   const inputRef = useRef()
   const selectWalletTokenView = useInstance(SelectWalletTokenViewModel)
 
+  const [ visible ] = useKeyboard();
+
   useEffect(() => {
-    // @ts-ignore
-    inputRef.current?.focus()
+    return () => {
+      view.closeDialog()
+    }
+  }, [])
+
+  useEffect(() => {
     view.init(route.params)
     selectWalletTokenView.init(view.walletAddress)
   }, [])
 
+  // @ts-ignore
+  const thr = throttle(() => {
+    InteractionManager.runAfterInteractions(() => {
+      // @ts-ignore
+      inputRef.current?.focus();
+    })
+  }, 300)
+
+  useEffect(() => {
+    try {
+      view.registerInput(inputRef)
+      // @ts-ignore
+      inputRef?.current && thr()
+    } catch (e) {
+      console.log("Error", e)
+    }
+  }, [ inputRef?.current ])
+
   return <Screen
       backgroundColor={ Colors.white }
       statusBarBg={ Colors.white }
+      style={ { height: "100%" } }
   >
-    <TouchableOpacity padding-20 paddingB-0 left row centerV spread onPress={ () => {
-      nav.goBack();
-      view.closeDialog()
-    } }>
-      <ArrowIcon height={ 16 } width={ 16 } style={ { color: Colors.primary } }/>
-      <Text robotoR text-grey>{ t('selectValueScreen.step2') }</Text>
-    </TouchableOpacity>
+    <Header icon={ ICON_HEADER.CROSS } rightText={ t('selectValueScreen.step') }/>
     { view.initialized && <>
         <View padding-16>
             <TextField
+                autoFocus
                 multiline={ true }
                 errorColor={ view.inputAddressError ? Colors.error : Colors.textGrey }
                 error={ view.inputAddressErrorMessage }
@@ -62,10 +84,19 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                 hideUnderline
                 floatingPlaceholder
                 rightButtonProps={ {
-                  iconSource: require("../../../assets/images/camera.png"),
+                  iconSource: CameraIcon, // require("../../../assets/images/camera.png"),
                   style: {
                     alignSelf: "center",
                     marginRight: 15,
+                  },
+                  onPress: () => {
+                    nav.navigate("QRScanner", {
+                      onScanSuccess: meta => {
+                        if (meta.action === "send-eth" && meta.target_address) {
+                          view.txData.to = meta.target_address
+                        }
+                      }
+                    }, undefined, undefined)
                   }
                 } }
                 floatingPlaceholderStyle={ !view.txData.to ? {
@@ -105,8 +136,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                         view.betweenMyAddress = !view.betweenMyAddress
                                       } }
                               >
-                                { !view.betweenMyAddress && <UpIcon width={ 14 } style={ { color: Colors.black } }/> }
-                                { view.betweenMyAddress && <DownIcon width={ 14 } style={ { color: Colors.black } }/> }
+                                { !view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
+                                { view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
                               </Button>
                             </View>)() }
                     >
@@ -119,7 +150,8 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                           {
                             getWalletStore().allWallets.map(w => {
                               return <View key={ w.address }>
-                                <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey } }/>
+                                <View
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 10 } }/>
                                 <Ripple onPress={ () => {
                                   if (view.txData.to === w.address) {
                                     view.txData.to = ""
@@ -127,9 +159,11 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                     view.txData.to = w.address
                                   }
                                 } } rippleColor={ Colors.primary }>
-                                  <View margin-12 row spread>
+                                  <View margin-12 row spread paddingR-3>
                                     <Text text16>{ w.formatAddress }</Text>
-                                    <RadioButton selected={ view.txData.to === w.address }/>
+                                    <RadioButton size={ 20 }
+                                                 color={ view.txData.to !== w.address ? Colors.textGrey : Colors.primary }
+                                                 selected={ view.txData.to === w.address }/>
                                   </View>
                                 </Ripple></View>
                             })
@@ -138,7 +172,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                     </ExpandableSection>
                 </View>
             </ScrollView>
-            <View style={ { width: "100%" } } center absB row padding-20 bg-bg>
+            <View center row padding-20 bg-bg style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                 <Button disabled={ view.inputAddressError || !view.txData.to }
                         style={ { width: "100%", borderRadius: 12 } }
                         label={ t("selectValueScreen.nextBtn") }
@@ -152,7 +186,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
         </View>
     </> }
     {
-      !view.initialized && <LoaderScreen />
+      !view.initialized && <LoaderScreen/>
     }
   </Screen>
 })

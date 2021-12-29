@@ -5,6 +5,7 @@
     "back": "Назад",
     "register": "Регистрация",
     "login": "Вход",
+    "signOut": "Выход",
     "import": "Импортировать",
     "cancellation": "Отмена",
     "send": "Отправить",
@@ -27,7 +28,10 @@
     "fast": "Быстро",
     "speedUp": "Ускорить",
     "receive": "Получить",
-    "sendTo": "К отправке"
+    "sendTo": "К отправке",
+    "refresh": "Обновление",
+    "noData": "Нет данных",
+    "next": "Next"
   },
   "errors": {
     "invalidEmail": "Invalid email address.",
@@ -35,19 +39,24 @@
   },
   "registerScreen": {
     "registration": "Регистрация",
-    "recoverFromMnemonicOne": "Восстановить",
+    "recoverFromMnemonicOne": "У меня уже есть кошелек",
     "recoverFromMnemonicTwo": "по секретной фразе",
+    "recoverPhrase": "Фраза восстановления",
     "walletCreating": "Кошелек создается",
     "walletRecoverTitle": "Введите фразу восстановления",
-    "recoveryError": "Неправильная фраза восстановления"
+    "recoveryError": "Неправильная фраза восстановления",
+    "recoveryDescription": "Пожалуйста введите фразу восстановления",
+    "createNewWallet": "Создать новый кошелек"
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",
     "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
     "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
     "pinFormLoginAction": "Введите пин код",
-    "pinFormRegisterAction": "Придумайте пин код",
+    "pinFormRegisterAction": "Создайте ПИН код",
     "pinFormConfirmationAction": "Подтвердите пин код",
+    "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
+    "pinFormConfirmationActionDescription": "И вспомните свой код",
     "correctPin": "Пин код подтвержден"
   },
   "walletScreen": {
@@ -65,11 +74,18 @@
   "browserScreen": {
     "name": "Браузер",
     "searchPlaceholder": "Введите URL-адрес",
-    "closeAllTabs": "Закрыть все вкладки"
+    "closeAllTabs": "Закрыть все вкладки",
+    "newTab": "Новая вкладка",
+    "reloadPage": "Перезагрузить",
+    "openNewTab": "Новая вкладка",
+    "addToBookmarks": "Добавить в закладки",
+    "changeAddress": "Сменить кошелек",
+    "changeNetwork": "Сменить сеть"
   },
   "walletMenuDialog": {
     "hideWallet": "Скрыть адрес",
-    "transactionHistory": "Транзакции"
+    "transactionHistory": "Транзакции",
+    "noTransactions": "Транзакции появятся здесь"
   },
   "exportMnemonicDialog": {
     "title": "Ваша секретная фраза",
@@ -80,8 +96,33 @@
     "editProfile": "Редактировать",
     "menu": {
       "ethNetwork": "Сеть эфира",
-      "exportMnemonic": "Экспорт фразы восстановления"
+      "exportMnemonic": "Экспорт фразы восстановления",
+      "recoveryPhrase": "Фраза восстановления",
+      "changePinCode": "Сменить пин код",
+      "currency": "Валюта",
+      "network": "Сеть",
+      "aboutApplication": "О приложении",
+      "signOut": "Выйти",
+      "recoveryDescription": "Фраза восстановления дает полный доступ к кошельку, не передавайте ее третьим лицам. \n\nЕсли вы потеряете фразу восстановления, Humaniq не сможет помочь Вам вернуть доступ к данному кошельку.",
+      "recoveryWarning": "Я понимаю риски",
+      "recoveryBtn": "Посмотреть фразу восстановления",
+      "recoveryPhraseDescription": "Запишите эти слова в точном порядке и сохраните в надежном месте . \nЕсли вы потеряете телефон или переустановите приложение - Вам понадобится фраза восстановления",
+      "recoveryPhraseWarning": "Не показывайте свою фразу восстановления кому либо, храните ее в секрете!",
+      "testNets": "ETH Тестовые сети",
+      "mainNets": "ETH Основные сети",
+      "privacyPolicyName": "Политика конфиденциальности",
+      "privacyPolicyDescription": "",
+      "termsOfServiceName": "Условия использования",
+      "termsOfServiceDescription": ""
     }
+  },
+  "selectTransactionFeeDialog": {
+    "name": "Выбор скорости транзакции",
+    "description": "Выберите время в соответствии со стоимостью"
+  },
+  "exitDialog": {
+    "title": "Вы сохранили свою фразу восстановления?",
+    "description": "Без нее вы не сможете больше получить доступ к своему аккаунту"
   },
   "sendTransactionDialog": {
     "successTx": "Средства успешно отправлены",
@@ -89,11 +130,11 @@
     "suggestedFee": "Предлагаемая комиссия",
     "maxFee": "Комиссия",
     "maxAmount": "Максимум",
-    "insufficientBalance": "Вам нужно еще %{balance} для совершения этой транзакции",
     "outerSuggestion": "TX data",
     "successSendTx": "Транзакция успешно отправлена",
     "sendTransaction": "Отправить",
-    "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию"
+    "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию",
+    "insufficientBalance": "Недостаточно средств"
   },
   "selectValueScreen": {
     "step": "Шаг 1 из 3",
@@ -112,8 +153,10 @@
     "title": "Выбрать токен"
   },
   "approvalDappConnectDialog": {
-    "wontToConnect": "хочет подключиться к",
-    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3"
+    "wontToConnect": "Соединение с",
+    "attention": "Соглашаясь, вы разрешаете DApp получить адрес вашего кошелька и включить Web3",
+    "deny": "Может быть позже",
+    "allow": "Да, подключить этот адрес"
   },
   "profileScreen": {
     "name": "Профиль",
@@ -157,7 +200,8 @@
       "undefined": "Неустановлено",
       "smartContract": "Контракт",
       "reject": "Отмена",
-      "pending": "Отправляется"
+      "pending": "Отправляется",
+      "cancelling": "Отменяется"
     }
   },
   "sendTransaction": {
@@ -177,5 +221,12 @@
   },
   "appToasts": {
     "addressCopied": "Ваш публичный адрес скопирован"
+  },
+  "qRScanner": {
+    "allowDialog": {
+      "title": "\"Humaniq\" приложению требуется разрешение",
+      "message": "Для сканирования QR кодов с адресами получателей"
+    },
+    "scanning": "Направьте вашу камеру на QR код"
   }
 }

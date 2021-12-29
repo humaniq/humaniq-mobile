@@ -12,7 +12,8 @@ Colors.loadColors({
   bg: "#F5FAFF",
   // white: "#FFFFFF",
   grey: "#E0E0E0",
-  greyLight: "#F2F3F6"
+  greyLight: "#F2F3F6",
+  greyLightSecond: "#EFF2F4"
 })
 
 Colors.loadColors({

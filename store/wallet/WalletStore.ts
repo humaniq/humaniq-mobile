@@ -11,7 +11,7 @@ import {
 } from "mobx-keystone"
 import { computed, observable, reaction } from "mobx"
 import { localStorage } from "../../utils/localStorage"
-import uuid from "react-native-uuid"
+import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from "./Wallet"
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -29,7 +29,7 @@ export class WalletStore extends Model({
   initialized: p(t.string, ""),
   allWallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
   hiddenWallets: p(t.array(t.string), []),
-  selectedWalletIndex: p(t.number, 0)
+  selectedWalletIndex: p(t.number, 0).withSetter()
 }) {
 
   @observable
@@ -37,6 +37,14 @@ export class WalletStore extends Model({
 
   @observable
   storedWallets
+
+  @computed
+  get walletsMap() {
+    return this.allWallets.reduce((map, obj) => {
+      map.set(obj.address, obj);
+      return map;
+    }, new Map);
+  }
 
   @computed
   get wallets() {
@@ -80,7 +88,7 @@ export class WalletStore extends Model({
           wallet.init()
           return wallet
         }) || []
-        this.initialized = uuid.v4()
+        this.initialized = uuidv4()
       }
       if (!this.initialized) {
         reaction(() => getSnapshot(getEthereumProvider().initialized), () => {

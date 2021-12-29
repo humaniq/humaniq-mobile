@@ -42,12 +42,12 @@
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
     "pinFormLoginAction": "Enter PIN code",
-    "pinFormRegisterAction": "Enter PIN code",
+    "pinFormRegisterAction": "Create PIN code",
     "pinFormConfirmationAction": "Confirm PIN code",
     "correctPin": "PIN code verified"
   },
   "walletScreen": {
-    "name": "Wallets",
+    "name": "Wallet",
     "menuDialog": {
       "createWallet": {
         "name": "Create new address",
@@ -117,7 +117,7 @@
       "outgoing": "outgoing",
       "incoming": "incoming",
       "undefined": "undefined",
-      "smartContract": "Smart contract",
+      "smartContract": "Contract",
       "reject": "rejected transaction"
     }
   },

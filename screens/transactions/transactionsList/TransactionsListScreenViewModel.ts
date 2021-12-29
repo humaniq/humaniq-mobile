@@ -9,13 +9,19 @@ export class TransactionsListScreenViewModel {
   refreshing = false
 
   get wallet() {
-    return getWalletStore().allWallets.find(w => w.address === this.currentWalletAddress)
+    return getWalletStore().walletsMap.get(this.currentWalletAddress)
   }
 
   get transactions() {
     return this.tokenAddress
-        ? this.wallet.erc20List.find(t => t.tokenAddress === this.tokenAddress).transactionsList
+        ? this.wallet.erc20.get(this.tokenAddress).transactionsList
         : this.wallet.transactionsList
+  }
+
+  get loadingTransactions() {
+    return this.tokenAddress
+        ? false
+        : this.wallet.transactions.loading
   }
 
   get token() {
@@ -37,7 +43,7 @@ export class TransactionsListScreenViewModel {
         if (this.tokenAddress) {
           await this.wallet.getERC20Transactions()
         } else {
-          await this.wallet.getWalletTransactions()
+          await this.wallet.loadTransactions(true)
         }
         this.initialized = true
       }

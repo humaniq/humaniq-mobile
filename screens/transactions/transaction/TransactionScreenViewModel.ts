@@ -26,6 +26,6 @@ export class TransactionScreenViewModel {
   get transaction() {
     return this.tokenAddress
         ? this.wallet.erc20List.find(t => t.tokenAddress === this.tokenAddress)?.transactions.get(this.transactionKey)
-        : this.wallet?.transactions.get(this.transactionKey)
+        : this.wallet?.transactions.map.get(this.transactionKey)
   }
 }

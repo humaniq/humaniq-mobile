@@ -1,14 +1,13 @@
 import React from "react";
 import { Button, Colors, View } from "react-native-ui-lib";
 import { t } from "../../../i18n";
-import ArrowLogoTop from "../../../assets/icons/arrow-to-top.svg"
-import ArrowLogoBottom from "../../../assets/icons/arrow-to-bottom.svg"
 import { Shadow } from "react-native-shadow-2";
 import { useInstance } from "react-ioc";
 import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletsScreenModel } from "../WalletsScreenModel";
 import Ripple from "react-native-material-ripple";
 import { RootNavigation } from "../../../navigators";
+import { HIcon } from "../../../components/icon"
 
 export interface IWalletTransactionControlsProps {
   tokenAddress?: string
@@ -20,8 +19,8 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
 
   return <View padding-20>
     <View row center>
-      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.primary, 0.05) }
-              containerViewStyle={ { backgroundColor: Colors.white } }>
+      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
+              containerViewStyle={ { backgroundColor: Colors.white, borderRadius: 15 } }>
         <Ripple rippleColor={ Colors.primary }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {
@@ -35,25 +34,25 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
         >
           <Button br50 outlineColor={ Colors.white }
                   labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                  style={ { backgroundColor: Colors.white } } primary outline marginH-10
+                  style={ { backgroundColor: Colors.white, minWidth: 120 } } primary outline marginH-10
                   label={ t("common.send") }
           >
-            <ArrowLogoTop height={ 14 } width={ 14 } style={ { color: Colors.primary } }/>
+            <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
           </Button>
         </Ripple>
       </Shadow>
-      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.primary, 0.05) }
-              containerViewStyle={ { backgroundColor: Colors.white, marginLeft: 20 } }>
+      <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
+              containerViewStyle={ { backgroundColor: Colors.white, marginLeft: 20, borderRadius: 15 } }>
         <Ripple rippleColor={ Colors.primary } onPress={ async () => {
           selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
           selfAddressQrCodeDialogViewModel.display = true
         } }>
           <Button br50 outlineColor={ Colors.white }
                   labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                  style={ { backgroundColor: Colors.white } } primary outline marginH-10
+                  style={ { backgroundColor: Colors.white, minWidth: 120 } } primary outline marginH-10
                   label={ t("common.receive") }
           >
-            <ArrowLogoBottom height={ 14 } width={ 14 } style={ { color: Colors.primary } }/>
+            <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>
           </Button>
         </Ripple>
       </Shadow>

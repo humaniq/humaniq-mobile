@@ -8,6 +8,7 @@
  * @format
  */
 import "./shim"
+import "react-native-get-random-values"
 import "react-native-gesture-handler"
 import React, { useEffect, useRef } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
@@ -16,7 +17,6 @@ import 'react-native-url-polyfill/auto'
 import { provider, toFactory, useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
 import { NavigationContainerRef } from "@react-navigation/native"
-import { LoaderScreen } from "react-native-ui-lib"
 import * as storage from "./utils/localStorage"
 import { canExit, RootNavigator, setRootNavigation, useBackButtonHandler, useNavigationPersistence } from "./navigators"
 import { enableScreens } from "react-native-screens"
@@ -36,26 +36,36 @@ import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
-import { SendWalletTransactionViewModel } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionViewModel"
-import { SendWalletTransactionDialog } from "./components/dialogs/sendWalletTransactionDialog/SendWalletTransactionDialog"
-import { SendTransactionViewModel as LegacySendTransactonViewModel } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
+import {
+  SendTransactionViewModel as LegacySendTransactonViewModel
+} from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
-import { WaitForEthTransactionViewModel } from "./screens/transactions/sendTransaction/WaitForEthTransactionViewModel"
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
 import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
-import { SelfAddressQrCodeDialogViewModel } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import {
+  SelfAddressQrCodeDialogViewModel
+} from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
 import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
 import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
-import { SelectTransactionFeeDialogViewModel } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import {
+  SelectTransactionFeeDialogViewModel
+} from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import { Splash } from "./components/splash/Splash";
+import { BrowserStore } from "./store/browser/BrowserStore";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
-LogBox.ignoreLogs([ "Setting a timer" ])
-LogBox.ignoreLogs([ "Require cycle" ])
-LogBox.ignoreLogs([ "componentWillReceiveProps" ])
+LogBox.ignoreLogs([
+  "Setting a timer",
+  "Require cycle",
+  "componentWillReceiveProps",
+  'Non-serializable values were found in the navigation state',
+  "new NativeEventEmitter()",
+  "rightButtonProps.iconSource"
+])
 
 enableScreens()
 
@@ -79,6 +89,8 @@ const providerStore = createContext<ProviderStore>()
 export const getProviderStore = () => providerStore.getDefault()
 const ethereumProvider = createContext<EthereumProvider>()
 export const getEthereumProvider = () => ethereumProvider.getDefault()
+const browserStore = createContext<BrowserStore>()
+export const getBrowserStore = () => browserStore.getDefault()
 
 function createRootStore() {
   const rootStore = new RootStore({})
@@ -91,12 +103,13 @@ function createRootStore() {
   profileStore.setDefault(rootStore.profileStore)
   providerStore.setDefault(rootStore.providerStore)
   ethereumProvider.setDefault(rootStore.providerStore.eth)
+  browserStore.setDefault(rootStore.browserStore)
   return rootStore
 }
 
 
 const AppScreen = observer(() => {
-  const navigationRef = useRef<NavigationContainerRef>(null)
+  const navigationRef = useRef<NavigationContainerRef<any>>(null)
   const store = useInstance(RootStore)
 
   setRootNavigation(navigationRef)
@@ -122,32 +135,31 @@ const AppScreen = observer(() => {
   return (<>
         <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
           {
-            store.appStore.initialized &&
-            store.appStore.appState === APP_STATE.APP &&
-            !store.appStore.isLocked &&
-            <><RootNavigator
-                ref={ navigationRef }
-                initialState={ initialNavigationState }
-                onStateChange={ onNavigationStateChange }
-            />
-                <AppToast/>
-                <CreateWalletToast/>
-                <SigningDialog/>
-                <SendWalletTransactionDialog/>
-                <SendTransactionDialog/>
-            </> }
+              store.appStore.initialized &&
+              store.appStore.appState === APP_STATE.APP &&
+              !store.appStore.isLocked &&
+              <><RootNavigator
+                  ref={ navigationRef }
+                  initialState={ initialNavigationState }
+                  onStateChange={ onNavigationStateChange }
+              />
+                  <AppToast/>
+                  <CreateWalletToast/>
+                  <SigningDialog/>
+                  <SendTransactionDialog/>
+              </> }
           {
-            store.appStore.initialized &&
-            store.appStore.appState === APP_STATE.AUTH &&
-            !store.appStore.isLocked &&
-            <AuthNavigator/>
+              store.appStore.initialized &&
+              store.appStore.appState === APP_STATE.AUTH &&
+              !store.appStore.isLocked &&
+              <AuthNavigator/>
           }
           {
-            store.appStore.initialized &&
-            store.appStore.isLocked &&
-            <Locker/>
+              store.appStore.initialized &&
+              store.appStore.isLocked &&
+              <Locker/>
           }
-          { !store.appStore.initialized && <LoaderScreen/> }
+          { !store.appStore.initialized && <Splash/> }
         </SafeAreaProvider>
       </>
   )
@@ -157,13 +169,12 @@ const App = provider()(AppScreen)
 App.register(
     [ RootStore, toFactory(createRootStore) ],
     WalletsScreenModel,
-    SendWalletTransactionViewModel,
     LegacySendTransactonViewModel,
-    WaitForEthTransactionViewModel,
     SelfAddressQrCodeDialogViewModel,
     WalletMenuDialogViewModel,
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
-    SelectTransactionFeeDialogViewModel
+    SelectTransactionFeeDialogViewModel,
+    // QRScannerView
 )
 export default App

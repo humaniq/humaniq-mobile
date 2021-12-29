@@ -15,7 +15,7 @@ export const WalletTittle = observer<any>(({ address }) => {
         {
           !!wallet.initialized && <View row spread centerV>
               <View>
-                  <Text h2>{ wallet.formatTotalWalletFiatBalance }</Text>
+                  <Text h2 black>{ wallet.formatTotalWalletFiatBalance }</Text>
                   <Text text-grey>{ t("walletScreen.totalBalanceTittle") }</Text>
               </View>
               <View>
@@ -33,11 +33,9 @@ export const WalletTittle = observer<any>(({ address }) => {
                         getAppStore().toast.message = ""
                       })
                     }, 3000)
-                  } } style={ { backgroundColor: Colors.rgba(Colors.primary, 0.1) } } textM primary
+                  } } style={ { backgroundColor: Colors.rgba(Colors.primary, 0.1), borderRadius: 12 } } textM primary
                           label={ wallet.formatAddress }/>
               </View>
-
-
           </View>
         }
         {
