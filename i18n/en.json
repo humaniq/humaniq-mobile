@@ -132,6 +132,7 @@
     "maxAmount": "Max amount",
     "insufficientBalance": "Insufficient balance",
     "outerSuggestion": "TX data",
+    "transactionSending": "Sending...",
     "successSendTx": "Transaction successfully send",
     "sendTransaction": "Send",
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction"
