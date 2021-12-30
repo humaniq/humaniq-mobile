@@ -18,6 +18,8 @@ import { SendTransactionViewModel } from "../../../components/dialogs/sendTransa
 import { IBrowserTab } from "./BrowserTabScreen";
 import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
 import { InteractionManager } from "react-native";
+import { closeToast, setPendingAppToast } from "../../../store/wallet/transaction/utils";
+import { t } from "../../../i18n";
 
 export class BrowserTabScreenViewModel {
 
@@ -98,20 +100,20 @@ export class BrowserTabScreenViewModel {
 
     this.disposerChangeNetwork = reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
       // this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
-      // this.reloadWebView()
+      this.reloadWebView()
 
-      this.postMessage({
-        type: "networkChanged",
-        data: getEthereumProvider().currentNetwork.networkID,
-      })
+      // this.postMessage({
+      //   type: "networkChanged",
+      //   data: getEthereumProvider().currentNetwork.networkID,
+      // })
     })
 
     this.disposerChangeAddress = reaction(() => getSnapshot(getWalletStore().selectedWallet.address), () => {
-      // this.reloadWebView()
-      this.postMessage({
-        type: "accountsChanged",
-        data: [ getWalletStore().selectedWallet.address ],
-      })
+      this.reloadWebView()
+      // this.postMessage({
+      //   type: "accountsChanged",
+      //   data: [ getWalletStore().selectedWallet.address ],
+      // })
     })
   }
 
@@ -123,14 +125,6 @@ export class BrowserTabScreenViewModel {
   async reloadWebView() {
     console.log("reload-web-view")
     try {
-      // this.postMessage({
-      //   type: "networkChanged",
-      //   data: getEthereumProvider().currentNetwork.networkID,
-      // })
-      // this.postMessage({
-      //   type: "accountsChanged",
-      //   data: [ getWalletStore().selectedWallet.address ],
-      // })
       this.webviewRef?.reload()
 
       this.postMessage({
@@ -354,23 +348,23 @@ export class BrowserTabScreenViewModel {
               }
             })
 
-            console.log({ approved })
             this.sendTransactionDialog.display = false
+            setPendingAppToast(t("sendTransactionDialog.transactionSending"))
             InteractionManager.runAfterInteractions(async () => {
               if (approved) {
                 try {
+                  // @ts-ignore
                   const tx = new EthereumTransaction(approved.tx)
                   console.log(tx)
                   await tx.sendTransaction()
-                  console.log("hash", tx.hash)
+                  closeToast()
                   this.postAsyncCallbackMessage({
                     result: tx.hash,
                     data
                   })
-
                   tx.applyToWallet()
-                  setTimeout(() => {
-                    tx.waitTransaction()
+                  setTimeout(async () => {
+                    await tx.waitTransaction()
                   }, 10)
 
                 } catch (e) {

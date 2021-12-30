@@ -131,6 +131,7 @@
     "maxFee": "Комиссия",
     "maxAmount": "Максимум",
     "outerSuggestion": "TX data",
+    "transactionSending": "Транзакция отправляется",
     "successSendTx": "Транзакция успешно отправлена",
     "sendTransaction": "Отправить",
     "cantRewriteTransaction": "У Вас недостаточно средств, для того чтобы отменить или ускорить транзакцию",
