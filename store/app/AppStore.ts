@@ -2,10 +2,11 @@ import { _await, Model, model, modelAction, modelFlow, runUnprotected, tProp as 
 import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
-import { getWalletStore } from "../../App"
+import { getAppStore, getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
+import Cryptr from "react-native-cryptr"
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -148,8 +149,17 @@ export class AppStore extends Model({
     }
   }
 
-  @modelAction
-  setPin(pin: string) {
+  @modelFlow
+  * setPin(pin: string) {
+    if(this.savedPin && this.savedPin !== pin) {
+      const cryptr = new Cryptr(this.savedPin)
+      const encrypted = yield * _await(localStorage.load("hm-wallet"))
+      const result = cryptr.decrypt(encrypted)
+      const storedWallets = JSON.parse(result)
+      const newCryptr = new Cryptr(pin)
+      const encoded = yield* _await(newCryptr.encrypt(JSON.stringify(storedWallets)))
+      yield* _await(localStorage.save("hm-wallet", encoded))
+    }
     this.savedPin = pin
   }
 }

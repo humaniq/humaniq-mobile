@@ -95,6 +95,7 @@
     "name": "Настройки",
     "editProfile": "Редактировать",
     "menu": {
+      "changePin": "Сменить пинкод",
       "ethNetwork": "Сеть эфира",
       "exportMnemonic": "Экспорт фразы восстановления",
       "recoveryPhrase": "Фраза восстановления",

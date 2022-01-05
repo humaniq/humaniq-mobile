@@ -159,6 +159,7 @@ const AppScreen = observer(() => {
               store.appStore.isLocked &&
               <Locker/>
           }
+
           { !store.appStore.initialized && <Splash/> }
         </SafeAreaProvider>
       </>

@@ -95,6 +95,7 @@
     "name": "Settings",
     "editProfile": "Edit",
     "menu": {
+      "changePin": "Change pin code",
       "ethNetwork": "Ethereum network",
       "exportMnemonic": "Export recovery phrase",
       "recoveryPhrase": "Recovery phrase",

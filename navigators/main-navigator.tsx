@@ -15,6 +15,7 @@ import { WalletsScreen } from "../screens/wallets/WalletsScreen";
 import { HIcon } from "../components/icon";
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { localStorage } from "../utils/localStorage";
+import { useNavigation } from "@react-navigation/native";
 
 
 const Stack = createStackNavigator()
@@ -47,6 +48,8 @@ export function MainNavigator<PrimaryParamList>() {
       setSeedStored(res || false)
     })
   })
+
+
 
   return (
       <Tab.Navigator

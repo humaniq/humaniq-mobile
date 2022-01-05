@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import { Button, Colors, Text, TextField, View } from "react-native-ui-lib"
+import { Button, Colors, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib"
 import { Screen } from "../../components"
 import { provider, useInstance } from "react-ioc"
 import { AUTH_STATE, AuthViewModel } from "./AuthViewModel"
@@ -64,20 +64,22 @@ const Auth = observer(function () {
                                                                        white>{ view.message }</Text></Animatable.View>
                       </View>
                       <View flex bottom paddingB-20>
-                          <Button onPress={ () => { view.state = AUTH_STATE.MAIN } } label={ t("common.back") }/>
+                          <Button onPress={ () => {
+                            view.state = AUTH_STATE.MAIN
+                          } } label={ t("common.back") }/>
                       </View>
                   </View>
               </Animatable.View> }
           { view.state === AUTH_STATE.RECOVER &&
               <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                 { !view.pending && <View flex>
-                    <View row padding-16 paddingT-25>
-                        <HIcon onPress={ () => {
-                          view.state = AUTH_STATE.MAIN;
-                          // @ts-ignore
-                          getAppStore().setRecoverPhrase("")
-                        } } name={ "arrow-left" } size={ 14 }/>
-                    </View>
+                    <TouchableOpacity row padding-16 paddingT-25 onPress={ () => {
+                      view.state = AUTH_STATE.MAIN;
+                      // @ts-ignore
+                      getAppStore().setRecoverPhrase("")
+                    } }>
+                        <HIcon name={ "arrow-left" } size={ 14 }/>
+                    </TouchableOpacity>
                     <View padding-16>
                         <Text robotoM text16>{ view.message }</Text>
                     </View>
