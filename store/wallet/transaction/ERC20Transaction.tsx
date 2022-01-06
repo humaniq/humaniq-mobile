@@ -76,7 +76,6 @@ export class ERC20Transaction extends Model({
         nonce: this.txBody.nonce,
         type: 0
       }))) as ethers.providers.TransactionResponse
-      console.log({ tx })
       this.transactionHash = tx.hash
       return tx
     } catch (e) {
@@ -87,12 +86,9 @@ export class ERC20Transaction extends Model({
 
   @modelFlow
   * waitTransaction() {
-    console.log("wait-transaction")
     try {
       getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
         const hash = this.hash
-        console.log("mined-transaction")
-        console.log(confirmedTx)
         await runUnprotected(async () => {
           this.blockTimestamp = new Date()
           this.receiptStatus = TRANSACTION_STATUS.SUCCESS
@@ -139,7 +135,6 @@ export class ERC20Transaction extends Model({
         yield this.storeTransaction()
 
         getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
-          console.log("cancelled-transaction")
           await runUnprotected(async () => {
             this.blockTimestamp = new Date()
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
@@ -187,7 +182,6 @@ export class ERC20Transaction extends Model({
             this.blockTimestamp = new Date()
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
             await this.removeFromStore()
-            console.log({ speedUpd: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
             closeToast()
           })

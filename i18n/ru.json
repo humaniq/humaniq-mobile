@@ -33,6 +33,10 @@
     "noData": "Нет данных",
     "next": "Next"
   },
+  "errorBoundary": {
+    "title": "Что то произошло!",
+    "tryAgain": "Попробовать снова"
+  },
   "errors": {
     "invalidEmail": "Invalid email address.",
     "transactionBodyError": "Введены некорректные данные транзакции"

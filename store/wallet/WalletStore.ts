@@ -136,7 +136,6 @@ export class WalletStore extends Model({
   * addWallet() {
     try {
       const wallet = yield this.createWallet()
-      console.log(getAppStore().savedPin)
       const cryptr = new Cryptr(getAppStore().savedPin)
       const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)))
       yield* _await(localStorage.save("hm-wallet", encoded))

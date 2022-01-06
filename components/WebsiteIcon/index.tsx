@@ -44,9 +44,7 @@ export default class WebsiteIcon extends PureComponent<IWebsiteIconProps> {
    * Get image url from favicon api
    */
   getIconUrl = (url) => {
-    const iconUrl = `https://api.faviconkit.com/${ getHost(url) }/64`;
-    console.log(iconUrl)
-    return iconUrl;
+    return `https://api.faviconkit.com/${ getHost(url) }/64`;
   };
 
   /**

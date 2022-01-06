@@ -33,6 +33,10 @@
     "noData": "No data",
     "next": "Next"
   },
+  "errorBoundary": {
+    "title": "Something happened!",
+    "tryAgain": "Try again"
+  },
   "errors": {
     "invalidEmail": "Invalid email address",
     "transactionBodyError": "Invalid transaction body"

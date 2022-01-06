@@ -50,7 +50,14 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                                 color={ Colors.error }/>
                                         </View>
                                     }
-                                    onPress={ () => nav.navigate("recoveryPhrase") }
+                                    onPress={ () => {
+                                      runUnprotected(() => {
+                                        getAppStore().lockerPreviousScreen = "recovery"
+                                        getAppStore().lockerMode = LOCKER_MODE.CHECK
+                                        getAppStore().isLocked = true
+                                      })
+                                      // nav.navigate("recoveryPhrase")
+                                    } }
                           />
                           <MenuItem icon={ "lock" }
                                     name={ t("settingsScreen.menu.changePin") }
@@ -87,7 +94,6 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                             <View row padding-16 spread>
                                 <Text>Отключить пин код?</Text>
                                 <Switch onValueChange={ (val?: boolean) => {
-                                  console.log(getAppStore().storedPin)
                                   runUnprotected(() => {
                                     getAppStore().storedPin = val ? getAppStore().savedPin : false
                                   })

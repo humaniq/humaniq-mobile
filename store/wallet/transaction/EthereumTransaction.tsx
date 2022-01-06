@@ -96,7 +96,6 @@ export class EthereumTransaction extends Model({
   @modelFlow
   * sendTransaction() {
     try {
-      console.log({ txBody: this.txBody })
       const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
       this.hash = tx.hash
       return tx
@@ -113,7 +112,6 @@ export class EthereumTransaction extends Model({
       getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
         const hash = this.hash
         console.log("mined-transaction")
-        console.log(confirmedTx)
         await runUnprotected(async () => {
           this.blockTimestamp = new Date()
           this.transactionIndex = confirmedTx.transactionIndex
@@ -157,7 +155,6 @@ export class EthereumTransaction extends Model({
             this.receiptContractAddress = confirmedTx.contractAddress
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
             await this.removeFromStore()
-            console.log({ canceled: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
             closeToast()
           })
@@ -193,7 +190,6 @@ export class EthereumTransaction extends Model({
             this.receiptContractAddress = confirmedTx.contractAddress
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
             await this.removeFromStore()
-            console.log({ speedUpd: confirmedTx })
             getEthereumProvider().currentProvider.off(tx.hash)
             closeToast()
           })

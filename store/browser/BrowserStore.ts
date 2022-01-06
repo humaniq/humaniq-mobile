@@ -84,7 +84,6 @@ export class BrowserStore extends Model({
   @modelAction
   closeTab = (id: string) => {
     this.tabs = this.tabs.filter(tab => tab.id !== id)
-    console.log(this.tabs)
     if (this.activeTab === id) {
       this.removeActiveTab()
     }

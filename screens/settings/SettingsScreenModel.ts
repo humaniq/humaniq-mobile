@@ -8,6 +8,7 @@ export class SettingsScreenModel {
   initialized = false
   recoveryRead = false
   exitDialogVisible = false
+  mnemonic = ""
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true })
@@ -29,7 +30,6 @@ export class SettingsScreenModel {
         currentValue: !!getAppStore().storedPin,
         icon: "lock",
         onPress: (val?: boolean) => {
-          console.log(getAppStore().storedPin)
           runUnprotected(() => {
             getAppStore().storedPin = val ? getAppStore().savedPin : false
           })

@@ -9,6 +9,7 @@ import bip39 from "react-native-bip39"
 import { getAppStore } from "../../App"
 import ReactNativeBiometrics from "react-native-biometrics";
 import Keychain from "react-native-keychain";
+import { RootNavigation } from "../../navigators";
 
 export const PIN_LENGHT = 4
 
@@ -131,7 +132,6 @@ export class LockerViewModel {
     this.reset()
   }
 
-
   done() {
     runUnprotected(() => {
       if (getAppStore().lockerPreviousScreen === "settings" && this.step === 0) {
@@ -141,6 +141,12 @@ export class LockerViewModel {
       } else if (getAppStore().lockerPreviousScreen === "settings" && this.step === 1) {
         this.step = 0
         this.exit()
+      } else if (getAppStore().lockerPreviousScreen === "recovery") {
+        this.exit()
+        setTimeout(() => {
+          RootNavigation.navigate("recoveryPhrase")
+        }, 10)
+
       } else {
         this.exit()
       }

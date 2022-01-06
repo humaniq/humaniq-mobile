@@ -60,7 +60,6 @@ export class AppStore extends Model({
 
   @modelFlow
   * logout() {
-    console.log("logout")
     yield* _await(localStorage.remove("hm-wallet"))
     this.setAppState(APP_STATE.AUTH)
     this.storedPin = null
@@ -114,7 +113,6 @@ export class AppStore extends Model({
 
   @modelAction
   onUnapprovedMessage = (messageParams, type) => {
-    console.log("On-unaproved-message", messageParams, type)
     const { title: currentPageTitle, url: currentPageUrl } = messageParams.meta
     delete messageParams.meta
     this.signMessageParams = messageParams

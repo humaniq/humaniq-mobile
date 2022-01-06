@@ -42,7 +42,6 @@ export class DictionaryStore extends Model({
       const res = yield* _await(axios.get<any>(""))
       if (res.ok) {
         tokens = res.data.tokens.length ? res.data.tokens : []
-        console.log("update-tokens-url")
         yield* _await(localStorage.save("hm-wallet-tokens-update", Date.now()))
         yield* _await(localStorage.save("hm-wallet-tokens", tokens))
       }

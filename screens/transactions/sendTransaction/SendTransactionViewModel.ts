@@ -49,7 +49,6 @@ export class SendTransactionViewModel {
   selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
 
   changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
-    console.log({ val })
     this.txData.value = ""
     this.tokenAddress = val !== "ETH" ? val : ""
     this.inputFiat = false
@@ -119,11 +118,9 @@ export class SendTransactionViewModel {
         getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
         this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
       ])
-      console.log({ gasLimit: gasLimit && gasLimit.toString() })
       this.txData.nonce = nonce
       this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
       this.pending = false
-      console.log(this.txData, this.parsedValue, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
     } catch (e) {
       console.log("ERROR-get-transaction-data", e)
     }
@@ -239,7 +236,7 @@ export class SendTransactionViewModel {
     try {
       return !(!this.wallet?.balances?.amount || !this.parsedValue || !this.enoughBalance);
     } catch (e) {
-      console.log(e)
+      console.log("ERROR", e)
       return false
     }
   }

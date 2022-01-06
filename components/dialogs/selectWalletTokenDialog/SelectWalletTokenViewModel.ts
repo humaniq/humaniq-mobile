@@ -25,7 +25,6 @@ export class SelectWalletTokenViewModel {
         formatFiatBalance: beautifyNumber(this.wallet?.formatFiatBalance),
         formatBalance: this.wallet?.formatBalance,
         onPress: () => {
-          console.log("PRESS")
           this.tokenAddress = "ETH"
           this.display = false
         }
@@ -40,7 +39,6 @@ export class SelectWalletTokenViewModel {
       formatBalance: i.formatBalance,
       formatFiatBalance: i.formatFiatBalance,
       onPress: () => {
-        console.log("PRESS")
         this.tokenAddress = i.tokenAddress || "ETH"
         this.display = false
       },
