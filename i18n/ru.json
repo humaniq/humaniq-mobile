@@ -57,7 +57,8 @@
     "pinFormConfirmationAction": "Подтвердите пин код",
     "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
     "pinFormConfirmationActionDescription": "И вспомните свой код",
-    "correctPin": "Пин код подтвержден"
+    "correctPin": "Пин код подтвержден",
+    "fingerprint": "Отпечаток"
   },
   "walletScreen": {
     "allAddresses": "Все адреса",

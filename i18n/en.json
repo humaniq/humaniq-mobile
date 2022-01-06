@@ -57,7 +57,8 @@
     "pinFormConfirmationAction": "Confirm PIN code",
     "pinFormRegisterActionDescription": "For quick access to the application",
     "pinFormConfirmationActionDescription": "And remember your code",
-    "correctPin": "PIN code verified"
+    "correctPin": "PIN code verified",
+    "fingerprint": "Fingerprint"
   },
   "walletScreen": {
     "allAddresses": "All addresses",

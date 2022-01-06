@@ -2,7 +2,7 @@ import { _await, Model, model, modelAction, modelFlow, runUnprotected, tProp as 
 import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
-import { getAppStore, getWalletStore } from "../../App"
+import { getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
@@ -58,7 +58,6 @@ export class AppStore extends Model({
   typedMessageManager = new TypedMessageManager()
   phishingController = new PhishingController()
 
-
   @modelFlow
   * logout() {
     console.log("logout")
@@ -88,6 +87,7 @@ export class AppStore extends Model({
                 this.walletPageInitialized = false
               })
             }
+
           }
         })
       } else {
@@ -151,9 +151,9 @@ export class AppStore extends Model({
 
   @modelFlow
   * setPin(pin: string) {
-    if(this.savedPin && this.savedPin !== pin) {
+    if (this.savedPin && this.savedPin !== pin) {
       const cryptr = new Cryptr(this.savedPin)
-      const encrypted = yield * _await(localStorage.load("hm-wallet"))
+      const encrypted = yield* _await(localStorage.load("hm-wallet"))
       const result = cryptr.decrypt(encrypted)
       const storedWallets = JSON.parse(result)
       const newCryptr = new Cryptr(pin)

@@ -10,6 +10,7 @@ import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
 import { HIcon } from "../icon";
 
+
 // export interface LockerProps {
 //   mode: "set|check";
 //   pin?: number;
@@ -31,10 +32,6 @@ const L = observer(function (props) {
     // })
 
   }, [])
-
-  useEffect(() => {
-    console.log(view.mode, view.step)
-  }, [ view.pin ])
 
   return <Screen backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
@@ -123,9 +120,10 @@ const L = observer(function (props) {
                 }
                   <View row center height={ 70 }>
                       <View margin-5 center row>
-                          <Ripple rippleColor={ "rgb(0, 0, 102)" }>
+                          <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
-                                  <HIcon name={ "backspace" } size={ 22 } color={ Colors.white }/>
+                                  <HIcon name={ "fingerprint" } size={ 22 }
+                                         color={ view.isBioAvailable ? Colors.black : Colors.white }/>
                               </View>
                           </Ripple>
                       </View>

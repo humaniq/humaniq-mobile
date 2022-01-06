@@ -7,6 +7,8 @@ import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
 import { getAppStore } from "../../App"
+import ReactNativeBiometrics from "react-native-biometrics";
+import Keychain from "react-native-keychain";
 
 export const PIN_LENGHT = 4
 
@@ -21,6 +23,7 @@ export class LockerViewModel {
   message: string
   encrypted
   incorrectCount = 0
+  isBioAvailable = false
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true })
@@ -29,6 +32,33 @@ export class LockerViewModel {
   async init() {
     this.encrypted = await localStorage.load("hm-wallet")
     this.initialized = true
+
+    if (this.mode === LOCKER_MODE.CHECK) {
+      const { available } = await ReactNativeBiometrics.isSensorAvailable()
+      this.isBioAvailable = available
+      setTimeout(async () => {
+        await this.checkBio()
+      })
+    }
+  }
+
+  async checkBio() {
+    if (!this.isBioAvailable) return
+    try {
+      const result = await ReactNativeBiometrics.simplePrompt({
+        promptMessage: t("lockerScreen.fingerprint"),
+        cancelButtonText: t('common.cancel')
+      })
+      if (!result.success) return
+      const cr = await Keychain.getGenericPassword()
+      if (cr) {
+        getAppStore().setLocker(true)
+        getAppStore().setPin(cr.password)
+        this.done()
+      }
+    } catch (e) {
+      console.log("input pin code")
+    }
   }
 
   handleClick(digit) {
@@ -131,7 +161,6 @@ export class LockerViewModel {
 
   watchPin = reaction(() => this.pin, async (val) => {
     if (val && val.length === PIN_LENGHT) {
-      console.log("check")
       this.disabled = true
       await this.validatePin()
     }

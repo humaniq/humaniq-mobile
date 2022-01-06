@@ -6242,9 +6242,9 @@ human-standard-token-abi@^2.0.0:
   resolved "https://registry.yarnpkg.com/human-standard-token-abi/-/human-standard-token-abi-2.0.0.tgz#e0c2057596d0a1d4a110f91f974a37f4b904f008"
   integrity sha512-m1f5DiIvqaNmpgphNqx2OziyTCj4Lvmmk28uMSxGWrOc9/lMpAKH8UcMPhvb13DMNZPzxn07WYFhxOGKuPLryg==
 
-"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.6.0":
+"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.7.0":
   version "1.0.0"
-  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#15afc643e18e99e04d989c12f8cb28369193bb07"
+  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#6d6814c98d91dcf77313d78115ed95663bc824fa"
 
 i18n-js@3.8.0:
   version "3.8.0"
@@ -9374,6 +9374,11 @@ react-native-animatable@1.3.3:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-biometrics@^2.1.4:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-biometrics/-/react-native-biometrics-2.1.4.tgz#e201e9f18baeb560eeaba8d41fbd4f90d04152fe"
+  integrity sha512-Ek7NmzgHB4rot2DdzV9Q3pzxFjnEFipGSFsmWZw5vcM9vkMoebhz8d8UYgsp0efroyeLITDNHwcFGEzq8XW9Kg==
+
 react-native-bip39@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/react-native-bip39/-/react-native-bip39-2.3.0.tgz#30c58d93a22b41f4937727fd456ab6b03f452671"
@@ -9507,6 +9512,11 @@ react-native-jazzicon@^0.1.2:
   dependencies:
     color "^3.0.0"
     mersenne-twister "^1.1.0"
+
+react-native-keychain@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-8.0.0.tgz#ff708e4dc2a5440df717179bf9b7cd50f78b61d7"
+  integrity sha512-c7Cs+YQN26UaQsRG1dmlXL7VL2ctnXwH/dl0IOMEQ7ZaL2NdN313YSAI8ZEZZjrVhNmPsyWEuvTFqWrdpItqQg==
 
 react-native-level-fs@^3.0.1:
   version "3.0.1"
