@@ -14,6 +14,7 @@
     "build-ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "release-android": "cd ./android && ./gradlew assembleRelease",
+    "release-abb-android": "cd ./android && ./gradlew bundleRelease",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
     "postinstall": "cp ./react.gradle ./node_modules/react-native/react.gradle &&  bash ./scripts/postinstall.sh"

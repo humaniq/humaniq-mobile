@@ -33,18 +33,16 @@ export class LockerViewModel {
   async init() {
     this.encrypted = await localStorage.load("hm-wallet")
     this.initialized = true
-
+    const { available } = await ReactNativeBiometrics.isSensorAvailable()
+    this.isBioAvailable = available
 
     AppState.addEventListener("change", async (nextState) => {
       if (nextState === "active" && this.mode === LOCKER_MODE.CHECK) {
-        const { available } = await ReactNativeBiometrics.isSensorAvailable()
-        this.isBioAvailable = available
         setTimeout(async () => {
           await this.checkBio()
         })
       }
     })
-
   }
 
   async checkBio() {
