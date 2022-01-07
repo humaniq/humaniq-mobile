@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction } from "mobx"
-import { Vibration } from "react-native"
+import { AppState, Vibration } from "react-native"
 import { APP_STATE, LOCKER_MODE } from "../../store/app/AppStore"
 import { t } from "../../i18n"
 import { runUnprotected } from "mobx-keystone"
@@ -34,13 +34,17 @@ export class LockerViewModel {
     this.encrypted = await localStorage.load("hm-wallet")
     this.initialized = true
 
-    if (this.mode === LOCKER_MODE.CHECK) {
-      const { available } = await ReactNativeBiometrics.isSensorAvailable()
-      this.isBioAvailable = available
-      setTimeout(async () => {
-        await this.checkBio()
-      })
-    }
+
+    AppState.addEventListener("change", async (nextState) => {
+      if (nextState === "active" && this.mode === LOCKER_MODE.CHECK) {
+        const { available } = await ReactNativeBiometrics.isSensorAvailable()
+        this.isBioAvailable = available
+        setTimeout(async () => {
+          await this.checkBio()
+        })
+      }
+    })
+
   }
 
   async checkBio() {

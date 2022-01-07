@@ -69,7 +69,6 @@ export class AppStore extends Model({
 
   @modelFlow
   * init() {
-
     if (!this.initialized) {
       this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
       if (!this.storedPin) {
@@ -86,7 +85,6 @@ export class AppStore extends Model({
                 this.walletPageInitialized = false
               })
             }
-
           }
         })
       } else {
