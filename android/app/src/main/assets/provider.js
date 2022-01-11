@@ -16,13 +16,14 @@
     }
 
     var bridgeSend = function (data) {
-      ReactNativeWebView.postMessage(JSON.stringify(data))
+      window.ReactNativeWebView.postMessage(JSON.stringify(data))
     }
 
     try {
 
       var history = window.history
       var pushState = history.pushState
+
       history.pushState = function (state) {
         setTimeout(function () {
           bridgeSend({
@@ -87,7 +88,7 @@
 
       UserRejectedRequest.prototype = Object.create(Error.prototype)
 
-      ReactNativeWebView.onMessage = function (message) {
+      window.ReactNativeWebView.onMessage = function (message) {
 
         data = JSON.parse(message)
         var id = data.messageId
@@ -184,7 +185,7 @@
       EthereumProvider.prototype.isHumaniq = true
       EthereumProvider.prototype.status = new StatusAPI()
       EthereumProvider.prototype.isConnected = function () {
-        return false
+        return true
       }
       // Set legacy metamask fields https://docs.metamask.io/guide/ethereum-provider.html#legacy-api
       EthereumProvider.prototype.networkVersion = window.humaniqAppNetworkId
