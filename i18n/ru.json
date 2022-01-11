@@ -33,6 +33,10 @@
     "noData": "Нет данных",
     "next": "Next"
   },
+  "errorBoundary": {
+    "title": "Что то произошло!",
+    "tryAgain": "Попробовать снова"
+  },
   "errors": {
     "invalidEmail": "Invalid email address.",
     "transactionBodyError": "Введены некорректные данные транзакции"
@@ -57,7 +61,8 @@
     "pinFormConfirmationAction": "Подтвердите пин код",
     "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
     "pinFormConfirmationActionDescription": "И вспомните свой код",
-    "correctPin": "Пин код подтвержден"
+    "correctPin": "Пин код подтвержден",
+    "fingerprint": "Отпечаток"
   },
   "walletScreen": {
     "allAddresses": "Все адреса",
@@ -95,6 +100,7 @@
     "name": "Настройки",
     "editProfile": "Редактировать",
     "menu": {
+      "changePin": "Сменить пинкод",
       "ethNetwork": "Сеть эфира",
       "exportMnemonic": "Экспорт фразы восстановления",
       "recoveryPhrase": "Фраза восстановления",

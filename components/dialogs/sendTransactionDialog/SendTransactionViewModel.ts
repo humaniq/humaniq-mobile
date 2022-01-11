@@ -50,7 +50,6 @@ export class SendTransactionViewModel {
     this.txData.gasLimit = +(txData.gas.toString())
     this.txData.gasPrice = gasPrice && +(gasPrice.toString())
     this.pending = false
-    console.log(txData, this.txData)
   }
 
   get hostname() {

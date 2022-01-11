@@ -6,6 +6,7 @@ import { getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
+import Cryptr from "react-native-cryptr"
 
 export enum APP_STATE {
   AUTH = "AUTH",
@@ -57,10 +58,8 @@ export class AppStore extends Model({
   typedMessageManager = new TypedMessageManager()
   phishingController = new PhishingController()
 
-
   @modelFlow
   * logout() {
-    console.log("logout")
     yield* _await(localStorage.remove("hm-wallet"))
     this.setAppState(APP_STATE.AUTH)
     this.storedPin = null
@@ -70,7 +69,6 @@ export class AppStore extends Model({
 
   @modelFlow
   * init() {
-
     if (!this.initialized) {
       this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
       if (!this.storedPin) {
@@ -113,7 +111,6 @@ export class AppStore extends Model({
 
   @modelAction
   onUnapprovedMessage = (messageParams, type) => {
-    console.log("On-unaproved-message", messageParams, type)
     const { title: currentPageTitle, url: currentPageUrl } = messageParams.meta
     delete messageParams.meta
     this.signMessageParams = messageParams
@@ -148,8 +145,17 @@ export class AppStore extends Model({
     }
   }
 
-  @modelAction
-  setPin(pin: string) {
+  @modelFlow
+  * setPin(pin: string) {
+    if (this.savedPin && this.savedPin !== pin) {
+      const cryptr = new Cryptr(this.savedPin)
+      const encrypted = yield* _await(localStorage.load("hm-wallet"))
+      const result = cryptr.decrypt(encrypted)
+      const storedWallets = JSON.parse(result)
+      const newCryptr = new Cryptr(pin)
+      const encoded = yield* _await(newCryptr.encrypt(JSON.stringify(storedWallets)))
+      yield* _await(localStorage.save("hm-wallet", encoded))
+    }
     this.savedPin = pin
   }
 }

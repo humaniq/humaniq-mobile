@@ -139,7 +139,6 @@ export class Wallet extends Model({
     this.transactions.loading = true
 
     const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.address }`))) || []
-    console.log({ pendingTransactions })
     pendingTransactions.forEach(t => {
       const pTx = fromSnapshot<EthereumTransaction>(t)
       pTx.applyToWallet()

@@ -68,7 +68,7 @@ export const SelfAddressQrCodeDialog = observer(() => {
                             subject: t("selfAddressQRCodeDialog.shareTitle")
                           })
                         } catch (e) {
-                          console.log(e)
+                          console.log("ERROR", e)
                         }
                       } }
               />

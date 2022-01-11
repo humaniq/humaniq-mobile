@@ -19,7 +19,6 @@ const Profile = observer(function () {
     const view = useInstance(ProfileScreenModel)
     useEffect(() => {
         view.init()
-        console.log(store.profileStore.email)
     }, [])
 
     return (
@@ -44,7 +43,6 @@ const Profile = observer(function () {
                                        onChangeText={ (val) => {
                                            runUnprotected(() => {
                                                store.profileStore.firstName = val
-                                               console.log(store.profileStore.firstName)
                                            })
                                        } }
                             />

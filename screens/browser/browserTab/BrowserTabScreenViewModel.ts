@@ -87,7 +87,6 @@ export class BrowserTabScreenViewModel {
   }
 
   async init(nav: NavigationProp<any>, props: IBrowserTab) {
-    console.log("INIT-BROWSER")
     this.id = props.id
     this.navigation = nav
     this.initialized = true
@@ -123,7 +122,6 @@ export class BrowserTabScreenViewModel {
   }
 
   async reloadWebView() {
-    console.log("reload-web-view")
     try {
       this.webviewRef?.reload()
 
@@ -137,7 +135,7 @@ export class BrowserTabScreenViewModel {
       })
 
     } catch (e) {
-      console.log(e)
+      console.log("ERROR", e)
     }
   }
 
@@ -252,7 +250,6 @@ export class BrowserTabScreenViewModel {
   async onMessage({ nativeEvent }) {
     let data = nativeEvent.data
     try {
-      // console.log(data)
       data = typeof data === 'string' ? JSON.parse(data) : data
       if (!data || !data.type) {
         return
@@ -264,7 +261,6 @@ export class BrowserTabScreenViewModel {
         // this.backEnabled = !!(data.navState.canGoBack - 1)
       }
       if (data.permission === "web3") {
-        console.log("web3-permission", this.url, new URL(data.params?.url).host)
         const selectedAddress = getWalletStore().selectedWallet.address
         if (this.getAccounts(data.params?.url).length > 0) {
           this.postMessage({
@@ -293,7 +289,6 @@ export class BrowserTabScreenViewModel {
               isAllowed: true
             })
           } else {
-            console.log("forbidden")
             this.postMessage({
               messageId: data.messageId,
               type: "api-response",
@@ -624,9 +619,7 @@ export class BrowserTabScreenViewModel {
   }
 
   navChanged(nav) {
-    console.log("NAV-CHANGED", nav)
     this.backEnabled = nav.canGoBack
-    console.log(this.backEnabled)
     this.forwardEnabled = nav.canGoForward
     this.url = nav.url
     this.title = nav.title

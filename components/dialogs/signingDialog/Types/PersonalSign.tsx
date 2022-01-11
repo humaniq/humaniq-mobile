@@ -13,7 +13,6 @@ export const PersonalSign = observer(() => {
     const [ message, setMessage ] = useState("")
 
     useEffect(() => {
-        console.log(appStore.signMessageParams)
         setMessage(hexToText(appStore.signMessageParams.data))
     }, [ appStore.signMessageParams ])
 

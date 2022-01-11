@@ -39,9 +39,7 @@ export class BrowserScreenViewModel {
   }
 
   newTab(url: string = DAPPS_CONFIG.HOMEPAGE_HOST) {
-    console.log("newTab")
     const tab = new BrowserTab({ url, id: Date.now() })
-    console.log(tab)
     getBrowserStore().createNewTab(tab)
     getBrowserStore().setActiveTab(tab.id)
   }

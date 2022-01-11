@@ -15,7 +15,6 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
   const nav = useNavigation()
 
   useEffect(() => {
-    console.log(route)
     view.init()
   }, [])
 

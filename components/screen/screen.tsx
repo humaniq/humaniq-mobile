@@ -3,8 +3,7 @@ import { Appearance, KeyboardAvoidingView, Platform, RefreshControl, ScrollView,
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
-import { Button, Colors, Text } from "react-native-ui-lib";
-import ErrorBoundary from 'react-native-error-boundary'
+import { Colors } from "react-native-ui-lib";
 
 const isIos = Platform.OS === "ios";
 
@@ -14,8 +13,6 @@ function ScreenWithoutScrolling(props: ScreenProps) {
   const style = props.style || {};
   const backgroundStyle = props.backgroundColor ? { backgroundColor: props.backgroundColor } : { backgroundColor: Colors.bg };
   const insetStyle = { paddingTop: props.unsafe ? 0 : insets.top };
-
-  console.log(props.statusBar)
 
   return (
       <KeyboardAvoidingView
@@ -68,14 +65,6 @@ function ScreenWithScrolling(props: ScreenProps) {
   );
 }
 
-const CustomFallback = (props: { error: Error, resetError: () => void }) => (
-    <View>
-      <Text>Something happened!</Text>
-      <Text>{ props.error.toString() }</Text>
-      <Button onPress={ props.resetError } label={ 'Try again' }/>
-    </View>
-)
-
 /**
  * The starting component on every screen in the app.
  *
@@ -83,8 +72,8 @@ const CustomFallback = (props: { error: Error, resetError: () => void }) => (
  */
 export function Screen(props: ScreenProps) {
   if (isNonScrolling(props.preset)) {
-    return <ErrorBoundary FallbackComponent={ CustomFallback }><ScreenWithoutScrolling { ...props } /></ErrorBoundary>;
+    return <ScreenWithoutScrolling { ...props } />;
   } else {
-    return <ErrorBoundary FallbackComponent={ CustomFallback }><ScreenWithScrolling { ...props } /></ErrorBoundary>;
+    return <ScreenWithScrolling { ...props } />;
   }
 }

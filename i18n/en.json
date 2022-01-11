@@ -33,6 +33,10 @@
     "noData": "No data",
     "next": "Next"
   },
+  "errorBoundary": {
+    "title": "Something happened!",
+    "tryAgain": "Try again"
+  },
   "errors": {
     "invalidEmail": "Invalid email address",
     "transactionBodyError": "Invalid transaction body"
@@ -57,7 +61,8 @@
     "pinFormConfirmationAction": "Confirm PIN code",
     "pinFormRegisterActionDescription": "For quick access to the application",
     "pinFormConfirmationActionDescription": "And remember your code",
-    "correctPin": "PIN code verified"
+    "correctPin": "PIN code verified",
+    "fingerprint": "Fingerprint"
   },
   "walletScreen": {
     "allAddresses": "All addresses",
@@ -95,6 +100,7 @@
     "name": "Settings",
     "editProfile": "Edit",
     "menu": {
+      "changePin": "Change pin code",
       "ethNetwork": "Ethereum network",
       "exportMnemonic": "Export recovery phrase",
       "recoveryPhrase": "Recovery phrase",

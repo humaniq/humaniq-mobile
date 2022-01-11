@@ -12,6 +12,7 @@ import { getAppStore, getEthereumProvider } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
+import { LOCKER_MODE } from "../../store/app/AppStore";
 
 const Settings = observer<{ route: any }>(function ({ route }) {
   const view = useInstance(SettingsScreenModel)
@@ -49,7 +50,24 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                                 color={ Colors.error }/>
                                         </View>
                                     }
-                                    onPress={ () => nav.navigate("recoveryPhrase") }
+                                    onPress={ () => {
+                                      runUnprotected(() => {
+                                        getAppStore().lockerPreviousScreen = "recovery"
+                                        getAppStore().lockerMode = LOCKER_MODE.CHECK
+                                        getAppStore().isLocked = true
+                                      })
+                                      // nav.navigate("recoveryPhrase")
+                                    } }
+                          />
+                          <MenuItem icon={ "lock" }
+                                    name={ t("settingsScreen.menu.changePin") }
+                                    onPress={ () => {
+                                      runUnprotected(() => {
+                                        getAppStore().lockerPreviousScreen = "settings"
+                                        getAppStore().lockerMode = LOCKER_MODE.CHECK
+                                        getAppStore().isLocked = true
+                                      })
+                                    } }
                           />
                       </Card>
                       <Card padding-10 padding-0 marginT-16>
@@ -76,7 +94,6 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                             <View row padding-16 spread>
                                 <Text>Отключить пин код?</Text>
                                 <Switch onValueChange={ (val?: boolean) => {
-                                  console.log(getAppStore().storedPin)
                                   runUnprotected(() => {
                                     getAppStore().storedPin = val ? getAppStore().savedPin : false
                                   })

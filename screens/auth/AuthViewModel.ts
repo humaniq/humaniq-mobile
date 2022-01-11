@@ -9,6 +9,7 @@ import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
 import { getAppStore, getWalletStore } from "../../App"
+import * as Keychain from 'react-native-keychain';
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -165,6 +166,7 @@ export class AuthViewModel {
         const wallet = await getWalletStore().createWallet(phrase)
         const cryptr = new Cryptr(getAppStore().savedPin)
         const encoded = await cryptr.encrypt(JSON.stringify(wallet))
+        await Keychain.setGenericPassword("hm-user", getAppStore().savedPin);
         await localStorage.save("hm-wallet", encoded)
         runUnprotected(async () => {
             getWalletStore().storedWallets = JSON.parse(JSON.stringify(wallet))

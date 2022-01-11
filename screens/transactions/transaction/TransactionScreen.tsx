@@ -17,7 +17,6 @@ const Transaction = observer<{ route: any }>(({ route }) => {
 
   useEffect(() => {
     view.init(route.params)
-    console.log("TRANSACTION", view.transaction)
   }, [])
 
   return <Screen
