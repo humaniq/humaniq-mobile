@@ -1,9 +1,21 @@
-import { _await, Model, model, modelFlow, objectMap, tProp as p, types as t } from "mobx-keystone"
+import {
+  _await,
+  arraySet,
+  fromSnapshot,
+  getSnapshot,
+  Model,
+  model,
+  modelFlow,
+  objectMap,
+  tProp as p,
+  types as t
+} from "mobx-keystone"
 import { v4 as uuidv4 } from 'uuid';
 import { create } from "apisauce";
 import { TOKEN_LOGO_URL } from "../../config/api";
 import { localStorage } from "../../utils/localStorage";
 import { MONTH } from "../../config/common";
+import { getWalletStore } from "../../App";
 
 
 @model("Coin")
@@ -29,11 +41,18 @@ export class DictionaryStore extends Model({
     type: t.string
   }))), () => objectMap()),
   ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap()),
+  recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet())
 }) {
 
   @modelFlow
   * init() {
-    // (yield* _await(localStorage.remove("hm-wallet-tokens-update")))
+    this.loadRecentlyUsedAddresses()
+    yield this.loadTokensData()
+    this.initialized = uuidv4()
+  }
+
+  @modelFlow
+  * loadTokensData() {
     const last = (yield* _await(localStorage.load("hm-wallet-tokens-update")))
     const lastTokenUpdate = +last || Date.now() - (MONTH + 1)
     let tokens = []
@@ -54,6 +73,29 @@ export class DictionaryStore extends Model({
       decimals: t.decimals,
       type: t.type
     }))
-    this.initialized = uuidv4()
+  }
+
+  @modelFlow
+  * loadRecentlyUsedAddresses() {
+    try {
+      const addresses = (yield* _await(localStorage.load("hm-wallet-recently-addresses"))) || {}
+      if (Object.keys(addresses).length) {
+        this.recentlyUsedAddresses = fromSnapshot(addresses)
+      }
+    } catch (e) {
+      console.log("ERROR", e)
+    }
+  }
+
+  @modelFlow
+  * saveAddress(address: string) {
+    try {
+      if (getWalletStore().walletsMap.has(address)) return
+      this.recentlyUsedAddresses.add(address)
+      const snap = getSnapshot(this.recentlyUsedAddresses)
+      yield* _await(localStorage.save("hm-wallet-recently-addresses", snap))
+    } catch (e) {
+      console.log("ERROR", e)
+    }
   }
 }

@@ -24,7 +24,7 @@ export class GasStation extends Model({
   enableAutoUpdate: p(t.boolean, false).withSetter(),
   gasPrice: p(t.string, ""),
   intId: p(t.string, ""),
-  selectedSpeed: p(t.enum(GAS_PRICE_SPEED), GAS_PRICE_SPEED.SAFE_LOW).withSetter(),
+  selectedSpeed: p(t.enum(GAS_PRICE_SPEED), GAS_PRICE_SPEED.FAST).withSetter(),
   isError: p(t.boolean, false),
   pending: p(t.boolean, false)
 }) {

@@ -1,14 +1,18 @@
 import { makeAutoObservable, reaction } from "mobx";
 import { Wallet } from "../../../store/wallet/Wallet";
-import { getEthereumProvider, getWalletStore } from "../../../App";
+import { getDictionary, getEthereumProvider, getWalletStore } from "../../../App";
 import { ERC20 } from "../../../store/wallet/erc20/ERC20";
 import { inject } from "react-ioc";
-import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import {
+  SelectWalletTokenViewModel
+} from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { getSnapshot } from "mobx-keystone";
 import { BigNumber, ethers } from "ethers";
 import { currencyFormat } from "../../../utils/number";
 import { EthereumTransaction, TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
-import { SelectTransactionFeeDialogViewModel } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import {
+  SelectTransactionFeeDialogViewModel
+} from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { isValidAddress } from "ethereumjs-util/dist/account";
 import { t } from "../../../i18n";
 import { RootNavigation } from "../../../navigators";
@@ -30,7 +34,8 @@ export class SendTransactionViewModel {
   inputFiat = false
   contract
 
-  betweenMyAddress = true
+  betweenMyAddress = false
+  recentlyUsedAddresses = false
 
   txData = {
     chainId: 0,
@@ -144,7 +149,7 @@ export class SendTransactionViewModel {
 
   get transactionMaxFee() {
     try {
-      return  +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
+      return +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
     } catch (e) {
       console.log("ERROR", e)
       return 0
@@ -209,7 +214,7 @@ export class SendTransactionViewModel {
             .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                     BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
                 )
-            ): false
+            ) : false
       } else {
         return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
                 .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
@@ -283,6 +288,7 @@ export class SendTransactionViewModel {
       tx.applyToWallet()
       setTimeout(() => {
         tx.waitTransaction()
+        getDictionary().saveAddress(tx.toAddress)
         this.closeDialog()
       }, 10)
 

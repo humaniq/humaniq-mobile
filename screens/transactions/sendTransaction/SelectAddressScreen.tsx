@@ -15,11 +15,13 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { Screen } from "../../../components";
 import { t } from "../../../i18n";
 import { useNavigation } from "@react-navigation/native";
-import { getWalletStore } from "../../../App";
+import { getDictionary, getWalletStore } from "../../../App";
 import Ripple from "react-native-material-ripple"
 import { RootNavigation } from "../../../navigators";
 import { InteractionManager, ScrollView } from "react-native";
-import { SelectWalletTokenViewModel } from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
+import {
+  SelectWalletTokenViewModel
+} from "../../../components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import { Header, ICON_HEADER } from "../../../components/header/Header";
 import useKeyboard from '@rnhooks/keyboard';
 import { throttle } from "../../../utils/general";
@@ -123,6 +125,61 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
             <ScrollView>
                 <View paddingH-16 marginB-90>
                     <Text text16 robotoM marginV-24>{ t("selectAddressScreen.transfer") }</Text>
+                  { getDictionary().recentlyUsedAddresses.items.length && <View marginB-10>
+                      <ExpandableSection
+                          expanded={ view.recentlyUsedAddresses }
+                          onPress={ () => {
+                            view.recentlyUsedAddresses = !view.recentlyUsedAddresses
+                          } }
+                          sectionHeader={ (() =>
+                              <View bg-white padding-10 br20 row centerV spread>
+                                <Text text16>{ t("selectAddressScreen.toRecentAddress") }</Text>
+                                <Button link style={ { height: 30, width: 30 } }
+                                        onPress={ () => {
+                                          view.recentlyUsedAddresses = !view.recentlyUsedAddresses
+                                        } }
+                                >
+                                  { !view.recentlyUsedAddresses &&
+                                      <HIcon name={ "down" } width={ 14 } style={ { color: Colors.black } }/> }
+                                  { view.recentlyUsedAddresses &&
+                                      <HIcon name={ "up" } width={ 14 } style={ { color: Colors.black } }/> }
+                                </Button>
+                              </View>)() }
+                      >
+                          <View
+                              style={ {
+                                borderBottomLeftRadius: 12,
+                                borderBottomRightRadius: 12,
+                                backgroundColor: Colors.white
+                              } }>
+                            {
+                              getDictionary().recentlyUsedAddresses.items.map(w => {
+                                return <View key={ w }>
+                                  <View
+                                      style={ {
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: Colors.grey,
+                                        marginLeft: 10
+                                      } }/>
+                                  <Ripple onPress={ () => {
+                                    if (view.txData.to === w) {
+                                      view.txData.to = ""
+                                    } else {
+                                      view.txData.to = w
+                                    }
+                                  } } rippleColor={ Colors.primary }>
+                                    <View margin-12 row spread paddingR-3>
+                                      <Text text16>{ `${ w.slice(0, 4) }...${ w.substring(w.length - 4) }` }</Text>
+                                      <RadioButton size={ 20 }
+                                                   color={ view.txData.to !== w ? Colors.textGrey : Colors.primary }
+                                                   selected={ view.txData.to === w }/>
+                                    </View>
+                                  </Ripple></View>
+                              })
+                            }
+                          </View>
+                      </ExpandableSection>
+                  </View> }
                     <ExpandableSection
                         expanded={ view.betweenMyAddress }
                         onPress={ () => {
@@ -136,8 +193,10 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                         view.betweenMyAddress = !view.betweenMyAddress
                                       } }
                               >
-                                { !view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
-                                { view.betweenMyAddress && <HIcon width={ 14 } style={ { color: Colors.black } }/> }
+                                { !view.betweenMyAddress &&
+                                    <HIcon name={ "down" } width={ 14 } style={ { color: Colors.black } }/> }
+                                { view.betweenMyAddress &&
+                                    <HIcon name={ "up" } width={ 14 } style={ { color: Colors.black } }/> }
                               </Button>
                             </View>)() }
                     >
@@ -186,7 +245,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
         </View>
     </> }
     {
-      !view.initialized && <LoaderScreen/>
+        !view.initialized && <LoaderScreen/>
     }
   </Screen>
 })

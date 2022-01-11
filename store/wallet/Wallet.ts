@@ -18,7 +18,6 @@ import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEthereumProvider, getMoralisRequest, getRequest } from "../../App"
 import { EthereumTransaction } from "./transaction/EthereumTransaction"
-import { intToHex } from "ethjs-util"
 import { changeCaseObj } from "../../utils/general"
 import { ERC20 } from "./erc20/ERC20"
 import { ERC20Transaction } from "./transaction/ERC20Transaction";
@@ -181,7 +180,7 @@ export class Wallet extends Model({
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
       address: this.address
     })
-    const result = yield getMoralisRequest().get(route, { chain:  getEthereumProvider().currentNetworkName })
+    const result = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName })
 
     if (result.ok && (result.data as TransactionsRequestResult).total) {
       (result.data as TransactionsRequestResult).result.forEach(r => {
@@ -215,7 +214,7 @@ export class Wallet extends Model({
     const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
       address: this.address
     })
-    const erc20 = yield getMoralisRequest().get(route, { chain:  getEthereumProvider().currentNetworkName })
+    const erc20 = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName })
     if (erc20.ok) {
       erc20.data.forEach(t => {
         const erc20Token = new ERC20({ ...changeCaseObj(t), walletAddress: this.address })
