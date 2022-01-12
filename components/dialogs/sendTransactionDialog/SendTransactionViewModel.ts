@@ -33,23 +33,27 @@ export class SendTransactionViewModel {
   }
 
   async init(txData, meta) {
-    this.pending = true
-    this.meta = meta
-    this.txData = {
-      ...this.txData,
-      ...txData
+    try {
+      this.pending = true
+      this.meta = meta
+      this.txData = {
+        ...this.txData,
+        ...txData
+      }
+      this.display = true
+      this.initialized = true
+      this.txData.chainId = getEthereumProvider().currentNetwork.chainID
+      const [ nonce, gasPrice ] = await Promise.all([
+        await getEthereumProvider().currentProvider.getTransactionCount(this.selectedWallet.address, "pending"),
+        await getEthereumProvider().currentProvider.getGasPrice()
+      ])
+      this.txData.nonce = nonce
+      this.txData.gasLimit = Number(txData.gas)
+      this.txData.gasPrice = gasPrice && +(gasPrice.toString())
+      this.pending = false
+    } catch (e) {
+      console.log("ERROR", e)
     }
-    this.display = true
-    this.initialized = true
-    this.txData.chainId = getEthereumProvider().currentNetwork.chainID
-    const [ nonce, gasPrice ] = await Promise.all([
-      await getEthereumProvider().currentProvider.getTransactionCount(this.selectedWallet.address, "pending"),
-      await getEthereumProvider().currentProvider.getGasPrice()
-    ])
-    this.txData.nonce = nonce
-    this.txData.gasLimit = +(txData.gas.toString())
-    this.txData.gasPrice = gasPrice && +(gasPrice.toString())
-    this.pending = false
   }
 
   get hostname() {
@@ -61,15 +65,20 @@ export class SendTransactionViewModel {
   }
 
   get transactionMaxFee() {
-    return this.txData.gasLimit ? +ethers.utils.formatEther(this.txData.gasLimit * this.txData.gasPrice) : 0
+    try {
+      return this.txData.gasLimit ? +ethers.utils.formatEther((this.txData.gasLimit * this.txData.gasPrice).toString()) : 0
+    } catch (e) {
+      console.log("ERROR", e)
+      return 0
+    }
   }
 
   get transactionFee() {
-    return this.txData.gasLimit ? +ethers.utils.formatEther(+this.txData.gasLimit * this.txData.gasPrice) : 0
+    return this.txData.gasLimit ? +ethers.utils.formatEther((this.txData.gasLimit * this.txData.gasPrice).toString()) : 0
   }
 
   get transactionTotalAmount() {
-    return this.txData.gasLimit ? +ethers.utils.formatEther(this.txData.value) + this.transactionFee : 0
+    return this.txData.gasLimit ? +ethers.utils.formatEther(Number(this.txData.value).toString()) + this.transactionFee : 0
   }
 
   get price() {
@@ -81,41 +90,51 @@ export class SendTransactionViewModel {
   }
 
   get txHumanReadable() {
-    return {
-      value: +ethers.utils.formatEther(this.txData.value),
-      valueFiat: currencyFormat(+ethers.utils.formatEther(this.txData.value) * this.price),
-      feeMax: this.transactionMaxFee,
-      fee: this.transactionFee,
-      feeFiat: currencyFormat(this.transactionFee * this.price),
-      total: this.transactionTotalAmount,
-      totalFiat: currencyFormat(+this.transactionTotalAmount * this.price),
-      maxAmount: +ethers.utils.formatEther(this.txData.value) + this.transactionMaxFee,
+    try {
+      return {
+        value: +ethers.utils.formatEther(Number(this.txData.value).toString()),
+        valueFiat: currencyFormat(+ethers.utils.formatEther(Number(this.txData.value).toString()) * this.price),
+        feeMax: this.transactionMaxFee,
+        fee: this.transactionFee,
+        feeFiat: currencyFormat(this.transactionFee * this.price),
+        total: this.transactionTotalAmount,
+        totalFiat: currencyFormat(+this.transactionTotalAmount * this.price),
+        maxAmount: +ethers.utils.formatEther(Number(this.txData.value).toString()) + this.transactionMaxFee,
+      }
+    } catch (e) {
+      console.log("ERROR", e)
+      return {}
     }
   }
 
   get txBody() {
-    return {
-      chainId: this.txData.chainId.toString(),
-      nonce: this.txData.nonce.toString(),
-      gasPrice: this.txData.gasPrice.toString(),
-      gas: this.txData.gasLimit.toString(),
-      toAddress: this.txData.to,
-      walletAddress: this.selectedWallet.address,
-      fromAddress: this.txData.from,
-      value: this.txData.value.toString(),
-      input: this.txData.data,
-      blockTimestamp: new Date(),
-      prices: {
-        usd: this.price
-      },
-      type: 0
+    try {
+      return {
+        chainId: this.txData.chainId.toString(),
+        nonce: this.txData.nonce.toString(),
+        gasPrice: this.txData.gasPrice.toString(),
+        gas: this.txData.gasLimit.toString(),
+        toAddress: this.txData.to,
+        walletAddress: this.selectedWallet.address,
+        fromAddress: this.txData.from,
+        value: this.txData.value.toString(),
+        input: this.txData.data,
+        blockTimestamp: new Date(),
+        prices: {
+          usd: this.price
+        },
+        type: 0
+      }
+    } catch (e) {
+      console.log("ERROR", e)
+      return {}
     }
   }
 
   get enoughBalance() {
     return this.selectedWallet.balances?.amount ? BigNumber.from(this.selectedWallet.balances?.amount)
         .gt(BigNumber.from((+this.txData.value).toString()).add(
-                BigNumber.from(this.txData.gasLimit * +this.txData.gasPrice)
+                BigNumber.from((this.txData.gasLimit * +this.txData.gasPrice).toString())
             )
         ) : false
   }
@@ -134,7 +153,7 @@ export class SendTransactionViewModel {
   onAccountsRejected = () => {
     // this.clear()
     this.display = false
-    this.approvalRequest.resolve(false)
+    this.approvalRequest.reject()
   }
 
   clear() {

@@ -4,12 +4,12 @@ import { TOASTER_TYPE } from "../../app/AppStore";
 import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
 
 
-export const setPendingAppToast = (message = "pending") => {
+export const setPendingAppToast = (message = "pending", position = TOAST_POSITION.BOTTOM) => {
   runUnprotected(() => {
     getAppStore().toast.type = TOASTER_TYPE.PENDING
     getAppStore().toast.message = message
     getAppStore().toast.display = true
-    getAppStore().toast.position = TOAST_POSITION.BOTTOM
+    getAppStore().toast.position = position
   })
 }
 

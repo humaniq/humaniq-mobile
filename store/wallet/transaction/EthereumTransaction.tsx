@@ -101,7 +101,7 @@ export class EthereumTransaction extends Model({
       return tx
     } catch (e) {
       console.log("ERROR-SEND-TRANSACTION", e)
-      return null
+      return false
     }
   }
 
@@ -268,7 +268,7 @@ export class EthereumTransaction extends Model({
 
   @computed
   get formatFee() {
-    return +formatEther(this.gasPrice * this.gas)
+    return +formatEther((this.gasPrice * this.gas).toString())
   }
 
   @computed
@@ -283,7 +283,7 @@ export class EthereumTransaction extends Model({
 
   @computed
   get formatTotal() {
-    return +formatEther(this.value) + (+formatEther(this.gasPrice * this.gas))
+    return +formatEther(this.value) + (+formatEther((this.gasPrice * this.gas).toString()))
   }
 
   @computed

@@ -70,18 +70,18 @@
         }
       }
 
-      function Unauthorized () {
+      function Unauthorized (id) {
         this.name = "Unauthorized"
-        this.id = 4100
+        this.id = id
         this.code = 4100
         this.message = "The requested method and/or account has not been authorized by the user."
       }
 
       Unauthorized.prototype = Object.create(Error.prototype)
 
-      function UserRejectedRequest () {
+      function UserRejectedRequest (id) {
         this.name = "UserRejectedRequest"
-        this.id = 4001
+        this.id = id
         this.code = 4001
         this.message = "The user rejected the request."
       }
@@ -125,13 +125,13 @@
               callback.resolve(data.data)
             } else {
               bridgeSend({ type: "user-reject-request", data })
-              callback.reject(new UserRejectedRequest())
+              callback.reject(new UserRejectedRequest(id))
             }
           } else if (data.type === "web3-send-async-callback") {
             if (callback.beta) {
               if (data.error) {
                 if (data.error.code === 4100)
-                  callback.reject(new Unauthorized())
+                  callback.reject(new Unauthorized(id))
                 else
                   callback.reject(data.error)
               } else {

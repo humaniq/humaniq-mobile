@@ -253,7 +253,7 @@ export class ERC20Transaction extends Model({
 
   @computed
   get formatFee() {
-    return +formatEther(this.gasPrice * this.gas)
+    return +formatEther((this.gasPrice * this.gas).toString())
   }
 
   @computed
