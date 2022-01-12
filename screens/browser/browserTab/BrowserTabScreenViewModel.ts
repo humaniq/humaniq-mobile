@@ -20,6 +20,7 @@ import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumT
 import { InteractionManager } from "react-native";
 import { closeToast, setPendingAppToast } from "../../../store/wallet/transaction/utils";
 import { t } from "../../../i18n";
+import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
 
 export class BrowserTabScreenViewModel {
 
@@ -336,46 +337,42 @@ export class BrowserTabScreenViewModel {
             if (this.sendTransactionDialog.display) return
             await this.sendTransactionDialog.init(data.payload.params[0], data.meta)
 
-            const approved = await new Promise((resolve, reject) => {
-              this.sendTransactionDialog.approvalRequest = {
-                resolve,
-                reject
-              }
-            })
+            try {
+              const approved = await new Promise((resolve, reject) => {
+                this.sendTransactionDialog.approvalRequest = {
+                  resolve,
+                  reject
+                }
+              })
 
-            this.sendTransactionDialog.display = false
-            setPendingAppToast(t("sendTransactionDialog.transactionSending"))
-            InteractionManager.runAfterInteractions(async () => {
-              if (approved) {
-                try {
-                  // @ts-ignore
-                  const tx = new EthereumTransaction(approved.tx)
-                  console.log(tx)
-                  await tx.sendTransaction()
-                  closeToast()
+              this.sendTransactionDialog.display = false
+              setPendingAppToast(t("sendTransactionDialog.transactionSending"), TOAST_POSITION.UNDER_TAB_BAR)
+              InteractionManager.runAfterInteractions(async () => {
+                // @ts-ignore
+                const tx = new EthereumTransaction(approved.tx)
+                const result = await tx.sendTransaction()
+                if (!result) {
                   this.postAsyncCallbackMessage({
-                    result: tx.hash,
-                    data
-                  })
-                  tx.applyToWallet()
-                  setTimeout(async () => {
-                    await tx.waitTransaction()
-                  }, 10)
-
-                } catch (e) {
-                  console.log("ERROR", e)
-                  this.postAsyncCallbackMessage({
-                    result: e,
-                    data
+                    data,
+                    error: "Error send transaction"
                   })
                 }
-              } else {
+                closeToast()
                 this.postAsyncCallbackMessage({
-                  result: "user rejected request",
+                  result: tx.hash,
                   data
                 })
-              }
-            })
+                tx.applyToWallet()
+                setTimeout(async () => {
+                  await tx.waitTransaction()
+                }, 10)
+              })
+            } catch (e) {
+              this.postAsyncCallbackMessage({
+                data,
+                error: { code: 4001, message: "user rejected request" }
+              })
+            }
             break
           }
           case 'eth_sign': {
@@ -542,12 +539,13 @@ export class BrowserTabScreenViewModel {
     this.webviewRef.injectJavaScript(js)
   }
 
-  postAsyncCallbackMessage({ result, data }) {
+  postAsyncCallbackMessage({ result = {}, data, error = undefined }) {
     this.postMessage({
       messageId: data.messageId,
       type: "web3-send-async-callback",
       beta: true,
-      result: { result }
+      result: { result },
+      error
     })
   }
 

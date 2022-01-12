@@ -6,7 +6,7 @@ Humaniq Mobile is a "Cold" ethereum networks compatible crypto wallet that provi
 - Show Ethereum and all ERC20 tokens balances (with it fiat values), associated with wallet addresses
 - Send and receive Ethereum and ERC20 tokens on to other addresses (includes self other addresses)
 - Show Ethereum and ERC20 tokens transactions history
-- Dapps browser with full functionality (connect wallet, sign messages, sign transactions, send transactions)
+- Dapps browser with inject functionality [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193)
 
 # Technology
 
@@ -19,7 +19,3 @@ Humaniq Mobile is a "Cold" ethereum networks compatible crypto wallet that provi
 - install dependencies `yarn`
 - start development mode `yarn start` and second terminal `yarn android`
 - build release `yarn build android` & `yarn release-android`
-
-### Development plans
-- Split application on bundles (for fast start)
-- Refactoring auth flow
