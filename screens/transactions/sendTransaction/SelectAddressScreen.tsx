@@ -93,6 +93,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                   },
                   onPress: () => {
                     nav.navigate("QRScanner", {
+                      // @ts-ignore
                       onScanSuccess: meta => {
                         if (meta.action === "send-eth" && meta.target_address) {
                           view.txData.to = meta.target_address

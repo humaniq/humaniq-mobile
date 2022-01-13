@@ -19,9 +19,7 @@ import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrase
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 import ErrorBoundary from 'react-native-error-boundary'
-import { Button, Colors, Text, View } from "react-native-ui-lib";
-import { Screen } from "../components";
-import { t } from "../i18n";
+import { CustomFallback } from "../components/customFallback/CustomFallback";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -81,17 +79,6 @@ const SendTransactionStack = () => {
     <Stack.Screen name="confirmTransaction" component={ ConfirmTransactionScreen }/>
   </Stack.Navigator>
 }
-
-
-const CustomFallback = (props: { error: Error, resetError: () => void }) => (
-    <Screen preset={ "fixed" } style={ { minHeight: "100%" } } backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }>
-      <View flex center>
-        <Text text16 robotoM>{ t("errorBoundary.title")}</Text>
-        <Text>{ props.error.toString() }</Text>
-        <Button marginT-20 onPress={ props.resetError } label={ t("errorBoundary.tryAgain") }/>
-      </View>
-    </Screen>
-)
 
 export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {

@@ -55,6 +55,7 @@ import {
 } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { Splash } from "./components/splash/Splash";
 import { BrowserStore } from "./store/browser/BrowserStore";
+import { routingInstrumentation } from "./index";
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -142,6 +143,10 @@ const AppScreen = observer(() => {
                   ref={ navigationRef }
                   initialState={ initialNavigationState }
                   onStateChange={ onNavigationStateChange }
+                  onReady={() => {
+                    // Register the navigation container with the instrumentation
+                    routingInstrumentation.registerNavigationContainer(navigationRef);
+                  }}
               />
                   <AppToast/>
                   <CreateWalletToast/>

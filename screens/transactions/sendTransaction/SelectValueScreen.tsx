@@ -36,9 +36,9 @@ const SelectValue = observer(() => {
 
   const [ visible ] = useKeyboard();
 
-  // @ts-ignore
   const thr = throttle(() => {
     InteractionManager.runAfterInteractions(() => {
+      // @ts-ignore
       inputRef.current?.focus();
     })
   }, 300)
