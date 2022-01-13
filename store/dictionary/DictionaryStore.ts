@@ -29,7 +29,6 @@ export class Coin extends Model({
 }) {
 }
 
-
 @model("DictionaryStore")
 export class DictionaryStore extends Model({
   initialized: p(t.string, ""),
@@ -41,7 +40,7 @@ export class DictionaryStore extends Model({
     type: t.string
   }))), () => objectMap()),
   ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap()),
-  recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet())
+  recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet()),
 }) {
 
   @modelFlow
