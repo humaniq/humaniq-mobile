@@ -55,7 +55,9 @@ import {
 } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { Splash } from "./components/splash/Splash";
 import { BrowserStore } from "./store/browser/BrowserStore";
-import { routingInstrumentation } from "./index";
+import * as Sentry from "@sentry/react-native";
+
+const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
@@ -143,10 +145,10 @@ const AppScreen = observer(() => {
                   ref={ navigationRef }
                   initialState={ initialNavigationState }
                   onStateChange={ onNavigationStateChange }
-                  onReady={() => {
+                  onReady={ () => {
                     // Register the navigation container with the instrumentation
-                    routingInstrumentation.registerNavigationContainer(navigationRef);
-                  }}
+                    routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
+                  } }
               />
                   <AppToast/>
                   <CreateWalletToast/>
@@ -183,4 +185,17 @@ App.register(
     SelectTransactionFeeDialogViewModel,
     // QRScannerView
 )
+
+Sentry.init({
+  dsn: "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030",
+  tracesSampleRate: 1.0,
+  integrations: [
+    new Sentry.ReactNativeTracing({
+      routingInstrumentation,
+    }),
+  ],
+});
+
+Sentry.wrap(App)
+
 export default App
