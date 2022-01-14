@@ -70,8 +70,9 @@ export const BrowserHeader = observer<HeaderProps>((
         </TouchableOpacity>
     }
     { isSearchMode &&
-        <View flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
-              style={ CSSShadows }
+        <TouchableOpacity flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
+                          style={ CSSShadows }
+                          onPress={ () => inputRef?.current.focus() }
         >
             <HIcon size={ 18 } name={ "arrow-left" } onPress={ onPressSearch }/>
             <TextField
@@ -93,7 +94,7 @@ export const BrowserHeader = observer<HeaderProps>((
                 placeholder={ t("browserScreen.searchPlaceholder") }
                 enableErrors={ false }
             />
-        </View>
+        </TouchableOpacity>
     }
     <View flex-1 row center paddingL-10>
       <Ripple
@@ -102,8 +103,8 @@ export const BrowserHeader = observer<HeaderProps>((
           onPress={ openTabs }
       >
         <View center paddingH-6 paddingV-2
-              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 28 } }>
-          <Text center>
+              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 24 } }>
+          <Text center text12>
             { numOfTabs }
           </Text>
         </View>
@@ -116,7 +117,7 @@ export const BrowserHeader = observer<HeaderProps>((
           borderRadius={ 4 }
           color={ Colors.white }
           enableShadow={ true }
-          offset={ 5 }
+          offset={ -50 }
           useSideTip={ false }
           customContent={
             <View>

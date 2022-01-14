@@ -1,6 +1,6 @@
 import { _await, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone";
 import { computed } from "mobx";
-import { captureScreen } from 'react-native-view-shot';
+import { captureRef } from 'react-native-view-shot';
 import { Dimensions } from "react-native";
 import Device from "../../utils/Device";
 
@@ -20,11 +20,12 @@ export class HistoryItem extends Model({
 export class BrowserTab extends Model({
   url: p(t.string).withSetter(),
   id: p(t.string),
-  image: p(t.string)
+  image: p(t.string),
+  icon: p(t.string).withSetter()
 }) {
   @modelFlow
-  * takeScreenShot() {
-    this.image = yield* _await(captureScreen({
+  * takeScreenShot(ref) {
+    this.image = yield* _await(captureRef(ref, {
       format: 'jpg',
       quality: 0.2,
       width: THUMB_WIDTH,
@@ -41,6 +42,32 @@ export class BrowserStore extends Model({
   activeTab: p(t.string, () => null)
 }) {
 
+  @modelFlow
+  * init() {
+    // try {
+    //   const stored = (yield* _await(localStorage.load("hm-wallet-browser-tabs"))) || {}
+    //   console.log({ stored })
+    //   if (stored.tabs) {
+    //     this.tabs = fromSnapshot(stored.tabs)
+    //     console.log(this.tabs)
+    //     if (stored.activeTab && this.tabs.find(t => t.id === stored.activeTab)) {
+    //       this.activeTab = stored.activeTab
+    //       console.log(this.activeTab)
+    //     }
+    //   }
+    // } catch (e) {
+    //   console.log("ERROR", e)
+    // }
+  }
+
+  @modelFlow
+  * saveTabs() {
+    // yield* _await(localStorage.save("hm-wallet-recently-addresses", {
+    //   tabs: getSnapshot(this.tabs),
+    //   activeTab: getSnapshot(this.activeTab)
+    // }))
+  }
+
   @computed
   get showTabs() {
     return !this.activeTab
@@ -49,11 +76,13 @@ export class BrowserStore extends Model({
   @modelAction
   removeActiveTab = () => {
     this.activeTab = null
+    this.saveTabs()
   }
 
   @modelAction
   setActiveTab = (id) => {
     this.activeTab = id
+    this.saveTabs()
   }
 
   @modelAction
@@ -74,11 +103,13 @@ export class BrowserStore extends Model({
   @modelAction
   closeAllTabs = () => {
     this.tabs = []
+    this.saveTabs()
   }
 
   @modelAction
   createNewTab = (tab: BrowserTab) => {
     this.tabs.push(tab)
+    this.saveTabs()
   }
 
   @modelAction
@@ -87,6 +118,7 @@ export class BrowserStore extends Model({
     if (this.activeTab === id) {
       this.removeActiveTab()
     }
+    this.saveTabs()
   }
 
   @modelAction
@@ -98,5 +130,6 @@ export class BrowserStore extends Model({
         return tab
       }
     })
+    this.saveTabs()
   }
 }

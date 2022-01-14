@@ -259,6 +259,7 @@ export class BrowserTabScreenViewModel {
         this.url = data.navState.url
         this.title = data.navState.title
         this.icon = data.navState.icon.replace("svg", "png")
+        this.storedTab.setIcon(this.icon)
         // this.backEnabled = !!(data.navState.canGoBack - 1)
       }
       if (data.permission === "web3") {

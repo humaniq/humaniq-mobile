@@ -22,7 +22,7 @@ export interface IBrowserTab {
   initialUrl: string
   id: string
   key: string,
-  showTabs: () => any
+  showTabs: (ref: any) => any
   newTab: () => any,
 }
 
@@ -82,7 +82,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            onSearchSubmit={ view.onSearchSubmit }
                            goHomePage={ view.goHomePage }
                            numOfTabs={ getBrowserStore().tabs.length }
-                           openTabs={ props.showTabs }
+                           openTabs={ () => props.showTabs(webViewRef) }
                            changeAddress={ () => selectAddress.display = true }
                            changeNetwork={ () => selectNetwork.display = true }
                            openNewTab={ props.newTab }
