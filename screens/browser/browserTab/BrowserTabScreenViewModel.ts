@@ -260,6 +260,7 @@ export class BrowserTabScreenViewModel {
         this.title = data.navState.title
         this.icon = data.navState.icon.replace("svg", "png")
         this.storedTab.setIcon(this.icon)
+        getBrowserStore().saveTabs()
         // this.backEnabled = !!(data.navState.canGoBack - 1)
       }
       if (data.permission === "web3") {
@@ -623,6 +624,7 @@ export class BrowserTabScreenViewModel {
     this.url = nav.url
     this.title = nav.title
     this.storedTab.setUrl(nav.url)
+    getBrowserStore().saveTabs()
   }
 
   goHomePage() {
@@ -658,6 +660,7 @@ export class BrowserTabScreenViewModel {
 
       this.progress = 0
       this.storedTab.setUrl(urlToGo)
+      getBrowserStore().saveTabs()
       return urlToGo
     }
     this.handleNotAllowedUrl(urlToGo)

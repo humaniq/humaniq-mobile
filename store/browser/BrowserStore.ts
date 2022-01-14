@@ -1,8 +1,19 @@
-import { _await, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone";
+import {
+  _await,
+  fromSnapshot,
+  getSnapshot,
+  Model,
+  model,
+  modelAction,
+  modelFlow,
+  tProp as p,
+  types as t
+} from "mobx-keystone";
 import { computed } from "mobx";
 import { captureRef } from 'react-native-view-shot';
 import { Dimensions } from "react-native";
 import Device from "../../utils/Device";
+import { localStorage } from "../../utils/localStorage";
 
 const margin = 16;
 const THUMB_WIDTH = Dimensions.get('window').width / 2 - margin * 2;
@@ -44,28 +55,27 @@ export class BrowserStore extends Model({
 
   @modelFlow
   * init() {
-    // try {
-    //   const stored = (yield* _await(localStorage.load("hm-wallet-browser-tabs"))) || {}
-    //   console.log({ stored })
-    //   if (stored.tabs) {
-    //     this.tabs = fromSnapshot(stored.tabs)
-    //     console.log(this.tabs)
-    //     if (stored.activeTab && this.tabs.find(t => t.id === stored.activeTab)) {
-    //       this.activeTab = stored.activeTab
-    //       console.log(this.activeTab)
-    //     }
-    //   }
-    // } catch (e) {
-    //   console.log("ERROR", e)
-    // }
+    try {
+      const stored = (yield* _await(localStorage.load("hm-wallet-browser-tabs"))) || {}
+      if (stored.tabs) {
+        this.tabs = fromSnapshot(stored.tabs)
+        if (stored.activeTab && this.tabs.find(t => t.id === stored.activeTab)) {
+          this.activeTab = stored.activeTab
+        }
+      }
+    } catch (e) {
+      console.log("ERROR", e)
+      yield* _await(localStorage.save("hm-wallet-browser-tabs", {}))
+      this.init()
+    }
   }
 
   @modelFlow
   * saveTabs() {
-    // yield* _await(localStorage.save("hm-wallet-recently-addresses", {
-    //   tabs: getSnapshot(this.tabs),
-    //   activeTab: getSnapshot(this.activeTab)
-    // }))
+    yield* _await(localStorage.save("hm-wallet-browser-tabs", {
+      tabs: getSnapshot(this.tabs),
+      activeTab: getSnapshot(this.activeTab)
+    }))
   }
 
   @computed
