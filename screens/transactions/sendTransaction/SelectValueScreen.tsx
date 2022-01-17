@@ -53,7 +53,7 @@ const SelectValue = observer(() => {
       // @ts-ignore
       inputRef?.current && thr()
     } catch (e) {
-      console.log("Error", e)
+      console.log("ERROR", e)
     }
   }, [ inputRef?.current ])
 

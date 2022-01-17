@@ -61,7 +61,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
       // @ts-ignore
       inputRef?.current && thr()
     } catch (e) {
-      console.log("Error", e)
+      console.log("ERROR", e)
     }
   }, [ inputRef?.current ])
 
@@ -126,7 +126,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
             <ScrollView>
                 <View paddingH-16 marginB-90>
                     <Text text16 robotoM marginV-24>{ t("selectAddressScreen.transfer") }</Text>
-                  { getDictionary().recentlyUsedAddresses.items.length && <View marginB-10>
+                  { !!getDictionary().recentlyUsedAddresses.items.length && <View marginB-10>
                       <ExpandableSection
                           expanded={ view.recentlyUsedAddresses }
                           onPress={ () => {

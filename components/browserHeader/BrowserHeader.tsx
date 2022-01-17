@@ -14,6 +14,8 @@ export interface HeaderProps {
   onPressSearch?: (any) => any | Promise<any>
   isSearchMode: boolean,
   onSearchSubmit?: (val: string) => any | Promise<any>
+  searchValue: string
+  onValueChange: (val: string) => void
   goHomePage: () => void,
   numOfTabs: number,
   openTabs: () => void
@@ -36,7 +38,9 @@ export const BrowserHeader = observer<HeaderProps>((
       openTabs,
       openNewTab,
       changeAddress,
-      changeNetwork
+      changeNetwork,
+      onValueChange,
+      searchValue = "",
     }) => {
 
   const inputRef = useRef()
@@ -45,14 +49,14 @@ export const BrowserHeader = observer<HeaderProps>((
     // @ts-ignore
     inputRef?.current?.focus()
     if (!isSearchMode) {
-      setValue("")
+      onValueChange("")
     }
   }, [ isSearchMode ])
 
-  const [ value, setValue ] = useState("")
   const [ visible, setVisible ] = useState(false)
 
   const isHttps = url && new URL(url).protocol === "https:"
+
   return <View row center bg-bg paddingV-10>
     { !isSearchMode &&
         <View left paddingH-8>
@@ -64,36 +68,46 @@ export const BrowserHeader = observer<HeaderProps>((
     { !isSearchMode &&
         <TouchableOpacity flex-6 row onPress={ onPressSearch }>
             <View row centerV bg-greyLightSecond paddingH-10 paddingV-10 br30 flexG>
-              { !!isHttps && <HIcon name={ "lock" } size={ 12 }/> }
+              { !!isHttps && <HIcon name={ "lock-fill" } size={ 14 }/> }
               { !!url && <Text grey20 marginR-4> { new URL(url).host }</Text> }
             </View>
         </TouchableOpacity>
     }
     { isSearchMode &&
-        <View flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
-              style={ CSSShadows }
+        <TouchableOpacity flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
+                          style={ CSSShadows }
+            // @ts-ignore
+                          onPress={ () => inputRef?.current.focus() }
         >
-            <HIcon size={ 18 } name={ "arrow-left" } onPress={ onPressSearch }/>
-            <TextField
-                autoCapitalize='none'
-                hideUnderline
-                style={ {
-                  fontSize: 14,
-                  // width: "90%",
-                  padding: 0,
-                  paddingLeft: 20,
-                  margin: 0,
-                  color: Colors.dark30,
-                  overflow: 'hidden',
-                } }
-                onSubmitEditing={ () => onSearchSubmit(value) }
-                ref={ inputRef }
-                onChangeText={ setValue }
-                value={ value }
-                placeholder={ t("browserScreen.searchPlaceholder") }
-                enableErrors={ false }
-            />
-        </View>
+            <TouchableOpacity row flex-1 onPress={ onPressSearch }>
+                <HIcon size={ 18 } name={ "arrow-left" }/>
+            </TouchableOpacity>
+            <View row flex-7>
+                <TextField
+                    autoCapitalize='none'
+                    hideUnderline
+                    style={ {
+                      fontSize: 14,
+                      padding: 0,
+                      margin: 0,
+                      color: Colors.dark30,
+                      overflow: 'hidden',
+                    } }
+                    onSubmitEditing={ () => onSearchSubmit(searchValue) }
+                    ref={ inputRef }
+                    onChangeText={ (val) => {
+                      onValueChange(val)
+                    } }
+                    value={ searchValue }
+                    placeholder={ t("browserScreen.searchPlaceholder") }
+                    enableErrors={ false }
+                />
+            </View>
+            <View row flex-2 right>
+              { !!searchValue.length && <HIcon style={ { paddingRight: 10 } } size={ 18 } name={ "circle-xmark-solid" }
+                                               onPress={ () => onValueChange("") }/> }
+            </View>
+        </TouchableOpacity>
     }
     <View flex-1 row center paddingL-10>
       <Ripple
@@ -102,8 +116,8 @@ export const BrowserHeader = observer<HeaderProps>((
           onPress={ openTabs }
       >
         <View center paddingH-6 paddingV-2
-              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 28 } }>
-          <Text center>
+              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 24 } }>
+          <Text center text12>
             { numOfTabs }
           </Text>
         </View>
@@ -116,35 +130,35 @@ export const BrowserHeader = observer<HeaderProps>((
           borderRadius={ 4 }
           color={ Colors.white }
           enableShadow={ true }
-          offset={ 5 }
+          offset={ -50 }
           useSideTip={ false }
           customContent={
             <View>
               <TouchableOpacity row centerV left onPress={ () => {
                 setVisible(false);
                 reloadPage()
-              } } padding-10>
+              } } paddingV-15 paddingH-5>
                 <HIcon name={ "redo-alt" } size={ 16 }/>
                 <Text marginL-10 text16>{ t("browserScreen.reloadPage") }</Text>
               </TouchableOpacity>
               <TouchableOpacity row centerV left onPress={ () => {
                 setVisible(false);
                 openNewTab()
-              } } padding-10>
+              } } paddingV-15 paddingH-5>
                 <HIcon name={ "squared-plus" } size={ 16 }/>
                 <Text marginL-10 text16>{ t("browserScreen.openNewTab") }</Text>
               </TouchableOpacity>
               <TouchableOpacity row centerV left onPress={ () => {
                 setVisible(false);
                 changeAddress()
-              } } padding-10>
+              } } paddingV-15 paddingH-5>
                 <HIcon name={ "wallet-alt" } size={ 16 }/>
                 <Text marginL-10 text16>{ t("browserScreen.changeAddress") }</Text>
               </TouchableOpacity>
               <TouchableOpacity row centerV left onPress={ () => {
                 setVisible(false);
                 changeNetwork()
-              } } padding-10>
+              } } paddingV-15 paddingH-5>
                 <HIcon name={ "network" } size={ 16 }/>
                 <Text marginL-10 text16>{ t("browserScreen.changeNetwork") }</Text>
               </TouchableOpacity>

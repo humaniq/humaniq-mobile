@@ -78,7 +78,6 @@ export class DictionaryStore extends Model({
   * loadRecentlyUsedAddresses() {
     try {
       const addresses = (yield* _await(localStorage.load("hm-wallet-recently-addresses"))) || {}
-      console.log(addresses)
       if (Object.keys(addresses).length) {
         this.recentlyUsedAddresses = fromSnapshot(addresses)
       }

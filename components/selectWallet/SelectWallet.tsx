@@ -1,4 +1,4 @@
-import { Header } from "../header/Header";
+import { Header, ICON_HEADER } from "../header/Header";
 import { t } from "../../i18n";
 import { Avatar, Card, Colors, RadioButton, Text, View } from "react-native-ui-lib";
 import { Wallet } from "../../store/wallet/Wallet";
@@ -12,15 +12,22 @@ export interface IWalletsListProps {
   wallets: Array<Wallet>
   onPressWallet: (w: Wallet, i: number) => void | Promise<void>
   onBackPress?: () => void
+  backIcon?: ICON_HEADER
 }
 
-export const SelectWallet: React.FC<IWalletsListProps> = (props) => {
+export const SelectWallet: React.FC<IWalletsListProps> = ({
+                                                            wallets,
+                                                            totalBalance,
+                                                            onPressWallet,
+                                                            backIcon,
+                                                            onBackPress
+                                                          }) => {
   return <View flex bg-bg>
-    <Header title={ t('walletScreen.allAddresses') } onBackPress={ props.onBackPress }/>
+    <Header title={ t('walletScreen.allAddresses') } onBackPress={ onBackPress } icon={ backIcon }/>
     <View padding-16>
       <View row spread centerV>
         <View>
-          <Text h2 black>{ props.totalBalance }</Text>
+          <Text h2 black>{ totalBalance }</Text>
           <Text text-grey>{ t("walletScreen.totalBalanceTittle") }</Text>
         </View>
       </View>
@@ -28,9 +35,9 @@ export const SelectWallet: React.FC<IWalletsListProps> = (props) => {
     <View padding-16>
       <Card>
         {
-            props.wallets && props.wallets.map((w: Wallet, i) => {
+            !!wallets && wallets.map((w: Wallet, i) => {
               return <Ripple key={ w.address } rippleColor={ Colors.primary }
-                             onPress={ () => props.onPressWallet(w, i) }
+                             onPress={ () => onPressWallet(w, i) }
               >
                 <View padding-10 paddingH-15 paddingR-20>
                   <View row centerV>

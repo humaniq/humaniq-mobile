@@ -7,6 +7,7 @@ import { Modal } from "react-native-ui-lib";
 import { runUnprotected } from "mobx-keystone";
 import { getEthereumProvider } from "../../../App";
 import * as storage from "../../../utils/localStorage";
+import { ICON_HEADER } from "../../header/Header";
 
 export const SelectNetworkDialog = observer(() => {
   const view = useInstance(SelectNetworkDialogViewModel)
@@ -16,7 +17,7 @@ export const SelectNetworkDialog = observer(() => {
       } }
       animationType={ "slide" }
       visible={ view.display }>
-    <SelectNetwork onBackPress={ () => view.display = false } mainNetworks={ view.mainNetworks }
+    <SelectNetwork backIcon={ ICON_HEADER.CROSS }  onBackPress={ () => view.display = false } mainNetworks={ view.mainNetworks }
                    testNetworks={ view.testNetworks } onPressNetwork={
       async (n) => {
         runUnprotected(() => {

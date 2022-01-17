@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
 import { BrowserTabScreenViewModel } from "./BrowserTabScreenViewModel"
 import React, { useEffect, useRef } from "react"
-import { Colors, TouchableOpacity, View } from "react-native-ui-lib"
+import { Colors, Image, Text, TouchableOpacity, View } from "react-native-ui-lib"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
 import WebView from "react-native-webview"
@@ -22,7 +22,7 @@ export interface IBrowserTab {
   initialUrl: string
   id: string
   key: string,
-  showTabs: () => any
+  showTabs: (ref: any) => any
   newTab: () => any,
 }
 
@@ -82,12 +82,34 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            onSearchSubmit={ view.onSearchSubmit }
                            goHomePage={ view.goHomePage }
                            numOfTabs={ getBrowserStore().tabs.length }
-                           openTabs={ props.showTabs }
+                           openTabs={ () => props.showTabs(webViewRef) }
                            changeAddress={ () => selectAddress.display = true }
                            changeNetwork={ () => selectNetwork.display = true }
                            openNewTab={ props.newTab }
+                           searchValue={ view.searchValue }
+                           onValueChange={ view.onSearchChange }
             />
-            <View flex-10 flexG-10>
+            <View flex-10 flexG-10 style={ !view.isSearchMode ? { display: 'none' } : {} }>
+              {
+                view.searchResults.map(h => {
+                  return <TouchableOpacity row key={ h[1].url } paddingH-16 paddingV-5
+                                           onPress={ () => view.onSearchSubmit(h[1].url) }>
+                    <View flex-1 centerV>
+                      <Image source={ { uri: h[1].icon } } style={ { width: 32, height: 32 } }/>
+                    </View>
+                    <View flex-9 paddingL-10>
+                      <View row flex>
+                        <Text text16 numberOfLines={ 1 }>{ h[1].tittle }</Text>
+                      </View>
+                      <View row flex>
+                        <Text primary numberOfLines={ 1 }>{ h[1].url }</Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                })
+              }
+            </View>
+            <View flex-10 flexG-10 style={ view.isSearchMode ? { display: 'none' } : {} }>
                 <WebView
                     ref={ webViewRef }
                     javaScriptEnabled

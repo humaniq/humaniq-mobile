@@ -22,7 +22,7 @@ export interface ITabsScreenProps {
 
 const margin = 15;
 const width = Dimensions.get('window').width / 2 - margin * 2;
-const height = Dimensions.get('window').height / 4
+const height = Dimensions.get('window').height / 3.2
 
 
 export const TabsScreen = observer<ITabsScreenProps>((props) => {
@@ -46,21 +46,27 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 style={ {
                   display: "flex",
                   borderRadius: 10,
-                  justifyContent: 'space-evenly',
+                  justifyContent: "space-evenly",
                   alignItems: 'center',
                   overflow: 'hidden',
                   borderColor: Colors.grey,
                   borderWidth: 1,
                   width,
                   height,
-                } }>
-              <View row paddingL-10 spread centerV>
-                <Text robotoM numberOfLines={ 1 }>{ isHomepage ? t("browserScreen.newTab") : hostname }</Text>
+                  paddingBottom: 4
+                } }
+                backgroundColor={ Colors.greyLight }
+            >
+              <View row spread centerV paddingH-10 width={ "100%" } style={{zIndex: 20}} backgroundColor={Colors.greyLight}>
+                <Image source={ { uri: tab.icon } } style={ { width: 20, height: 20 } }/>
+                <View paddingL-10 style={ { width: "70%" } }>
+                  <Text robotoM numberOfLines={ 1 }>{ isHomepage ? t("browserScreen.newTab") : hostname }</Text>
+                </View>
                 <Ripple onPress={ () => props.closeTab(tab.id) } rippleColor={ Colors.primary }
-                        style={ { padding: 10 } }><HIcon name={ "cross" }/></Ripple>
+                        style={ { paddingVertical: 10, paddingLeft: 10 } }><HIcon name={ "cross" }/></Ripple>
               </View>
               <Ripple style={ {
-                width: width - 20,
+                width: width - 10,
                 backgroundColor: Colors.white,
                 flex: 1,
               } }
@@ -71,7 +77,6 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                        style={ {
                          ...StyleSheet.absoluteFillObject,
                          // width,
-                         resizeMode: 'cover',
                        } }
                        resizeMode={ "cover" }
                 />

@@ -132,6 +132,7 @@ const AppScreen = observer(() => {
       await store.providerStore.init()
       await store.walletStore.init()
       await store.appStore.init()
+      await store.browserStore.init()
     })()
   }, [])
 
