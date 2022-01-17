@@ -21,6 +21,7 @@ import { InteractionManager } from "react-native";
 import { closeToast, setPendingAppToast } from "../../../store/wallet/transaction/utils";
 import { t } from "../../../i18n";
 import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
+import { HistoryItem } from "../../../store/browser/BrowserStore";
 
 export class BrowserTabScreenViewModel {
 
@@ -47,6 +48,7 @@ export class BrowserTabScreenViewModel {
   showAddCustomNetworkDialog = false
   customNetworkToSwitch = null
   showSwitchCustomNetworkDialog = undefined
+  searchValue = ""
 
   webviewRef: any
   inputRef: MutableRefObject<any>
@@ -115,6 +117,14 @@ export class BrowserTabScreenViewModel {
       //   data: [ getWalletStore().selectedWallet.address ],
       // })
     })
+  }
+
+  onSearchChange(val) {
+    this.searchValue = val
+  }
+
+  get searchResults(): Array<[ string, HistoryItem ]> {
+    return (this.searchValue ? getBrowserStore().historyKeys.filter(el => el[0].includes(this.searchValue)) : []) as Array<[ string, HistoryItem ]>
   }
 
   disposeAll() {
@@ -260,8 +270,13 @@ export class BrowserTabScreenViewModel {
         this.title = data.navState.title
         this.icon = data.navState.icon.replace("svg", "png")
         this.storedTab.setIcon(this.icon)
+        this.storedTab.setTittle(this.title)
+        getBrowserStore().addToBrowserHistory(new HistoryItem({
+          url: this.url,
+          tittle: this.title,
+          icon: this.icon
+        }))
         getBrowserStore().saveTabs()
-        // this.backEnabled = !!(data.navState.canGoBack - 1)
       }
       if (data.permission === "web3") {
         const selectedAddress = getWalletStore().selectedWallet.address

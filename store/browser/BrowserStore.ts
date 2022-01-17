@@ -6,6 +6,7 @@ import {
   model,
   modelAction,
   modelFlow,
+  objectMap,
   tProp as p,
   types as t
 } from "mobx-keystone";
@@ -22,7 +23,8 @@ const THUMB_HEIGHT = Device.isIos() ? THUMB_WIDTH * 1.81 : THUMB_WIDTH * 1.48;
 @model("HistoryItem")
 export class HistoryItem extends Model({
   url: p(t.string),
-  name: p(t.string)
+  tittle: p(t.string),
+  icon: p(t.string)
 }) {
 
 }
@@ -32,7 +34,8 @@ export class BrowserTab extends Model({
   url: p(t.string).withSetter(),
   id: p(t.string),
   image: p(t.string),
-  icon: p(t.string).withSetter()
+  icon: p(t.string).withSetter(),
+  tittle: p(t.string).withSetter()
 }) {
   @modelFlow
   * takeScreenShot(ref) {
@@ -47,11 +50,16 @@ export class BrowserTab extends Model({
 
 @model("BrowserStore")
 export class BrowserStore extends Model({
-  history: p(t.array(t.model<HistoryItem>(HistoryItem)), () => []),
+  history: p(t.objectMap(t.model<HistoryItem>(HistoryItem)), () => objectMap()),
   whitelist: p(t.array(t.string), () => []),
   tabs: p(t.array(t.model<BrowserTab>(BrowserTab)), () => []),
   activeTab: p(t.string, () => null)
 }) {
+
+  @computed
+  get historyKeys() {
+    return Object.entries(this.history.items)
+  }
 
   @modelFlow
   * init() {
@@ -63,9 +71,14 @@ export class BrowserStore extends Model({
           this.activeTab = stored.activeTab
         }
       }
+      const storedHistory = (yield* _await(localStorage.load("hm-wallet-browser-history")))
+      if (storedHistory) {
+        this.history = fromSnapshot(storedHistory)
+      }
     } catch (e) {
       console.log("ERROR", e)
       yield* _await(localStorage.save("hm-wallet-browser-tabs", {}))
+      yield* _await(localStorage.save("hm-wallet-browser-history", false))
       this.init()
     }
   }
@@ -95,9 +108,15 @@ export class BrowserStore extends Model({
     this.saveTabs()
   }
 
+  @modelFlow
+  * saveBrowserHistory() {
+    yield* _await(localStorage.save("hm-wallet-browser-history", getSnapshot(this.history)))
+  }
+
   @modelAction
   addToBrowserHistory(item: HistoryItem) {
-    this.history.push(item)
+    this.history.set(new URL(item.url).host, item)
+    this.saveBrowserHistory()
   }
 
   @modelAction

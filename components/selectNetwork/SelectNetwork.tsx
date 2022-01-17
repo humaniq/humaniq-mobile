@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Colors, RadioButton, Text, View } from "react-native-ui-lib";
-import { Header } from "../header/Header";
+import { Header, ICON_HEADER } from "../header/Header";
 import { t } from "../../i18n";
 import { getEthereumProvider } from "../../App";
 import Ripple from "react-native-material-ripple";
@@ -11,11 +11,18 @@ export interface ISelectNetworkProps {
   testNetworks: Array<ETHEREUM_NETWORK>
   onPressNetwork: (network: ETHEREUM_NETWORK) => void | Promise<void>
   onBackPress?: () => void
+  backIcon?: ICON_HEADER
 }
 
-export const SelectNetwork: React.FC<ISelectNetworkProps> = (props) => {
+export const SelectNetwork: React.FC<ISelectNetworkProps> = ({
+                                                               mainNetworks,
+                                                               onPressNetwork,
+                                                               onBackPress,
+                                                               testNetworks,
+                                                               backIcon
+                                                             }) => {
   return <View flex bg-bg>
-    <Header title={ t("settingsScreen.menu.network") } onBackPress={ props.onBackPress }/>
+    <Header title={ t("settingsScreen.menu.network") } onBackPress={ onBackPress } icon={ backIcon }/>
     <View flex paddingV-20>
       <View row padding-16>
         <Text text16 robotoM>{ t("settingsScreen.menu.mainNets") }</Text>
@@ -23,9 +30,9 @@ export const SelectNetwork: React.FC<ISelectNetworkProps> = (props) => {
       <View row paddingH-16>
         <Card padding-0 flex>
           {
-            props.mainNetworks.map((n, i) => {
+            mainNetworks.map((n, i) => {
               return <Ripple key={ n.name } rippleColor={ Colors.primary } style={ { padding: 12 } }
-                             onPress={ () => props.onPressNetwork(n) }
+                             onPress={ () => onPressNetwork(n) }
               >
                 <View row>
                   <View flex-5>
@@ -56,9 +63,9 @@ export const SelectNetwork: React.FC<ISelectNetworkProps> = (props) => {
       <View row paddingH-16>
         <Card padding-0 flex>
           {
-            props.testNetworks.map((n, i) => {
+            testNetworks.map((n, i) => {
               return <Ripple key={ n.name } rippleColor={ Colors.primary } style={ { padding: 12 } }
-                             onPress={ () => props.onPressNetwork(n) }
+                             onPress={ () => onPressNetwork(n) }
               >
                 <View row>
                   <View flex-5>
