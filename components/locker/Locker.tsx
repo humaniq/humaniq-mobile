@@ -38,7 +38,7 @@ const L = observer(function (props) {
       { view.initialized &&
           <View flex-1>
               <TouchableOpacity row padding-16 paddingT-25 onPress={ view.exit }>
-                  <HIcon name={ "arrow-left" } size={ 14 }/>
+                  <HIcon name={ "arrow-left" } size={ 18 }/>
               </TouchableOpacity>
               <View flex bottom center/>
             { !view.message &&

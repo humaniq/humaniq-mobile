@@ -44,9 +44,11 @@
   "registerScreen": {
     "registration": "Регистрация",
     "recoverFromMnemonicOne": "У меня уже есть кошелек",
-    "recoverFromMnemonicTwo": "по секретной фразе",
+    "recoverFromMnemonicTwo": "Ввойти по другому кошельку",
     "recoverPhrase": "Фраза восстановления",
     "walletCreating": "Кошелек создается",
+    "enterPin": "Ввести PIN код",
+    "goExisting": "Ввойти в кошелек",
     "walletRecoverTitle": "Введите фразу восстановления",
     "recoveryError": "Неправильная фраза восстановления",
     "recoveryDescription": "Пожалуйста введите фразу восстановления",
