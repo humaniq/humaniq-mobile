@@ -45,12 +45,10 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
             <View
                 style={ {
                   display: "flex",
-                  borderRadius: 10,
+                  borderRadius: 16,
                   justifyContent: "space-evenly",
                   alignItems: 'center',
                   overflow: 'hidden',
-                  borderColor: Colors.grey,
-                  borderWidth: 1,
                   width,
                   height,
                   paddingBottom: 4
