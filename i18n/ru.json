@@ -78,7 +78,7 @@
   },
   "browserScreen": {
     "name": "Браузер",
-    "searchPlaceholder": "Введите URL-адрес",
+    "searchPlaceholder": "Введите URL-адрес или поисковый запрос",
     "closeAllTabs": "Закрыть все вкладки",
     "newTab": "Новая вкладка",
     "reloadPage": "Перезагрузить",

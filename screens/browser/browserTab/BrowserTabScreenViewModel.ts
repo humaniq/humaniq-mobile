@@ -124,7 +124,7 @@ export class BrowserTabScreenViewModel {
   }
 
   get searchResults(): Array<[ string, HistoryItem ]> {
-    return (this.searchValue ? getBrowserStore().historyKeys.filter(el => el[0].includes(this.searchValue)) : []) as Array<[ string, HistoryItem ]>
+    return getBrowserStore().historyKeys.filter(el => el[0].includes(this.searchValue)) as Array<[ string, HistoryItem ]> // (this.searchValue ? getBrowserStore().historyKeys.filter(el => el[0].includes(this.searchValue)) : []) as Array<[ string, HistoryItem ]>
   }
 
   disposeAll() {

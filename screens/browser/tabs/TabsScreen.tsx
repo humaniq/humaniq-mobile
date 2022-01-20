@@ -45,25 +45,28 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
             <View
                 style={ {
                   display: "flex",
-                  borderRadius: 10,
+                  borderRadius: 16,
                   justifyContent: "space-evenly",
                   alignItems: 'center',
                   overflow: 'hidden',
-                  borderColor: Colors.grey,
-                  borderWidth: 1,
                   width,
                   height,
                   paddingBottom: 4
                 } }
-                backgroundColor={ Colors.greyLight }
+                backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight }
             >
-              <View row spread centerV paddingH-10 width={ "100%" } style={{zIndex: 20}} backgroundColor={Colors.greyLight}>
+              <View row spread centerV paddingH-10 width={ "100%" } style={ { zIndex: 20 } }
+                    backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight }>
                 <Image source={ { uri: tab.icon } } style={ { width: 20, height: 20 } }/>
                 <View paddingL-10 style={ { width: "70%" } }>
-                  <Text robotoM numberOfLines={ 1 }>{ isHomepage ? t("browserScreen.newTab") : hostname }</Text>
+                  <Text robotoM numberOfLines={ 1 } color={ props.activeTab === tab.id ? Colors.white : Colors.black }>
+                    { isHomepage ? t("browserScreen.newTab") : hostname }
+                  </Text>
                 </View>
                 <Ripple onPress={ () => props.closeTab(tab.id) } rippleColor={ Colors.primary }
-                        style={ { paddingVertical: 10, paddingLeft: 10 } }><HIcon name={ "cross" }/></Ripple>
+                        style={ { paddingVertical: 10, paddingLeft: 10 } }>
+                  <HIcon name={ "cross" }
+                         color={ props.activeTab === tab.id ? Colors.white : Colors.black }/></Ripple>
               </View>
               <Ripple style={ {
                 width: width - 10,
@@ -82,6 +85,8 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 />
               </Ripple>
             </View>
+            <View absB backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight } height={ 16 }
+                  width={ "100%" } style={ { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 } }/>
           </View>
         })
       }

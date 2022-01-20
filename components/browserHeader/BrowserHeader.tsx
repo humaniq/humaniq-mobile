@@ -104,7 +104,7 @@ export const BrowserHeader = observer<HeaderProps>((
                 />
             </View>
             <View row flex-2 right>
-              { !!searchValue.length && <HIcon style={ { paddingRight: 10 } } size={ 18 } name={ "circle-xmark-solid" }
+              { !!searchValue.length && <HIcon style={ { paddingRight: 10, color: Colors.textGrey } } size={ 18 } name={ "circle-xmark-solid" }
                                                onPress={ () => onValueChange("") }/> }
             </View>
         </TouchableOpacity>

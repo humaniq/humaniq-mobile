@@ -78,7 +78,7 @@
   },
   "browserScreen": {
     "name": "Browser",
-    "searchPlaceholder": "Input URL-address",
+    "searchPlaceholder": "Search or type web address",
     "closeAllTabs": "Close all tabs",
     "newTab": "New tab",
     "reloadPage": "Reload page",
