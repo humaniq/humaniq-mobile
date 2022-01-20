@@ -47,9 +47,7 @@ export class BrowserScreenViewModel {
   async showTabs(ref) {
     const activeTab = getBrowserStore().tabs.find(tab => tab.id === getBrowserStore().activeTab)
     await activeTab.takeScreenShot(ref)
-
-    getBrowserStore().removeActiveTab()
+    // @ts-ignore
+    getBrowserStore().setShowTabs(true)
   }
-
-
 }

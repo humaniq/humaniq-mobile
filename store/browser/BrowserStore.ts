@@ -53,7 +53,8 @@ export class BrowserStore extends Model({
   history: p(t.objectMap(t.model<HistoryItem>(HistoryItem)), () => objectMap()),
   whitelist: p(t.array(t.string), () => []),
   tabs: p(t.array(t.model<BrowserTab>(BrowserTab)), () => []),
-  activeTab: p(t.string, () => null)
+  activeTab: p(t.string, () => null),
+  showTabs: p(t.boolean, false).withSetter()
 }) {
 
   @computed
@@ -69,6 +70,8 @@ export class BrowserStore extends Model({
         this.tabs = fromSnapshot(stored.tabs)
         if (stored.activeTab && this.tabs.find(t => t.id === stored.activeTab)) {
           this.activeTab = stored.activeTab
+        } else {
+          this.showTabs = true
         }
       }
       const storedHistory = (yield* _await(localStorage.load("hm-wallet-browser-history")))
@@ -91,20 +94,22 @@ export class BrowserStore extends Model({
     }))
   }
 
-  @computed
-  get showTabs() {
-    return !this.activeTab
-  }
+  // @computed
+  // get showTabs() {
+  //   return !this.activeTab
+  // }
 
   @modelAction
   removeActiveTab = () => {
     this.activeTab = null
+    this.showTabs = true
     this.saveTabs()
   }
 
   @modelAction
   setActiveTab = (id) => {
     this.activeTab = id
+    this.showTabs = false
     this.saveTabs()
   }
 
@@ -132,6 +137,7 @@ export class BrowserStore extends Model({
   @modelAction
   closeAllTabs = () => {
     this.tabs = []
+    this.showTabs = true
     this.saveTabs()
   }
 
