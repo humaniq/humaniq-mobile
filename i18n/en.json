@@ -44,12 +44,14 @@
   "registerScreen": {
     "registration": "Registration",
     "recoverFromMnemonicOne": "I already have a wallet",
+    "recoverFromMnemonicTwo": "Sign in with another wallet",
     "recoverPhrase": "Recovery phrase",
-    "recoverFromMnemonicTwo": "from recovery phrase",
+    "enterPin": "Enter PIN code",
+    "goExisting": "Go to existing wallet",
     "walletCreating": "Wallet is being created",
-    "walletRecoverTitle": "Enter your recovery phrase",
-    "recoveryError": "Incorrect recovery phrase, please try again",
-    "recoveryDescription": "Please enter a 12 word recovery phrase",
+    "walletRecoverTitle": "Sign in with a recovery phrase",
+    "recoveryError": "Incorrect, please check 12 words ",
+    "recoveryDescription": "12 words separated by single spaces",
     "createNewWallet": "Create a new wallet"
   },
   "lockerScreen": {
