@@ -1,16 +1,19 @@
-import { ThemeManager } from "react-native-ui-lib";
+import { Colors, ThemeManager } from "react-native-ui-lib";
 
-ThemeManager.setComponentForcedTheme('Button', (props, context) => {
-  return {
-    style: { borderRadius: 2 },
-    labelStyle: {
-      fontFamily: "Roboto-Regular"
-    }
-  };
-});
 
-ThemeManager.setComponentForcedTheme('Text', (props) => {
-  return {
-    fontFamily: props.bold ? "Roboto-Bold" : "Roboto-Regular"
-  }
-});
+export const applyTheme = () => {
+
+    ThemeManager.setComponentForcedTheme('Card', (props, context) => {
+        return {
+            ...props,
+            enableShadow: false,
+        };
+    });
+
+    ThemeManager.setComponentForcedTheme('Checkbox', (props, context) => {
+        return {
+            color: props.value ? Colors.primary : Colors.textGrey,
+            ...props,
+        };
+    });
+}

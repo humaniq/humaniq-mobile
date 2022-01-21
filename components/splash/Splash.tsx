@@ -4,7 +4,6 @@ import React from "react";
 import * as Animatable from "react-native-animatable"
 
 export const Splash = ({ showLoader = false }) => {
-    console.log(showLoader)
     return <View center flex>
         <View style={ { height: 310 } } top>
             <View>

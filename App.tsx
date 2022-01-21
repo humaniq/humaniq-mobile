@@ -37,7 +37,7 @@ import { ProviderStore } from "./store/provider/ProviderStore"
 import { EthereumProvider } from "./store/provider/EthereumProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
 import {
-  SendTransactionViewModel as LegacySendTransactonViewModel
+    SendTransactionViewModel as LegacySendTransactonViewModel
 } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
@@ -45,35 +45,38 @@ import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
 import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
 import {
-  SelfAddressQrCodeDialogViewModel
+    SelfAddressQrCodeDialogViewModel
 } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
 import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
 import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import {
-  SelectTransactionFeeDialogViewModel
+    SelectTransactionFeeDialogViewModel
 } from "./components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { Splash } from "./components/splash/Splash";
 import { BrowserStore } from "./store/browser/BrowserStore";
 import * as Sentry from "@sentry/react-native";
+import { applyTheme } from "./theme/componentTheme";
+
+applyTheme()
 
 const routingInstrumentation = new Sentry.ReactNavigationInstrumentation()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 LogBox.ignoreLogs([
-  "Setting a timer",
-  "Require cycle",
-  "componentWillReceiveProps",
-  'Non-serializable values were found in the navigation state',
-  "new NativeEventEmitter()",
-  "rightButtonProps.iconSource"
+    "Setting a timer",
+    "Require cycle",
+    "componentWillReceiveProps",
+    'Non-serializable values were found in the navigation state',
+    "new NativeEventEmitter()",
+    "rightButtonProps.iconSource"
 ])
 
 enableScreens()
 
 configure({
-  enforceActions: "never"
+    enforceActions: "never"
 })
 
 const appStore = createContext<AppStore>()
@@ -96,82 +99,81 @@ const browserStore = createContext<BrowserStore>()
 export const getBrowserStore = () => browserStore.getDefault()
 
 function createRootStore() {
-  const rootStore = new RootStore({})
-  registerRootStore(rootStore)
-  appStore.setDefault(rootStore.appStore)
-  walletStore.setDefault(rootStore.walletStore)
-  moralisRequestStore.setDefault(rootStore.moralisRequestStore)
-  requestStore.setDefault(rootStore.requestStore)
-  dictionaryStore.setDefault(rootStore.dictionaryStore)
-  profileStore.setDefault(rootStore.profileStore)
-  providerStore.setDefault(rootStore.providerStore)
-  ethereumProvider.setDefault(rootStore.providerStore.eth)
-  browserStore.setDefault(rootStore.browserStore)
-  return rootStore
+    const rootStore = new RootStore({})
+    registerRootStore(rootStore)
+    appStore.setDefault(rootStore.appStore)
+    walletStore.setDefault(rootStore.walletStore)
+    moralisRequestStore.setDefault(rootStore.moralisRequestStore)
+    requestStore.setDefault(rootStore.requestStore)
+    dictionaryStore.setDefault(rootStore.dictionaryStore)
+    profileStore.setDefault(rootStore.profileStore)
+    providerStore.setDefault(rootStore.providerStore)
+    ethereumProvider.setDefault(rootStore.providerStore.eth)
+    browserStore.setDefault(rootStore.browserStore)
+    return rootStore
 }
 
-
 const AppScreen = observer(() => {
-  const navigationRef = useRef<NavigationContainerRef<any>>(null)
-  const store = useInstance(RootStore)
+    const navigationRef = useRef<NavigationContainerRef<any>>(null)
+    const store = useInstance(RootStore)
 
-  setRootNavigation(navigationRef)
-  useBackButtonHandler(navigationRef, canExit)
+    setRootNavigation(navigationRef)
+    useBackButtonHandler(navigationRef, canExit)
 
-  const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
-      storage,
-      NAVIGATION_PERSISTENCE_KEY
-  )
+    const { initialNavigationState, onNavigationStateChange } = useNavigationPersistence(
+        storage,
+        NAVIGATION_PERSISTENCE_KEY
+    )
 
-  useEffect(() => {
-    ;(async () => {
-      await store.dictionaryStore.init()
-      await store.moralisRequestStore.init()
-      await store.requestStore.init()
-      await store.profileStore.init()
-      await store.providerStore.init()
-      await store.walletStore.init()
-      await store.appStore.init()
-      await store.browserStore.init()
-    })()
-  }, [])
+    useEffect(() => {
+        ;(async () => {
+            await store.dictionaryStore.init()
+            await store.moralisRequestStore.init()
+            await store.requestStore.init()
+            await store.profileStore.init()
+            await store.providerStore.init()
+            await store.walletStore.init()
+            await store.appStore.init()
+            await store.browserStore.init()
+        })()
+    }, [])
 
-  return (<>
-        <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
-          {
-              store.appStore.initialized &&
-              store.appStore.appState === APP_STATE.APP &&
-              !store.appStore.isLocked &&
-              <><RootNavigator
-                  ref={ navigationRef }
-                  initialState={ initialNavigationState }
-                  onStateChange={ onNavigationStateChange }
-                  onReady={ () => {
-                    // Register the navigation container with the instrumentation
-                    routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
-                  } }
-              />
-                  <AppToast/>
-                  <CreateWalletToast/>
-                  <SigningDialog/>
-                  <SendTransactionDialog/>
-              </> }
-          {
-              store.appStore.initialized &&
-              store.appStore.appState === APP_STATE.AUTH &&
-              !store.appStore.isLocked &&
-              <AuthNavigator/>
-          }
-          {
-              store.appStore.initialized &&
-              store.appStore.isLocked &&
-              <Locker/>
-          }
+    return (<>
+            <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
+                {
+                    store.appStore.initialized &&
+                    store.appStore.appState === APP_STATE.APP &&
+                    !store.appStore.isLocked &&
+                    <><RootNavigator
+                        ref={ navigationRef }
+                        initialState={ initialNavigationState }
+                        onStateChange={ onNavigationStateChange }
+                        onReady={ () => {
+                            // Register the navigation container with the instrumentation
+                            routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
+                        } }
+                    />
+                        <AppToast/>
+                        <CreateWalletToast/>
+                        <SigningDialog/>
+                        <SendTransactionDialog/>
+                    </> }
+                {
+                    store.appStore.initialized &&
+                    store.appStore.appState === APP_STATE.AUTH &&
+                    !store.appStore.isLocked &&
+                    <AuthNavigator/>
+                }
+                {
+                    store.appStore.initialized &&
+                    store.appStore.isLocked &&
+                    <Locker/>
+                }
 
-          { !store.appStore.initialized && <Splash/> }
-        </SafeAreaProvider>
-      </>
-  )
+                { !store.appStore.initialized && <Splash/> }
+            </SafeAreaProvider>
+        </>
+    )
 })
 
 const App = provider()(AppScreen)
@@ -188,13 +190,13 @@ App.register(
 )
 
 Sentry.init({
-  dsn: "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030",
-  tracesSampleRate: 1.0,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      routingInstrumentation,
-    }),
-  ],
+    dsn: "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030",
+    tracesSampleRate: 1.0,
+    integrations: [
+        new Sentry.ReactNativeTracing({
+            routingInstrumentation,
+        }),
+    ],
 });
 
 Sentry.wrap(App)

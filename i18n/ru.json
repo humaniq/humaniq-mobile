@@ -102,11 +102,11 @@
     "name": "Настройки",
     "editProfile": "Редактировать",
     "menu": {
-      "changePin": "Сменить пинкод",
+      "changePin": "Сменить ПИН код",
       "ethNetwork": "Сеть эфира",
       "exportMnemonic": "Экспорт фразы восстановления",
       "recoveryPhrase": "Фраза восстановления",
-      "changePinCode": "Сменить пин код",
+      "changePinCode": "Сменить ПИН код",
       "currency": "Валюта",
       "network": "Сеть",
       "aboutApplication": "О приложении",
