@@ -2,10 +2,12 @@ import { Model, model, objectMap, runUnprotected, tProp as p, types as t } from 
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
-import { getDictionary, getMoralisRequest } from "../../../App";
+import { getDictionary, getMoralisRequest, getWalletStore } from "../../../App";
 import { MORALIS_ROUTES } from "../../../config/api";
 import { formatRoute } from "../../../navigators";
 import { ERC20Transaction } from "../transaction/ERC20Transaction";
+import { ethers } from "ethers";
+import { CURRENCIES } from "../../../config/common";
 
 
 @model("ERC20")
@@ -25,6 +27,17 @@ export class ERC20 extends Model({
     transactions: p(t.objectMap(t.model<ERC20Transaction>(ERC20Transaction)), () => objectMap<ERC20Transaction>())
 }) {
 
+    @computed
+    get prices() {
+        return this.priceEther ? {
+            eur: getWalletStore().allWallets[0].prices[CURRENCIES.EUR] * Number(ethers.utils.formatEther(this.priceEther)),
+            usd: getWalletStore().allWallets[0].prices[CURRENCIES.USD] * Number(ethers.utils.formatEther(this.priceEther)),
+            rub: getWalletStore().allWallets[0].prices[CURRENCIES.RUB] * Number(ethers.utils.formatEther(this.priceEther)),
+            cny: getWalletStore().allWallets[0].prices[CURRENCIES.CNY] * Number(ethers.utils.formatEther(this.priceEther)),
+            jpy: getWalletStore().allWallets[0].prices[CURRENCIES.JPY] * Number(ethers.utils.formatEther(this.priceEther)),
+        } : { eur: 0, usd: 0, rub: 0, cny: 0, jpy: 0 }
+    }
+
     @action
     async init() {
         try {
@@ -36,6 +49,7 @@ export class ERC20 extends Model({
                 if (result.ok) {
                     runUnprotected(() => {
                         this.priceUSD = result.data.usdPrice
+                        this.priceEther = result.data.nativePrice.value
                         getDictionary().ethTokenCurrentAddress.set(this.tokenAddress, this.symbol)
                     })
                 }
@@ -65,12 +79,21 @@ export class ERC20 extends Model({
     }
 
     @computed
+    get currentFiatPrice() {
+        try {
+            return this.priceEther ? getWalletStore().allWallets[0].prices[getWalletStore().currentFiatCurrency] * Number(ethers.utils.formatEther(this.priceEther)) : null
+        } catch (e) {
+            return 0
+        }
+    }
+
+    @computed
     get fiatBalance() {
-        return this.priceUSD ? preciseRound(this.valBalance * this.priceUSD) : null
+        return this.currentFiatPrice ? preciseRound(this.valBalance * this.currentFiatPrice) : null
     }
 
     @computed
     get formatFiatBalance() {
-        return this.fiatBalance ? `$${ beautifyNumber(+this.fiatBalance) }` : `--/--`
+        return this.fiatBalance ? `${ beautifyNumber(+this.fiatBalance, getWalletStore().currentFiatCurrency) }` : `--/--`
     }
 }

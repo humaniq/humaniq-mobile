@@ -15,7 +15,7 @@ import { t as tr } from "../../../i18n"
 import { formatEther } from "ethers/lib/utils"
 import { Avatar, Colors } from "react-native-ui-lib"
 import { BigNumber, ethers } from "ethers"
-import { amountFormat, beautifyNumber, preciseRound } from "../../../utils/number"
+import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../../utils/number"
 import dayjs from "dayjs";
 import { renderShortAddress } from "../../../utils/address";
 import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
@@ -69,7 +69,10 @@ export class EthereumTransaction extends Model({
   gasPrice: p(t.string, ""),
   prices: p(t.maybeNull(t.frozen(() => ({
     eur: t.number,
-    usd: t.number
+    usd: t.number,
+    rub: t.number,
+    cny: t.number,
+    jpy: t.number
   })))),
 }) {
 
@@ -251,18 +254,18 @@ export class EthereumTransaction extends Model({
 
   @computed
   get fiatValue() {
-    return this.prices?.usd ? preciseRound(this?.prices?.usd * +formatEther(this.value)) : 0
+    return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * +formatEther(this.value)) : 0
   }
 
   @computed
   get formatFiatValue() {
     switch (this.action) {
       case 1:
-        return `-$${ this.fiatValue }`
+        return `- ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
       case 2:
-        return `+$${ this.fiatValue }`
+        return `+ ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
       default:
-        return `$${ this.fiatValue }`
+        return `${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
     }
   }
 
@@ -278,7 +281,7 @@ export class EthereumTransaction extends Model({
 
   @computed
   get fiatFee() {
-    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.formatFee) : 0
+    return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * this.formatFee) : 0
   }
 
   @computed
@@ -288,7 +291,7 @@ export class EthereumTransaction extends Model({
 
   @computed
   get fiatTotal() {
-    return this.prices?.usd ? preciseRound(this?.prices?.usd * this.formatTotal) : 0
+    return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * this.formatTotal) : 0
   }
 
   @computed

@@ -102,6 +102,7 @@
     "name": "Настройки",
     "editProfile": "Редактировать",
     "menu": {
+      "currentCurrency": "Текущая валюта",
       "changePin": "Сменить ПИН код",
       "ethNetwork": "Сеть эфира",
       "exportMnemonic": "Экспорт фразы восстановления",

@@ -7,6 +7,7 @@ import Ripple from "react-native-material-ripple"
 import { t } from "../../../i18n";
 import { currencyFormat } from "../../../utils/number";
 import { DialogHeader } from "../dialogHeader/DalogHeader";
+import { getWalletStore } from "../../../App";
 
 export const SelectTransactionFeeDialog = observer(() => {
 
@@ -51,7 +52,7 @@ export const SelectTransactionFeeDialog = observer(() => {
                             <View flex-6 centerV right>
                               <View>
                                 <Text black text16
-                                      robotoM>{ currencyFormat(`${ (option.label as any).feeFiat }`) }</Text>
+                                      robotoM>{ currencyFormat(`${ (option.label as any).feeFiat }`, getWalletStore().currentFiatCurrency) }</Text>
                               </View>
                               <View paddingT-5>
                                 <Text text14 robotoR textGrey>{ `${ (option.label as any).fee } ETH` }</Text>

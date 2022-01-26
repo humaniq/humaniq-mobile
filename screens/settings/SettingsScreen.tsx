@@ -8,7 +8,7 @@ import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { HIcon } from "../../components/icon";
 import { MenuItem } from "../../components/menuItem/MenuItem";
-import { getAppStore, getEthereumProvider } from "../../App";
+import { getAppStore, getEthereumProvider, getWalletStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
@@ -73,6 +73,14 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 />
                             </Card>
                             <Card padding-10 padding-0 marginT-16>
+                                <MenuItem icon={ "double-arrows" }
+                                          name={ t("settingsScreen.menu.currency") }
+                                          value={ <Text text16
+                                                        textGrey> { getWalletStore().currentFiatCurrency } </Text> }
+                                          onPress={ () => nav.navigate("selectCurrency") }
+                                />
+                                <View
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "network" }
                                           name={ t("settingsScreen.menu.network") }
                                           value={ <Text text16

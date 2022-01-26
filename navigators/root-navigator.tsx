@@ -20,6 +20,7 @@ import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPa
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 import ErrorBoundary from 'react-native-error-boundary'
 import { CustomFallback } from "../components/customFallback/CustomFallback";
+import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrencyPage";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -32,63 +33,65 @@ import { CustomFallback } from "../components/customFallback/CustomFallback";
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type RootParamList = {
-  mainStack: undefined
-  walletsList: undefined,
-  walletTransactions: undefined,
-  walletTransaction: undefined,
-  selectValue: undefined,
-  sendTransaction: undefined,
-  selectAddress: undefined,
-  confirmTransaction: undefined,
-  QRScanner: undefined,
-  recoveryPhrase: undefined,
-  selectNetwork: undefined,
-  termsOfServicePage,
-  privacyPolicyPage,
-  aboutPage
+    mainStack: undefined
+    walletsList: undefined,
+    walletTransactions: undefined,
+    walletTransaction: undefined,
+    selectValue: undefined,
+    sendTransaction: undefined,
+    selectAddress: undefined,
+    confirmTransaction: undefined,
+    QRScanner: undefined,
+    recoveryPhrase: undefined,
+    selectNetwork: undefined,
+    termsOfServicePage,
+    privacyPolicyPage,
+    aboutPage,
+    selectCurrency
 }
 
 const Stack = createStackNavigator<RootParamList>()
 
 const RootStack = () => {
-  return (
-      <Stack.Navigator screenOptions={ { headerShown: false } }>
-        <Stack.Screen name="mainStack" component={ MainNavigator }/>
-        <Stack.Screen name="walletsList" component={ WalletsListScreen }/>
-        <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }/>
-        <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
-        <Stack.Screen name="sendTransaction" component={ SendTransactionStack }/>
-        <Stack.Screen name="QRScanner" component={ QRScanner }/>
-        <Stack.Screen name="recoveryPhrase" component={ RecoveryPhrasePage }/>
-        <Stack.Screen name="selectNetwork" component={ SelectNetworkPage }/>
-        <Stack.Screen name="aboutPage" component={ AboutPage }/>
-        <Stack.Screen name="privacyPolicyPage" component={ PrivacyPolicyPage }/>
-        <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
-      </Stack.Navigator>
-  )
+    return (
+        <Stack.Navigator screenOptions={ { headerShown: false } }>
+            <Stack.Screen name="mainStack" component={ MainNavigator }/>
+            <Stack.Screen name="walletsList" component={ WalletsListScreen }/>
+            <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }/>
+            <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
+            <Stack.Screen name="sendTransaction" component={ SendTransactionStack }/>
+            <Stack.Screen name="QRScanner" component={ QRScanner }/>
+            <Stack.Screen name="recoveryPhrase" component={ RecoveryPhrasePage }/>
+            <Stack.Screen name="selectNetwork" component={ SelectNetworkPage }/>
+            <Stack.Screen name="selectCurrency" component={ SelectCurrencyPage }/>
+            <Stack.Screen name="aboutPage" component={ AboutPage }/>
+            <Stack.Screen name="privacyPolicyPage" component={ PrivacyPolicyPage }/>
+            <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
+        </Stack.Navigator>
+    )
 }
 
 const SendTransactionStack = () => {
-  return <Stack.Navigator
-      screenOptions={ {
-        headerShown: false,
-      } }
-  >
-    <Stack.Screen name="selectValue" component={ SelectValueScreen }/>
-    <Stack.Screen name="selectAddress" component={ SelectAddressScreen }/>
-    <Stack.Screen name="confirmTransaction" component={ ConfirmTransactionScreen }/>
-  </Stack.Navigator>
+    return <Stack.Navigator
+        screenOptions={ {
+            headerShown: false,
+        } }
+    >
+        <Stack.Screen name="selectValue" component={ SelectValueScreen }/>
+        <Stack.Screen name="selectAddress" component={ SelectAddressScreen }/>
+        <Stack.Screen name="confirmTransaction" component={ ConfirmTransactionScreen }/>
+    </Stack.Navigator>
 }
 
 export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {
-  return (
-      <ErrorBoundary FallbackComponent={ CustomFallback }>
-        <NavigationContainer { ...props } ref={ ref }>
-          <RootStack/>
-        </NavigationContainer>
-      </ErrorBoundary>
-  )
+    return (
+        <ErrorBoundary FallbackComponent={ CustomFallback }>
+            <NavigationContainer { ...props } ref={ ref }>
+                <RootStack/>
+            </NavigationContainer>
+        </ErrorBoundary>
+    )
 })
 
 RootNavigator.displayName = "RootNavigator"

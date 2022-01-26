@@ -9,7 +9,7 @@ import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { renderShortAddress } from "../../../utils/address";
 import { Header } from "../../../components/header/Header";
 import * as Animatable from "react-native-animatable";
-import { getEthereumProvider } from "../../../App";
+import { getEthereumProvider, getWalletStore } from "../../../App";
 import { currencyFormat } from "../../../utils/number";
 
 export const ConfirmTransactionScreen = observer(() => {
@@ -58,7 +58,7 @@ export const ConfirmTransactionScreen = observer(() => {
                              animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
                              iterationCount={ "infinite" }
                              direction="alternate">
-              { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
+              { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
             </Animatable.Text>
           </Button>
         </View>

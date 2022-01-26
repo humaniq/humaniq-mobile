@@ -15,7 +15,7 @@ export class EthereumProvider extends Model({
   initialized: p(t.string, ""),
   pending: p(t.boolean, false),
   currentProviderType: p(t.enum(PROVIDER_TYPE), PROVIDER_TYPE.infura),
-  currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET),
+  currentNetworkName: p(t.enum(ETH_NETWORKS), ETH_NETWORKS.MAINNET).withSetter(),
   gasStation: p(t.model<GasStation>(GasStation), () => {
     const gs = new GasStation({});
     gs.init();
