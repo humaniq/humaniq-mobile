@@ -102,6 +102,7 @@
     "name": "Settings",
     "editProfile": "Edit",
     "menu": {
+      "currentCurrency": "Current currency",
       "changePin": "Change PIN code",
       "ethNetwork": "Ethereum network",
       "exportMnemonic": "Export recovery phrase",

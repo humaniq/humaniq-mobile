@@ -32,7 +32,7 @@ export class SelectTransactionFeeDialogViewModel {
           data: GAS_PRICE_SPEED.SAFE_LOW,
           time: getEthereumProvider().gasStation.safeLowWait,
           fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLowFee * this.gasLimit, 18),
-          feeFiat: +(ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLowFee * this.gasLimit, 18)) * this.wa?.prices.usd
+          feeFiat: +(ethers.utils.formatUnits(getEthereumProvider().gasStation.safeLowFee * this.gasLimit, 18)) * this.wa?.prices[getWalletStore().currentFiatCurrency]
         },
         onPress: () => {
           getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.SAFE_LOW)
@@ -48,7 +48,7 @@ export class SelectTransactionFeeDialogViewModel {
           data: GAS_PRICE_SPEED.FAST,
           time: getEthereumProvider().gasStation.fastWait,
           fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastFee * this.gasLimit, 18),
-          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastFee * this.gasLimit, 18) * this.wa?.prices.usd
+          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastFee * this.gasLimit, 18) * this.wa?.prices[getWalletStore().currentFiatCurrency]
         },
         onPress: () => {
           getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FAST)
@@ -64,7 +64,7 @@ export class SelectTransactionFeeDialogViewModel {
           data: GAS_PRICE_SPEED.FASTEST,
           time: getEthereumProvider().gasStation.fastestWait,
           fee: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastestFee * this.gasLimit, 18),
-          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastestFee * this.gasLimit, 18) * this.wa?.prices.usd
+          feeFiat: +ethers.utils.formatUnits(getEthereumProvider().gasStation.fastestFee * this.gasLimit, 18) * this.wa?.prices[getWalletStore().currentFiatCurrency]
         },
         onPress: () => {
           getEthereumProvider().gasStation.setSelectedSpeed(GAS_PRICE_SPEED.FASTEST)

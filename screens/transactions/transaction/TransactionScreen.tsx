@@ -7,9 +7,10 @@ import { Screen } from "../../../components";
 import { t } from "../../../i18n";
 import { renderShortAddress } from "../../../utils/address";
 import { Linking } from "react-native";
-import { getEthereumProvider } from "../../../App";
+import { getEthereumProvider, getWalletStore } from "../../../App";
 import { TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
 import { Header, ICON_HEADER } from "../../../components/header/Header";
+import { currencyFormat } from "../../../utils/number";
 
 const Transaction = observer<{ route: any }>(({ route }) => {
   const view = useInstance(TransactionScreenViewModel)
@@ -89,7 +90,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         { t("transactionScreen.amount") }
                       </Text>
                       <View right>
-                          <Text black text16 robotoM>{ "$" + view.transaction.fiatValue }</Text>
+                          <Text black text16 robotoM>{ view.transaction.fiatValue }</Text>
                           <Text text-grey
                                 robotoR text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
                       </View>
@@ -102,7 +103,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                           { t("transactionScreen.suggestedFee") }
                         </Text>
                         <View right>
-                            <Text black text16 robotoM>{ "$" + view.transaction.fiatFee }</Text>
+                            <Text black text16 robotoM>{ currencyFormat(view.transaction.fiatFee, getWalletStore().currentFiatCurrency) }</Text>
                             <Text text-grey
                                   robotoR text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || 'ETH' }` }</Text>
                         </View>
@@ -116,7 +117,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                           { t("transactionScreen.total") }
                         </Text>
                         <View right>
-                            <Text black text16 robotoM>{ "$" + view.transaction.fiatTotal }</Text>
+                            <Text black text16 robotoM>{ currencyFormat(view.transaction.fiatTotal, getWalletStore().currentFiatCurrency) }</Text>
                             <Text text-grey
                                   robotoR text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || 'ETH' }` }</Text>
                         </View>

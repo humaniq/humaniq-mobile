@@ -8,7 +8,7 @@ import React from "react";
 import Ripple from "react-native-material-ripple";
 
 export interface IWalletsListProps {
-  totalBalance: string
+  totalBalance: string | number
   wallets: Array<Wallet>
   onPressWallet: (w: Wallet, i: number) => void | Promise<void>
   onBackPress?: () => void

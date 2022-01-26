@@ -24,7 +24,7 @@ import { HIcon } from "../../../components/icon";
 import {
   SelectTransactionFeeDialogViewModel
 } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
-import { getEthereumProvider } from "../../../App";
+import { getEthereumProvider, getWalletStore } from "../../../App";
 import * as Animatable from "react-native-animatable"
 import { InteractionManager } from "react-native";
 
@@ -141,7 +141,7 @@ const SelectValue = observer(() => {
                              animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
                              iterationCount={ "infinite" }
                              direction="alternate">
-              { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee) }` }
+              { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
             </Animatable.Text>
           </Button>
         </View>
