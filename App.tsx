@@ -10,6 +10,7 @@
 import "./shim"
 import "react-native-get-random-values"
 import "react-native-gesture-handler"
+import { LogBox } from "react-native";
 import React, { useEffect, useRef } from "react"
 import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import "@ethersproject/shims"
@@ -25,7 +26,7 @@ import "./theme/color"
 import "./theme/typography"
 import { RootStore } from "./store/RootStore"
 import { createContext, registerRootStore } from "mobx-keystone"
-import { LogBox } from "react-native"
+import ErrorBoundary from "react-native-error-boundary";
 import { APP_STATE, AppStore } from "./store/app/AppStore"
 import { AuthNavigator } from "./navigators/auth-navigator"
 import { Locker } from "./components/locker/Locker"
@@ -57,6 +58,9 @@ import { Splash } from "./components/splash/Splash";
 import { BrowserStore } from "./store/browser/BrowserStore";
 import * as Sentry from "@sentry/react-native";
 import { applyTheme } from "./theme/componentTheme";
+import { CustomFallback } from "./components/customFallback/CustomFallback";
+import { isDev } from "./shim";
+import { CENTRY_URL } from "./config/api";
 
 applyTheme()
 
@@ -138,8 +142,9 @@ const AppScreen = observer(() => {
         })()
     }, [])
 
-    return (<>
-            <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
+    return (
+        <SafeAreaProvider initialMetrics={ initialWindowMetrics }>
+            <ErrorBoundary FallbackComponent={ CustomFallback }>
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.APP &&
@@ -171,8 +176,8 @@ const AppScreen = observer(() => {
                 }
 
                 { !store.appStore.initialized && <Splash/> }
-            </SafeAreaProvider>
-        </>
+            </ErrorBoundary>
+        </SafeAreaProvider>
     )
 })
 
@@ -189,16 +194,18 @@ App.register(
     // QRScannerView
 )
 
-Sentry.init({
-    dsn: "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030",
-    tracesSampleRate: 1.0,
-    integrations: [
-        new Sentry.ReactNativeTracing({
-            routingInstrumentation,
-        }),
-    ],
-});
+if(isDev) {
+    Sentry.init({
+        dsn: CENTRY_URL,
+        tracesSampleRate: 1.0,
+        integrations: [
+            new Sentry.ReactNativeTracing({
+                routingInstrumentation,
+            }),
+        ],
+    });
 
-Sentry.wrap(App)
+    Sentry.wrap(App)
+}
 
 export default App
