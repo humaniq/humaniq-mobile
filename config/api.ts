@@ -4,6 +4,7 @@ export const MORALIS_TOKEN = "ndvgmaxPzVSe5OM7cBRsHIMQDvqn5d7HX7Zoz9bBrilJyQCIYt
 export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/assets/9af1b653778b5ee8f9207dc4440c7ee22e8ce5b7/blockchains/ethereum/tokenlist.json"
 const timeout = 10000
 export const GAS_STATION_URL = "https://ethgasstation.info/api"
+export const CENTRY_URL= "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030"
 
 export interface ApiConfig {
     url: string;

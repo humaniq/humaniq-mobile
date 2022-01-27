@@ -18,8 +18,6 @@ import { QRScanner } from "../components/qRScanner/QRScanner";
 import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrasePage";
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
-import ErrorBoundary from 'react-native-error-boundary'
-import { CustomFallback } from "../components/customFallback/CustomFallback";
 import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrencyPage";
 
 /**
@@ -86,11 +84,9 @@ const SendTransactionStack = () => {
 export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {
     return (
-        <ErrorBoundary FallbackComponent={ CustomFallback }>
             <NavigationContainer { ...props } ref={ ref }>
                 <RootStack/>
             </NavigationContainer>
-        </ErrorBoundary>
     )
 })
 

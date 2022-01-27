@@ -35,7 +35,8 @@
   },
   "errorBoundary": {
     "title": "Что то произошло!",
-    "tryAgain": "Попробовать снова"
+    "tryAgain": "Обновить",
+    "description": "Пожалуйта нажмите кнопку \"Обновить\""
   },
   "errors": {
     "invalidEmail": "Invalid email address.",

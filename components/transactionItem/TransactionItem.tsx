@@ -3,7 +3,6 @@ import React from "react";
 import Ripple from "react-native-material-ripple";
 
 export const TransactionItem = ({ item, index, onPress }) => {
-  console.log(item, item.title, item.formatFiatValue )
   return <Ripple rippleColor={ Colors.primary }
                  onPress={ onPress }
   >
