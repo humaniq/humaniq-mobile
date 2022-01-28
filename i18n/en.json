@@ -35,7 +35,8 @@
   },
   "errorBoundary": {
     "title": "Something happened!",
-    "tryAgain": "Try again"
+    "tryAgain": "Refresh",
+    "description": "Please press \"Refresh\" button"
   },
   "errors": {
     "invalidEmail": "Invalid email address",
