@@ -30,7 +30,7 @@ const Browser = observer(() => {
     view.init()
   }, [])
 
-  return <Screen backgroundColor={ Colors.bg } statusBarBg={ getBrowserStore().showTabs ? Colors.white  : Colors.bg }
+  return <Screen backgroundColor={ Colors.white } statusBarBg={ getBrowserStore().showTabs ? Colors.white  : Colors.bg }
                  preset="scroll"
                  style={ { minHeight: "100%" } }
   >
