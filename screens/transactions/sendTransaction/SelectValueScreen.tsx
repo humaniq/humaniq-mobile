@@ -45,6 +45,9 @@ const SelectValue = observer(() => {
 
   useEffect(() => {
     getEthereumProvider().gasStation.setEnableAutoUpdate(true)
+    return () => {
+      getEthereumProvider().gasStation.setEnableAutoUpdate(false)
+    }
   }, [])
 
   useEffect(() => {

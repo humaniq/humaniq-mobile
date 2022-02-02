@@ -4,6 +4,7 @@ import { t } from "../../i18n";
 import React from "react";
 import ErrorImg from '../../assets/images/error.svg'
 import { isDev } from "../../shim";
+import RNRestart from 'react-native-restart';
 
 export const CustomFallback = (props: { error: Error, resetError: () => void }) => (
     <Screen preset={ "fixed" } style={ { minHeight: "100%" } } backgroundColor={ Colors.white }
@@ -18,7 +19,7 @@ export const CustomFallback = (props: { error: Error, resetError: () => void }) 
                 { isDev && <Text marginT-30>{ props.error.toString() }</Text> }
             </View>
             <View flex bottom padding-16 width={ "100%" }>
-                <Button br50 marginT-20 onPress={ props.resetError } label={ t("errorBoundary.tryAgain") }/>
+                <Button br50 marginT-20 onPress={ () => RNRestart.Restart() } label={ t("errorBoundary.tryAgain") }/>
             </View>
 
         </View>

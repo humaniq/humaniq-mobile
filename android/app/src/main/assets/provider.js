@@ -180,7 +180,7 @@
       var EthereumProvider = function () {
       }
 
-      // EthereumProvider.prototype.isMetaMask = false
+      EthereumProvider.prototype.isMetaMask = true
       // EthereumProvider.prototype.isStatus = false
       EthereumProvider.prototype.isHumaniq = true
       EthereumProvider.prototype.status = new StatusAPI()
