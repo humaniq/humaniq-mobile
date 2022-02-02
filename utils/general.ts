@@ -118,3 +118,12 @@ export const memoize = (func) => {
     return results[argsKey];
   };
 };
+
+export function isJson(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}

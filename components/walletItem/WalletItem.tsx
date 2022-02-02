@@ -29,7 +29,7 @@ export const WalletItem: React.FC<IWalletItemProps> = (props) => {
             </Avatar>
           }
         </View>
-        <View flex-6>
+        <View flex-6={showRadio} flex-2={!showRadio}>
           <Text numberOfLines={ 1 } textM text16 black>{ props.wallet.formatAddress }</Text>
           { showRadio &&
               <Text numberOfLines={ 1 } text14 robotoR textGrey>
@@ -37,7 +37,7 @@ export const WalletItem: React.FC<IWalletItemProps> = (props) => {
               </Text>
           }
         </View>
-        <View flex-2 right>
+        <View flex-6={!showRadio} flex-2={showRadio} right>
           { showRadio && <RadioButton size={ 20 }
                                       color={ getWalletStore().selectedWalletIndex !== props.index ? Colors.textGrey : Colors.primary }
                                       selected={ getWalletStore().selectedWalletIndex === props.index }/>

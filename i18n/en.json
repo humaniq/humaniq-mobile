@@ -31,7 +31,8 @@
     "sendTo": "Send to",
     "refresh": "Refreshing",
     "noData": "No data",
-    "next": "Next"
+    "next": "Next",
+    "from": "From"
   },
   "errorBoundary": {
     "title": "Something happened!",
@@ -178,8 +179,9 @@
   "signature_request": {
     "title": "Signature Request",
     "signRequested": "Your signature is being requested",
-    "signing": "Sign this message?",
-    "ethSignWarning": "Proceed with caution. This action can potentially be used to withdraw assets from your account. Make sure you trust this site."
+    "signing": "Yes, sign this message",
+    "deny": "Maybe later",
+    "ethSignWarning": "By signing this message, please make sure that you trust this site."
   },
   "transactionsScreen": {
     "name": "Transactions"

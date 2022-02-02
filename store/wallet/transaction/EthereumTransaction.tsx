@@ -164,6 +164,7 @@ export class EthereumTransaction extends Model({
         })
       } catch (e) {
         console.log("ERROR-CANCELLING-TRANSACTION", e)
+        closeToast()
       }
     }
   }
@@ -199,6 +200,7 @@ export class EthereumTransaction extends Model({
         })
       } catch (e) {
         console.log("ERROR-SPEED-UP-TRANSACTION", e)
+        closeToast()
       }
     }
   }
