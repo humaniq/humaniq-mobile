@@ -46,12 +46,12 @@ export class EthereumProvider extends Model({
         case PROVIDER_TYPE.infura:
           network = yield* _await(storage.load("currentNetworkName"))
           this.currentNetworkName = network || this.currentNetworkName
-          this.currentProvider = ethers.getDefaultProvider(this.currentNetworkName, {
-            infura: {
-              projectId: this.currentNetwork.infuraID,
-              projectSecret: this.currentNetwork.infuraSecret
-            }
-          })
+
+          this.currentProvider =  new ethers.providers.InfuraProvider(this.currentNetworkName, {
+            projectId: this.currentNetwork.infuraID,
+            projectSecret: this.currentNetwork.infuraSecret
+          } )
+
           this.jsonRPCProvider = new ethers.providers.JsonRpcProvider({
             url: `https://${ getEthereumProvider().currentNetworkName }.infura.io/v3/${ this.currentNetwork.infuraID }`,
             user: this.currentNetwork.infuraID,

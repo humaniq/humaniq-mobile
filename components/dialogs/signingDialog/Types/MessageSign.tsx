@@ -1,10 +1,9 @@
 import { observer } from "mobx-react-lite"
-import { Button, Colors, Text, View } from "react-native-ui-lib"
 import { getAppStore, getWalletStore } from "../../../../App"
-import { t } from "../../../../i18n"
 import React from "react"
 import { runUnprotected } from "mobx-keystone"
 import { normalize } from "eth-sig-util"
+import { SignBody } from "./SignBody";
 
 export const MessageSign = observer(() => {
     const appStore = getAppStore()
@@ -31,28 +30,7 @@ export const MessageSign = observer(() => {
         })
     }
 
-
-    return <View center>
-        <View row center marginB-10>
-            <Text primary text60> { t("signatureRequest.title") } </Text>
-        </View>
-        <View row center padding-10>
-            <Text grey30 center
-                  text60>{ appStore.signPageTitle || new URL(appStore.signPageUrl).host }</Text>
-        </View>
-        <View row center paddingT-10>
-            <Text purple50 center
-                  text80>{ t('signatureRequest.ethSignWarning') }</Text>
-        </View>
-        <View row center padding-20>
-            <Text primary
-                  text60>{ t('signatureRequest.signing') }</Text>
-        </View>
-        <View row spread>
-            <Button onPress={ rejectMessage } outline outlineColor={ Colors.error } marginH-10
-                    label={ t('common.deny') }/>
-            <Button onPress={ signMessage } outline outlineColor={ Colors.primary } marginH-10
-                    label={ t('common.sign') }/>
-        </View>
-    </View>
+    return <SignBody
+        rejectMessage={ rejectMessage }
+        signMessage={ signMessage }/>
 })

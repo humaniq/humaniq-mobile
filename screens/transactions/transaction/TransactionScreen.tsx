@@ -90,7 +90,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         { t("transactionScreen.amount") }
                       </Text>
                       <View right>
-                          <Text black text16 robotoM>{ view.transaction.fiatValue }</Text>
+                          <Text black text16 robotoM>{ view.transaction.formatFiatValue }</Text>
                           <Text text-grey
                                 robotoR text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
                       </View>
