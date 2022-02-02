@@ -74,7 +74,7 @@ export const BrowserHeader = observer<HeaderProps>((
         </TouchableOpacity>
     }
     { isSearchMode &&
-        <TouchableOpacity flex-8 row centerV marginL-16 paddingL-8 bg-white br30 paddingV-5
+        <TouchableOpacity flex-8 row centerV marginL-16 paddingL-10 bg-white br30 paddingV-5 marginR-16
                           style={ CSSShadows }
             // @ts-ignore
                           onPress={ () => inputRef?.current.focus() }
@@ -109,72 +109,76 @@ export const BrowserHeader = observer<HeaderProps>((
             </View>
         </TouchableOpacity>
     }
-    <View flex-1 row center paddingL-10>
-      <Ripple
-          style={ { padding: 10 } }
-          rippleColor={ Colors.primary }
-          onPress={ openTabs }
-      >
-        <View center paddingH-6 paddingV-2
-              style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 24 } }>
-          <Text center text12>
-            { numOfTabs }
-          </Text>
+    { !isSearchMode &&
+        <View flex-1 row center paddingL-10>
+            <Ripple
+                style={ { padding: 10 } }
+                rippleColor={ Colors.primary }
+                onPress={ openTabs }
+            >
+                <View center paddingH-6 paddingV-2
+                      style={ { borderColor: Colors.black, borderWidth: 2, borderRadius: 8, width: 24 } }>
+                    <Text center text12>
+                        { numOfTabs }
+                    </Text>
+                </View>
+            </Ripple>
         </View>
-      </Ripple>
-    </View>
-    <View flex-1 center paddingR-8>
-      <Hint
-          position={ Hint.positions.BOTTOM }
-          visible={ visible }
-          borderRadius={ 4 }
-          color={ Colors.white }
-          enableShadow={ true }
-          offset={ -50 }
-          useSideTip={ false }
-          customContent={
-            <View>
-              <TouchableOpacity row centerV left onPress={ () => {
-                setVisible(false);
-                reloadPage()
-              } } paddingV-15 paddingH-5>
-                <HIcon name={ "redo-alt" } size={ 16 }/>
-                <Text marginL-10 text16>{ t("browserScreen.reloadPage") }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity row centerV left onPress={ () => {
-                setVisible(false);
-                openNewTab()
-              } } paddingV-15 paddingH-5>
-                <HIcon name={ "squared-plus" } size={ 16 }/>
-                <Text marginL-10 text16>{ t("browserScreen.openNewTab") }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity row centerV left onPress={ () => {
-                setVisible(false);
-                changeAddress()
-              } } paddingV-15 paddingH-5>
-                <HIcon name={ "wallet-alt" } size={ 16 }/>
-                <Text marginL-10 text16>{ t("browserScreen.changeAddress") }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity row centerV left onPress={ () => {
-                setVisible(false);
-                changeNetwork()
-              } } paddingV-15 paddingH-5>
-                <HIcon name={ "network" } size={ 16 }/>
-                <Text marginL-10 text16>{ t("browserScreen.changeNetwork") }</Text>
-              </TouchableOpacity>
-            </View>
-          }
-          onBackgroundPress={ () => setVisible(!visible) }
-      >
-        <View>
-          <Ripple onPress={ () => setVisible(!visible) } rippleContainerBorderRadius={ 20 }
-                  rippleColor={ Colors.primary }
-                  style={ { padding: 10 } }
-          >
-            <HIcon name={ "circles" } size={ 18 }/>
-          </Ripple>
+    }
+    { !isSearchMode &&
+        <View flex-1 center paddingR-8>
+            <Hint
+                position={ Hint.positions.BOTTOM }
+                visible={ visible }
+                borderRadius={ 4 }
+                color={ Colors.white }
+                enableShadow={ true }
+                offset={ -50 }
+                useSideTip={ false }
+                customContent={
+                    <View>
+                        <TouchableOpacity row centerV left onPress={ () => {
+                            setVisible(false);
+                            reloadPage()
+                        } } paddingV-15 paddingH-5>
+                            <HIcon name={ "redo-alt" } size={ 16 }/>
+                            <Text marginL-10 text16>{ t("browserScreen.reloadPage") }</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity row centerV left onPress={ () => {
+                            setVisible(false);
+                            openNewTab()
+                        } } paddingV-15 paddingH-5>
+                            <HIcon name={ "squared-plus" } size={ 16 }/>
+                            <Text marginL-10 text16>{ t("browserScreen.openNewTab") }</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity row centerV left onPress={ () => {
+                            setVisible(false);
+                            changeAddress()
+                        } } paddingV-15 paddingH-5>
+                            <HIcon name={ "wallet-alt" } size={ 16 }/>
+                            <Text marginL-10 text16>{ t("browserScreen.changeAddress") }</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity row centerV left onPress={ () => {
+                            setVisible(false);
+                            changeNetwork()
+                        } } paddingV-15 paddingH-5>
+                            <HIcon name={ "network" } size={ 16 }/>
+                            <Text marginL-10 text16>{ t("browserScreen.changeNetwork") }</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+                onBackgroundPress={ () => setVisible(!visible) }
+            >
+                <View>
+                    <Ripple onPress={ () => setVisible(!visible) } rippleContainerBorderRadius={ 20 }
+                            rippleColor={ Colors.primary }
+                            style={ { padding: 10 } }
+                    >
+                        <HIcon name={ "circles" } size={ 18 }/>
+                    </Ripple>
+                </View>
+            </Hint>
         </View>
-      </Hint>
-    </View>
+    }
   </View>
 })
