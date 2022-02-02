@@ -176,7 +176,7 @@
     "firstName": "First name",
     "lastName": "Last name"
   },
-  "signature_request": {
+  "signatureRequest": {
     "title": "Signature Request",
     "signRequested": "Your signature is being requested",
     "signing": "Yes, sign this message",
