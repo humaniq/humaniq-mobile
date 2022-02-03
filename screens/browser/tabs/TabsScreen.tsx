@@ -51,7 +51,6 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                   overflow: 'hidden',
                   width,
                   height,
-                  paddingBottom: 4
                 } }
                 backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight }
             >
@@ -64,7 +63,7 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                   </Text>
                 </View>
                 <Ripple onPress={ () => props.closeTab(tab.id) } rippleColor={ Colors.primary }
-                        style={ { paddingVertical: 10, paddingLeft: 10 } }>
+                        style={ { paddingVertical: 14, paddingLeft: 10, paddingRight: 4 } }>
                   <HIcon name={ "cross" }
                          color={ props.activeTab === tab.id ? Colors.white : Colors.black }/></Ripple>
               </View>
@@ -72,6 +71,12 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 width: width - 10,
                 backgroundColor: Colors.white,
                 flex: 1,
+                borderTopRightRadius: 12,
+                borderTopLeftRadius: 12,
+                borderBottomLeftRadius: 16,
+                borderBottomRightRadius: 16,
+                marginBottom: 5,
+                overflow: 'hidden',
               } }
                       rippleColor={ Colors.primary }
                       onPress={ () => props.switchToTab(tab.id) }
@@ -79,14 +84,11 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 <Image source={ { uri: tab.image } }
                        style={ {
                          ...StyleSheet.absoluteFillObject,
-                         // width,
                        } }
                        resizeMode={ "cover" }
                 />
               </Ripple>
             </View>
-            <View absB backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight } height={ 16 }
-                  width={ "100%" } style={ { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 } }/>
           </View>
         })
       }
