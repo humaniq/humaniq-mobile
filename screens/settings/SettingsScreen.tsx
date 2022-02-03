@@ -128,19 +128,19 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                 }
             </Screen>
             <Dialog center visible={ view.exitDialogVisible }
-                    containerStyle={ { backgroundColor: Colors.white, padding: 24 } }
+                    containerStyle={ { backgroundColor: Colors.white, padding: 24, borderRadius: 28 } }
                     ignoreBackgroundPress
             >
                 <Text text22>{ t("exitDialog.title") }</Text>
                 <Text marginV-20 textGrey>{ t("exitDialog.description") }</Text>
-                <View row right>
-                    <Button link label={ t("common.signOut") }
+                <View row right marginB-10 marginT-10>
+                    <Button robotoM size={ Button.sizes.medium } link label={ t("common.signOut") }
                             onPress={ () => {
                                 getAppStore().logout()
                             } }
                     />
-                    <Button marginL-20 link label={ t("common.cancel") }
-                            onPress={ () => view.exitDialogVisible = false }/>
+                    <Button robotoM size={ Button.sizes.medium } marginR-10 marginL-26 link label={ t("common.cancel") }
+                            onPress={ () => { view.exitDialogVisible = false } }/>
                 </View>
             </Dialog>
         </>
