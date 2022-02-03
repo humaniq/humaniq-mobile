@@ -89,7 +89,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                            searchValue={ view.searchValue }
                            onValueChange={ view.onSearchChange }
             />
-            <View backgroundColor={Colors.bg} flex-10 flexG-10 style={ !view.isSearchMode ? { display: 'none' } : {} }>
+            <View backgroundColor={ Colors.bg } flex-10 flexG-10 style={ !view.isSearchMode ? { display: 'none' } : {} }>
               {
                 view.searchResults.map(h => {
                   return <TouchableOpacity row key={ h[1].url } paddingH-16 paddingV-5
