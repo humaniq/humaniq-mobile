@@ -101,6 +101,7 @@ export const BrowserHeader = observer<HeaderProps>((
                     value={ searchValue }
                     placeholder={ t("browserScreen.searchPlaceholder") }
                     enableErrors={ false }
+                    selectionColor={ Colors.primary }
                 />
             </View>
             <View row flex-2 right>
