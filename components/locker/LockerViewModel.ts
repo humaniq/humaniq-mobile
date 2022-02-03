@@ -25,6 +25,7 @@ export class LockerViewModel {
   encrypted
   incorrectCount = 0
   isBioAvailable = false
+  isVibrationEnabled = true
 
   constructor() {
     makeAutoObservable(this, {}, { autoBind: true })
@@ -65,12 +66,12 @@ export class LockerViewModel {
   }
 
   handleClick(digit) {
-    Vibration.vibrate(100)
+    if (this.isVibrationEnabled) Vibration.vibrate(100)
     this.pin += digit
   }
 
   removeDigit() {
-    Vibration.vibrate(150)
+    if (this.isVibrationEnabled) Vibration.vibrate(150)
     this.pin = this.pin.substring(0, this.pin.length - 1);
   }
 
@@ -78,6 +79,9 @@ export class LockerViewModel {
     return getAppStore().lockerMode
   }
 
+  get isChangingPin() {
+    return getAppStore().lockerPreviousScreen === 'settings'
+  }
 
   async validatePin() {
     if (this.mode === LOCKER_MODE.CHECK) {

@@ -61,9 +61,12 @@
     "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
     "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
     "pinFormLoginAction": "Введите пин код",
+    "pinFormChangeAction": "Введите текущий PIN-код",
     "pinFormRegisterAction": "Создайте ПИН код",
+    "pinFormRegisterNewAction": "Создайте новый ПИН код",
     "pinFormConfirmationAction": "Подтвердите пин код",
-    "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
+    "pinFormConfirmationNewAction": "Подтвердите новый пин код",
+    "pinFormRegisterActionDescription": "Для быстрого доступа\nк приложению",
     "pinFormConfirmationActionDescription": "И вспомните свой код",
     "correctPin": "Пин код подтвержден",
     "fingerprint": "Отпечаток"
