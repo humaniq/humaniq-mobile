@@ -46,11 +46,26 @@ const L = observer(function (props) {
                 <View flex-1 center>
                     <View row flex bottom>
                       { view.mode === LOCKER_MODE.CHECK &&
-                          <Text robotoM text16 black>{ t(view.isChangingPin ? "lockerScreen.pinFormChangeAction" : "lockerScreen.pinFormLoginAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormLoginAction", {
+                              p: view.isChangingPin ? `${ t("common.current") } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
-                          <Text robotoM text16 black>{ t(view.isChangingPin ? "lockerScreen.pinFormRegisterNewAction" : "lockerScreen.pinFormRegisterAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormRegisterAction", {
+                              p: view.isChangingPin ? `${ t("common.new") } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 1 &&
-                          <Text robotoM text16 black>{ t(view.isChangingPin ? "lockerScreen.pinFormConfirmationNewAction" : "lockerScreen.pinFormConfirmationAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormConfirmationAction", {
+                              p: view.isChangingPin ? `${ t("common.new") } ` : ""
+                            })
+                          }</Text>
+                      }
                     </View>
                     <View row flex paddingT-16>
                       { view.mode === LOCKER_MODE.CHECK && view.isChangingPin && view.step === 0 &&
@@ -73,10 +88,14 @@ const L = observer(function (props) {
                 </View>
             }
               <View row flex center>
-                  <LockerDot bgColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
-                  <LockerDot bgColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
-                  <LockerDot bgColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
-                  <LockerDot bgColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
               </View>
               <View flex-4 marginB-20 bottom>
                 {

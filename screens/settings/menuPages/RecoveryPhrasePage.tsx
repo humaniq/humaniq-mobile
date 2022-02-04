@@ -39,6 +39,7 @@ export class RecoveryPhraseViewModel {
 export const RecoveryPhrase = observer(() => {
 
     const view = useInstance(RecoveryPhraseViewModel)
+
     useEffect(() => {
         view.init()
     }, [])
@@ -90,7 +91,6 @@ export const RecoveryPhrase = observer(() => {
                                                                      lineHeight: 22,
                                                                      fontFamily: "Roboto-Medium",
                                                                      color: Colors.primary
-
                                                                  } }
                                                                  containerStyle={ {
                                                                      borderColor: Colors.transparent,

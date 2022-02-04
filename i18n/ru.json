@@ -32,7 +32,9 @@
     "refresh": "Обновление",
     "noData": "Нет данных",
     "next": "Следующий",
-    "from": "От"
+    "from": "От",
+    "current": "текущий",
+    "new": "новый"
   },
   "errorBoundary": {
     "title": "Что то произошло!",
@@ -60,12 +62,10 @@
     "incorrectPin": "Неправильный пин код",
     "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
     "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
-    "pinFormLoginAction": "Введите пин код",
-    "pinFormChangeAction": "Введите текущий PIN-код",
-    "pinFormRegisterAction": "Создайте ПИН код",
-    "pinFormRegisterNewAction": "Создайте новый ПИН код",
-    "pinFormConfirmationAction": "Подтвердите пин код",
-    "pinFormConfirmationNewAction": "Подтвердите новый пин код",
+    "pinFormLoginAction": "Введите %{p}ПИН код",
+    "pinFormRegisterAction": "Создайте %{p}ПИН код",
+    "pinFormConfirmationAction": "Подтвердите %{p}ПИН код",
+    "pinFormChangeActionDescription": "Для смены на новый",
     "pinFormRegisterActionDescription": "Для быстрого доступа\nк приложению",
     "pinFormConfirmationActionDescription": "И вспомните свой код",
     "correctPin": "Пин код подтвержден",

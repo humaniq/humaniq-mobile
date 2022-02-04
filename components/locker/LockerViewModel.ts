@@ -80,7 +80,7 @@ export class LockerViewModel {
   }
 
   get isChangingPin() {
-    return getAppStore().lockerPreviousScreen === 'settings'
+    return getAppStore().lockerPreviousScreen === "settings"
   }
 
   async validatePin() {

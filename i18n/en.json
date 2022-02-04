@@ -32,7 +32,9 @@
     "refresh": "Refreshing",
     "noData": "No data",
     "next": "Next",
-    "from": "From"
+    "from": "From",
+    "current": "current",
+    "new": "new"
   },
   "errorBoundary": {
     "title": "Something happened!",
@@ -60,12 +62,9 @@
     "incorrectPin": "Invalid PIN",
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
-    "pinFormLoginAction": "Enter PIN code",
-    "pinFormChangeAction": "Enter current PIN code",
-    "pinFormRegisterAction": "Create PIN code",
-    "pinFormRegisterNewAction": "Create new PIN code",
-    "pinFormConfirmationAction": "Confirm PIN code",
-    "pinFormConfirmationNewAction": "Confirm new PIN code",
+    "pinFormLoginAction": "Enter %{p}PIN code",
+    "pinFormRegisterAction": "Create %{p}PIN code",
+    "pinFormConfirmationAction": "Confirm %{p}PIN code",
     "pinFormChangeActionDescription": "For change to the new one",
     "pinFormRegisterActionDescription": "For quick access to the\napplication",
     "pinFormConfirmationActionDescription": "And remember your code",
