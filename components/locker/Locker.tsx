@@ -73,10 +73,10 @@ const L = observer(function (props) {
                 </View>
             }
               <View row flex center>
-                  <LockerDot backgroundColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
-                  <LockerDot backgroundColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
-                  <LockerDot backgroundColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
-                  <LockerDot backgroundColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
+                  <LockerDot bgColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
+                  <LockerDot bgColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
+                  <LockerDot bgColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
+                  <LockerDot bgColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
               </View>
               <View flex-4 marginB-20 bottom>
                 {
