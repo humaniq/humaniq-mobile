@@ -11,7 +11,7 @@ import ReactNativeBiometrics from "react-native-biometrics";
 import Keychain from "react-native-keychain";
 import { RootNavigation } from "../../navigators";
 
-export const PIN_LENGHT = 4
+export const PIN_LENGTH = 4
 
 export class LockerViewModel {
   initialized = false
@@ -47,7 +47,7 @@ export class LockerViewModel {
   }
 
   async checkBio() {
-    if (!this.isBioAvailable) return
+    if (!this.isFingerprintEnabled) return
     try {
       const result = await ReactNativeBiometrics.simplePrompt({
         promptMessage: t("lockerScreen.fingerprint"),
@@ -81,6 +81,10 @@ export class LockerViewModel {
 
   get isChangingPin() {
     return getAppStore().lockerPreviousScreen === "settings"
+  }
+
+  get isFingerprintEnabled() {
+    return this.isBioAvailable && this.mode === LOCKER_MODE.CHECK
   }
 
   async validatePin() {
@@ -172,7 +176,7 @@ export class LockerViewModel {
   }
 
   watchPin = reaction(() => this.pin, async (val) => {
-    if (val && val.length === PIN_LENGHT) {
+    if (val && val.length === PIN_LENGTH) {
       this.disabled = true
       await this.validatePin()
     }

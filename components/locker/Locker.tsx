@@ -124,7 +124,7 @@ const L = observer(function (props) {
                           <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "fingerprint" } size={ 22 }
-                                         color={ view.isBioAvailable ? Colors.black : Colors.white }/>
+                                         color={ view.isFingerprintEnabled ? Colors.black : Colors.white }/>
                               </View>
                           </Ripple>
                       </View>

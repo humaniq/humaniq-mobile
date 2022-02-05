@@ -9,7 +9,6 @@ import { t } from "../../../i18n";
 import { HIcon } from "../../../components/icon";
 import Ripple from "react-native-material-ripple"
 
-
 export interface ITabsScreenProps {
   tabs: Array<BrowserTab>
   activeTab: BrowserTab
@@ -24,18 +23,21 @@ const margin = 15;
 const width = Dimensions.get('window').width / 2 - margin * 2;
 const height = Dimensions.get('window').height / 3.2
 
-
 export const TabsScreen = observer<ITabsScreenProps>((props) => {
 
   return <View style={ { minHeight: "100%" } }>
-    <View row padding-16 centerV>
-      <Ripple rippleColor={ Colors.primary } style={ { padding: 10 } } onPress={ () => props.newTab() }>
-        <HIcon name={ "plus" } size={ 18 }/>
+      <Ripple rippleColor={ Colors.primary } onPress={ () => props.newTab() }
+              style={ {
+                  alignSelf: "flex-start",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 16,
+              } }>
+          <HIcon name={ "plus" } size={ 18 }/>
+          <Text numberOfLines={ 1 } text20 marginL-20 robotoM>
+              { t("browserScreen.newTab") }
+          </Text>
       </Ripple>
-      <Text numberOfLines={ 1 } text20 marginL-20 robotoM>
-        { t("browserScreen.newTab") }
-      </Text>
-    </View>
     <View row padding-20 style={ { flexWrap: "wrap" } }>
       {
         props.tabs.map((tab, index) => {
