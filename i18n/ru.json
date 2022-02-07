@@ -34,7 +34,8 @@
     "next": "Следующий",
     "from": "От",
     "current": "Текущий",
-    "new": "Новый"
+    "new": "Новый",
+    "words": "Слов"
   },
   "errorBoundary": {
     "title": "Что то произошло!",
@@ -56,7 +57,7 @@
     "walletRecoverTitle": "Введите фразу восстановления",
     "recoveryError": "Неправильная фраза восстановления",
     "recoveryDescription": "Пожалуйста введите фразу восстановления",
-    "createNewWallet": "Создать новый кошелек"
+    "createNewWallet": "Создать новый кошелек",
   },
   "lockerScreen": {
     "incorrectPin": "Неправильный пин код",

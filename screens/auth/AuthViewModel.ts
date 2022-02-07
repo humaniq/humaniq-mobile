@@ -27,6 +27,7 @@ export class AuthViewModel {
     navigation: NavigationProp<any>
     isSavedWallet = false
     isValidRecover = false
+    wordsCount = 0
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
@@ -36,7 +37,28 @@ export class AuthViewModel {
         runUnprotected(() => {
             getAppStore().recoverPhrase = val
         })
-        this.isValidRecover = bip39.validateMnemonic(getAppStore().recoverPhrase.toLowerCase())
+
+        this.isValidRecover = this.checkWordsCount(val)
+            && bip39.validateMnemonic(getAppStore().recoverPhrase.trim().toLowerCase())
+            && getAppStore().recoverPhrase.length <= 74
+    }
+
+    get isInvalidRecover() {
+        return this.wordsCount >= 12 && !this.isValidRecover
+    }
+
+    clearWordsCount() {
+        this.wordsCount = 0
+        this.isValidRecover = false
+    }
+
+    checkWordsCount(val: string) {
+        if (val.length === 0) {
+            this.wordsCount = 0
+            return false
+        }
+        this.wordsCount = val.trim().split(" ").length
+        return this.wordsCount === 12
     }
 
     async recoveryWallet() {

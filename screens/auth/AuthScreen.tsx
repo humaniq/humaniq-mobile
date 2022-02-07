@@ -12,6 +12,7 @@ import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
 import { Splash } from "../../components/splash/Splash";
+import { toLowerCase } from "../../utils/general";
 
 const Auth = observer(function () {
     const view = useInstance(AuthViewModel)
@@ -110,6 +111,7 @@ const Auth = observer(function () {
                                         onPress: () => {
                                             // @ts-ignore
                                             getAppStore().setRecoverPhrase("")
+                                            view.clearWordsCount()
                                         }
                                     } : {} }
                                     floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
@@ -125,7 +127,7 @@ const Auth = observer(function () {
                                         paddingRight: 4,
                                     } }
                                     floatingPlaceholderColor={ {
-                                        focus: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary,
+                                        focus: view.isInvalidRecover ? Colors.error : Colors.primary,
                                         default: Colors.primary,
                                         disabled: Colors.primary
                                     } }
@@ -135,12 +137,16 @@ const Auth = observer(function () {
                                         paddingRight: 50,
                                         padding: 10,
                                         borderRadius: 5,
-                                        borderColor: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary
+                                        borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
                                     } }
                                 />
-                                <Text text14 robotoR marginT-6 marginL-10 style={ {
-                                    color: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.textGrey
-                                } }>{ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
+                                <Text text10 robotoR marginR-6 style={ {
+                                    color: Colors.textGrey,
+                                    alignSelf: "flex-end"
+                                } }>{ `${ toLowerCase(t("common.words")) }: ${view.wordsCount}` }</Text>
+                                <Text text14 robotoR marginL-10 style={ {
+                                    color: view.isInvalidRecover ? Colors.error : Colors.textGrey
+                                } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
                             </View>
                             <View flex-5 bottom paddingB-20 paddingH-16>
                                 <Button disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
