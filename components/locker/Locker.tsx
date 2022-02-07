@@ -9,6 +9,8 @@ import { t } from "../../i18n"
 import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
 import { HIcon } from "../icon";
+import { LockerDot } from "./LockerDot";
+import { toLowerCase } from "../../utils/general";
 
 
 // export interface LockerProps {
@@ -45,13 +47,31 @@ const L = observer(function (props) {
                 <View flex-1 center>
                     <View row flex bottom>
                       { view.mode === LOCKER_MODE.CHECK &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormLoginAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormLoginAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.current")) } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormRegisterAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 1 &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormConfirmationAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
+                            })
+                          }</Text>
+                      }
                     </View>
-                    <View row flex paddingT-10>
+                    <View row flex paddingT-16>
+                      { view.mode === LOCKER_MODE.CHECK && view.isChangingPin && view.step === 0 &&
+                          <Text robotoR marginH-80 center
+                                textGrey>{ t("lockerScreen.pinFormChangeActionDescription") }</Text> }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
                           <Text robotoR marginH-80 center
                                 textGrey>{ t("lockerScreen.pinFormRegisterActionDescription") }</Text> }
@@ -68,33 +88,15 @@ const L = observer(function (props) {
                     </View>
                 </View>
             }
-              <View center flex>
-                  <View row flex center>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 0 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 1 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 2 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 3 ? Colors.primary : Colors.grey
-                      } }/>
-                  </View>
+              <View row flex center>
+                  <LockerDot
+                      bgColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
               </View>
               <View flex-4 marginB-20 bottom>
                 {
@@ -123,7 +125,7 @@ const L = observer(function (props) {
                           <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "fingerprint" } size={ 22 }
-                                         color={ view.isBioAvailable ? Colors.black : Colors.white }/>
+                                         color={ view.isFingerprintEnabled ? Colors.black : Colors.white }/>
                               </View>
                           </Ripple>
                       </View>

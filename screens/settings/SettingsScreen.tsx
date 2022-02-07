@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import { LOCKER_MODE } from "../../store/app/AppStore";
+import { capitalize, toUpperCase } from "../../utils/general";
 
 const Settings = observer<{ route: any }>(function ({ route }) {
     const view = useInstance(SettingsScreenModel)
@@ -76,7 +77,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <MenuItem icon={ "double-arrows" }
                                           name={ t("settingsScreen.menu.currency") }
                                           value={ <Text text16
-                                                        textGrey> { getWalletStore().currentFiatCurrency } </Text> }
+                                                        textGrey> { toUpperCase(getWalletStore().currentFiatCurrency) } </Text> }
                                           onPress={ () => nav.navigate("selectCurrency") }
                                 />
                                 <View
@@ -84,7 +85,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <MenuItem icon={ "network" }
                                           name={ t("settingsScreen.menu.network") }
                                           value={ <Text text16
-                                                        textGrey> { getEthereumProvider().currentNetworkName } </Text> }
+                                                        textGrey> { capitalize(getEthereumProvider().currentNetworkName) } </Text> }
                                           onPress={ () => nav.navigate("selectNetwork") }
                                 />
                                 <View
@@ -127,19 +128,19 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                 }
             </Screen>
             <Dialog center visible={ view.exitDialogVisible }
-                    containerStyle={ { backgroundColor: Colors.white, padding: 24 } }
+                    containerStyle={ { backgroundColor: Colors.white, padding: 24, borderRadius: 28 } }
                     ignoreBackgroundPress
             >
                 <Text text22>{ t("exitDialog.title") }</Text>
                 <Text marginV-20 textGrey>{ t("exitDialog.description") }</Text>
-                <View row right>
-                    <Button link label={ t("common.signOut") }
+                <View row right marginB-10 marginT-10>
+                    <Button robotoM size={ Button.sizes.medium } link label={ t("common.signOut") }
                             onPress={ () => {
                                 getAppStore().logout()
                             } }
                     />
-                    <Button marginL-20 link label={ t("common.cancel") }
-                            onPress={ () => view.exitDialogVisible = false }/>
+                    <Button robotoM size={ Button.sizes.medium } marginR-10 marginL-26 link label={ t("common.cancel") }
+                            onPress={ () => { view.exitDialogVisible = false } }/>
                 </View>
             </Dialog>
         </>
