@@ -39,7 +39,7 @@ export class AuthViewModel {
         })
 
         this.isValidRecover = this.checkWordsCount(val)
-            && bip39.validateMnemonic(getAppStore().recoverPhrase.trim().toLowerCase())
+            && bip39.validateMnemonic(getAppStore().recoverPhrase.toLowerCase())
             && getAppStore().recoverPhrase.length <= 74
     }
 
