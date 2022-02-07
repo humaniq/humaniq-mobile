@@ -10,6 +10,7 @@ import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
 import { HIcon } from "../icon";
 import { LockerDot } from "./LockerDot";
+import { toLowerCase } from "../../utils/general";
 
 
 // export interface LockerProps {
@@ -48,21 +49,21 @@ const L = observer(function (props) {
                       { view.mode === LOCKER_MODE.CHECK &&
                           <Text robotoM text16 black>{
                             t("lockerScreen.pinFormLoginAction", {
-                              p: view.isChangingPin ? `${ t("common.current") } ` : ""
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.current")) } ` : ""
                             })
                           }</Text>
                       }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
                           <Text robotoM text16 black>{
                             t("lockerScreen.pinFormRegisterAction", {
-                              p: view.isChangingPin ? `${ t("common.new") } ` : ""
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
                             })
                           }</Text>
                       }
                       { view.mode === LOCKER_MODE.SET && view.step === 1 &&
                           <Text robotoM text16 black>{
                             t("lockerScreen.pinFormConfirmationAction", {
-                              p: view.isChangingPin ? `${ t("common.new") } ` : ""
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
                             })
                           }</Text>
                       }

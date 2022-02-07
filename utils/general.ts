@@ -42,6 +42,8 @@ export const capitalize = str => (str && str.charAt(0).toUpperCase() + str.slice
 
 export const toUpperCase = (str?: string) => typeof str === 'string' ? str.toUpperCase() : ''
 
+export const toLowerCase = (str?: string) => typeof str === 'string' ? str.toLowerCase() : ''
+
 export const toLowerCaseEquals = (a, b) => {
   if (!a && !b) return false
   return tlc(a) === tlc(b)
