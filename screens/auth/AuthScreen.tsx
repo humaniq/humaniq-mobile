@@ -92,13 +92,11 @@ const Auth = observer(function () {
                             </View>
                             <View flex-3 marginH-16>
                                 <TextField
-                                    autoCapitalize="characters"
+                                    autoCapitalize="none"
                                     selectionColor={ Colors.primary }
-                                    autocapitalize={ 'none' }
                                     autoFocus
                                     multiline={ true }
-                                    errorColor={ !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.textGrey }
-                                    error={ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }
+                                    enableErrors={ false }
                                     onChangeText={ view.onChangeRecoverPhrase }
                                     value={ getAppStore().recoverPhrase }
                                     hideUnderline
@@ -118,23 +116,31 @@ const Auth = observer(function () {
                                         left: 15,
                                         top: 13,
                                         fontFamily: "Roboto-Medium"
-                                    } : {} }
+                                    } : {
+                                        left: 12,
+                                        top: 11,
+                                        backgroundColor: Colors.white,
+                                        zIndex: 10,
+                                        paddingLeft: 4,
+                                        paddingRight: 4,
+                                    } }
                                     floatingPlaceholderColor={ {
-                                        focus: Colors.primary,
-                                        error: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary,
+                                        focus: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary,
                                         default: Colors.primary,
                                         disabled: Colors.primary
                                     } }
                                     placeholderTextColor={ Colors.textGrey }
                                     placeholder={ t("registerScreen.recoverPhrase") }
                                     style={ {
-                                        // textTransform: "uppercase",
                                         paddingRight: 50,
                                         padding: 10,
                                         borderRadius: 5,
                                         borderColor: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary
                                     } }
                                 />
+                                <Text text14 robotoR marginT-6 marginL-10 style={ {
+                                    color: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.textGrey
+                                } }>{ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
                             </View>
                             <View flex-5 bottom paddingB-20 paddingH-16>
                                 <Button disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
