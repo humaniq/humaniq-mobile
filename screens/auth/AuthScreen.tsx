@@ -143,7 +143,7 @@ const Auth = observer(function () {
                                 <Text text10 robotoR marginR-6 style={ {
                                     color: Colors.textGrey,
                                     alignSelf: "flex-end"
-                                } }>{ `${ toLowerCase(t("common.words")) }: ${view.wordsCount}` }</Text>
+                                } }>{ `${ toLowerCase(t("common.words")) }: ${ view.wordsCount }` }</Text>
                                 <Text text14 robotoR marginL-10 style={ {
                                     color: view.isInvalidRecover ? Colors.error : Colors.textGrey
                                 } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
