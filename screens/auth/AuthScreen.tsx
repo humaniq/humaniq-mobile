@@ -108,11 +108,7 @@ const Auth = observer(function () {
                                             alignSelf: "center",
                                             marginRight: 15,
                                         },
-                                        onPress: () => {
-                                            // @ts-ignore
-                                            getAppStore().setRecoverPhrase("")
-                                            view.clearWordsCount()
-                                        }
+                                        onPress: () => { view.clearWordsCount() }
                                     } : {} }
                                     floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
                                         left: 15,

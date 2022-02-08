@@ -59,6 +59,8 @@ export class AuthViewModel {
     }
 
     clearWordsCount() {
+        // @ts-ignore
+        getAppStore().setRecoverPhrase("")
         this.input = ""
     }
 
