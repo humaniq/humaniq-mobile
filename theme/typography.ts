@@ -8,6 +8,7 @@ Typography.loadTypographies({
 )
 
 Typography.loadTypographies({
+      text10: { fontSize: 10 },
       text12: { fontSize: 12 },
       text14: { fontSize: 14 },
       text16: { fontSize: 16 },
