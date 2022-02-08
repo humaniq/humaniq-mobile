@@ -9,7 +9,6 @@ import { t } from "../../../i18n";
 import { HIcon } from "../../../components/icon";
 import Ripple from "react-native-material-ripple"
 
-
 export interface ITabsScreenProps {
   tabs: Array<BrowserTab>
   activeTab: BrowserTab
@@ -24,18 +23,21 @@ const margin = 15;
 const width = Dimensions.get('window').width / 2 - margin * 2;
 const height = Dimensions.get('window').height / 3.2
 
-
 export const TabsScreen = observer<ITabsScreenProps>((props) => {
 
   return <View style={ { minHeight: "100%" } }>
-    <View row padding-16 centerV>
-      <Ripple rippleColor={ Colors.primary } style={ { padding: 10 } } onPress={ () => props.newTab() }>
-        <HIcon name={ "plus" } size={ 18 }/>
+      <Ripple rippleColor={ Colors.primary } onPress={ () => props.newTab() }
+              style={ {
+                  alignSelf: "flex-start",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  padding: 16,
+              } }>
+          <HIcon name={ "plus" } size={ 18 }/>
+          <Text numberOfLines={ 1 } text20 marginL-20 robotoM>
+              { t("browserScreen.newTab") }
+          </Text>
       </Ripple>
-      <Text numberOfLines={ 1 } text20 marginL-20 robotoM>
-        { t("browserScreen.newTab") }
-      </Text>
-    </View>
     <View row padding-20 style={ { flexWrap: "wrap" } }>
       {
         props.tabs.map((tab, index) => {
@@ -51,7 +53,6 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                   overflow: 'hidden',
                   width,
                   height,
-                  paddingBottom: 4
                 } }
                 backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight }
             >
@@ -64,7 +65,7 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                   </Text>
                 </View>
                 <Ripple onPress={ () => props.closeTab(tab.id) } rippleColor={ Colors.primary }
-                        style={ { paddingVertical: 10, paddingLeft: 10 } }>
+                        style={ { paddingVertical: 14, paddingLeft: 10, paddingRight: 4 } }>
                   <HIcon name={ "cross" }
                          color={ props.activeTab === tab.id ? Colors.white : Colors.black }/></Ripple>
               </View>
@@ -72,6 +73,12 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 width: width - 10,
                 backgroundColor: Colors.white,
                 flex: 1,
+                borderTopRightRadius: 12,
+                borderTopLeftRadius: 12,
+                borderBottomLeftRadius: 16,
+                borderBottomRightRadius: 16,
+                marginBottom: 5,
+                overflow: 'hidden',
               } }
                       rippleColor={ Colors.primary }
                       onPress={ () => props.switchToTab(tab.id) }
@@ -79,14 +86,11 @@ export const TabsScreen = observer<ITabsScreenProps>((props) => {
                 <Image source={ { uri: tab.image } }
                        style={ {
                          ...StyleSheet.absoluteFillObject,
-                         // width,
                        } }
                        resizeMode={ "cover" }
                 />
               </Ripple>
             </View>
-            <View absB backgroundColor={ props.activeTab === tab.id ? Colors.primary : Colors.greyLight } height={ 16 }
-                  width={ "100%" } style={ { borderBottomLeftRadius: 16, borderBottomRightRadius: 16 } }/>
           </View>
         })
       }
