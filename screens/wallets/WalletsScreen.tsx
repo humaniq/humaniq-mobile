@@ -22,9 +22,8 @@ import { useNavigation } from "@react-navigation/native";
 import { getWalletStore } from "../../App";
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
-const renderBody = ({ item }) => <WalletBody { ...item } />
-
 const renderTittle = ({ item }) => <WalletTittle { ...item } />
+const renderBody = ({ item }) => <WalletBody { ...item } />
 
 const Wallets = observer<{ route: any }>(function ({ route }) {
 
@@ -54,6 +53,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
 
   return <BlurWrapper
       before={ <Screen
+          testID={ 'wallets-screen' }
           backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }
           preset="scroll"
           refreshing={ view.refreshing }
@@ -63,13 +63,13 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
         <>
           { view.allInitialized && <>
               <View paddingT-20 paddingL-16 left>
-                  <Button link textM primary
+                  <Button testID={ 'allAddressesOrCreateWalletBtn' } link textM primary
                           label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
                           onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                   />
               </View>
               <View paddingB-10>
-                  <View height={ 100 }>
+                  <View height={ 100 } testID={'titleWalletBlock'}>
                       <Carousel
                           vertical={ false }
                           useScrollView={ true }

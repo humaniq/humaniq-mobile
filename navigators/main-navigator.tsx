@@ -32,90 +32,93 @@ const Stack = createStackNavigator()
  *   https://reactnavigation.org/docs/typescript#type-checking-the-navigator
  */
 export type PrimaryParamList = {
-  wallet: undefined
-  demo: undefined
-  settings: undefined
+    wallet: undefined
+    demo: undefined
+    settings: undefined
 }
 
 const Tab = createMaterialBottomTabNavigator()
 
 export function MainNavigator<PrimaryParamList>() {
-  const [ seedStored, setSeedStored ] = useState(true)
+    const [ seedStored, setSeedStored ] = useState(true)
 
-  useEffect(() => {
-    localStorage.load("hm-wallet-recovery-read").then(res => {
-      setSeedStored(res || false)
+    useEffect(() => {
+        localStorage.load("hm-wallet-recovery-read").then(res => {
+            setSeedStored(res || false)
+        })
     })
-  })
 
 
-
-  return (
-      <Tab.Navigator
-          labeled={ false }
-          activeColor={ Colors.primary }
-          inactiveColor={ Colors.textGrey }
-          barStyle={ { backgroundColor: Colors.white, paddingBottom: 5 } }
-          screenOptions={ ({ route }) => ({
-            tabBarLabelStyle: { marginTop: 10 },
-            headerShown: false,
-            tabBarIcon: (options) => {
-              switch (route.name) {
-                case "browser":
-                  return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 } height={ 30 }
-                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
-                  >
-                    <HIcon name={ "globe" } size={ 20 }
-                           style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
-                case "settings":
-                  return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 } height={ 30 }
-                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
-                  >
-                    <HIcon
-                        name={ "cog" } size={ 20 }
-                        style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
-                default:
-                  return <View padding-5 paddingL-20 marginB-5 br50
-                               backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
-                               width={ 60 } height={ 30 }><HIcon
-                      name={ "wallet" } size={ 20 }
-                      style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
-              }
-            },
-          }) }>
-        <Tab.Screen name="wallet"
-                    component={ WalletStack }/>
-        <Tab.Screen name="browser"
-                    component={ BrowserScreen }/>
-        <Tab.Screen name="settings"
-                    component={ SettingsStack }
-                    options={ { tabBarBadge: !seedStored } }
-        />
-      </Tab.Navigator>
-  )
+    return (
+        <Tab.Navigator
+            labeled={ false }
+            activeColor={ Colors.primary }
+            inactiveColor={ Colors.textGrey }
+            barStyle={ { backgroundColor: Colors.white, paddingBottom: 5 } }
+            screenOptions={ ({ route }) => ({
+                tabBarLabelStyle: { marginTop: 10 },
+                tabBarTestID: `tab-${route.name}`,
+                headerShown: false,
+                tabBarIcon: (options) => {
+                    switch (route.name) {
+                        case "browser":
+                            return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 }
+                                         height={ 30 }
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                            >
+                                <HIcon name={ "globe" } size={ 20 }
+                                       style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
+                        case "settings":
+                            return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 }
+                                         height={ 30 }
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                            >
+                                <HIcon
+                                    name={ "cog" } size={ 20 }
+                                    style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
+                        default:
+                            return <View padding-5 paddingL-20 marginB-5 br50
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                                         width={ 60 } height={ 30 }>
+                                <HIcon name={ "wallet" } size={ 20 }
+                                       style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/>
+                            </View>
+                    }
+                },
+            }) }>
+            <Tab.Screen name="wallet"
+                        component={ WalletStack }/>
+            <Tab.Screen name="browser"
+                        component={ BrowserScreen }/>
+            <Tab.Screen name="settings"
+                        component={ SettingsStack }
+                        options={ { tabBarBadge: !seedStored } }
+            />
+        </Tab.Navigator>
+    )
 }
 
 export function WalletStack() {
-  return (
-      <><Stack.Navigator screenOptions={ {
-        headerShown: false,
-      } }>
-        <Stack.Screen name="wallet-main" component={ WalletsScreen }/>
-      </Stack.Navigator>
-      </>
-  )
+    return (
+        <><Stack.Navigator screenOptions={ {
+            headerShown: false,
+        } }>
+            <Stack.Screen name="wallet-main" component={ WalletsScreen }/>
+        </Stack.Navigator>
+        </>
+    )
 }
 
 
 export function SettingsStack() {
-  return (
-      <Stack.Navigator screenOptions={ {
-        headerShown: false,
-      } }>
-        <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen }/>
-        <Stack.Screen name="settings-profile" component={ ProfileScreen }/>
-      </Stack.Navigator>
-  )
+    return (
+        <Stack.Navigator screenOptions={ {
+            headerShown: false,
+        } }>
+            <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen }/>
+            <Stack.Screen name="settings-profile" component={ ProfileScreen }/>
+        </Stack.Navigator>
+    )
 }
 
 /**

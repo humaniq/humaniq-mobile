@@ -66,3 +66,7 @@ Anyone is welcome to participate in the wallet development:
 - install dependencies `yarn`
 - start development mode `yarn start` and second terminal `yarn android`
 - build release `yarn build android` & `yarn release-android`
+
+# e2e test
+- build `detox build -c android.release`
+- test `detox test -c android.release`

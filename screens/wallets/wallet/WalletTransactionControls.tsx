@@ -3,7 +3,9 @@ import { Button, Colors, View } from "react-native-ui-lib";
 import { t } from "../../../i18n";
 import { Shadow } from "react-native-shadow-2";
 import { useInstance } from "react-ioc";
-import { SelfAddressQrCodeDialogViewModel } from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
+import {
+  SelfAddressQrCodeDialogViewModel
+} from "../../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
 import { WalletsScreenModel } from "../WalletsScreenModel";
 import Ripple from "react-native-material-ripple";
 import { RootNavigation } from "../../../navigators";
@@ -21,7 +23,9 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
     <View row center>
       <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
               containerViewStyle={ { backgroundColor: Colors.white, borderRadius: 15 } }>
-        <Ripple rippleColor={ Colors.primary }
+        <Ripple
+            testID={ `sendTransaction-${props.tokenAddress}` }
+            rippleColor={ Colors.primary }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {
                     screen: "selectAddress",
@@ -43,7 +47,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
       </Shadow>
       <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
               containerViewStyle={ { backgroundColor: Colors.white, marginLeft: 20, borderRadius: 15 } }>
-        <Ripple rippleColor={ Colors.primary } onPress={ async () => {
+          <Ripple testID={ `selfAddressQrCode-${ view.currentWallet.address }` } rippleColor={ Colors.primary } onPress={ async () => {
           selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
           selfAddressQrCodeDialogViewModel.display = true
         } }>

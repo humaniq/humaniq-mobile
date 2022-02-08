@@ -17,6 +17,7 @@ export const SelfAddressQrCodeDialog = observer(() => {
   const view = useInstance(SelfAddressQrCodeDialogViewModel);
 
   return <Dialog
+      testID={'selfAddressQrCodeDialog'}
       width={ "100%" }
       containerStyle={ { backgroundColor: Colors.grey80, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
       onDismiss={ () => runInAction(() => view.display = false) }
