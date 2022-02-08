@@ -22,7 +22,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
       >
         <StatusBar
             translucent
-            barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "dark-content" : "dark-content" }
+            barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
             backgroundColor={ props.statusBarBg || Colors.bg }/>
         <View style={ [ preset.inner, style, insetStyle ] }>{ props.children }</View>
       </KeyboardAvoidingView>
