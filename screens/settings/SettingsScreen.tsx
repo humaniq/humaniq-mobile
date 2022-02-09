@@ -34,8 +34,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                     view.initialized &&
                     <>
                         <Header backEnabled={ false } title={ t("settingsScreen.name") }/>
-
-                        <View testID={'settings-screen'} flex paddingT-20 paddingH-16>
+                        <View testID={ 'settings-screen' } flex paddingT-20 paddingH-16>
                             <Card padding-10 padding-0>
                                 <MenuItem icon={ "key" }
                                           name={ t("settingsScreen.menu.recoveryPhrase") }
@@ -130,17 +129,22 @@ const Settings = observer<{ route: any }>(function ({ route }) {
             <Dialog center visible={ view.exitDialogVisible }
                     containerStyle={ { backgroundColor: Colors.white, padding: 24, borderRadius: 28 } }
                     ignoreBackgroundPress
+                    testID={ 'logoutDialog' }
             >
                 <Text text22>{ t("exitDialog.title") }</Text>
                 <Text marginV-20 textGrey>{ t("exitDialog.description") }</Text>
                 <View row right marginB-10 marginT-10>
-                    <Button robotoM size={ Button.sizes.medium } link label={ t("common.signOut") }
+                    <Button testID={ 'logoutBtn' } robotoM size={ Button.sizes.medium } link
+                            label={ t("common.signOut") }
                             onPress={ () => {
                                 getAppStore().logout()
                             } }
                     />
-                    <Button robotoM size={ Button.sizes.medium } marginR-10 marginL-26 link label={ t("common.cancel") }
-                            onPress={ () => { view.exitDialogVisible = false } }/>
+                    <Button testID={ 'cancelBtn' } robotoM size={ Button.sizes.medium } marginR-10 marginL-26 link
+                            label={ t("common.cancel") }
+                            onPress={ () => {
+                                view.exitDialogVisible = false
+                            } }/>
                 </View>
             </Dialog>
         </>

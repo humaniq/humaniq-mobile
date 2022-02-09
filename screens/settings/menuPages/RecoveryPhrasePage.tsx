@@ -47,7 +47,7 @@ export const RecoveryPhrase = observer(() => {
     return <Screen preset={ "scroll" } style={ { minHeight: "100%" } }
                    statusBarBg={ Colors.white } backgroundColor={ Colors.white }>
         <Header title={ !view.showRecoveryPhrase ? t("settingsScreen.menu.recoveryPhrase") : undefined }/>
-        { !view.showRecoveryPhrase && <View flex paddingV-20>
+        { !view.showRecoveryPhrase && <View flex paddingV-20 testID={ 'recoveryPhrasePage-1' }>
             <View row center>
                 <RecoveryImage/>
             </View>
@@ -57,14 +57,14 @@ export const RecoveryPhrase = observer(() => {
                 </Text>
             </View>
             <View row paddingH-16>
-                <Checkbox value={ view.understandRisc }
+                <Checkbox testID={'understandRisc'} value={ view.understandRisc }
                           onValueChange={ () => {
                               view.understandRisc = !view.understandRisc
                           }
                           } label={ t("settingsScreen.menu.recoveryWarning") }/>
             </View>
             <View flex bottom paddingH-16 paddingT-16>
-                <Button onPress={ async () => {
+                <Button testID={'showRecoveryPhrase'} onPress={ async () => {
                     view.showRecoveryPhrase = true
                     await localStorage.save("hm-wallet-recovery-read", true)
                 } } disabled={ !view.understandRisc } br50 label={ t("settingsScreen.menu.recoveryBtn") } absB/>
@@ -72,7 +72,7 @@ export const RecoveryPhrase = observer(() => {
         </View>
         }
         { view.showRecoveryPhrase &&
-            <View flex paddingV-20>
+            <View flex paddingV-20 testID={ 'recoveryPhrasePage-2' }>
                 <View row paddingH-16>
                     <Text text16 robotoM>
                         { t("settingsScreen.menu.recoveryPhrase") }
