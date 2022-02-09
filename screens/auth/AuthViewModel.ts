@@ -10,6 +10,7 @@ import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
 import { getAppStore, getWalletStore } from "../../App"
 import * as Keychain from 'react-native-keychain';
+import { isEmpty } from "../../utils/general";
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -26,7 +27,7 @@ export class AuthViewModel {
     step = 0
     navigation: NavigationProp<any>
     isSavedWallet = false
-    isValidRecover = false
+    input = ''
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
@@ -34,9 +35,33 @@ export class AuthViewModel {
 
     onChangeRecoverPhrase(val) {
         runUnprotected(() => {
+            this.input = val
             getAppStore().recoverPhrase = val
         })
-        this.isValidRecover = bip39.validateMnemonic(getAppStore().recoverPhrase.toLowerCase())
+    }
+
+    get wordsCount() {
+        if (isEmpty(this.input)) {
+            return 0
+        }
+        return this.input.trim().split(" ").length
+    }
+
+    get isValidRecover() {
+        return this.wordsCount === 12
+            && bip39.validateMnemonic(this.input)
+            && this.input.length <= 74
+            && !isEmpty(this.input)
+    }
+
+    get isInvalidRecover() {
+        return this.wordsCount >= 12 && !this.isValidRecover
+    }
+
+    clearWordsCount() {
+        // @ts-ignore
+        getAppStore().setRecoverPhrase("")
+        this.input = ""
     }
 
     async recoveryWallet() {

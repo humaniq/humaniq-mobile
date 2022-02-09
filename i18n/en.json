@@ -34,7 +34,8 @@
     "next": "Next",
     "from": "From",
     "current": "Current",
-    "new": "New"
+    "new": "New",
+    "words": "Words"
   },
   "errorBoundary": {
     "title": "Something happened!",
