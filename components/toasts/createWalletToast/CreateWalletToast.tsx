@@ -6,7 +6,7 @@ import { WalletsScreenModel } from "../../../screens/wallets/WalletsScreenModel"
 import { t } from "../../../i18n";
 import { HIcon } from "../../icon";
 import { TOAST_POSITION } from "../appToast/AppToast";
-
+import { CircularProgress } from "../../progress/CircularProgress";
 
 export const CreateWalletToast = observer(() => {
   const view = useInstance(WalletsScreenModel)
@@ -21,8 +21,10 @@ export const CreateWalletToast = observer(() => {
       <Card padding-15 marginH-16>
         <View row centerV>
           { !view.walletDialogs.pendingDialog.walletCreated ?
-              <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
-                <HIcon name={ "clock-arrows" } size={ 18 } color={ Colors.warning }/></Avatar> :
+              <CircularProgress indeterminate strokeWidth={2} radius={18}>
+                <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
+                  <HIcon name={ "clock-arrows" } size={ 18 } color={ Colors.warning }/></Avatar>
+              </CircularProgress> :
               <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 32 }>
                 <HIcon name={ "done" } size={ 19 } color={ Colors.success }/></Avatar> }
           <Text marginL-8 robotoR> { !view.walletDialogs.pendingDialog.walletCreated ?

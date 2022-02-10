@@ -18,8 +18,9 @@ export const WalletBody = observer<any>(({ address }) => {
               <TokenItem
                   onPress={ () => RootNavigation.navigate("walletTransactions", {
                     wallet: wallet.address,
-                    symbol: 'ETH'
-                  }) }
+                    symbol: 'ETH',
+                    animate: true
+                  } ) }
                   symbol={ "ETH" }
                   tokenAddress={ wallet.address }
                   logo={ "ethereum" }
@@ -37,11 +38,12 @@ export const WalletBody = observer<any>(({ address }) => {
                                     () => RootNavigation.navigate("walletTransactions", {
                                       wallet: wallet.address,
                                       symbol: p.symbol,
-                                      tokenAddress: p.tokenAddress
-                                    })
+                                      tokenAddress: p.tokenAddress,
+                                      animate: true
+                                    } )
                                   }
                 />
-              })
+              } )
             }
           </>
         }

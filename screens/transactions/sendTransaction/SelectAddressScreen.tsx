@@ -76,6 +76,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
             <TextField
                 autoFocus
                 multiline={ true }
+                selectionColor={ Colors.primary }
                 errorColor={ view.inputAddressError ? Colors.error : Colors.textGrey }
                 error={ view.inputAddressErrorMessage }
                 onChangeText={ (val) => {
@@ -114,6 +115,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                   disabled: Colors.primary
                 } }
                 placeholder={ "Address" }
+                placeholderTextColor={ Colors.textGrey }
                 style={ {
                   paddingRight: 50,
                   padding: 10,
