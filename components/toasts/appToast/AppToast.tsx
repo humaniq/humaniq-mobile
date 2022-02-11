@@ -7,6 +7,7 @@ import { TOASTER_TYPE } from "../../../store/app/AppStore";
 import { Shadow } from "react-native-shadow-2";
 import { Dimensions } from "react-native";
 import { HIcon } from "../../icon";
+import { CircularProgress } from "../../progress/CircularProgress";
 
 export enum TOAST_POSITION {
   UNDER_TAB_BAR = "UNDER_TAB_BAR",
@@ -26,11 +27,13 @@ export const AppToast = observer(() => {
       >
         <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.grey10, 0.1) }
                 containerViewStyle={ { backgroundColor: Colors.white } }>
-          <View row centerV flex padding-15 width={ Dimensions.get("window").width - 32 }>
+          <View row centerV flex padding-12 width={ Dimensions.get("window").width - 32 }>
             {
               view.appStore.toast.type === TOASTER_TYPE.PENDING &&
-              <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
+              <CircularProgress strokeWidth={2} indeterminate radius={18}>
+                <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
                   <HIcon name={ "clock-arrows" } size={ 18 } color={ Colors.warning }/></Avatar>
+              </CircularProgress>
             }
             {
               view.appStore.toast.type === TOASTER_TYPE.SUCCESS &&

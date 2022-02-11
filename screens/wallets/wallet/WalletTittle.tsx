@@ -33,8 +33,10 @@ export const WalletTittle = observer<any>(({ address }) => {
                                     getAppStore().toast.message = ""
                                 })
                             }, 3000)
-                        } } style={ { backgroundColor: Colors.rgba(Colors.primary, 0.1), borderRadius: 12 } } textM primary
-                                label={ wallet.formatAddress }/>
+                        } } style={ {
+                            backgroundColor: Colors.rgba(Colors.primary, 0.1),
+                            borderRadius: 20,
+                        } } paddingT-8 paddingB-8 textM primary label={ wallet.formatAddress }/>
                     </View>
                 </View>
             }

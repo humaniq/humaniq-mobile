@@ -10,7 +10,6 @@ import { Dimensions } from "react-native";
 import { t } from "../../i18n";
 import { WalletTittle } from "./wallet/WalletTittle";
 import { WalletBody } from "./wallet/WalletBody";
-import { WalletTabs } from "./wallet/WalletTabs";
 import { WalletTransactionControls } from "./wallet/WalletTransactionControls";
 import {
   SelfAddressQrCodeDialogViewModel
@@ -29,7 +28,7 @@ const renderTittle = ({ item }) => <WalletTittle { ...item } />
 const Wallets = observer<{ route: any }>(function ({ route }) {
 
   const view = useInstance(WalletsScreenModel)
-  const nav = useNavigation()
+  const nav = useNavigation<any>()
   const walletMenu = useInstance(WalletMenuDialogViewModel)
   const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
@@ -65,7 +64,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
               <View paddingT-20 paddingL-16 left>
                   <Button link textM primary
                           label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
-                          onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList") : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
+                          onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList", { animate: true } ) : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                   />
               </View>
               <View paddingB-10>
@@ -89,7 +88,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                           } }
                       />
                   </View>
-                { getWalletStore().wallets.length > 1 && <WalletTabs index={ view.activeIndex }/> }
                   <WalletTransactionControls/>
                   <Carousel
                       vertical={ false }
