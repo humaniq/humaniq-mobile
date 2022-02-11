@@ -154,7 +154,7 @@ export const CircularProgress = ({
                     </G>
                 </Svg>
             </Animated.View>
-            { !indeterminate && textEnabled && !children ? <AnimatedText style={ {
+            { !indeterminate && textEnabled && !children && <AnimatedText style={ {
                 ...StyleSheet.absoluteFillObject,
                 fontSize: textSize,
                 color: textColor,
@@ -162,7 +162,8 @@ export const CircularProgress = ({
                 textAlignVertical: "center"
             } }>
                 { `${ currentValue }` }
-            </AnimatedText> : <View style={ {
+            </AnimatedText>  }
+            { children && <View style={ {
                 ...StyleSheet.absoluteFillObject,
                 alignItems: "center",
                 justifyContent: "center"
