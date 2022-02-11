@@ -18,8 +18,8 @@ export const ApprovalDappConnectDialog = observer(() => {
       visible={ view.display }
       bottom
   >
-    <View bg-bg>
-      <DialogHeader onPressIn={ () => view.display = false }/>
+    <View bg-bg testID={'approvalDappConnectDialog'} >
+      <DialogHeader onPressIn={ () => { view.display = false } }/>
       { !view.pending &&
           <View padding-20>
               <View row>
@@ -33,11 +33,11 @@ export const ApprovalDappConnectDialog = observer(() => {
                   <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>
               </View>
               <View row width={ "100%" } center paddingT-40>
-                  <Button onPress={ view.onAccountsRejected } link br50 bg-primary marginB-20 robotoM
+                  <Button testID={'reject'} onPress={ view.onAccountsRejected } link br50 bg-primary marginB-20 robotoM
                           label={ t('approvalDappConnectDialog.deny') }/>
               </View>
               <View width={ "100%" }>
-                  <Button onPress={ view.onAccountsConfirm } marginH-10 fullWidth style={ { borderRadius: 12 } }
+                  <Button testID={'allow'} onPress={ view.onAccountsConfirm } marginH-10 fullWidth style={ { borderRadius: 12 } }
                           label={ t('approvalDappConnectDialog.allow') }/>
               </View>
           </View>

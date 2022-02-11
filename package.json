@@ -2,30 +2,13 @@
   "name": "humaniqmobile",
   "version": "0.8.0",
   "private": true,
-  "detox": {
-    "test-runner": "jest",
-    "configurations": {
-      "android.debug": {
-        "binaryPath": "android/app/build/outputs/apk/debug/app-arm64-v8a-debug.apk",
-        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
-        "type": "android.emulator",
-        "name": "Pixel_XL_API_30"
-      },
-      "android.release": {
-        "binaryPath": "android/app/build/outputs/apk/release/app-universal-release.apk",
-        "testBinaryPath": "android/app/build/outputs/apk/androidTest/release/app-release-androidTest.apk",
-        "build": "cd android && gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
-        "type": "android.emulator",
-        "name": "Pixel_XL_API_30"
-      }
-    }
-  },
   "scripts": {
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test:build": "detox build -c android.release",
-    "test:run": "detox test -c android.release",
+    "test:build": "detox build -c android.emu.release",
+    "test:run": "detox test -c android.emu.release --detectOpenHandles",
+    "test:run:sass": "yarn build-android && detox test -c android.genycloud.release --detectOpenHandles --record-logs all --take-screenshots all",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "npm-run-all format:*",
     "format:ts": "prettier --write \"app/**/*.ts{,x}\"",
@@ -164,6 +147,7 @@
     "eslint-plugin-promise": "4.2.1",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-native": "3.10.0",
+    "fs-extra": "^10.0.0",
     "jest": "^27.4.7",
     "metro-config": "^0.66.2",
     "metro-react-native-babel-preset": "^0.66.2",

@@ -24,7 +24,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
       <Shadow distance={ 8 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
               containerViewStyle={ { backgroundColor: Colors.white, borderRadius: 15 } }>
         <Ripple
-            testID={ `sendTransaction-${props.tokenAddress}` }
+            testID={ `sendTransaction-${props.tokenAddress || 'eth'}` }
             rippleColor={ Colors.primary }
                 onPress={ () => {
                   RootNavigation.navigate("sendTransaction", {

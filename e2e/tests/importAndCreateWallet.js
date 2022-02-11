@@ -9,7 +9,6 @@ export const importAndCreateWallet = () => {
         });
 
         // it('Create wallet', async () => {
-        //     await element(by.id('backBtn')).tap()
         //     await element(by.id('createWalletBtn')).tap()
         //     await expect(element(by.id('lockerScreen'))).toBeVisible()
         //     await setPinCode()

@@ -11,11 +11,12 @@ export interface MenuItemProps {
     value?: string | JSX.Element,
     showArrow?: boolean
     onPress?: (props?: any) => any | Promise<any>
+    testID?: string
 }
 
-export const MenuItem = ({ icon, iconStyle, name, value, onPress, showArrow = true }: MenuItemProps) => {
+export const MenuItem = ({ icon, iconStyle, name, value, onPress, showArrow = true, testID }: MenuItemProps) => {
     return <Ripple onPress={ onPress && onPress } rippleColor={ Colors.primary } style={ { padding: 10 } }>
-        <View testID={ `menuItem-${ icon || name }` } row center>
+        <View testID={ `menuItem-${ icon || testID }` } row center>
             { icon && <View>
                 <View bg-greyLight padding-9 br100 style={ iconStyle }>
                     <HIcon

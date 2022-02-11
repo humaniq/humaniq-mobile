@@ -8,22 +8,23 @@ import { getWalletStore } from "../../../App";
 import { ICON_HEADER } from "../../header/Header";
 
 export const SelectWalletDialog = observer(() => {
-  const view = useInstance(SelectWalletDialogViewModel)
+    const view = useInstance(SelectWalletDialogViewModel)
 
-  return <Modal
-      onRequestClose={ () => {
-        view.display = false
-      } }
-      animationType={ "slide" }
-      visible={ view.display }>
-    <SelectWallet backIcon={ ICON_HEADER.CROSS } onBackPress={ () => {
-      view.display = false
-    } }
-                  totalBalance={ getWalletStore().formatTotalAllWalletsFiatBalance } wallets={ view.options }
-                  onPressWallet={ (_, i) => {
-                    // @ts-ignore
-                    getWalletStore().setSelectedWalletIndex(i);
-                    view.display = false
-                  } }/>
-  </Modal>
+    return <Modal
+        testID={ 'selectWalletDialog' }
+        onRequestClose={ () => {
+            view.display = false
+        } }
+        animationType={ "slide" }
+        visible={ view.display }>
+        <SelectWallet backIcon={ ICON_HEADER.CROSS } onBackPress={ () => {
+            view.display = false
+        } }
+                      totalBalance={ getWalletStore().formatTotalAllWalletsFiatBalance } wallets={ view.options }
+                      onPressWallet={ (_, i) => {
+                          // @ts-ignore
+                          getWalletStore().setSelectedWalletIndex(i);
+                          view.display = false
+                      } }/>
+    </Modal>
 })

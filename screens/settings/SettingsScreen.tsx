@@ -34,7 +34,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                     view.initialized &&
                     <>
                         <Header backEnabled={ false } title={ t("settingsScreen.name") }/>
-                        <View testID={ 'settings-screen' } flex paddingT-20 paddingH-16>
+                        <View testID={ 'settingsScreen' } flex paddingT-20 paddingH-16>
                             <Card padding-10 padding-0>
                                 <MenuItem icon={ "key" }
                                           name={ t("settingsScreen.menu.recoveryPhrase") }

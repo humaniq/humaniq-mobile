@@ -10,11 +10,12 @@ import { TypedSign } from "./Types/TypedSign"
 export const SigningDialog = observer(() => {
 
     return <Dialog
-            ignoreBackgroundPress
-            width={ "100%" }
-            containerStyle={ { backgroundColor: Colors.bg, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
-            visible={ getAppStore().signMessageDialogDisplay }
-            bottom
+        testID={ 'signingDialog' }
+        ignoreBackgroundPress
+        width={ "100%" }
+        containerStyle={ { backgroundColor: Colors.bg, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
+        visible={ getAppStore().signMessageDialogDisplay }
+        bottom
     >
         <View>
             <DialogHeader onPressIn={ () => null }/>

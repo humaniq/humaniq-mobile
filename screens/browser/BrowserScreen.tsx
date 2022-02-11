@@ -16,7 +16,7 @@ import { SelectNetworkDialog } from "../../components/dialogs/selectNetworkDialo
 import {
     ApprovalDappConnectDialogViewModel
 } from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialogViewModel";
-import { ExploreModalViewModel } from "./ExploreModalViewModel";
+
 import {
     ApprovalDappConnectDialog
 } from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialog";
@@ -35,7 +35,7 @@ const Browser = observer(() => {
                    preset="scroll"
                    style={ { minHeight: "100%" } }
     >
-        <View testID={ 'browser-screen' }>
+        <View testID={ 'browserScreen' }>
             { view.initialized &&
                 getBrowserStore().showTabs && <TabsScreen
                     tabs={ view.tabs }
@@ -70,5 +70,4 @@ BrowserScreen.register(
     SelectWalletDialogViewModel,
     SelectNetworkDialogViewModel,
     ApprovalDappConnectDialogViewModel,
-    ExploreModalViewModel,
 )

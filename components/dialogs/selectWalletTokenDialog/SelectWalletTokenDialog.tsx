@@ -13,6 +13,7 @@ export const SelectWalletTokenDialog = observer(() => {
   const view = useInstance(SelectWalletTokenViewModel)
 
   return <Dialog
+      testID={'selectWalletTokenDialog'}
       width={ "100%" }
       height={ 350 }
       visible={ view.display }

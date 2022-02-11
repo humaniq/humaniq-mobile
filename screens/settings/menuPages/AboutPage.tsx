@@ -26,10 +26,10 @@ export const AboutPage = () => {
             </View>
             <View paddingT-24>
                 <Card>
-                    <MenuItem name={ t("settingsScreen.menu.privacyPolicyName") }
+                    <MenuItem testID={'privacyPolicyPage'} name={ t("settingsScreen.menu.privacyPolicyName") }
                               onPress={ () => nav.navigate("privacyPolicyPage") }/>
                     <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 20 } }/>
-                    <MenuItem name={ t("settingsScreen.menu.termsOfServiceName") }
+                    <MenuItem testID={'termsOfServicePage'} name={ t("settingsScreen.menu.termsOfServiceName") }
                               onPress={ () => nav.navigate("termsOfServicePage") }/>
                 </Card>
             </View>
