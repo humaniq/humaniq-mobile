@@ -27,7 +27,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
 
     const view = useInstance(WalletsScreenModel)
     const nav = useNavigation<any>()
-    const walletMenu = useInstance(WalletMenuDialogViewModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
     const carouselTittleRef = useRef<Carousel<any>>()
