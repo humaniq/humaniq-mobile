@@ -53,6 +53,7 @@ export const TypedSign = observer(() => {
     }
 
     return <SignBody
+        testID={ 'typedSign' }
         rejectMessage={ rejectMessage }
         signMessage={ signMessage }
         message={ message }

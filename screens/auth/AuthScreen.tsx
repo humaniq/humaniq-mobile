@@ -12,6 +12,7 @@ import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
 import { Splash } from "../../components/splash/Splash";
+import { toLowerCase } from "../../utils/general";
 
 const Auth = observer(function () {
     const view = useInstance(AuthViewModel)
@@ -37,21 +38,25 @@ const Auth = observer(function () {
                         <View bottom flex paddingB-20>
                             <View bottom row flex style={ { width: "100%" } }>
                                 <View style={ { width: "100%" } } paddingH-16>
-                                    <Button outline br50 bg-primary robotoM onPress={ view.goRecover } marginB-10
+                                    <Button testID={ 'recoveryWalletBtn' } outline br50 bg-primary robotoM
+                                            onPress={ view.goRecover } marginB-10
                                             label={ view.isSavedWallet ? t("registerScreen.recoverFromMnemonicTwo") :
                                                 t("registerScreen.recoverFromMnemonicOne") }/>
 
-                                    <Button fullWidth bg-primary onPress={ view.goRegister }
+                                    <Button testID={ 'createWalletBtn' } fullWidth bg-primary
+                                            onPress={ view.goRegister }
                                             style={ { borderRadius: 12 } }
                                             label={ t("registerScreen.createNewWallet") }/>
                                     {
                                         view.isSavedWallet && <View row center paddingT-20>
                                             <Text>{ t("registerScreen.goExisting") }.</Text>
-                                            <Button link bg-primary marginV-10 marginL-10
-                                                    style={ { borderRadius: 12 } }
-                                                    onPress={ view.goLogin }
-                                                    labelStyle={ { fontSize: 14 } }
-                                                    label={ t("registerScreen.enterPin") }/>
+                                            <Button
+                                                testID={ 'loginWalletBtn' }
+                                                link bg-primary marginV-10 marginL-10
+                                                style={ { borderRadius: 12 } }
+                                                onPress={ view.goLogin }
+                                                labelStyle={ { fontSize: 14 } }
+                                                label={ t("registerScreen.enterPin") }/>
                                         </View>
                                     }
                                 </View>
@@ -67,20 +72,23 @@ const Auth = observer(function () {
                             </View>
                             <View flex paddingB-20>
                                 <Animatable.View animation="pulse" iterationCount={ "infinite" }
-                                                 direction="alternate"><Text text60BO
-                                                                             white>{ view.message }</Text></Animatable.View>
+                                                 direction="alternate">
+                                    <Text text60BO white>{ view.message }</Text>
+                                </Animatable.View>
                             </View>
                             <View flex bottom paddingB-20>
-                                <Button onPress={ () => {
-                                    view.state = AUTH_STATE.MAIN
-                                } } label={ t("common.back") }/>
+                                <Button
+                                    testID={ 'backBtn' }
+                                    onPress={ () => {
+                                        view.state = AUTH_STATE.MAIN
+                                    } } label={ t("common.back") }/>
                             </View>
                         </View>
                     </Animatable.View> }
                 { view.state === AUTH_STATE.RECOVER &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
                         { !view.pending && <View flex>
-                            <TouchableOpacity row padding-16 paddingT-25 onPress={ () => {
+                            <TouchableOpacity testID={ 'backBtn' } row padding-16 paddingT-25 onPress={ () => {
                                 view.state = AUTH_STATE.MAIN;
                                 // @ts-ignore
                                 getAppStore().setRecoverPhrase("")
@@ -92,13 +100,12 @@ const Auth = observer(function () {
                             </View>
                             <View flex-3 marginH-16>
                                 <TextField
-                                    autoCapitalize="characters"
+                                    testID={ 'enterMnemonicField' }
+                                    autoCapitalize="none"
                                     selectionColor={ Colors.primary }
-                                    autocapitalize={ 'none' }
                                     autoFocus
                                     multiline={ true }
-                                    errorColor={ !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.textGrey }
-                                    error={ !view.isValidRecover && getAppStore().recoverPhrase.length > 0 ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }
+                                    enableErrors={ false }
                                     onChangeText={ view.onChangeRecoverPhrase }
                                     value={ getAppStore().recoverPhrase }
                                     hideUnderline
@@ -109,36 +116,47 @@ const Auth = observer(function () {
                                             alignSelf: "center",
                                             marginRight: 15,
                                         },
-                                        onPress: () => {
-                                            // @ts-ignore
-                                            getAppStore().setRecoverPhrase("")
-                                        }
+                                        onPress: () => { view.clearWordsCount() }
                                     } : {} }
                                     floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
                                         left: 15,
                                         top: 13,
                                         fontFamily: "Roboto-Medium"
-                                    } : {} }
+                                    } : {
+                                        left: 12,
+                                        top: 11,
+                                        backgroundColor: Colors.white,
+                                        zIndex: 10,
+                                        paddingLeft: 4,
+                                        paddingRight: 4,
+                                    } }
                                     floatingPlaceholderColor={ {
-                                        focus: Colors.primary,
-                                        error: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary,
+                                        focus: view.isInvalidRecover ? Colors.error : Colors.primary,
                                         default: Colors.primary,
                                         disabled: Colors.primary
                                     } }
                                     placeholderTextColor={ Colors.textGrey }
                                     placeholder={ t("registerScreen.recoverPhrase") }
                                     style={ {
-                                        // textTransform: "uppercase",
                                         paddingRight: 50,
                                         padding: 10,
                                         borderRadius: 5,
-                                        borderColor: !view.isValidRecover && getAppStore().recoverPhrase.length >= 74 ? Colors.error : Colors.primary
+                                        borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
                                     } }
                                 />
+                                <Text text10 robotoR marginR-6 style={ {
+                                    color: Colors.textGrey,
+                                    alignSelf: "flex-end"
+                                } }>{ `${ toLowerCase(t("common.words")) }: ${ view.wordsCount }` }</Text>
+                                <Text text14 robotoR marginL-10 style={ {
+                                    color: view.isInvalidRecover ? Colors.error : Colors.textGrey
+                                } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
                             </View>
                             <View flex-5 bottom paddingB-20 paddingH-16>
-                                <Button disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
-                                        label={ t("common.next") }/>
+                                <Button
+                                    testID={ 'runRecoveryWalletBtn' }
+                                    disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
+                                    label={ t("common.next") }/>
                             </View>
                         </View> }
                         { view.pending && <Splash showLoader={ view.needLoader }/> }

@@ -18,7 +18,7 @@ export const RootNavigation = {
 };
 
 export const setRootNavigation = (ref: React.RefObject<NavigationContainerRef<any>>) => {
-  for (const method in RootNavigation) { 
+  for (const method in RootNavigation) {
     RootNavigation[method] = (...args: any) => {
       if (ref.current) {
         return ref.current[method](...args);

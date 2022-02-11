@@ -9,6 +9,8 @@ import { t } from "../../i18n"
 import { LOCKER_MODE } from "../../store/app/AppStore"
 import * as Animatable from "react-native-animatable"
 import { HIcon } from "../icon";
+import { LockerDot } from "./LockerDot";
+import { toLowerCase } from "../../utils/general";
 
 
 // export interface LockerProps {
@@ -18,26 +20,26 @@ import { HIcon } from "../icon";
 
 const L = observer(function (props) {
 
-  const view = useInstance(LockerViewModel)
+    const view = useInstance(LockerViewModel)
 
-  useEffect(() => {
-    view.init()
+    useEffect(() => {
+        view.init()
 
-    // reaction(() => getAppStore().lockerStatus, async () => {
-    //   view.pin = ""
-    //   view.settledPin = getAppStore().savedPin
-    //   view.confirmationPin = ""
-    //   view.step = 0
-    //   view.message = ""
-    // })
+        // reaction(() => getAppStore().lockerStatus, async () => {
+        //   view.pin = ""
+        //   view.settledPin = getAppStore().savedPin
+        //   view.confirmationPin = ""
+        //   view.step = 0
+        //   view.message = ""
+        // })
 
-  }, [])
+    }, [])
 
-  return <Screen backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
+  return <Screen testID={ 'lockerScreen' } backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
       { view.initialized &&
           <View flex-1>
-              <TouchableOpacity row padding-16 paddingT-25 onPress={ view.exit }>
+              <TouchableOpacity testID={ 'backBtn' } row padding-16 paddingT-25 onPress={ view.exit }>
                   <HIcon name={ "arrow-left" } size={ 18 }/>
               </TouchableOpacity>
               <View flex bottom center/>
@@ -45,13 +47,31 @@ const L = observer(function (props) {
                 <View flex-1 center>
                     <View row flex bottom>
                       { view.mode === LOCKER_MODE.CHECK &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormLoginAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormLoginAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.current")) } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormRegisterAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormRegisterAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
+                            })
+                          }</Text>
+                      }
                       { view.mode === LOCKER_MODE.SET && view.step === 1 &&
-                          <Text robotoM text16 black>{ t("lockerScreen.pinFormConfirmationAction") }</Text> }
+                          <Text robotoM text16 black>{
+                            t("lockerScreen.pinFormConfirmationAction", {
+                              p: view.isChangingPin ? `${ toLowerCase(t("common.new")) } ` : ""
+                            })
+                          }</Text>
+                      }
                     </View>
-                    <View row flex paddingT-10>
+                    <View row flex paddingT-16>
+                      { view.mode === LOCKER_MODE.CHECK && view.isChangingPin && view.step === 0 &&
+                          <Text robotoR marginH-80 center
+                                textGrey>{ t("lockerScreen.pinFormChangeActionDescription") }</Text> }
                       { view.mode === LOCKER_MODE.SET && view.step === 0 &&
                           <Text robotoR marginH-80 center
                                 textGrey>{ t("lockerScreen.pinFormRegisterActionDescription") }</Text> }
@@ -68,33 +88,15 @@ const L = observer(function (props) {
                     </View>
                 </View>
             }
-              <View center flex>
-                  <View row flex center>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 0 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 1 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 2 ? Colors.primary : Colors.grey
-                      } }/>
-                      <View marginH-5 style={ {
-                        width: 20,
-                        height: 20,
-                        borderRadius: 10,
-                        backgroundColor: view.pin.length > 3 ? Colors.primary : Colors.grey
-                      } }/>
-                  </View>
+              <View row flex center>
+                  <LockerDot
+                      bgColor={ view.pin.length > 0 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 1 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 2 ? Colors.primary : Colors.grey } />
+                  <LockerDot
+                      bgColor={ view.pin.length > 3 ? Colors.primary : Colors.grey } />
               </View>
               <View flex-4 marginB-20 bottom>
                 {
@@ -103,7 +105,9 @@ const L = observer(function (props) {
                         {
                           [ 1, 2, 3 ].map(row =>
                               <View key={ `row${ row }` } margin-5 center row>
-                                <Ripple disabled={ view.disabled } rippleColor={ "rgb(0, 0, 102)" }
+                                <Ripple
+                                    testID={ `lockerBtn-${ (col - 1) * 3 + row }` }
+                                    disabled={ view.disabled } rippleColor={ "rgb(0, 0, 102)" }
                                         onPress={ () => view.handleClick(`${ (col - 1) * 3 + row }`) }>
                                   <View padding-10 width={ 80 } center
                                         style={ { borderRadius: 40 } }>
@@ -120,15 +124,17 @@ const L = observer(function (props) {
                 }
                   <View row center height={ 70 }>
                       <View margin-5 center row>
-                          <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
+                          <Ripple
+                              testID={ 'lockerBtn-finger' }
+                              rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "fingerprint" } size={ 22 }
-                                         color={ view.isBioAvailable ? Colors.black : Colors.white }/>
+                                         color={ view.isFingerprintEnabled ? Colors.black : Colors.white }/>
                               </View>
                           </Ripple>
                       </View>
                       <View margin-5 center row>
-                          <Ripple onPress={ () => view.handleClick("0") } rippleColor={ "rgb(0, 0, 102)" }>
+                          <Ripple testID={ 'lockerBtn-0' } onPress={ () => view.handleClick("0") } rippleColor={ "rgb(0, 0, 102)" }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <Text robotoR text30>
                                       0
@@ -137,7 +143,7 @@ const L = observer(function (props) {
                           </Ripple>
                       </View>
                       <View margin-5 center row>
-                          <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
+                          <Ripple testID={ 'lockerBtn-delete' } rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "backspace" } size={ 22 } color={ Colors.black }/>
                               </View>

@@ -32,7 +32,10 @@
     "refresh": "Refreshing",
     "noData": "No data",
     "next": "Next",
-    "from": "From"
+    "from": "From",
+    "current": "Current",
+    "new": "New",
+    "words": "Words"
   },
   "errorBoundary": {
     "title": "Something happened!",
@@ -60,10 +63,11 @@
     "incorrectPin": "Invalid PIN",
     "pinFormErrorIncorrectConfirmationMessage": "Incorrect PIN",
     "pinFormErrorIncorrectPinMessage": "Incorrect PIN",
-    "pinFormLoginAction": "Enter PIN code",
-    "pinFormRegisterAction": "Create PIN code",
-    "pinFormConfirmationAction": "Confirm PIN code",
-    "pinFormRegisterActionDescription": "For quick access to the application",
+    "pinFormLoginAction": "Enter %{p}PIN code",
+    "pinFormRegisterAction": "Create %{p}PIN code",
+    "pinFormConfirmationAction": "Confirm %{p}PIN code",
+    "pinFormChangeActionDescription": "For change to the new one",
+    "pinFormRegisterActionDescription": "For quick access to the\napplication",
     "pinFormConfirmationActionDescription": "And remember your code",
     "correctPin": "PIN code verified",
     "fingerprint": "Fingerprint"
@@ -240,6 +244,7 @@
       "title": "\"Humaniq\" application requests access to the camera",
       "message": "Required to scan codes for adding contacts and payments"
     },
-    "scanning": "Point the camera of your phone to the QR code "
+    "scanning": "Point the camera of your phone to the QR code ",
+    "chooseFromGallery": "Choose from gallery"
   }
 }

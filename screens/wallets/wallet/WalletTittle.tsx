@@ -14,12 +14,13 @@ export const WalletTittle = observer<any>(({ address }) => {
         <View padding-20>
             {
                 !!wallet.initialized && <View row spread centerV>
-                    <TouchableOpacity onPress={ getWalletStore().changeCurrentFiatCurrency }>
+                    <TouchableOpacity testID={ `changeCurrentFiatCurrency-${ address }` }
+                                      onPress={ getWalletStore().changeCurrentFiatCurrency }>
                         <Text h2 black>{ wallet.formatTotalWalletFiatBalance }</Text>
                         <Text text-grey>{ t("walletScreen.totalBalanceTittle") }</Text>
                     </TouchableOpacity>
                     <View>
-                        <Button onPress={ () => {
+                        <Button testID={ `copyWalletAddress-${ address }` } onPress={ () => {
                             Clipboard.setString(wallet.address)
                             runUnprotected(() => {
                                 getAppStore().toast.type = TOASTER_TYPE.SUCCESS
@@ -33,8 +34,10 @@ export const WalletTittle = observer<any>(({ address }) => {
                                     getAppStore().toast.message = ""
                                 })
                             }, 3000)
-                        } } style={ { backgroundColor: Colors.rgba(Colors.primary, 0.1), borderRadius: 12 } } textM primary
-                                label={ wallet.formatAddress }/>
+                        } } style={ {
+                            backgroundColor: Colors.rgba(Colors.primary, 0.1),
+                            borderRadius: 20,
+                        } } paddingT-8 paddingB-8 textM primary label={ wallet.formatAddress }/>
                     </View>
                 </View>
             }

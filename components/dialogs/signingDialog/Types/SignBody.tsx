@@ -12,9 +12,10 @@ export interface ISignBodyProps {
     message?: string,
     rejectMessage: () => void | Promise<void>
     signMessage: () => void | Promise<void>
+    testID?: string
 }
 
-export const SignBody: React.FC<ISignBodyProps> = ({ message, rejectMessage, signMessage }) => {
+export const SignBody: React.FC<ISignBodyProps> = ({ message, rejectMessage, signMessage, testID }) => {
 
     const [ isJsonM, setIsJsonM ] = useState(isJson(message))
     const [ expanded, setExpanded ] = useState(true)
@@ -43,7 +44,7 @@ export const SignBody: React.FC<ISignBodyProps> = ({ message, rejectMessage, sig
         setIsJsonM(isJson(message))
     }, [ message ])
 
-    return <View center bg-bg width={ "100%" }>
+    return <View center bg-bg width={ "100%" } testID={ testID }>
         <View row center marginB-10>
             <Text text16
                   RobotoM>{ `${ t("signatureRequest.title") } ${ appStore.signPageTitle || new URL(appStore.signPageUrl).host }` } </Text>
@@ -85,8 +86,10 @@ export const SignBody: React.FC<ISignBodyProps> = ({ message, rejectMessage, sig
                             </ScrollView>
                         }
                         {
-                            isJsonM && <ScrollView><JSONTree shouldExpandNode={() => true} hideRoot invertTheme={ false } theme={ theme }
-                                                             data={ JSON.parse(message) }/></ScrollView>
+                            isJsonM &&
+                            <ScrollView><JSONTree shouldExpandNode={ () => true } hideRoot invertTheme={ false }
+                                                  theme={ theme }
+                                                  data={ JSON.parse(message) }/></ScrollView>
                         }
                     </View>
                 </ExpandableSection>

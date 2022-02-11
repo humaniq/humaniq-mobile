@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { NavigationContainer, NavigationContainerRef } from "@react-navigation/native"
-import { createStackNavigator } from "@react-navigation/stack"
+import { CardStyleInterpolators, createStackNavigator } from "@react-navigation/stack"
 import { MainNavigator } from "./main-navigator"
 import { WalletsListScreen } from "../screens/wallets/WalletsListScreen";
 import { TransactionsListScreen } from "../screens/transactions/transactionsList/TransactionsListScreen";
@@ -32,8 +32,8 @@ import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrency
  */
 export type RootParamList = {
     mainStack: undefined
-    walletsList: undefined,
-    walletTransactions: undefined,
+    walletsList: { animate: boolean },
+    walletTransactions: { wallet: string, symbol: string, tokenAddress?: string, animate?: boolean },
     walletTransaction: undefined,
     selectValue: undefined,
     sendTransaction: undefined,
@@ -54,8 +54,20 @@ const RootStack = () => {
     return (
         <Stack.Navigator screenOptions={ { headerShown: false } }>
             <Stack.Screen name="mainStack" component={ MainNavigator }/>
-            <Stack.Screen name="walletsList" component={ WalletsListScreen }/>
-            <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }/>
+            <Stack.Screen name="walletsList" component={ WalletsListScreen }
+                          options={ ( { route: { params } } ) => ( {
+                              cardStyleInterpolator: params?.animate
+                                  ? CardStyleInterpolators.forHorizontalIOS
+                                  : CardStyleInterpolators.forScaleFromCenterAndroid,
+                          } ) }
+                />
+            <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }
+                          options={ ( { route: { params } } ) => ( {
+                              cardStyleInterpolator: params?.animate
+                                  ? CardStyleInterpolators.forHorizontalIOS
+                                  : CardStyleInterpolators.forScaleFromCenterAndroid,
+                          } ) }
+                />
             <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
             <Stack.Screen name="sendTransaction" component={ SendTransactionStack }/>
             <Stack.Screen name="QRScanner" component={ QRScanner }/>

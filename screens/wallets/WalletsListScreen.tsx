@@ -21,6 +21,7 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
   return <BlurWrapper
       before={
         <><Screen
+            testID={ 'walletsListScreen' }
             backgroundColor={ Colors.bg } statusBarBg={ Colors.bg }
             preset="scroll"
             refreshing={ view.refreshing }
@@ -51,7 +52,7 @@ const WalletsList = observer<{ route: any }>(({ route }) => {
                   totalBalance={ getWalletStore().formatTotalAllWalletsFiatBalance }/>
           }
           { !view.initialized && <LoaderScreen/> }
-          <Button margin-16 absB br40 label={ t("walletScreen.menuDialog.createWallet.name") }
+          <Button testID={'createWalletBtn'} margin-16 absB br40 label={ t("walletScreen.menuDialog.createWallet.name") }
                   onPress={ view.createWalletDialog }
           />
         </Screen>

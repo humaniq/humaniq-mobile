@@ -32,7 +32,10 @@
     "refresh": "Обновление",
     "noData": "Нет данных",
     "next": "Следующий",
-    "from": "От"
+    "from": "От",
+    "current": "Текущий",
+    "new": "Новый",
+    "words": "Слов"
   },
   "errorBoundary": {
     "title": "Что то произошло!",
@@ -60,10 +63,11 @@
     "incorrectPin": "Неправильный пин код",
     "pinFormErrorIncorrectConfirmationMessage": "Некорректный пин код",
     "pinFormErrorIncorrectPinMessage": "Некорректный пин код",
-    "pinFormLoginAction": "Введите пин код",
-    "pinFormRegisterAction": "Создайте ПИН код",
-    "pinFormConfirmationAction": "Подтвердите пин код",
-    "pinFormRegisterActionDescription": "Для быстрого доступа к приложению",
+    "pinFormLoginAction": "Введите %{p}ПИН код",
+    "pinFormRegisterAction": "Создайте %{p}ПИН код",
+    "pinFormConfirmationAction": "Подтвердите %{p}ПИН код",
+    "pinFormChangeActionDescription": "Для смены на новый",
+    "pinFormRegisterActionDescription": "Для быстрого доступа\nк приложению",
     "pinFormConfirmationActionDescription": "И вспомните свой код",
     "correctPin": "Пин код подтвержден",
     "fingerprint": "Отпечаток"
@@ -240,6 +244,7 @@
       "title": "\"Humaniq\" приложению требуется разрешение",
       "message": "Для сканирования QR кодов с адресами получателей"
     },
-    "scanning": "Направьте вашу камеру на QR код"
+    "scanning": "Направьте вашу камеру на QR код",
+    "chooseFromGallery": "Выбрать из галереи"
   }
 }
