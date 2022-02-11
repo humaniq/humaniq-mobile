@@ -38,6 +38,7 @@ export const PersonalSign = observer(() => {
     }
 
     return <SignBody
+        testID={ 'personalSign' }
         rejectMessage={ rejectMessage }
         signMessage={ signMessage }
         message={ message }

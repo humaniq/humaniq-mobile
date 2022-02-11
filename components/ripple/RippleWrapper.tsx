@@ -9,6 +9,7 @@ export interface RippleWrapperProps {
     onClick: () => void
     borderRadius?: number
     rippleColor?: string
+    testID?: string
 }
 
 /**
@@ -20,6 +21,7 @@ export interface RippleWrapperProps {
  * @param onClick
  * @param borderRadius
  * @param rippleColor
+ * @param testID
  * @constructor
  */
 export const RippleWrapper = ({
@@ -27,9 +29,10 @@ export const RippleWrapper = ({
                                   style,
                                   onClick,
                                   borderRadius = 50,
-                                  rippleColor = Colors.primary
+                                  rippleColor = Colors.primary,
+                                  testID
                               }: RippleWrapperProps) => {
-    return <Ripple style={ { borderRadius: borderRadius, overflow: "hidden", ...style } }
+    return <Ripple testID={ testID } style={ { borderRadius: borderRadius, overflow: "hidden", ...style } }
                    rippleColor={ rippleColor }
                    onPress={ onClick }>
         { children }

@@ -16,7 +16,9 @@ export const SelectNetworkDialog = observer(() => {
             view.display = false
         } }
         animationType={ "slide" }
-        visible={ view.display }>
+        visible={ view.display }
+        testID={'selectNetworkModal'}
+    >
         <ItemSelector selected={ getEthereumProvider().currentNetworkName } backIcon={ ICON_HEADER.CROSS }
                       headerTittle={ t("settingsScreen.menu.network") }
                       onBackPress={ () => view.display = false } items={ view.networks }

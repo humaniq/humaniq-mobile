@@ -48,7 +48,6 @@ import { AppToast } from "./components/toasts/appToast/AppToast";
 import {
     SelfAddressQrCodeDialogViewModel
 } from "./components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
-import { WalletMenuDialogViewModel } from "./components/dialogs/menuWalletDialog/WalletMenuDialogViewModel";
 import { SendTransactionViewModel } from "./screens/transactions/sendTransaction/SendTransactionViewModel";
 import { SelectWalletTokenViewModel } from "./components/dialogs/selectWalletTokenDialog/SelectWalletTokenViewModel";
 import {
@@ -187,7 +186,6 @@ App.register(
     WalletsScreenModel,
     LegacySendTransactonViewModel,
     SelfAddressQrCodeDialogViewModel,
-    WalletMenuDialogViewModel,
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
     SelectTransactionFeeDialogViewModel,

@@ -18,6 +18,7 @@ export const SendTransactionDialog = observer(() => {
     const [ expanded, setExpanded ] = useState(true)
 
     return <Dialog
+        testID={ 'sendTransactionDialog' }
         ignoreBackgroundPress={ !view.txHash }
         width={ "100%" }
         containerStyle={ {

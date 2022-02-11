@@ -43,7 +43,7 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                         <Card padding-0 flex>
                             {
                                 i.items.map((n, i) => {
-                                    return <Ripple key={ n.name } rippleColor={ Colors.primary }
+                                    return <Ripple testID={`itemSelector-${n.name}`} key={ n.name } rippleColor={ Colors.primary }
                                                    style={ { padding: 12 } }
                                                    onPress={ () => onPressItem(n) }
                                     >

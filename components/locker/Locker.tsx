@@ -20,26 +20,26 @@ import { toLowerCase } from "../../utils/general";
 
 const L = observer(function (props) {
 
-  const view = useInstance(LockerViewModel)
+    const view = useInstance(LockerViewModel)
 
-  useEffect(() => {
-    view.init()
+    useEffect(() => {
+        view.init()
 
-    // reaction(() => getAppStore().lockerStatus, async () => {
-    //   view.pin = ""
-    //   view.settledPin = getAppStore().savedPin
-    //   view.confirmationPin = ""
-    //   view.step = 0
-    //   view.message = ""
-    // })
+        // reaction(() => getAppStore().lockerStatus, async () => {
+        //   view.pin = ""
+        //   view.settledPin = getAppStore().savedPin
+        //   view.confirmationPin = ""
+        //   view.step = 0
+        //   view.message = ""
+        // })
 
-  }, [])
+    }, [])
 
-  return <Screen backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
+  return <Screen testID={ 'lockerScreen' } backgroundColor={ Colors.white } statusBarBg={ Colors.white }>
     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
       { view.initialized &&
           <View flex-1>
-              <TouchableOpacity row padding-16 paddingT-25 onPress={ view.exit }>
+              <TouchableOpacity testID={ 'backBtn' } row padding-16 paddingT-25 onPress={ view.exit }>
                   <HIcon name={ "arrow-left" } size={ 18 }/>
               </TouchableOpacity>
               <View flex bottom center/>
@@ -105,7 +105,9 @@ const L = observer(function (props) {
                         {
                           [ 1, 2, 3 ].map(row =>
                               <View key={ `row${ row }` } margin-5 center row>
-                                <Ripple disabled={ view.disabled } rippleColor={ "rgb(0, 0, 102)" }
+                                <Ripple
+                                    testID={ `lockerBtn-${ (col - 1) * 3 + row }` }
+                                    disabled={ view.disabled } rippleColor={ "rgb(0, 0, 102)" }
                                         onPress={ () => view.handleClick(`${ (col - 1) * 3 + row }`) }>
                                   <View padding-10 width={ 80 } center
                                         style={ { borderRadius: 40 } }>
@@ -122,7 +124,9 @@ const L = observer(function (props) {
                 }
                   <View row center height={ 70 }>
                       <View margin-5 center row>
-                          <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
+                          <Ripple
+                              testID={ 'lockerBtn-finger' }
+                              rippleColor={ "rgb(0, 0, 102)" } onPress={ view.checkBio }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "fingerprint" } size={ 22 }
                                          color={ view.isFingerprintEnabled ? Colors.black : Colors.white }/>
@@ -130,7 +134,7 @@ const L = observer(function (props) {
                           </Ripple>
                       </View>
                       <View margin-5 center row>
-                          <Ripple onPress={ () => view.handleClick("0") } rippleColor={ "rgb(0, 0, 102)" }>
+                          <Ripple testID={ 'lockerBtn-0' } onPress={ () => view.handleClick("0") } rippleColor={ "rgb(0, 0, 102)" }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <Text robotoR text30>
                                       0
@@ -139,7 +143,7 @@ const L = observer(function (props) {
                           </Ripple>
                       </View>
                       <View margin-5 center row>
-                          <Ripple rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
+                          <Ripple testID={ 'lockerBtn-delete' } rippleColor={ "rgb(0, 0, 102)" } onPress={ view.removeDigit }>
                               <View padding-10 flex width={ 80 } center style={ { borderRadius: 40 } }>
                                   <HIcon name={ "backspace" } size={ 22 } color={ Colors.black }/>
                               </View>
