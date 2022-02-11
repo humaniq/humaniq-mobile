@@ -168,6 +168,8 @@ package-lock.json
 .vscode
 .vs
 
+/artifacts
+
 # Android memory profiler files
 *.hprof
 
