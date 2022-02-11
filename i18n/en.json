@@ -244,6 +244,7 @@
       "title": "\"Humaniq\" application requests access to the camera",
       "message": "Required to scan codes for adding contacts and payments"
     },
-    "scanning": "Point the camera of your phone to the QR code "
+    "scanning": "Point the camera of your phone to the QR code ",
+    "chooseFromGallery": "Choose from gallery"
   }
 }
