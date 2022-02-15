@@ -31,10 +31,9 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                    }
                                })
                            } }>
-                <Button borderRadius={ 12 } outlineColor={ Colors.white }
+                <Button outlineColor={ Colors.transparent }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
-                        style={ { backgroundColor: Colors.white } } primary outline
-                        label={ t("common.send") }
+                        primary outline label={ t("common.send") }
                 >
                     <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
                 </Button>
@@ -44,9 +43,9 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
                                selfAddressQrCodeDialogViewModel.display = true
                            } }>
-                <Button borderRadius={ 12 } outlineColor={ Colors.white }
+                <Button outlineColor={ Colors.transparent }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
-                        style={ { backgroundColor: Colors.white } } primary outline
+                        primary outline
                         label={ t("common.receive") }
                 >
                     <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>
