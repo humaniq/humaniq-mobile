@@ -28,7 +28,7 @@ export const RippleWrapper = ({
                                   children,
                                   style,
                                   onClick,
-                                  borderRadius = 50,
+                                  borderRadius = 20,
                                   rippleColor = Colors.primary,
                                   testID
                               }: RippleWrapperProps) => {
