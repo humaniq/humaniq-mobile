@@ -10,6 +10,7 @@ import {
     types as t,
 } from "mobx-keystone"
 import { computed, observable, reaction } from "mobx"
+import * as storage from "../../utils/localStorage"
 import { localStorage } from "../../utils/localStorage"
 import { v4 as uuidv4 } from 'uuid';
 import { Wallet } from "./Wallet"
@@ -23,7 +24,6 @@ import { getAppStore, getEthereumProvider, getWalletStore } from "../../App"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { currencyFormat } from "../../utils/number";
 import { CURRENCIES, CURRENCIES_ARR } from "../../config/common";
-import * as storage from "../../utils/localStorage";
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -82,7 +82,7 @@ export class WalletStore extends Model({
     @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
-            const currentFiatCurrency  = (yield* _await(storage.load("currentFiatCurrency"))) || CURRENCIES.USD
+            const currentFiatCurrency = (yield* _await(storage.load("currentFiatCurrency"))) || CURRENCIES.USD
             // @ts-ignore
             getWalletStore().setCurrentFiatCurrency(currentFiatCurrency)
 
@@ -115,7 +115,7 @@ export class WalletStore extends Model({
                             const encrypted = await localStorage.load("hm-wallet")
                             const result = cryptr.decrypt(encrypted)
                             this.storedWallets = JSON.parse(result)
-                            await this.init(true)
+                            await this.init()
                             // runUnprotected(() => this.initialized = uuid.v4())
                             // getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
                         })
