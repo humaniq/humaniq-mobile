@@ -31,7 +31,7 @@ export interface QRBoundaryCornerProps {
 export const QRBoundaryCorner = ({
                                      position = QRBoundaryPosition.TOP_LEFT,
                                      size = 32,
-                                     borderRadius = 0,
+                                     borderRadius = 12,
                                      width = 5,
                                      offset = 0,
                                      color = Colors.white

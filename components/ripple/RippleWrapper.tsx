@@ -6,8 +6,8 @@ import { Shadow } from "react-native-shadow-2";
 
 export interface RippleWrapperProps {
     children: ReactNode
-    style?: ViewStyle
     onClick: () => void
+    style?: ViewStyle
     borderRadius?: number
     rippleColor?: string
     backgroundColor?: string
@@ -16,27 +16,27 @@ export interface RippleWrapperProps {
 
 /**
  * A wrapper class above Ripple component
- * with some predefined styles
+ * with shadows and some predefined styles
  *
- * @param children
- * @param style
- * @param onClick
- * @param borderRadius
- * @param rippleColor
- * @param backgroundColor
- * @param testID
+ * @param children - React Node
+ * @param onClick - Callback function
+ * @param style - Additional style for wrapper component
+ * @param borderRadius - Wrapper border radius
+ * @param rippleColor - Ripple animation color
+ * @param backgroundColor - Background color
+ * @param testID - Id for testing purposes
  * @constructor
  */
 export const RippleWrapper = ({
                                   children,
-                                  style = {},
                                   onClick,
+                                  style = {},
                                   borderRadius = 12,
                                   rippleColor = Colors.primary,
                                   backgroundColor = Colors.white,
                                   testID
                               }: RippleWrapperProps) => {
-    return <Shadow distance={ 10 } radius={ 15 } startColor={ Colors.rgba(Colors.black, 0.03) }
+    return <Shadow distance={ 10 } radius={ 15 } startColor={ Colors.rgba(Colors.primary, 0.03) }
                    viewStyle={ { alignSelf: "stretch" } }
                    containerViewStyle={ { ...style, backgroundColor, borderRadius } }>
         <Ripple testID={ testID } style={ { borderRadius, overflow: "hidden" } }
