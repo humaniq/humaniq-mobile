@@ -18,14 +18,13 @@ import {
 import { currencyFormat } from "../../../utils/number";
 import { RootNavigation } from "../../../navigators";
 import { Header } from "../../../components/header/Header";
-import { throttle } from "../../../utils/general";
+import { capitalize, throttle, toLowerCase } from "../../../utils/general";
 import useKeyboard from '@rnhooks/keyboard';
 import { HIcon } from "../../../components/icon";
 import {
     SelectTransactionFeeDialogViewModel
 } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { getEthereumProvider, getWalletStore } from "../../../App";
-import * as Animatable from "react-native-animatable"
 import { InteractionManager } from "react-native";
 
 const SelectValue = observer(() => {
@@ -110,11 +109,13 @@ const SelectValue = observer(() => {
                                 fontSize: 32,
                                 fontFamily: "Roboto-Bold"
                             } }
+                            selectionColor={ Colors.primary }
                             keyboardType={ "numeric" }
                             floatingPlaceholder={ false }
                             centered={ true }
                             hideUnderline
                             placeholder={ "0" }
+                            placeholderTextColor={ Colors.textGrey }
                             enableErrors={ false }
                             value={ view.txData.value }
                             onChangeText={ (val) => {
@@ -135,7 +136,7 @@ const SelectValue = observer(() => {
                 <View row center>
                     <Text robotoM>{ `${ view.parsedPrice } ${ view.inputPrice }` }</Text>
                 </View>
-                <View row center>
+                <View row center marginT-10>
                     <Button testID={ 'selectFee' } onPress={ () => {
                         view.selectTransactionFeeDialog.wallet = view.walletAddress
                         view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
@@ -143,12 +144,9 @@ const SelectValue = observer(() => {
                     } }
                             link
                     >
-                        <Animatable.Text style={ { color: Colors.primary } }
-                                         animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
-                                         iterationCount={ "infinite" }
-                                         direction="alternate">
-                            { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
-                        </Animatable.Text>
+                        <Text style={ { color: Colors.primary } }>
+                            { `${ capitalize(view.selectedGasPriceLabel) } ${ toLowerCase(t("selectValueScreen.fee")) } ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
+                        </Text>
                     </Button>
                 </View>
             </View>

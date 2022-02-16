@@ -36,8 +36,8 @@ export interface CircularProgressProps {
  * @param duration - Circle progress animation duration
  * @param color - Color of circle progress
  * @param maxValue - Progress max value
- * @param indeterminate - Looping spin animation for circular progress
- * @param indeterminateDuration - Looping spin animation duration
+ * @param indeterminate - Infinite spinning animation when there is no currentValue
+ * @param indeterminateDuration - Duration of spin animation for 1 cycle
  * @param textSize - Circle text size to show percentage
  * @param textColor - Circle text color
  * @param textEnabled - Enable or disable text appearance

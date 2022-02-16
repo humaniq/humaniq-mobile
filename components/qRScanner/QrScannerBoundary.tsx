@@ -44,13 +44,13 @@ const FADE_ANIMATION_DURATION = 400
  */
 export const QrScannerBoundary = ({
                                       maskColor = Colors.rgba("#000000", 0.5),
-                                      squareSize = 300,
+                                      squareSize = 280,
                                       drawCorners = true,
                                       drawScan = false,
                                       scanColor = Colors.primary,
                                       helperText,
                                       cornersColor = Colors.white,
-                                      borderWidth = 6,
+                                      borderWidth = 4,
                                       scanHeight = 1.5,
                                       helperTextColor = Colors.white,
                                       bottomButtonTitle,
@@ -144,9 +144,9 @@ export const QrScannerBoundary = ({
             <View flex backgroundColor={ maskColor }/>
         </View>
         { !isEmpty(helperText) ? <View paddingH-70 center backgroundColor={ maskColor } style={ { flex: 0.5 } }>
-            <Text style={ {
+            <Text RobotoM style={ {
                 color: helperTextColor,
-                fontSize: 17,
+                fontSize: 19,
                 justifyContent: 'center',
                 textAlign: 'center'
             } }>{ helperText }</Text>

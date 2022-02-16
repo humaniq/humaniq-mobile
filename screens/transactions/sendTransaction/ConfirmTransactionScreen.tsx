@@ -8,9 +8,6 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { renderShortAddress } from "../../../utils/address";
 import { Header } from "../../../components/header/Header";
-import * as Animatable from "react-native-animatable";
-import { getEthereumProvider, getWalletStore } from "../../../App";
-import { currencyFormat } from "../../../utils/number";
 
 export const ConfirmTransactionScreen = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -54,12 +51,9 @@ export const ConfirmTransactionScreen = observer(() => {
                 } }
                         link
                 >
-                    <Animatable.Text style={ { color: Colors.primary } }
-                                     animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
-                                     iterationCount={ "infinite" }
-                                     direction="alternate">
-                        { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
-                    </Animatable.Text>
+                    <Text style={ { color: Colors.primary } }>
+                        { `${ t("transactionScreen.changeFee") }` }
+                    </Text>
                 </Button>
             </View>
             <Card>
