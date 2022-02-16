@@ -48,7 +48,7 @@ const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
           onStatusChange={ view.onStatusChange }
       >
           <QrScannerRoundedBoundary closeButtonOnClick={ view.goBack }
-                                    helperText={t('qRScanner.scanning')}/>
+                                    helperText={ t('qRScanner.scanning') }/>
       </RNCamera>
     </View>
   </>
