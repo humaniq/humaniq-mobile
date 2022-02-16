@@ -66,7 +66,7 @@ export const QrScannerRoundedBoundary = ({
                                              borderColor = Colors.white,
                                              maskOpacity = 0.6,
                                              xOffset = 2,
-                                             yOffset = 2.7,
+                                             yOffset = 3,
                                          }: QrScannerRoundedBoundaryProps) => {
     const scanStartValue = borderWidth > 0 ? 4 * borderWidth : 0
 
@@ -163,18 +163,18 @@ export const QrScannerRoundedBoundary = ({
             width: squareSize,
             height: squareSize,
         } }>
-            { drawScan && <Animated.View style={ {
+            { drawScan ? <Animated.View style={ {
                 transform: [ { translateY: animatedScan } ],
                 opacity: animatedFade,
                 height: scanHeight,
                 width: squareSize - 3 * scanStartValue,
                 backgroundColor: scanColor,
                 alignSelf: 'center'
-            } }/> }
+            } }/> : null }
         </View>
         { !isEmpty(helperText) ? <View paddingH-70 center style={ {
             position: 'absolute',
-            top: (deviceHeight / yOffset) - (squareSize / yOffset) + 310,
+            top: (deviceHeight / yOffset) - (squareSize / yOffset) + squareSize + 20 ,
             left: 0,
             right: 0
         } }>
@@ -185,13 +185,13 @@ export const QrScannerRoundedBoundary = ({
                 textAlign: 'center'
             } }>{ helperText }</Text>
         </View> : null }
-        { !isEmpty(bottomButtonTitle) && <Button robotoM outline outlineColor={ Colors.white } style={ {
+        { !isEmpty(bottomButtonTitle) ? <Button robotoM outline outlineColor={ Colors.white } style={ {
             position: 'absolute',
             left: 16,
             right: 16,
             bottom: 20,
             borderRadius: 10
-        } } onPress={ bottomButtonOnClick } label={ bottomButtonTitle }/> }
+        } } onPress={ bottomButtonOnClick } label={ bottomButtonTitle }/> : null }
         { typeof closeButtonOnClick === 'function' && <TouchableOpacity style={ {
             position: 'absolute',
             left: 20,
