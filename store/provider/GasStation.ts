@@ -3,7 +3,7 @@ import { ApisauceInstance, create } from "apisauce";
 import { DEFAULT_API_CONFIG, GAS_STATION_ROUTES, GAS_STATION_URL } from "../../config/api";
 import { reaction } from "mobx";
 import { getEthereumProvider } from "../../App";
-import { ETH_NETWORKS } from "../../config/network";
+import { EVM_NETWORKS_NAMES } from "../../config/network";
 import { ethers } from "ethers";
 import { t as tr } from "../../i18n"
 
@@ -30,15 +30,15 @@ export class GasStation extends Model({
 }) {
 
   get fastFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fast : (this.gasPrice * 1.25).toFixed(0)
+    return getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.MAINNET ? this.fast : (this.gasPrice * 1.25).toFixed(0)
   }
 
   get fastestFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.fastest : (this.gasPrice * 1.5).toFixed(0)
+    return getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.MAINNET ? this.fastest : (this.gasPrice * 1.5).toFixed(0)
   }
 
   get safeLowFee() {
-    return getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET ? this.safeLow : (this.gasPrice * 1).toFixed(0)
+    return getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.MAINNET ? this.safeLow : (this.gasPrice * 1).toFixed(0)
   }
 
   axios: ApisauceInstance;
@@ -58,7 +58,7 @@ export class GasStation extends Model({
   }
 
   get selectedGasPrice() {
-    if (getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET) {
+    if (getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.MAINNET) {
       switch (this.selectedSpeed) {
         case GAS_PRICE_SPEED.FAST:
           return this.fast
@@ -95,7 +95,7 @@ export class GasStation extends Model({
     try {
       if (!this.enableAutoUpdate) return null
       this.pending = true
-      if (getEthereumProvider().currentNetworkName === ETH_NETWORKS.MAINNET) {
+      if (getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.MAINNET) {
         const result = yield* _await(this.axios.get<any>(GAS_STATION_ROUTES.GET_GAS_FEE))
         if (result.ok) {
           this.isError = false
@@ -109,7 +109,7 @@ export class GasStation extends Model({
           this.isError = true
         }
       } else {
-        const gasPrice = yield* _await(getEthereumProvider().currentProvider.getGasPrice())
+        const gasPrice = yield* _await(getEthereumProvider().jsonRPCProvider.getGasPrice())
         this.gasPrice = gasPrice.toString()
         this.isError = false
       }

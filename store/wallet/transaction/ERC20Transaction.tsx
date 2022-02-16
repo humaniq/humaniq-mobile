@@ -92,7 +92,7 @@ export class ERC20Transaction extends Model({
     @modelFlow
     * waitTransaction() {
         try {
-            getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
+            getEthereumProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
                 await runUnprotected(async () => {
                     this.blockTimestamp = new Date()
@@ -100,7 +100,7 @@ export class ERC20Transaction extends Model({
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
                     await this.applyToWallet()
-                    getEthereumProvider().currentProvider.off(hash)
+                    getEthereumProvider().jsonRPCProvider.off(hash)
                 })
             })
         } catch (e) {
@@ -139,13 +139,13 @@ export class ERC20Transaction extends Model({
                 this.transactionHash = tx.hash
                 yield this.storeTransaction()
 
-                getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+                getEthereumProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
                     await runUnprotected(async () => {
                         this.blockTimestamp = new Date()
                         this.receiptStatus = TRANSACTION_STATUS.SUCCESS
                         await this.removeFromStore()
                         console.log({ canceled: confirmedTx })
-                        getEthereumProvider().currentProvider.off(tx.hash)
+                        getEthereumProvider().jsonRPCProvider.off(tx.hash)
                         closeToast()
                     })
                 })
@@ -181,13 +181,13 @@ export class ERC20Transaction extends Model({
                 this.transactionHash = tx.hash
                 yield this.storeTransaction()
 
-                getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+                getEthereumProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
                     console.log("speed-up-transaction")
                     await runUnprotected(async () => {
                         this.blockTimestamp = new Date()
                         this.receiptStatus = TRANSACTION_STATUS.SUCCESS
                         await this.removeFromStore()
-                        getEthereumProvider().currentProvider.off(tx.hash)
+                        getEthereumProvider().jsonRPCProvider.off(tx.hash)
                         closeToast()
                     })
                 })

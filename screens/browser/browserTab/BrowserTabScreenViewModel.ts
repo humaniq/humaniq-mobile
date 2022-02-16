@@ -321,13 +321,13 @@ export class BrowserTabScreenViewModel {
                 switch (data.payload.method) {
                     case 'eth_blockNumber':
                         this.postAsyncCallbackMessage({
-                            result: await getEthereumProvider().currentProvider.getBlockNumber(),
+                            result: await getEthereumProvider().jsonRPCProvider.getBlockNumber(),
                             data
                         })
                         break
                     case 'eth_call':
                         this.postAsyncCallbackMessage({
-                            result: await getEthereumProvider().currentProvider.call(data.payload.params[0]),
+                            result: await getEthereumProvider().jsonRPCProvider.call(data.payload.params[0]),
                             data
                         })
                         break

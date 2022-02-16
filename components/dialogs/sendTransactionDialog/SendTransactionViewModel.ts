@@ -51,7 +51,7 @@ export class SendTransactionViewModel {
             this.initialized = true
             this.txData.chainId = getEthereumProvider().currentNetwork.chainID
             const [ nonce ] = await Promise.all([
-                await getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
+                await getEthereumProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
             ])
             this.txData.nonce = nonce
             this.txData.gasLimit = Number(txData.gas || txData.gasLimit) || this.txData.gasLimit

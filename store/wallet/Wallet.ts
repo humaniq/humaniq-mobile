@@ -24,6 +24,7 @@ import { ERC20 } from "./erc20/ERC20"
 import { ERC20Transaction } from "./transaction/ERC20Transaction";
 import { EthereumTransactionStore } from "./transaction/EthereumTransactionStore";
 import { localStorage } from "../../utils/localStorage";
+import { EVM_NETWORKS, EVM_NETWORKS_NAMES } from "../../config/network";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -71,7 +72,7 @@ export class Wallet extends Model({
         if (!this.initialized || force) {
             try {
                 this.pending = true
-                this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
+                this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().jsonRPCProvider) // root.providerStore.eth.currenProvider || undefined);
 
                 yield Promise.all([
                     this.updateBalanceFromProvider(),
@@ -217,7 +218,7 @@ export class Wallet extends Model({
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
         })
-        const erc20 = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName })
+        const erc20 = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName === EVM_NETWORKS_NAMES.BSC_TESTNET ? '0x61' : getEthereumProvider().currentNetworkName  })
         if (erc20.ok) {
             erc20.data.forEach(t => {
                 const erc20Token = new ERC20({ ...changeCaseObj(t), walletAddress: this.address })

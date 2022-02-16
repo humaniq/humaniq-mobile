@@ -120,7 +120,7 @@ export class SendTransactionViewModel {
             }
 
             const [ nonce, gasLimit ] = await Promise.all([
-                getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
+                getEthereumProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
                 this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
             ])
             this.txData.nonce = nonce

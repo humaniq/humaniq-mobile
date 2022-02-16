@@ -113,7 +113,7 @@ export class EthereumTransaction extends Model({
   * waitTransaction() {
     console.log("wait-transaction")
     try {
-      getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
+      getEthereumProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
         const hash = this.hash
         console.log("mined-transaction")
         await runUnprotected(async () => {
@@ -124,7 +124,7 @@ export class EthereumTransaction extends Model({
           // TODO: обработать обгон транзакции над перезаписываемой
           getAppStore().toast.display = false
           await this.applyToWallet()
-          getEthereumProvider().currentProvider.off(hash)
+          getEthereumProvider().jsonRPCProvider.off(hash)
         })
       })
     } catch (e) {
@@ -151,7 +151,7 @@ export class EthereumTransaction extends Model({
         yield this.removeFromStore()
         this.hash = tx.hash
         yield this.storeTransaction()
-        getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+        getEthereumProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
           console.log("cancelled-transaction")
           await runUnprotected(async () => {
             this.blockTimestamp = new Date()
@@ -159,7 +159,7 @@ export class EthereumTransaction extends Model({
             this.receiptContractAddress = confirmedTx.contractAddress
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
             await this.removeFromStore()
-            getEthereumProvider().currentProvider.off(tx.hash)
+            getEthereumProvider().jsonRPCProvider.off(tx.hash)
             closeToast()
           })
         })
@@ -187,7 +187,7 @@ export class EthereumTransaction extends Model({
         yield this.removeFromStore()
         this.hash = tx.hash
         yield this.storeTransaction()
-        getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+        getEthereumProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
           console.log("speed-up-transaction")
           await runUnprotected(async () => {
             this.blockTimestamp = new Date()
@@ -195,7 +195,7 @@ export class EthereumTransaction extends Model({
             this.receiptContractAddress = confirmedTx.contractAddress
             this.receiptStatus = TRANSACTION_STATUS.SUCCESS
             await this.removeFromStore()
-            getEthereumProvider().currentProvider.off(tx.hash)
+            getEthereumProvider().jsonRPCProvider.off(tx.hash)
             closeToast()
           })
         })
@@ -383,10 +383,10 @@ export class EthereumTransaction extends Model({
         return tr('transactionModel.action.incoming')
       case this.action === 3:
         return tr('transactionModel.action.smartContract')
-      case this.action === 4:
-        return tr('transactionModel.action.undefined')
       case this.action === 5:
         return tr('transactionModel.action.reject')
+      default:
+        return tr('transactionModel.action.undefined')
     }
   }
 }
