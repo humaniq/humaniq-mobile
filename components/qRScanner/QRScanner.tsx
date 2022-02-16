@@ -6,7 +6,7 @@ import { Colors, View } from "react-native-ui-lib";
 import { t } from "../../i18n";
 import { provider, useInstance } from "react-ioc";
 import { QRScannerView } from "./QRScannerView";
-import { QrScannerBoundary } from "./QrScannerBoundary";
+import { QrScannerRoundedBoundary } from "./QrScannerRoundedBoundary";
 
 const styles = StyleSheet.create({
   container: {
@@ -47,11 +47,8 @@ const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
           } }
           onStatusChange={ view.onStatusChange }
       >
-        <QrScannerBoundary
-            closeButtonOnClick={ view.goBack }
-            drawScan={true}
-            drawCorners={true}
-            helperText={t('qRScanner.scanning')}/>
+          <QrScannerRoundedBoundary closeButtonOnClick={ view.goBack }
+                                    helperText={t('qRScanner.scanning')}/>
       </RNCamera>
     </View>
   </>

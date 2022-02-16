@@ -22,6 +22,7 @@ import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon";
 import { closeToast, setPendingAppToast } from "./utils";
+import { CircularProgress } from "../../../components/progress/CircularProgress";
 
 
 export interface IEthereumTransactionConstructor {
@@ -356,8 +357,10 @@ export class EthereumTransaction extends Model({
     switch (true) {
       case this.receiptStatus === TRANSACTION_STATUS.PENDING:
       case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
-        return <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
-          <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/></Avatar>
+        return <CircularProgress indeterminate strokeWidth={ 1 } radius={ 18 }>
+          <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
+            <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/></Avatar>
+        </CircularProgress>
       case this.action === 5:
         return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
           <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/></Avatar>
