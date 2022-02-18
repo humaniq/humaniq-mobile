@@ -14,6 +14,7 @@ import { TransactionItem } from "../../../components/transactionItem/Transaction
 import { RootNavigation } from "../../../navigators";
 import SearchPicture from "../../../assets/images/search.svg"
 import { Header } from "../../../components/header/Header";
+import { NATIVE_COIN } from "../../../config/network";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
     const view = useInstance(TransactionsListScreenViewModel)
@@ -60,7 +61,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                         if (!view.tokenAddress) {
                                             await view.wallet.loadTransactions(true)
                                         } else {
-                                            await view.wallet.getERC20Transactions(true)
+                                            await view.wallet.getTokenTransactions(true)
                                         }
                                         view.refreshing = false
                                     } }
@@ -82,13 +83,17 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                             <View>
                                 <View row center paddingT-10>
                                     {
-                                        view.token.name === 'Ethereum' &&
+                                        view.token.logo === NATIVE_COIN.ETHEREUM &&
                                         <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>
                                     }
                                     {
-                                        view.token.name !== 'Ethereum' &&
+                                        view.token.logo === NATIVE_COIN.BINANCECOIN &&
+                                        <Av size={ 80 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
+                                    }
+                                    {
+                                        !view.token.logo &&
                                         <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                                source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                                                source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
                                     }
                                 </View>
                                 <View row center>

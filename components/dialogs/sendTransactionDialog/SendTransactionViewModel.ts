@@ -1,8 +1,8 @@
 import { makeAutoObservable } from "mobx"
-import { getEthereumProvider, getWalletStore } from "../../../App"
+import { getEVMProvider, getWalletStore } from "../../../App"
 import { BigNumber, ethers } from "ethers"
 import { currencyFormat } from "../../../utils/number"
-import { ERC20 } from "../../../store/wallet/erc20/ERC20";
+import { Token } from "../../../store/wallet/token/Token";
 import { getSnapshot } from "mobx-keystone";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { inject } from "react-ioc";
@@ -49,15 +49,15 @@ export class SendTransactionViewModel {
             }
             this.display = true
             this.initialized = true
-            this.txData.chainId = getEthereumProvider().currentNetwork.chainID
+            this.txData.chainId = getEVMProvider().currentNetwork.chainID
             const [ nonce ] = await Promise.all([
-                await getEthereumProvider().currentProvider.getTransactionCount(this.wallet.address, "pending"),
+                await getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
             ])
             this.txData.nonce = nonce
             this.txData.gasLimit = Number(txData.gas || txData.gasLimit) || this.txData.gasLimit
             this.transactionFeeView.wallet = this.wallet.address
             this.transactionFeeView.gasLimit = this.txData.gasLimit
-            getEthereumProvider().gasStation.setEnableAutoUpdate(true)
+            getEVMProvider().gasStation.setEnableAutoUpdate(true)
             this.pending = false
         } catch (e) {
             console.log("ERROR", e)
@@ -65,11 +65,11 @@ export class SendTransactionViewModel {
     }
 
     get selectedGasPrice() {
-        return +getEthereumProvider().gasStation.selectedGasPrice
+        return +getEVMProvider().gasStation.selectedGasPrice
     }
 
     get selectedGasPriceLabel() {
-        return getEthereumProvider().gasStation.selectedGasPriceLabel
+        return getEVMProvider().gasStation.selectedGasPriceLabel
     }
 
     get hostname() {
@@ -189,7 +189,7 @@ export class SendTransactionViewModel {
     }
 
 
-    get token(): ERC20 | any {
+    get token(): Token | any {
         return {
             name: "Ethereum",
             symbol: "ETH",

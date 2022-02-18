@@ -2,57 +2,84 @@ import React from "react";
 import {
     _await,
     getSnapshot,
-    Model,
     model,
+    Model,
     modelFlow,
     runUnprotected,
     timestampToDateTransform,
     tProp as p,
     types as t
-} from "mobx-keystone";
-import { action, computed } from "mobx";
-import { formatUnits } from "@ethersproject/units/src.ts/index";
-import { t as tr } from "../../../i18n";
-import { Avatar, Colors } from "react-native-ui-lib";
-import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../../utils/number";
+} from "mobx-keystone"
+import { action, computed, observable } from "mobx"
+import { t as tr } from "../../../i18n"
+import { formatEther } from "ethers/lib/utils"
+import { Avatar, Colors } from "react-native-ui-lib"
+import { BigNumber, ethers } from "ethers"
+import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../../utils/number"
 import dayjs from "dayjs";
 import { renderShortAddress } from "../../../utils/address";
-import { TRANSACTION_STATUS } from "./EthereumTransaction";
-import { BigNumber, ethers } from "ethers";
-import { formatEther } from "ethers/lib/utils";
-import { getAppStore, getEthereumProvider, getWalletStore } from "../../../App";
-import { contractAbiErc20 } from "../../../utils/abi";
+import { getAppStore, getEVMProvider, getWalletStore } from "../../../App";
 import { localStorage } from "../../../utils/localStorage";
-import { HIcon } from "../../../components/icon"
+import { HIcon } from "../../../components/icon";
 import { closeToast, setPendingAppToast } from "./utils";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
 
-@model("ERC20Transaction")
-export class ERC20Transaction extends Model({
+
+export interface IEthereumTransactionConstructor {
+    chainId: string
+    nonce: string
+    gasPrice: string
+    gas: string
+    value: string
+    walletAddress: string
+    toAddress: string
+    fromAddress: string
+    input: ""
+    blockTimestamp: Date
+    prices: {
+        usd: number,
+        eur?: number
+    }
+    type: number
+}
+
+
+export enum TRANSACTION_STATUS {
+    PENDING = "",
+    ERROR = "0",
+    SUCCESS = "1",
+    CANCELLING = "2",
+    CANCELLED = "3",
+}
+
+@model("NativeTransaction")
+export class NativeTransaction extends Model({
     walletAddress: p(t.string, ""),
-    decimals: p(t.number, 8),
+    hash: p(t.string, ""),
     nonce: p(t.string, ""),
-    symbol: p(t.string, ""),
-    transactionHash: p(t.string, ""),
-    address: p(t.string, ""),
-    blockTimestamp: p(t.string).withTransform(timestampToDateTransform()),
-    blockNumber: p(t.number, 0),
-    blockHash: p(t.string, ""),
+    transactionIndex: p(t.string, ""),
     toAddress: p(t.string, ""),
     fromAddress: p(t.string, ""),
     value: p(t.string, ""),
+    input: p(t.string, ""),
     chainId: p(t.string, ""),
-    receiptStatus: p(t.enum(TRANSACTION_STATUS), TRANSACTION_STATUS.SUCCESS),
+    receiptContractAddress: p(t.string, ""),
+    receiptStatus: p(t.enum(TRANSACTION_STATUS), TRANSACTION_STATUS.PENDING),
+    blockTimestamp: p(t.number).withTransform(timestampToDateTransform()),
     gas: p(t.string, ""),
     gasPrice: p(t.string, ""),
-    prices: p(t.maybeNull(t.object(() => ({
+    prices: p(t.maybeNull(t.frozen(() => ({
         eur: t.number,
         usd: t.number,
         rub: t.number,
         cny: t.number,
-        jpy: t.number
+        jpy: t.number,
+        eth: t.number
     })))),
 }) {
+
+    @observable
+    waitingTransactions
 
     wait = null
 
@@ -66,41 +93,39 @@ export class ERC20Transaction extends Model({
             to: this.toAddress,
             from: this.fromAddress,
             value: BigNumber.from(this.value),
-            address: this.address,
-            type: 0
+            type: 0,
+            data: this.input
         }
     }
 
     @modelFlow
     * sendTransaction() {
         try {
-            const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
-            const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
-                gasPrice: this.txBody.gasPrice,
-                gasLimit: this.txBody.gasLimit,
-                nonce: this.txBody.nonce,
-                type: 0
-            }))) as ethers.providers.TransactionResponse
-            this.transactionHash = tx.hash
+            const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
+            this.hash = tx.hash
             return tx
         } catch (e) {
             console.log("ERROR-SEND-TRANSACTION", e)
-            return null
+            return false
         }
     }
 
     @modelFlow
     * waitTransaction() {
+        console.log("wait-transaction")
         try {
-            getEthereumProvider().currentProvider.once(this.hash, async (confirmedTx) => {
+            getEVMProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
+                console.log("mined-transaction")
                 await runUnprotected(async () => {
                     this.blockTimestamp = new Date()
+                    this.transactionIndex = confirmedTx.transactionIndex
+                    this.receiptContractAddress = confirmedTx.contractAddress
                     this.receiptStatus = TRANSACTION_STATUS.SUCCESS
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
-                    await this.applyToWallet()
-                    getEthereumProvider().currentProvider.off(hash)
+                    this.applyToWallet()
+                    getEVMProvider().jsonRPCProvider.off(hash)
                 })
             })
         } catch (e) {
@@ -123,36 +148,25 @@ export class ERC20Transaction extends Model({
                 this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
                 this.value = "0"
                 this.toAddress = ethers.constants.AddressZero
-
-                const tx = (yield* _await(this.wallet.ether.sendTransaction({
-                    chainId: this.txBody.chainId,
-                    nonce: this.txBody.nonce,
-                    gasPrice: this.txBody.gasPrice,
-                    gasLimit: this.txBody.gasLimit,
-                    to: this.txBody.to,
-                    from: this.txBody.from,
-                    value: BigNumber.from(this.value),
-                    type: 0
-                }))) as ethers.providers.TransactionResponse
-
+                const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
                 yield this.removeFromStore()
-                this.transactionHash = tx.hash
+                this.hash = tx.hash
                 yield this.storeTransaction()
-
-                getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+                getEVMProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
+                    console.log("cancelled-transaction")
                     await runUnprotected(async () => {
                         this.blockTimestamp = new Date()
+                        this.transactionIndex = confirmedTx.transactionIndex
+                        this.receiptContractAddress = confirmedTx.contractAddress
                         this.receiptStatus = TRANSACTION_STATUS.SUCCESS
                         await this.removeFromStore()
-                        console.log({ canceled: confirmedTx })
-                        getEthereumProvider().currentProvider.off(tx.hash)
+                        getEVMProvider().jsonRPCProvider.off(tx.hash)
                         closeToast()
                     })
                 })
             } catch (e) {
                 console.log("ERROR-CANCELLING-TRANSACTION", e)
-                getAppStore().toast.display = false
-                yield this.removeFromStore()
+                closeToast()
             }
         }
     }
@@ -163,36 +177,32 @@ export class ERC20Transaction extends Model({
         await this.speedUpTransaction()
     }
 
+
     @modelFlow
     * speedUpTransaction() {
         if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
             try {
                 setPendingAppToast(tr("transactionScreen.speedUpTransaction"))
                 this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
-                const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
-                const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
-                    gasPrice: this.txBody.gasPrice,
-                    gasLimit: this.txBody.gasLimit,
-                    nonce: this.txBody.nonce,
-                    type: 0
-                }))) as ethers.providers.TransactionResponse
-
+                const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
                 yield this.removeFromStore()
-                this.transactionHash = tx.hash
+                this.hash = tx.hash
                 yield this.storeTransaction()
-
-                getEthereumProvider().currentProvider.once(tx.hash, async (confirmedTx) => {
+                getEVMProvider().jsonRPCProvider.once(tx.hash, async (confirmedTx) => {
                     console.log("speed-up-transaction")
                     await runUnprotected(async () => {
                         this.blockTimestamp = new Date()
+                        this.transactionIndex = confirmedTx.transactionIndex
+                        this.receiptContractAddress = confirmedTx.contractAddress
                         this.receiptStatus = TRANSACTION_STATUS.SUCCESS
                         await this.removeFromStore()
-                        getEthereumProvider().currentProvider.off(tx.hash)
+                        getEVMProvider().jsonRPCProvider.off(tx.hash)
                         closeToast()
                     })
                 })
             } catch (e) {
                 console.log("ERROR-SPEED-UP-TRANSACTION", e)
+                closeToast()
             }
         }
     }
@@ -200,27 +210,27 @@ export class ERC20Transaction extends Model({
     @modelFlow
     * storeTransaction() {
         const saveTx = getSnapshot(this)
-        const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.walletAddress }-${ this.address }`))) || []
+        const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || []
         pendingTransactions.push(saveTx)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.walletAddress }-${ this.address }`, pendingTransactions))
+        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, pendingTransactions))
     }
 
     @modelFlow
     * removeFromStore() {
-        let pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.walletAddress }-${ this.address }`))) || []
-        pendingTransactions = pendingTransactions.filter(t => t.transactionHash !== this.key)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.walletAddress }-${ this.address }`, pendingTransactions))
+        let pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || []
+        pendingTransactions = pendingTransactions.filter(t => t.hash !== this.key)
+        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, pendingTransactions))
     }
 
     @modelFlow
     * applyToWallet() {
         try {
             if (this.receiptStatus === TRANSACTION_STATUS.PENDING || this.receiptStatus === TRANSACTION_STATUS.CANCELLING) {
-                yield this.storeTransaction()
+                this.storeTransaction()
             } else {
-                yield this.removeFromStore()
+                this.removeFromStore()
             }
-            this.erc20.transactions.set(this.key, this)
+            this.wallet.transactions.set(this.key, this)
         } catch (e) {
             console.log("ERROR-APPLY-TO-WALLET", e)
         }
@@ -228,7 +238,7 @@ export class ERC20Transaction extends Model({
 
     @computed
     get key() {
-        return this.transactionHash
+        return this.hash
     }
 
     @computed
@@ -237,23 +247,30 @@ export class ERC20Transaction extends Model({
     }
 
     @computed
-    get erc20() {
-        return this.wallet.erc20.get(this.address)
-    }
-
-    @computed
-    get hash() {
-        return this.transactionHash
-    }
-
-    @computed
     get formatValue() {
-        return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) }`
+        return `${ beautifyNumber(preciseRound(+formatEther(this.value))) }`
     }
 
     @computed
     get formatDate() {
         return dayjs(this.blockTimestamp).format("lll")
+    }
+
+    @computed
+    get fiatValue() {
+        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * +formatEther(this.value)) : 0
+    }
+
+    @computed
+    get formatFiatValue() {
+        switch (this.action) {
+            case 1:
+                return `- ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
+            case 2:
+                return `+ ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
+            default:
+                return `${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
+        }
     }
 
     @computed
@@ -267,26 +284,18 @@ export class ERC20Transaction extends Model({
     }
 
     @computed
-    get fiatValue() {
-        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this.prices[getWalletStore().currentFiatCurrency] * +formatUnits(this.value, this.decimals)) : 0
+    get fiatFee() {
+        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * this.formatFee) : 0
     }
 
     @computed
-    get formatFiatValue() {
-        try {
-            switch (this.action) {
-                case 1:
-                    return `- ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
-                case 2:
-                    return `+ ${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
-                default:
-                    return `${ currencyFormat(this.fiatValue, getWalletStore().currentFiatCurrency) }`
-            }
-        } catch (e) {
-            console.log(this.prices)
-            console.log("ERROR", e)
-            return "--/--"
-        }
+    get formatTotal() {
+        return +formatEther(this.value) + (+formatEther((this.gasPrice * this.gas).toString()))
+    }
+
+    @computed
+    get fiatTotal() {
+        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * this.formatTotal) : 0
     }
 
     @computed
@@ -294,10 +303,12 @@ export class ERC20Transaction extends Model({
         switch (true) {
             case this.walletAddress === this.fromAddress && this.toAddress === ethers.constants.AddressZero && this.value === "0":
                 return 5
-            case this.walletAddress === this.fromAddress:
+            case this.walletAddress === this.fromAddress && this.value && this.input === "0x":
                 return 1
-            case this.walletAddress === this.toAddress:
+            case this.walletAddress === this.toAddress && this.value && this.input === "0x":
                 return 2
+            case this.input !== "0x":
+                return 3
             default:
                 return 4
         }
@@ -310,6 +321,8 @@ export class ERC20Transaction extends Model({
                 return renderShortAddress(this.toAddress)
             case this.action === 2:
                 return renderShortAddress(this.fromAddress)
+            case this.action === 3:
+                return renderShortAddress(this.toAddress)
             case this.action === 4:
                 return tr('transactionModel.action.undefined')
             case this.action === 5:
@@ -323,11 +336,10 @@ export class ERC20Transaction extends Model({
             case this.receiptStatus === TRANSACTION_STATUS.PENDING:
             case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
                 return Colors.warning
-            case this.action === 4:
             case this.action === 5:
                 return Colors.error
             default:
-                return Colors.textGrey
+                return Colors.textGray
         }
     }
 
@@ -350,17 +362,14 @@ export class ERC20Transaction extends Model({
                     <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
                         <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/></Avatar>
                 </CircularProgress>
-            case this.action === 4:
             case this.action === 5:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
-                    <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/>
-                </Avatar>
+                    <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/></Avatar>
             default:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
                     <HIcon name={ "done" } size={ 20 } color={ Colors.success }/></Avatar>
         }
     }
-
 
     @computed
     get actionName() {
@@ -371,8 +380,10 @@ export class ERC20Transaction extends Model({
                 return tr('transactionModel.action.pending')
             case this.action === 1:
                 return tr('transactionModel.action.outgoing')
-            case  this.action === 2:
+            case this.action === 2:
                 return tr('transactionModel.action.incoming')
+            case this.action === 3:
+                return tr('transactionModel.action.smartContract')
             case this.action === 5:
                 return tr('transactionModel.action.reject')
             default:

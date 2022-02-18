@@ -1,6 +1,8 @@
 import { makeAutoObservable } from "mobx";
-import { getWalletStore } from "../../../App";
+import { getEVMProvider, getWalletStore } from "../../../App";
 import { beautifyNumber } from "../../../utils/number";
+import { Wallet } from "../../../store/wallet/Wallet";
+import { capitalize } from "../../../utils/general";
 
 export class SelectWalletTokenViewModel {
   display = false
@@ -11,27 +13,28 @@ export class SelectWalletTokenViewModel {
     this.walletAddress = walletAddress
   }
 
-  get wallet() {
+  get wallet(): Wallet {
     return getWalletStore().allWallets.find(w => w.address === this.walletAddress)
   }
 
   get options() {
     const options = [
       {
-        name: "Ethereum",
-        symbol: "ETH",
+        name: capitalize(getEVMProvider().currentNetwork.nativeCoin),
+        symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
         tokenAddress: "",
-        logo: "ethereum",
+        logo: getEVMProvider().currentNetwork.nativeCoin,
         formatFiatBalance: beautifyNumber(this.wallet?.formatFiatBalance),
         formatBalance: this.wallet?.formatBalance,
         onPress: () => {
-          this.tokenAddress = "ETH"
+          console.log(getEVMProvider().currentNetwork.nativeSymbol.toUpperCase())
+          this.tokenAddress = getEVMProvider().currentNetwork.nativeSymbol.toUpperCase()
           this.display = false
         }
       }
     ]
 
-    this.wallet?.erc20List && options.push(...this.wallet.erc20List.map(i => ({
+    this.wallet?.tokenList && options.push(...this.wallet.tokenList.map(i => ({
       name: i.name,
       symbol: i.symbol,
       tokenAddress: i.tokenAddress,
@@ -39,7 +42,7 @@ export class SelectWalletTokenViewModel {
       formatBalance: i.formatBalance,
       formatFiatBalance: i.formatFiatBalance,
       onPress: () => {
-        this.tokenAddress = i.tokenAddress || "ETH"
+        this.tokenAddress = i.tokenAddress || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase()
         this.display = false
       },
     })))

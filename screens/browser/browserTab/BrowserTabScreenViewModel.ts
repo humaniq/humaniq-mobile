@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction } from "mobx"
 import { MutableRefObject } from "react"
 import { DAPPS_CONFIG } from "../../../config/dapp"
-import { getAppStore, getBrowserStore, getEthereumProvider, getWalletStore } from "../../../App"
+import { getAppStore, getBrowserStore, getEVMProvider, getWalletStore } from "../../../App"
 // import { createAsyncMiddleware, JsonRpcRequest, PendingJsonRpcResponse } from "json-rpc-engine"
 import { NavigationProp } from "@react-navigation/native"
 // import BackgroundBridge from "../../core/BackgroundBridge"
@@ -16,7 +16,7 @@ import { resemblesAddress } from "../../../utils/address"
 import { ethErrors } from 'eth-json-rpc-errors'
 import { SendTransactionViewModel } from "../../../components/dialogs/sendTransactionDialog/SendTransactionViewModel"
 import { IBrowserTab } from "./BrowserTabScreen";
-import { EthereumTransaction } from "../../../store/wallet/transaction/EthereumTransaction";
+import { NativeTransaction } from "../../../store/wallet/transaction/NativeTransaction";
 import { InteractionManager } from "react-native";
 import { closeToast, setPendingAppToast } from "../../../store/wallet/transaction/utils";
 import { t } from "../../../i18n";
@@ -94,13 +94,13 @@ export class BrowserTabScreenViewModel {
         this.navigation = nav
         this.initialized = true
         const entryScriptWeb3 = await dappsProvider.get()
-        this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
+        this.entryScriptWeb3 = SET_NETWORK_ID(getEVMProvider().currentNetwork.networkID) + entryScriptWeb3
         this.initialUrl = this.storedTab.url
         this.url = this.storedTab.url
         this.go(props.initialUrl, true)
 
 
-        this.disposerChangeNetwork = reaction(() => getSnapshot(getEthereumProvider().currentNetworkName), () => {
+        this.disposerChangeNetwork = reaction(() => getSnapshot(getEVMProvider().currentNetworkName), () => {
             // this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
             this.reloadWebView()
 
@@ -138,7 +138,7 @@ export class BrowserTabScreenViewModel {
 
             this.postMessage({
                 type: "networkChanged",
-                data: getEthereumProvider().currentNetwork.networkID,
+                data: getEVMProvider().currentNetwork.networkID,
             })
             this.postMessage({
                 type: "accountsChanged",
@@ -321,13 +321,13 @@ export class BrowserTabScreenViewModel {
                 switch (data.payload.method) {
                     case 'eth_blockNumber':
                         this.postAsyncCallbackMessage({
-                            result: await getEthereumProvider().currentProvider.getBlockNumber(),
+                            result: await getEVMProvider().jsonRPCProvider.getBlockNumber(),
                             data
                         })
                         break
                     case 'eth_call':
                         this.postAsyncCallbackMessage({
-                            result: await getEthereumProvider().currentProvider.call(data.payload.params[0]),
+                            result: await getEVMProvider().jsonRPCProvider.call(data.payload.params[0]),
                             data
                         })
                         break
@@ -354,13 +354,13 @@ export class BrowserTabScreenViewModel {
                         break
                     case 'eth_chainId':
                         this.postAsyncCallbackMessage({
-                            result: `0x${ Number(getEthereumProvider().currentNetwork.networkID).toString(16) }`,
+                            result: `0x${ Number(getEVMProvider().currentNetwork.networkID).toString(16) }`,
                             data
                         })
                         break
                     case 'net_version':
                         this.postAsyncCallbackMessage({
-                            result: getEthereumProvider().currentNetwork.networkID,
+                            result: getEVMProvider().currentNetwork.networkID,
                             data
                         })
                         break
@@ -380,7 +380,7 @@ export class BrowserTabScreenViewModel {
                             setPendingAppToast(t("sendTransactionDialog.transactionSending"), TOAST_POSITION.UNDER_TAB_BAR)
                             InteractionManager.runAfterInteractions(async () => {
                                 // @ts-ignore
-                                const tx = new EthereumTransaction(approved.tx)
+                                const tx = new NativeTransaction(approved.tx)
                                 const result = await tx.sendTransaction()
                                 if (!result) {
                                     this.postAsyncCallbackMessage({
@@ -502,7 +502,7 @@ export class BrowserTabScreenViewModel {
                         }
 
                         const chainId = params.data.domain.chainId
-                        const activeChainId = getEthereumProvider().currentNetwork.chainID
+                        const activeChainId = getEVMProvider().currentNetwork.chainID
 
                         if (chainId && chainId !== activeChainId) {
                             this.postAsyncCallbackMessage({
@@ -540,7 +540,7 @@ export class BrowserTabScreenViewModel {
                         }
 
                         const chainId = params.data.domain.chainId
-                        const activeChainId = getEthereumProvider().currentNetwork.chainID
+                        const activeChainId = getEVMProvider().currentNetwork.chainID
 
                         if (chainId && chainId !== activeChainId) {
                             this.postAsyncCallbackMessage({
@@ -565,7 +565,7 @@ export class BrowserTabScreenViewModel {
                     }
                     default:
                         this.postAsyncCallbackMessage({
-                            result: await getEthereumProvider().jsonRPCProvider.send(data.payload.method, data.payload.params),
+                            result: await getEVMProvider().jsonRPCProvider.send(data.payload.method, data.payload.params),
                             data
                         })
                 }
@@ -621,7 +621,7 @@ export class BrowserTabScreenViewModel {
         this.webviewRef.injectJavaScript(JS_POST_MESSAGE_TO_PROVIDER(JSON.stringify({ type: 'getPageInfo' })))
         this.postMessage({
             type: "networkChanged",
-            data: getEthereumProvider().currentNetwork.networkID,
+            data: getEVMProvider().currentNetwork.networkID,
         })
         this.postMessage({
             type: "accountsChanged",

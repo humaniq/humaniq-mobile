@@ -5,13 +5,13 @@ import { action, computed } from "mobx"
 import { getDictionary, getMoralisRequest, getWalletStore } from "../../../App";
 import { MORALIS_ROUTES } from "../../../config/api";
 import { formatRoute } from "../../../navigators";
-import { ERC20Transaction } from "../transaction/ERC20Transaction";
+import { TokenTransaction } from "../transaction/TokenTransaction";
 import { ethers } from "ethers";
 import { CURRENCIES } from "../../../config/common";
 
 
-@model("ERC20")
-export class ERC20 extends Model({
+@model("Token")
+export class Token extends Model({
     walletAddress: p(t.string, ""),
     initialized: p(t.boolean, false),
     pending: p(t.boolean, false),
@@ -24,18 +24,19 @@ export class ERC20 extends Model({
     balance: p(t.string, ""),
     priceUSD: p(t.string, ""),
     priceEther: p(t.string, ""),
-    transactions: p(t.objectMap(t.model<ERC20Transaction>(ERC20Transaction)), () => objectMap<ERC20Transaction>())
+    transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>())
 }) {
 
     @computed
     get prices() {
         return this.priceEther ? {
-            eur: getWalletStore().allWallets[0].prices[CURRENCIES.EUR] * Number(ethers.utils.formatEther(this.priceEther)),
-            usd: getWalletStore().allWallets[0].prices[CURRENCIES.USD] * Number(ethers.utils.formatEther(this.priceEther)),
-            rub: getWalletStore().allWallets[0].prices[CURRENCIES.RUB] * Number(ethers.utils.formatEther(this.priceEther)),
-            cny: getWalletStore().allWallets[0].prices[CURRENCIES.CNY] * Number(ethers.utils.formatEther(this.priceEther)),
-            jpy: getWalletStore().allWallets[0].prices[CURRENCIES.JPY] * Number(ethers.utils.formatEther(this.priceEther)),
-        } : { eur: 0, usd: 0, rub: 0, cny: 0, jpy: 0 }
+            eur: getWalletStore().allWallets[0].prices[CURRENCIES.EUR] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
+            usd: getWalletStore().allWallets[0].prices[CURRENCIES.USD] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
+            rub: getWalletStore().allWallets[0].prices[CURRENCIES.RUB] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
+            cny: getWalletStore().allWallets[0].prices[CURRENCIES.CNY] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
+            jpy: getWalletStore().allWallets[0].prices[CURRENCIES.JPY] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
+            eth: getWalletStore().allWallets[0].prices.eth
+        } : { eur: 0, usd: 0, rub: 0, cny: 0, jpy: 0, eth: 0 }
     }
 
     @action
@@ -65,7 +66,7 @@ export class ERC20 extends Model({
 
     @computed
     get transactionsList() {
-        return Object.values<ERC20Transaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+        return Object.values<TokenTransaction>(this.transactions.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
     }
 
     @computed
@@ -81,7 +82,7 @@ export class ERC20 extends Model({
     @computed
     get currentFiatPrice() {
         try {
-            return this.priceEther ? getWalletStore().allWallets[0].prices[getWalletStore().currentFiatCurrency] * Number(ethers.utils.formatEther(this.priceEther)) : null
+            return this.priceEther ? getWalletStore().allWallets[0].prices[getWalletStore().currentFiatCurrency] / getWalletStore().allWallets[0].prices.eth * Number(ethers.utils.formatEther(this.priceEther)) : null
         } catch (e) {
             return 0
         }

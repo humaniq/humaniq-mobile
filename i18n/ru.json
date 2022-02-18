@@ -193,7 +193,7 @@
   },
   "transactionScreen": {
     "transactionDetails": "Детали транзакции",
-    "viewOnEtherScan": "Посмотреть на Etherscan",
+    "viewOnEtherScan": "Посмотреть на %{0}",
     "status": "Статус",
     "date": "Дата",
     "from": "От",

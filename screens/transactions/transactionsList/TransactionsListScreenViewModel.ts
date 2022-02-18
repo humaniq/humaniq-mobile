@@ -1,5 +1,7 @@
-import { getWalletStore } from "../../../App"
+import { getEVMProvider, getWalletStore } from "../../../App"
 import { makeAutoObservable } from "mobx"
+import { Wallet } from "../../../store/wallet/Wallet";
+import { capitalize } from "../../../utils/general";
 
 
 export class TransactionsListScreenViewModel {
@@ -8,13 +10,13 @@ export class TransactionsListScreenViewModel {
   tokenAddress = null
   refreshing = false
 
-  get wallet() {
+  get wallet(): Wallet {
     return getWalletStore().walletsMap.get(this.currentWalletAddress)
   }
 
   get transactions() {
     return this.tokenAddress
-        ? this.wallet.erc20.get(this.tokenAddress).transactionsList
+        ? this.wallet.token.get(this.tokenAddress).transactionsList
         : this.wallet.transactionsList
   }
 
@@ -26,11 +28,13 @@ export class TransactionsListScreenViewModel {
 
   get token() {
     return this.tokenAddress
-        ? this.wallet.erc20List.find(t => t.tokenAddress === this.tokenAddress) : {
-          name: "Ethereum",
-          symbol: "ETH",
+        ? this.wallet.tokenList.find(t => t.tokenAddress === this.tokenAddress) : {
+          name: capitalize(getEVMProvider().currentNetwork.nativeCoin),
+          symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
           formatFiatBalance: this.wallet?.formatFiatBalance,
-          formatBalance: this.wallet?.formatBalance
+          formatBalance: this.wallet?.formatBalance,
+          tokenAddress: "",
+          logo: getEVMProvider().currentNetwork.nativeCoin
         }
   }
 
@@ -41,7 +45,7 @@ export class TransactionsListScreenViewModel {
       this.initialized = !!params.initialized
       if (!this.initialized) {
         if (this.tokenAddress) {
-          await this.wallet.getERC20Transactions()
+          await this.wallet.getTokenTransactions()
         } else {
           await this.wallet.loadTransactions(true)
         }
@@ -50,7 +54,6 @@ export class TransactionsListScreenViewModel {
     } catch (e) {
       console.log("ERROR", e)
     }
-
   }
 
   constructor() {

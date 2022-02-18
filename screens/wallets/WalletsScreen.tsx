@@ -37,14 +37,14 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
         nav.addListener('focus', async () => {
             if (!carouselBodyRef.current) return
             if (carouselBodyRef?.current.currentIndex !== getWalletStore().selectedWalletIndex) {
-                carouselTittleRef?.current.snapToItem(getWalletStore().selectedWalletIndex)
+                carouselTittleRef?.current?.snapToItem(getWalletStore().selectedWalletIndex)
             }
         })
     }, [])
 
     useEffect(() => {
         if (route.params?.index) {
-            carouselTittleRef.current.snapToItem(+route.params.index)
+            carouselTittleRef?.current?.snapToItem(+route.params.index)
         }
     }, [ route ])
 

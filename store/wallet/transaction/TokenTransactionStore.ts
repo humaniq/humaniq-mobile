@@ -1,18 +1,18 @@
 import { Model, model, objectMap, tProp as p, types as t } from "mobx-keystone";
 import { computed } from "mobx";
-import { ERC20Transaction } from "./ERC20Transaction";
+import { TokenTransaction } from "./TokenTransaction";
 
-@model("ERC20TransactionStore")
-export class ERC20TransactionStore extends Model({
+@model("TokenTransactionStore")
+export class TokenTransactionStore extends Model({
   page: p(t.number, 0),
   pageSize: p(t.number, 20),
   total: p(t.number, 0),
-  map: p(t.objectMap(t.model<ERC20Transaction>(ERC20Transaction)), () => objectMap<ERC20Transaction>()),
+  map: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
   loading: p(t.boolean, false)
 }) {
   @computed
   get list() {
-    return Object.values<ERC20Transaction>(this.map.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+    return Object.values<TokenTransaction>(this.map.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
   }
 
   @computed
