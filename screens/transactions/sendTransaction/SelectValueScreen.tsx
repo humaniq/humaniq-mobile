@@ -24,7 +24,7 @@ import { HIcon } from "../../../components/icon";
 import {
     SelectTransactionFeeDialogViewModel
 } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
-import { getEthereumProvider, getWalletStore } from "../../../App";
+import { getEVMProvider, getWalletStore } from "../../../App";
 import { InteractionManager } from "react-native";
 
 const SelectValue = observer(() => {
@@ -43,9 +43,9 @@ const SelectValue = observer(() => {
     }, 300)
 
     useEffect(() => {
-        getEthereumProvider().gasStation.setEnableAutoUpdate(true)
+        getEVMProvider().gasStation.setEnableAutoUpdate(true)
         return () => {
-            getEthereumProvider().gasStation.setEnableAutoUpdate(false)
+            getEVMProvider().gasStation.setEnableAutoUpdate(false)
         }
     }, [])
 
@@ -138,14 +138,15 @@ const SelectValue = observer(() => {
                 </View>
                 <View row center marginT-10>
                     <Button testID={ 'selectFee' } onPress={ () => {
+                        if (getEVMProvider().gasStation.isBSC) return
                         view.selectTransactionFeeDialog.wallet = view.walletAddress
                         view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
                         view.selectTransactionFeeDialog.display = true
                     } }
                             link
                     >
-                        <Text style={ { color: Colors.primary } }>
-                            { `${ capitalize(view.selectedGasPriceLabel) } ${ toLowerCase(t("selectValueScreen.fee")) } ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
+                        <Text style={ { color: !getEVMProvider().gasStation.isBSC && Colors.primary } }>
+                            { getEVMProvider().gasStation.isBSC ? ` ${ t("selectValueScreen.fee") } ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` : `${ capitalize(view.selectedGasPriceLabel) } ${ toLowerCase(t("selectValueScreen.fee")) } ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
                         </Text>
                     </Button>
                 </View>

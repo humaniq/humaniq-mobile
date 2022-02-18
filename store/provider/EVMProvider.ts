@@ -6,11 +6,11 @@ import { ethers } from "ethers"
 import { v4 as uuidv4 } from 'uuid';
 import { GasStation } from "./GasStation";
 import { JsonRpcProvider } from "@ethersproject/providers/src.ts/json-rpc-provider";
-import { getEthereumProvider } from "../../App";
+import { getEVMProvider } from "../../App";
 
 
-@model("EthereumProvider")
-export class EthereumProvider extends Model({
+@model("EVMProvider")
+export class EVMProvider extends Model({
     initialized: p(t.string, ""),
     pending: p(t.boolean, false),
     currentNetworkName: p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.MAINNET).withSetter(),
@@ -21,7 +21,6 @@ export class EthereumProvider extends Model({
     })
 }) {
 
-    // currentProvider: BaseProvider
     jsonRPCProvider: JsonRpcProvider
 
     @computed
@@ -50,7 +49,7 @@ export class EthereumProvider extends Model({
                     break
                 default:
                     this.jsonRPCProvider = new ethers.providers.JsonRpcProvider({
-                        url: `https://${ getEthereumProvider().currentNetworkName }.infura.io/v3/${ this.currentNetwork.providerID }`,
+                        url: `https://${ getEVMProvider().currentNetworkName }.infura.io/v3/${ this.currentNetwork.providerID }`,
                         user: this.currentNetwork.providerID,
                         password: this.currentNetwork.providerSecret
                     })

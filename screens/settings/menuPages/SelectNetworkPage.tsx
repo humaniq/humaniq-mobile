@@ -5,7 +5,7 @@ import { Colors } from "react-native-ui-lib";
 import { Screen } from "../../../components"
 import React from "react";
 import { EVM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
-import { getEthereumProvider } from "../../../App";
+import { getEVMProvider } from "../../../App";
 import * as storage from "../../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone";
 import { useNavigation } from "@react-navigation/native";
@@ -37,11 +37,11 @@ export const SelectNetwork = observer(() => {
     const nav = useNavigation()
     return <Screen style={ { minHeight: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                    statusBarBg={ Colors.bg }>
-        <ItemSelector selected={ getEthereumProvider().currentNetworkName } items={ view.networks }
+        <ItemSelector selected={ getEVMProvider().currentNetworkName } items={ view.networks }
                       headerTittle={ t("settingsScreen.menu.network") }
                       onPressItem={ async (n) => {
                           runUnprotected(() => {
-                              getEthereumProvider().currentNetworkName = n.name
+                              getEVMProvider().currentNetworkName = n.name
                           })
                           storage.save("currentNetworkName", n.name)
                           nav.goBack()

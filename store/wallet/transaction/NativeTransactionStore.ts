@@ -1,19 +1,19 @@
 import { Model, model, modelAction, objectMap, tProp as p, types as t } from "mobx-keystone";
-import { EthereumTransaction } from "./EthereumTransaction";
+import { NativeTransaction } from "./NativeTransaction";
 import { computed } from "mobx";
 
-@model("EthereumTransactionStore")
-export class EthereumTransactionStore extends Model({
+@model("NativeTransactionStore")
+export class NativeTransactionStore extends Model({
   page: p(t.number, 0),
   pageSize: p(t.number, 20),
   total: p(t.number, 0),
-  map: p(t.objectMap(t.model<EthereumTransaction>(EthereumTransaction)), () => objectMap<EthereumTransaction>()),
+  map: p(t.objectMap(t.model<NativeTransaction>(NativeTransaction)), () => objectMap<NativeTransaction>()),
   loading: p(t.boolean, false),
   initialized: p(t.boolean, false)
 }) {
   @computed
   get list() {
-    return Object.values<EthereumTransaction>(this.map.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
+    return Object.values<NativeTransaction>(this.map.items).sort((a, b) => b.blockTimestamp - a.blockTimestamp)
   }
 
   @modelAction

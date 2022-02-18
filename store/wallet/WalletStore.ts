@@ -20,7 +20,7 @@ import HDKeyring from "eth-hd-keyring"
 import { normalize } from "eth-sig-util"
 import { ethers } from "ethers"
 import Cryptr from "react-native-cryptr"
-import { getAppStore, getEthereumProvider, getWalletStore } from "../../App"
+import { getAppStore, getEVMProvider, getWalletStore } from "../../App"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { currencyFormat } from "../../utils/number";
 import { CURRENCIES, CURRENCIES_ARR } from "../../config/common";
@@ -105,7 +105,7 @@ export class WalletStore extends Model({
                 this.initialized = uuidv4()
             }
             if (!this.initialized) {
-                reaction(() => getSnapshot(getEthereumProvider().initialized), () => {
+                reaction(() => getSnapshot(getEVMProvider().initialized), () => {
                     this.init(true)
                 })
                 reaction(() => getSnapshot(getAppStore().savedPin), async (pin) => {

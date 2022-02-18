@@ -1,7 +1,7 @@
 import { makeAutoObservable, reaction } from "mobx";
 import { Wallet } from "../../../store/wallet/Wallet";
-import { getDictionary, getEthereumProvider, getWalletStore } from "../../../App";
-import { ERC20 } from "../../../store/wallet/erc20/ERC20";
+import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
+import { Token } from "../../../store/wallet/token/Token";
 import { inject } from "react-ioc";
 import {
     SelectWalletTokenViewModel
@@ -9,7 +9,7 @@ import {
 import { getSnapshot } from "mobx-keystone";
 import { BigNumber, ethers } from "ethers";
 import { currencyFormat } from "../../../utils/number";
-import { EthereumTransaction, TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
+import { NativeTransaction, TRANSACTION_STATUS } from "../../../store/wallet/transaction/NativeTransaction";
 import {
     SelectTransactionFeeDialogViewModel
 } from "../../../components/dialogs/selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
@@ -18,8 +18,9 @@ import { t } from "../../../i18n";
 import { RootNavigation } from "../../../navigators";
 import { CommonActions } from "@react-navigation/native";
 import { contractAbiErc20 } from "../../../utils/abi";
-import { ERC20Transaction } from "../../../store/wallet/transaction/ERC20Transaction";
-import { throttle } from "../../../utils/general";
+import { TokenTransaction } from "../../../store/wallet/transaction/TokenTransaction";
+import { capitalize, throttle } from "../../../utils/general";
+import { NATIVE_COIN_SYMBOL } from "../../../config/network";
 
 export class SendTransactionViewModel {
 
@@ -29,7 +30,7 @@ export class SendTransactionViewModel {
     initialized = false
     walletAddress = ""
     tokenAddress = ""
-    symbol = "ETH"
+    symbol = getEVMProvider().currentNetwork.nativeSymbol.toUpperCase()
     commissionSelectExpanded = false
     inputFiat = false
     contract
@@ -55,11 +56,11 @@ export class SendTransactionViewModel {
 
     changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
         this.txData.value = ""
-        this.tokenAddress = val !== "ETH" ? val : ""
+        this.tokenAddress = Object.values(NATIVE_COIN_SYMBOL).includes(val.toLowerCase() as NATIVE_COIN_SYMBOL) ? "" : val
         this.inputFiat = false
         this.getTransactionData()
-        if (this.tokenAddress && !this.wallet.erc20TransactionsInitialized) {
-            this.wallet.getERC20Transactions()
+        if (this.tokenAddress && !this.wallet.tokenTransactionsInitialized) {
+            this.wallet.getTokenTransactions()
         } else if (!this.wallet.transactions.initialized) {
             this.wallet.loadTransactions()
         }
@@ -85,11 +86,11 @@ export class SendTransactionViewModel {
 
 
     get selectedGasPrice() {
-        return +getEthereumProvider().gasStation.selectedGasPrice
+        return +getEVMProvider().gasStation.selectedGasPrice
     }
 
     get selectedGasPriceLabel() {
-        return getEthereumProvider().gasStation.selectedGasPriceLabel
+        return getEVMProvider().gasStation.selectedGasPriceLabel
     }
 
     async init(route) {
@@ -99,7 +100,7 @@ export class SendTransactionViewModel {
             await this.getTransactionData();
 
             if (this.tokenAddress) {
-                this.wallet.getERC20Transactions()
+                this.wallet.getTokenTransactions()
             } else {
                 this.wallet.loadTransactions(true)
             }
@@ -114,13 +115,13 @@ export class SendTransactionViewModel {
     async getTransactionData() {
         try {
             this.pending = true
-            this.txData.chainId = getEthereumProvider().currentNetwork.chainID
+            this.txData.chainId = getEVMProvider().currentNetwork.chainID
             if (this.tokenAddress) {
                 this.contract = new ethers.Contract(this.tokenAddress, contractAbiErc20, this.wallet.ether);
             }
 
             const [ nonce, gasLimit ] = await Promise.all([
-                getEthereumProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
+                getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
                 this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
             ])
             this.txData.nonce = nonce
@@ -133,7 +134,7 @@ export class SendTransactionViewModel {
 
     setMaxValue() {
         try {
-            if (this.token.symbol === "ETH") {
+            if (Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase())) {
                 this.txData.value = this.inputFiat ? ((this.wallet.valBalance - this.transactionFee) * this.price).toFixed(2).toString() : (this.wallet.valBalance - this.transactionFee).toFixed(6).toString()
             } else {
                 this.txData.value = this.inputFiat ? (this.token.valBalance * this.price).toFixed(2).toString() : this.token.valBalance.toFixed(6).toString()
@@ -202,14 +203,14 @@ export class SendTransactionViewModel {
             feeFiat: currencyFormat(this.transactionFee * this.wallet?.prices[getWalletStore().currentFiatCurrency], getWalletStore().currentFiatCurrency),
             totalFiat: currencyFormat(+this.parsedValue * this.price + this.transactionFee * this.wallet?.prices[getWalletStore().currentFiatCurrency], getWalletStore().currentFiatCurrency),
             maxAmount: this.parsedValue ? (+this.parsedValue) + this.transactionMaxFee : 0,
-            total: this.token.symbol === "ETH" ? `${ (+this.transactionFee + (+this.parsedValue)) } ETH` :
-                `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ETH`
+            total: Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase()) ? `${ (+this.transactionFee + (+this.parsedValue)) } ${ this.token.symbol.toUpperCase() }` :
+                `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ${ this.token.symbol.toUpperCase() }`
         }
     }
 
     get enoughBalance() {
         try {
-            if (this.token.symbol === "ETH") {
+            if (Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase())) {
                 return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
                     .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                             BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
@@ -258,7 +259,7 @@ export class SendTransactionViewModel {
             fromAddress: this.wallet?.address,
             input: "0x",
             blockTimestamp: new Date(),
-            prices:  this.token.prices,
+            prices: this.token.prices,
             type: 0
         }
         return !this.tokenAddress ? baseBody : {
@@ -279,8 +280,8 @@ export class SendTransactionViewModel {
             }, 10)
 
             const tx = !this.tokenAddress ?
-                new EthereumTransaction(this.txBody) :
-                new ERC20Transaction(this.txBody)
+                new NativeTransaction(this.txBody) :
+                new TokenTransaction(this.txBody)
             await tx.sendTransaction()
             tx.applyToWallet()
             setTimeout(() => {
@@ -327,7 +328,7 @@ export class SendTransactionViewModel {
             to: "",
         }
         this.pendingTransaction = false
-        getEthereumProvider().gasStation.setEnableAutoUpdate(false)
+        getEVMProvider().gasStation.setEnableAutoUpdate(false)
         this.display = false
     }
 
@@ -343,14 +344,14 @@ export class SendTransactionViewModel {
         return this.token?.fiatBalance !== null
     }
 
-    get token(): ERC20 | any {
+    get token(): Token | any {
         return this.tokenAddress
-            ? this.wallet.erc20List.find(t => t.tokenAddress === this.tokenAddress) : {
-                name: "Ethereum",
-                symbol: "ETH",
+            ? this.wallet.tokenList.find(t => t.tokenAddress === this.tokenAddress) : {
+                name: capitalize(getEVMProvider().currentNetwork.nativeCoin),
+                symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
                 formatFiatBalance: this.wallet?.formatFiatBalance,
                 formatBalance: this.wallet?.formatBalance,
-                logo: "ethereum",
+                logo: getEVMProvider().currentNetwork.nativeCoin,
                 fiatBalance: this.wallet?.fiatBalance,
                 decimals: 18,
                 priceUSD: this.wallet?.prices.usd,

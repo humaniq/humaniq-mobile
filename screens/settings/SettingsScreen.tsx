@@ -8,7 +8,7 @@ import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { HIcon } from "../../components/icon";
 import { MenuItem } from "../../components/menuItem/MenuItem";
-import { getAppStore, getEthereumProvider, getWalletStore } from "../../App";
+import { getAppStore, getEVMProvider, getWalletStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
@@ -84,7 +84,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <MenuItem icon={ "network" }
                                           name={ t("settingsScreen.menu.network") }
                                           value={ <Text text16
-                                                        textGrey> { capitalize(getEthereumProvider().currentNetworkName) } </Text> }
+                                                        textGrey> { capitalize(getEVMProvider().currentNetworkName) } </Text> }
                                           onPress={ () => nav.navigate("selectNetwork") }
                                 />
                                 <View

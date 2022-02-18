@@ -193,7 +193,7 @@
   },
   "transactionScreen": {
     "transactionDetails": "Transaction details",
-    "viewOnEtherScan": "View on Etherscan",
+    "viewOnEtherScan": "View on %{0}",
     "status": "Status",
     "date": "Date",
     "from": "From",

@@ -1,10 +1,10 @@
 import { Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { EthereumProvider } from "./EthereumProvider"
+import { EVMProvider } from "./EVMProvider"
 
 @model("ProviderStore")
 export class ProviderStore extends Model({
   initialized: p(t.string, ""),
-  eth: p(t.model<EthereumProvider>(EthereumProvider), () => new EthereumProvider({}))
+  eth: p(t.model<EVMProvider>(EVMProvider), () => new EVMProvider({}))
 }) {
   @modelFlow
   * init() {
