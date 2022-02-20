@@ -24,13 +24,18 @@ export interface SkeletonProps {
     /**
      * The duration of shim animation.
      */
-    shimAnimationDuration: number;
+    shimDuration: number;
+    /**
+     * Whether the shim animation is enabled.
+     */
+    shimEnabled: boolean;
     /**
      * The delay of shim animation after first iteration.
      */
     delay: number;
     /**
      * List of the gradient colors of the Skeleton view.
+     * The first item of the array i.e. color will be applied as background color for skeleton view
      */
     colors: string[];
     /**
@@ -58,7 +63,7 @@ export interface SkeletonViewProps {
      */
     type?: SkeletonTemplate;
     /**
-     * Skeleton view props base on type.
+     * Skeleton view props based on type.
      * Types: LIST and CONTENT
      */
     skeletonProps?: SkeletonListStyle | SkeletonContentStyle;
@@ -88,7 +93,11 @@ export interface SkeletonStyle {
     /**
      * The duration of shim animation.
      */
-    shimAnimationDuration?: number;
+    shimDuration?: number;
+    /**
+     * The duration of shim animation.
+     */
+    shimEnabled?: boolean;
 }
 
 export interface SkeletonListStyle extends SkeletonStyle {
@@ -146,17 +155,19 @@ export type SkeletonContentStyle = Omit<SkeletonListStyle, "isAvatar" | "avatarS
  * @param wrapperStyle
  * @param contentStyle
  * @param shimmerStyle
- * @param shimAnimationDuration
+ * @param shimDuration
+ * @param shimEnabled
  * @param delay
  * @param colors
  * @param children
  * @constructor
  */
-const Skeleton = ({
+export const Skeleton = ({
                       width,
                       height,
                       isLoading,
-                      shimAnimationDuration,
+                      shimDuration,
+                      shimEnabled,
                       delay,
                       colors,
                       wrapperStyle = {},
@@ -167,23 +178,29 @@ const Skeleton = ({
     const shimAnimation = useRef(new Animated.Value(-1)).current
 
     useEffect(() => {
-        let animatedValue = Animated.loop(
-            Animated.sequence([
-                Animated.timing(shimAnimation, {
-                    toValue: 1,
-                    duration: shimAnimationDuration,
-                    easing: Easing.ease,
-                    useNativeDriver: true,
-                }),
-                Animated.delay(delay),
-            ])
-        )
+        let animatedValue
 
-        animatedValue?.start();
+        if (shimEnabled) {
+            animatedValue = Animated.loop(
+                Animated.sequence([
+                    Animated.timing(shimAnimation, {
+                        toValue: 1,
+                        duration: shimDuration,
+                        easing: Easing.ease,
+                        useNativeDriver: true,
+                    }),
+                    Animated.delay(delay),
+                ])
+            )
+
+            animatedValue?.start();
+        }
 
         return () => {
-            animatedValue?.stop()
-            animatedValue = null
+            if (shimEnabled) {
+                animatedValue?.stop()
+                animatedValue = null
+            }
         }
     }, [])
 
@@ -198,7 +215,7 @@ const Skeleton = ({
                 isLoading && { width: 0, height: 0, opacity: 0 },
                 !isLoading && contentStyle,
             ] }>{ children }</View>
-            { isLoading ? (
+            { isLoading && (
                 <View style={ { flex: 1, backgroundColor: colors[0], overflow: 'hidden' } }>
                     <Animated.View style={ {
                         flex: 1,
@@ -223,7 +240,7 @@ const Skeleton = ({
                             locations={ [ 0.3, 0.5, 0.7 ] }/>
                     </Animated.View>
                 </View>
-            ) : null }
+            ) }
         </View>
     );
 };
@@ -253,19 +270,19 @@ export const SkeletonView = ({
         return <>
             { [ ...Array(style.itemsCount).keys() ].map((item, index) => {
                 return <View key={ `skeleton_list_item_${ index }` }
-                             style={ [ { flexDirection: 'row' },
-                                 containerStyle ] }>
-                    { style.isAvatar ? <Skeleton
+                             style={ [ { flexDirection: 'row' }, containerStyle ] }>
+                    { style.isAvatar && <Skeleton
                         width={ style.avatarSize }
                         height={ style.avatarSize }
                         isLoading={ isLoading }
-                        shimAnimationDuration={ style.shimAnimationDuration }
+                        shimDuration={ style.shimDuration }
+                        shimEnabled={ style.shimEnabled }
                         wrapperStyle={ {
                             marginRight: 10,
                             borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
                         } }
                         delay={ style.delay }
-                        colors={ style.colors }/> : null }
+                        colors={ style.colors }/> }
                     <View style={ [ { flex: 1, justifyContent: "center" }, style.isDivider && dividerDefaultStyles ] }>
                         { [ ...Array(style.rowCount).keys() ].map((item, index) => {
                             return <View key={ `skeleton_content_row_item_${ index }` }
@@ -276,7 +293,8 @@ export const SkeletonView = ({
                                     isLoading={ isLoading }
                                     colors={ style.colors }
                                     delay={ style.delay }
-                                    shimAnimationDuration={ style.shimAnimationDuration }
+                                    shimDuration={ style.shimDuration }
+                                    shimEnabled={ style.shimEnabled }
                                     wrapperStyle={ {
                                         marginTop: index === 0 ? 0 : style.rowMargin,
                                         borderRadius: style.rowBorderRadius
@@ -294,13 +312,14 @@ export const SkeletonView = ({
                          isLoading={ isLoading }
                          colors={ style.colors }
                          delay={ style.delay }
-                         shimAnimationDuration={ style.shimAnimationDuration }>{ children }</Skeleton>
+                         shimEnabled={ style.shimEnabled }
+                         shimDuration={ style.shimDuration }>{ children }</Skeleton>
     }
 }
 
 /**
  * Default values of the skeleton view styles
- * Base on skeleton types: LIST and CONTENT
+ * Based on skeleton types: LIST and CONTENT
  *
  * @param type
  */
@@ -309,7 +328,8 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
-            shimAnimationDuration: 700,
+            shimDuration: 700,
+            shimEnabled: true,
             isAvatar: true,
             isDivider: true,
             rowCount: 2,
@@ -324,7 +344,8 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
-            shimAnimationDuration: 700,
+            shimDuration: 700,
+            shimEnabled: true,
             rowCount: 3,
             rowMargin: 10,
             rowWidth: 200,
