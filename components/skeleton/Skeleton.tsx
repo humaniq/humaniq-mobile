@@ -4,8 +4,8 @@ import LinearGradient from "react-native-linear-gradient";
 import { Colors } from "react-native-ui-lib";
 
 export enum SkeletonTemplate {
-    LIST = 'list',
-    CONTENT = 'content',
+    TRANSACTION_LIST = 'transaction_list',
+    PAGE = 'page',
 }
 
 export interface SkeletonProps {
@@ -35,9 +35,13 @@ export interface SkeletonProps {
     delay: number;
     /**
      * List of the gradient colors of the Skeleton view.
-     * The first item of the array i.e. color will be applied as background color for skeleton view
      */
     colors: string[];
+    /**
+     * The background color of the Skeleton view.
+     * If not defined, the first item of the array i.e. colors, will be applied as background color for skeleton view
+     */
+    backgroundColor?: string;
     /**
      * Skeleton container style.
      */
@@ -45,11 +49,7 @@ export interface SkeletonProps {
     /**
      * Skeleton children style.
      */
-    contentStyle?: StyleProp<ViewStyle>;
-    /**
-     * Skeleton shimmer style. Condition style, appears when isLoading = true
-     */
-    shimmerStyle?: StyleProp<ViewStyle>;
+    childrenStyle?: StyleProp<ViewStyle>;
     /**
      * React children.
      */
@@ -154,11 +154,11 @@ export type SkeletonContentStyle = Omit<SkeletonListStyle, "isAvatar" | "avatarS
  * @param isLoading
  * @param wrapperStyle
  * @param contentStyle
- * @param shimmerStyle
  * @param shimDuration
  * @param shimEnabled
  * @param delay
  * @param colors
+ * @param backgroundColor
  * @param children
  * @constructor
  */
@@ -171,10 +171,11 @@ export const Skeleton = ({
                       delay,
                       colors,
                       wrapperStyle = {},
-                      contentStyle = {},
-                      shimmerStyle = {},
+                      childrenStyle = {},
                       children,
+                      backgroundColor
                   }: SkeletonProps) => {
+    const bgColor = backgroundColor || colors[0]
     const shimAnimation = useRef(new Animated.Value(-1)).current
 
     useEffect(() => {
@@ -208,15 +209,14 @@ export const Skeleton = ({
         <View style={ [
             isLoading && { height, width },
             { overflow: 'hidden' },
-            isLoading && shimmerStyle,
             wrapperStyle,
         ] }>
             <View style={ [
                 isLoading && { width: 0, height: 0, opacity: 0 },
-                !isLoading && contentStyle,
+                !isLoading && childrenStyle,
             ] }>{ children }</View>
             { isLoading && (
-                <View style={ { flex: 1, backgroundColor: colors[0], overflow: 'hidden' } }>
+                <View style={ { flex: 1, backgroundColor: bgColor, overflow: 'hidden' } }>
                     <Animated.View style={ {
                         flex: 1,
                         transform: [ {
@@ -256,7 +256,7 @@ export const Skeleton = ({
  * @constructor
  */
 export const SkeletonView = ({
-                                 type = SkeletonTemplate.CONTENT,
+                                 type = SkeletonTemplate.PAGE,
                                  children,
                                  isLoading,
                                  skeletonProps = {} as any,
@@ -264,31 +264,55 @@ export const SkeletonView = ({
                              }: SkeletonViewProps) => {
     let style;
 
-    if (type === SkeletonTemplate.LIST) {
+    if (type === SkeletonTemplate.TRANSACTION_LIST) {
         style = { ...getDefaultSkeletonStyle(type) as SkeletonListStyle, ...skeletonProps }
 
-        return <>
+        return <View style={ { backgroundColor: "#fff", marginHorizontal: 16, borderRadius: 16 } }>
             { [ ...Array(style.itemsCount).keys() ].map((item, index) => {
                 return <View key={ `skeleton_list_item_${ index }` }
-                             style={ [ { flexDirection: 'row' }, containerStyle ] }>
-                    { style.isAvatar && <Skeleton
-                        width={ style.avatarSize }
-                        height={ style.avatarSize }
-                        isLoading={ isLoading }
-                        shimDuration={ style.shimDuration }
-                        shimEnabled={ style.shimEnabled }
-                        wrapperStyle={ {
-                            marginRight: 10,
-                            borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
-                        } }
-                        delay={ style.delay }
-                        colors={ style.colors }/> }
-                    <View style={ [ { flex: 1, justifyContent: "center" }, style.isDivider && dividerDefaultStyles ] }>
-                        { [ ...Array(style.rowCount).keys() ].map((item, index) => {
-                            return <View key={ `skeleton_content_row_item_${ index }` }
-                                         style={ { overflow: 'hidden' } }>
+                             style={ [ { flexDirection: 'row' }, { marginHorizontal: 16, marginVertical: 16 }, containerStyle ] }>
+                    { style.isAvatar && <View style={ { alignItems: "center", justifyContent: "center" } }>
+                        <Skeleton
+                            width={ style.avatarSize }
+                            height={ style.avatarSize }
+                            isLoading={ isLoading }
+                            shimDuration={ style.shimDuration }
+                            shimEnabled={ style.shimEnabled }
+                            wrapperStyle={ {
+                                marginRight: 10,
+                                borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
+                            } }
+                            delay={ style.delay }
+                            colors={ style.colors }/></View>}
+                    <View style={ [
+                        { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+                        style.isDivider && dividerDefaultStyles
+                    ] }>
+                        <View style={ { justifyContent: "center" } }>
+                            { [ ...Array(style.rowCount).keys() ].map((item, index) => {
+                                return <View key={ `skeleton_content_row_item_${ index }` }
+                                             style={ { flexDirection: "row", alignItems: "center" } }>
+                                    <View style={ { overflow: 'hidden' } }>
+                                        <Skeleton
+                                            width={ index % 2 !== 0 ? style.rowWidth : style.rowWidth / 1.3 }
+                                            height={ style.rowHeight }
+                                            isLoading={ isLoading }
+                                            colors={ style.colors }
+                                            delay={ style.delay }
+                                            shimDuration={ style.shimDuration }
+                                            shimEnabled={ style.shimEnabled }
+                                            wrapperStyle={ {
+                                                marginTop: index === 0 ? 0 : style.rowMargin,
+                                                borderRadius: style.rowBorderRadius
+                                            } }/></View>
+                                </View>
+                            }) }
+                        </View>
+
+                        <View style={{  alignItems: "center" }}>
+                            <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
                                 <Skeleton
-                                    width={ index % 2 === 0 ? style.rowWidth : style.rowWidth / 1.5 }
+                                    width={ 60 }
                                     height={ style.rowHeight }
                                     isLoading={ isLoading }
                                     colors={ style.colors }
@@ -296,14 +320,26 @@ export const SkeletonView = ({
                                     shimDuration={ style.shimDuration }
                                     shimEnabled={ style.shimEnabled }
                                     wrapperStyle={ {
-                                        marginTop: index === 0 ? 0 : style.rowMargin,
                                         borderRadius: style.rowBorderRadius
                                     } }/></View>
-                        }) }
+                            <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
+                                <Skeleton
+                                    width={ 70 }
+                                    height={ style.rowHeight }
+                                    isLoading={ isLoading }
+                                    colors={ style.colors }
+                                    delay={ style.delay }
+                                    shimDuration={ style.shimDuration }
+                                    shimEnabled={ style.shimEnabled }
+                                    wrapperStyle={ {
+                                        marginTop: style.rowMargin,
+                                        borderRadius: style.rowBorderRadius
+                                    } }/></View>
+                        </View>
                     </View>
                 </View>
             }) }
-        </>
+        </View>
     } else {
         style = { ...getDefaultSkeletonStyle(type) as SkeletonContentStyle, ...skeletonProps }
 
@@ -324,27 +360,27 @@ export const SkeletonView = ({
  * @param type
  */
 const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
-    if (type === SkeletonTemplate.LIST) {
+    if (type === SkeletonTemplate.TRANSACTION_LIST) {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
-            shimDuration: 700,
+            shimDuration: 400,
             shimEnabled: true,
             isAvatar: true,
-            isDivider: true,
+            isDivider: false,
             rowCount: 2,
-            rowMargin: 10,
-            rowWidth: 200,
-            rowHeight: 8,
-            rowBorderRadius: 4,
+            rowMargin: 14,
+            rowWidth: 150,
+            rowHeight: 14,
+            rowBorderRadius: 0,
             itemsCount: 10,
-            avatarSize: 60
+            avatarSize: 40
         } as SkeletonListStyle
     } else {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
-            shimDuration: 700,
+            shimDuration: 400,
             shimEnabled: true,
             rowCount: 3,
             rowMargin: 10,
@@ -361,5 +397,5 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
 const dividerDefaultStyles = {
     borderBottomWidth: 1,
     borderBottomColor: Colors.grey,
-    paddingBottom: 2,
+    paddingBottom: 6,
 }
