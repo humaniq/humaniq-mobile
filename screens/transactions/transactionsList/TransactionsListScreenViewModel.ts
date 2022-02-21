@@ -3,7 +3,6 @@ import { makeAutoObservable } from "mobx"
 import { Wallet } from "../../../store/wallet/Wallet";
 import { capitalize } from "../../../utils/general";
 
-
 export class TransactionsListScreenViewModel {
   initialized = false
   currentWalletAddress

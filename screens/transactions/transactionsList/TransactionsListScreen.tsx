@@ -15,7 +15,8 @@ import { RootNavigation } from "../../../navigators";
 import SearchPicture from "../../../assets/images/search.svg"
 import { Header } from "../../../components/header/Header";
 import { NATIVE_COIN } from "../../../config/network";
-import { SkeletonTemplate, SkeletonView } from "../../../components/skeleton/Skeleton";
+import { SkeletonTemplateTypes, SkeletonView } from "../../../components/skeleton/Skeleton";
+import { TransactionListScreenSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
     const view = useInstance(TransactionsListScreenViewModel)
@@ -113,7 +114,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                 <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
                             </View>
                             { view.refreshing && <SkeletonView isLoading={ view.refreshing }
-                                                                type={ SkeletonTemplate.TRANSACTION_LIST }/> }
+                                                                type={ SkeletonTemplateTypes.TRANSACTION_LIST }/> }
                             {
                                 !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
                                     { view.transactions.map((item, index) => renderItem({
@@ -136,7 +137,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                         </ScrollView>
                     </>
                 }
-                { !view.initialized && <View flex><LoaderScreen/></View> }
+                { !view.initialized && <View flex><TransactionListScreenSkeleton/></View> }
             </Screen>
         }
         after={ <View absB flex row/> }

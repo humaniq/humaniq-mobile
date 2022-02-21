@@ -3,9 +3,10 @@ import { Animated, Easing, StyleProp, View, ViewStyle } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Colors } from "react-native-ui-lib";
 
-export enum SkeletonTemplate {
+export enum SkeletonTemplateTypes {
     TRANSACTION_LIST = 'transaction_list',
-    PAGE = 'page',
+    WALLET = 'wallet',
+    ROW = 'row',
 }
 
 export interface SkeletonProps {
@@ -59,18 +60,22 @@ export interface SkeletonProps {
 export interface SkeletonViewProps {
     /**
      * The type of the skeleton view.
-     * Types: LIST and CONTENT
+     * Types: TRANSACTION_LIST, WALLET and ROW
      */
-    type?: SkeletonTemplate;
+    type?: SkeletonTemplateTypes;
     /**
      * Skeleton view props based on type.
-     * Types: LIST and CONTENT
+     * Types: TRANSACTION_LIST, WALLET and ROW
      */
-    skeletonProps?: SkeletonListStyle | SkeletonContentStyle;
+    skeletonProps?: SkeletonListStyle | SkeletonWalletStyle | SkeletonRowStyle;
     /**
-     * Skeleton container style.
+     * Skeleton view container style.
      */
     containerStyle?: StyleProp<ViewStyle>;
+    /**
+     * Skeleton view content style.
+     */
+    contentStyle?: StyleProp<ViewStyle>;
     /**
      * Whether skeleton view is loading.
      */
@@ -144,7 +149,63 @@ export interface SkeletonListStyle extends SkeletonStyle {
     avatarRadius?: number;
 }
 
-export type SkeletonContentStyle = Omit<SkeletonListStyle, "isAvatar" | "avatarSize" | "itemsCount" | "avatarRadius" | "isDivider">
+export interface SkeletonWalletStyle extends SkeletonStyle {
+    /**
+     * Button width.
+     */
+    buttonWidth?: number;
+    /**
+     * Button height.
+     */
+    buttonHeight?: number;
+    /**
+     * Button border radius.
+     */
+    buttonBorderRadius?: number;
+    /**
+     * Wallet title width.
+     */
+    titleWidth?: number;
+    /**
+     * Wallet title height.
+     */
+    titleHeight?: number;
+    /**
+     * Wallet subTitle width.
+     */
+    subTitleWidth?: number;
+    /**
+     * Wallet subTitle height.
+     */
+    subTitleHeight?: number;
+    /**
+     * Whether avatar is enabled.
+     */
+    isAvatar?: boolean;
+    /**
+     * Size of the avatar if enabled.
+     */
+    avatarSize?: number;
+}
+
+export interface SkeletonRowStyle extends SkeletonStyle {
+    /**
+     * Content row margins.
+     */
+    rowMargin?: number;
+    /**
+     * Width of the content row.
+     */
+    rowWidth?: number;
+    /**
+     * Height of the content row.
+     */
+    rowHeight?: number;
+    /**
+     * Border radius of the content row.
+     */
+    rowBorderRadius?: number;
+}
 
 /**
  * Skeleton view with shimming animation.
@@ -163,18 +224,18 @@ export type SkeletonContentStyle = Omit<SkeletonListStyle, "isAvatar" | "avatarS
  * @constructor
  */
 export const Skeleton = ({
-                      width,
-                      height,
-                      isLoading,
-                      shimDuration,
-                      shimEnabled,
-                      delay,
-                      colors,
-                      wrapperStyle = {},
-                      childrenStyle = {},
-                      children,
-                      backgroundColor
-                  }: SkeletonProps) => {
+                             width,
+                             height,
+                             isLoading,
+                             shimDuration,
+                             shimEnabled,
+                             delay,
+                             colors,
+                             wrapperStyle = {},
+                             childrenStyle = {},
+                             children,
+                             backgroundColor
+                         }: SkeletonProps) => {
     const bgColor = backgroundColor || colors[0]
     const shimAnimation = useRef(new Animated.Value(-1)).current
 
@@ -253,24 +314,29 @@ export const Skeleton = ({
  * @param children
  * @param skeletonProps
  * @param containerStyle
+ * @param contentStyle
  * @constructor
  */
 export const SkeletonView = ({
-                                 type = SkeletonTemplate.PAGE,
-                                 children,
-                                 isLoading,
+                                 type = SkeletonTemplateTypes.TRANSACTION_LIST,
+                                 isLoading = true,
                                  skeletonProps = {} as any,
-                                 containerStyle = {}
+                                 containerStyle = {},
+                                 contentStyle = {}
                              }: SkeletonViewProps) => {
     let style;
 
-    if (type === SkeletonTemplate.TRANSACTION_LIST) {
+    if (type === SkeletonTemplateTypes.TRANSACTION_LIST) {
         style = { ...getDefaultSkeletonStyle(type) as SkeletonListStyle, ...skeletonProps }
 
-        return <View style={ { backgroundColor: "#fff", marginHorizontal: 16, borderRadius: 16 } }>
+        return <View
+            style={ [ { backgroundColor: Colors.white, marginHorizontal: 16, borderRadius: 16 }, containerStyle ] }>
             { [ ...Array(style.itemsCount).keys() ].map((item, index) => {
                 return <View key={ `skeleton_list_item_${ index }` }
-                             style={ [ { flexDirection: 'row' }, { marginHorizontal: 16, marginVertical: 16 }, containerStyle ] }>
+                             style={ [ { flexDirection: 'row' }, {
+                                 marginHorizontal: 16,
+                                 marginVertical: 16
+                             }, contentStyle ] }>
                     { style.isAvatar && <View style={ { alignItems: "center", justifyContent: "center" } }>
                         <Skeleton
                             width={ style.avatarSize }
@@ -283,9 +349,8 @@ export const SkeletonView = ({
                                 borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
                             } }
                             delay={ style.delay }
-                            colors={ style.colors }/></View>}
-                    <View style={ [
-                        { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+                            colors={ style.colors }/></View> }
+                    <View style={ [ { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
                         style.isDivider && dividerDefaultStyles
                     ] }>
                         <View style={ { justifyContent: "center" } }>
@@ -309,7 +374,7 @@ export const SkeletonView = ({
                             }) }
                         </View>
 
-                        <View style={{  alignItems: "center" }}>
+                        <View style={ { alignItems: "center" } }>
                             <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
                                 <Skeleton
                                     width={ 60 }
@@ -340,27 +405,109 @@ export const SkeletonView = ({
                 </View>
             }) }
         </View>
-    } else {
-        style = { ...getDefaultSkeletonStyle(type) as SkeletonContentStyle, ...skeletonProps }
+    } else if (type === SkeletonTemplateTypes.WALLET) {
+        style = { ...getDefaultSkeletonStyle(type) as SkeletonWalletStyle, ...skeletonProps }
 
-        return <Skeleton width={ style.rowWidth }
-                         height={ style.rowHeight }
-                         isLoading={ isLoading }
-                         colors={ style.colors }
-                         delay={ style.delay }
-                         shimEnabled={ style.shimEnabled }
-                         shimDuration={ style.shimDuration }>{ children }</Skeleton>
+        return <View>
+            <View style={ { alignItems: "center", justifyContent: "center", paddingTop: 10 } }>
+                <Skeleton
+                    width={ style.avatarSize }
+                    height={ style.avatarSize }
+                    isLoading={ isLoading }
+                    shimDuration={ style.shimDuration }
+                    shimEnabled={ style.shimEnabled }
+                    delay={ style.delay }
+                    colors={ style.colors }/>
+            </View>
+
+            <View style={ { alignItems: "center", justifyContent: "center" } }>
+                <Skeleton
+                    width={ style.titleWidth }
+                    height={ style.titleHeight }
+                    isLoading={ isLoading }
+                    shimDuration={ style.shimDuration }
+                    shimEnabled={ style.shimEnabled }
+                    wrapperStyle={ {
+                        marginTop: 8
+                    } }
+                    delay={ style.delay }
+                    colors={ style.colors }/>
+
+                <Skeleton
+                    width={ style.subTitleWidth }
+                    height={ style.subTitleHeight }
+                    isLoading={ isLoading }
+                    shimDuration={ style.shimDuration }
+                    shimEnabled={ style.shimEnabled }
+                    wrapperStyle={ {
+                        marginTop: 6
+                    } }
+                    delay={ style.delay }
+                    colors={ style.colors }/>
+            </View>
+
+            <View style={ {
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                marginHorizontal: 16,
+                marginTop: 20
+            } }>
+                <Skeleton
+                    width={ style.buttonWidth }
+                    height={ style.buttonHeight }
+                    isLoading={ isLoading }
+                    shimDuration={ style.shimDuration }
+                    shimEnabled={ style.shimEnabled }
+                    wrapperStyle={ {
+                        flex: 0.5,
+                        borderRadius: style.buttonBorderRadius,
+                        marginRight: 8
+                    } }
+                    delay={ style.delay }
+                    colors={ style.colors }/>
+                <Skeleton
+                    width={ style.buttonWidth }
+                    height={ style.buttonHeight }
+                    isLoading={ isLoading }
+                    shimDuration={ style.shimDuration }
+                    shimEnabled={ style.shimEnabled }
+                    wrapperStyle={ {
+                        flex: 0.5,
+                        borderRadius: style.buttonBorderRadius,
+                        marginLeft: 8
+                    } }
+                    delay={ style.delay }
+                    colors={ style.colors }/>
+            </View>
+        </View>
+    } else {
+        style = { ...getDefaultSkeletonStyle(type) as SkeletonRowStyle, ...skeletonProps }
+
+        return <View style={ { marginHorizontal: 16, marginTop: 16, marginBottom: 6 } }>
+            <Skeleton
+                width={ style.rowWidth }
+                height={ style.rowHeight }
+                isLoading={ isLoading }
+                shimDuration={ style.shimDuration }
+                shimEnabled={ style.shimEnabled }
+                wrapperStyle={ {
+                    marginTop: 8
+                } }
+                delay={ style.delay }
+                colors={ style.colors }/>
+        </View>
     }
 }
 
 /**
  * Default values of the skeleton view styles
- * Based on skeleton types: LIST and CONTENT
+ * Based on skeleton types: TRANSACTION_LIST, WALLET and ROW
  *
  * @param type
  */
-const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
-    if (type === SkeletonTemplate.TRANSACTION_LIST) {
+const getDefaultSkeletonStyle = (type: SkeletonTemplateTypes) => {
+    if (type === SkeletonTemplateTypes.TRANSACTION_LIST) {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
@@ -376,18 +523,32 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplate) => {
             itemsCount: 10,
             avatarSize: 40
         } as SkeletonListStyle
+    } else if (type === SkeletonTemplateTypes.WALLET) {
+        return {
+            colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
+            delay: 1000,
+            shimDuration: 400,
+            shimEnabled: true,
+            isAvatar: true,
+            avatarSize: 80,
+            titleWidth: 80,
+            titleHeight: 16,
+            subTitleWidth: 150,
+            subTitleHeight: 14,
+            buttonWidth: 200,
+            buttonHeight: 40,
+            buttonBorderRadius: 0,
+        } as SkeletonWalletStyle
     } else {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
             delay: 1000,
             shimDuration: 400,
             shimEnabled: true,
-            rowCount: 3,
-            rowMargin: 10,
-            rowWidth: 200,
-            rowHeight: 8,
-            rowBorderRadius: 4,
-        } as SkeletonContentStyle
+            rowWidth: 140,
+            rowHeight: 16,
+            rowBorderRadius: 0,
+        } as SkeletonRowStyle
     }
 }
 
