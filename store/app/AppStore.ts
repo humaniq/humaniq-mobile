@@ -88,7 +88,7 @@ export class AppStore extends Model({
                         // @ts-ignore
                         this.setLastBackgroundDate(new Date())
                     } else if (nextState === "active") {
-                        if (new Date().getTime() - (this.lastBackgroundDate.getTime() + 15 * 1000) > 0) {
+                        if (!this.lastBackgroundDate || new Date().getTime() - (this.lastBackgroundDate?.getTime() + 15 * 1000) > 0) {
                             this.setAppState(APP_STATE.AUTH)
                             if (getWalletStore().storedWallets) {
                                 runUnprotected(() => {
