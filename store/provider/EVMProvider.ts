@@ -13,7 +13,7 @@ import { getEVMProvider } from "../../App";
 export class EVMProvider extends Model({
     initialized: p(t.string, ""),
     pending: p(t.boolean, false),
-    currentNetworkName: p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.MAINNET).withSetter(),
+    currentNetworkName: p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.BSC).withSetter(),
     gasStation: p(t.model<GasStation>(GasStation), () => {
         const gs = new GasStation({});
         gs.init();
