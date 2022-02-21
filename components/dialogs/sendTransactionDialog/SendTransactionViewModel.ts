@@ -7,6 +7,7 @@ import { getSnapshot } from "mobx-keystone";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { inject } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "../selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
+import { capitalize } from "../../../utils/general";
 
 export class SendTransactionViewModel {
     display = false
@@ -191,11 +192,11 @@ export class SendTransactionViewModel {
 
     get token(): Token | any {
         return {
-            name: "Ethereum",
-            symbol: "ETH",
+            name: capitalize(getEVMProvider().currentNetwork.nativeCoin),
+            symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
             formatFiatBalance: this.wallet?.formatFiatBalance,
             formatBalance: this.wallet?.formatBalance,
-            logo: "ethereum",
+            logo: getEVMProvider().currentNetwork.nativeCoin,
             fiatBalance: this.wallet?.fiatBalance,
             decimals: 18,
             priceUSD: this.wallet?.prices.usd,
