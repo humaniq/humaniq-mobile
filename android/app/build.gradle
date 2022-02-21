@@ -141,8 +141,8 @@ android {
         applicationId "com.humaniqmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "0.9.0"
+        versionCode 4
+        versionName "1.0.0"
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')

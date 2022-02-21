@@ -96,7 +96,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                 <Text black text16 robotoM>{ view.transaction.formatFiatValue }</Text>
                                 <Text text-grey
                                       robotoR
-                                      text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                      text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                             </View>
 
                         </View>
@@ -111,7 +111,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                           robotoM>{ currencyFormat(view.transaction.fiatFee, getWalletStore().currentFiatCurrency) }</Text>
                                     <Text text-grey
                                           robotoR
-                                          text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                          text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>
                             </View>
                         </View>
@@ -127,7 +127,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                           robotoM>{ currencyFormat(view.transaction.fiatTotal, getWalletStore().currentFiatCurrency) }</Text>
                                     <Text text-grey
                                           robotoR
-                                          text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                          text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>
                             </View>
                         </View>

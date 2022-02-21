@@ -192,7 +192,7 @@ App.register(
     // QRScannerView
 )
 
-if(isDev) {
+if(!isDev) {
     Sentry.init({
         dsn: CENTRY_URL,
         tracesSampleRate: 1.0,
