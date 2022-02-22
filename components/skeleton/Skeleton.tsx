@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useRef } from "react";
 import { Animated, Easing, StyleProp, View, ViewStyle } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { Colors } from "react-native-ui-lib";
+import { SCREEN_WIDTH } from "../../utils/screenUtils";
 
 export enum SkeletonTemplateTypes {
     TRANSACTION_LIST = 'transaction_list',
@@ -460,22 +461,9 @@ export const SkeletonView = ({
                     shimDuration={ style.shimDuration }
                     shimEnabled={ style.shimEnabled }
                     wrapperStyle={ {
-                        flex: 0.5,
+                        flex: 1,
                         borderRadius: style.buttonBorderRadius,
                         marginRight: 8
-                    } }
-                    delay={ style.delay }
-                    colors={ style.colors }/>
-                <Skeleton
-                    width={ style.buttonWidth }
-                    height={ style.buttonHeight }
-                    isLoading={ isLoading }
-                    shimDuration={ style.shimDuration }
-                    shimEnabled={ style.shimEnabled }
-                    wrapperStyle={ {
-                        flex: 0.5,
-                        borderRadius: style.buttonBorderRadius,
-                        marginLeft: 8
                     } }
                     delay={ style.delay }
                     colors={ style.colors }/>
@@ -510,7 +498,7 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplateTypes) => {
     if (type === SkeletonTemplateTypes.TRANSACTION_LIST) {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 1000,
+            delay: 800,
             shimDuration: 400,
             shimEnabled: true,
             isAvatar: true,
@@ -526,7 +514,7 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplateTypes) => {
     } else if (type === SkeletonTemplateTypes.WALLET) {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 1000,
+            delay: 800,
             shimDuration: 400,
             shimEnabled: true,
             isAvatar: true,
@@ -535,14 +523,14 @@ const getDefaultSkeletonStyle = (type: SkeletonTemplateTypes) => {
             titleHeight: 16,
             subTitleWidth: 150,
             subTitleHeight: 14,
-            buttonWidth: 200,
+            buttonWidth: SCREEN_WIDTH,
             buttonHeight: 40,
             buttonBorderRadius: 0,
         } as SkeletonWalletStyle
     } else {
         return {
             colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 1000,
+            delay: 800,
             shimDuration: 400,
             shimEnabled: true,
             rowWidth: 140,
