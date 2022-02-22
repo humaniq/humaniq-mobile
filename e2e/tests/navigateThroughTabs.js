@@ -4,7 +4,6 @@ export const navigateThroughTabs = () => {
     describe('Navigate through tabs', () => {
         beforeAll(async () => {
             await device.launchApp();
-            await inputPinCode()
         });
 
         it('Go to settings tab', async () => {

@@ -1,10 +1,10 @@
-import {inputPinCode} from "../elements/setPincode";
 import {selfAddresses} from "../env";
+import {inputPinCode} from "../elements/setPincode";
 
 export const browserScreen = () => {
     describe('Browser screen', () => {
         beforeAll(async () => {
-            await device.launchApp();
+            await device.launchApp({newInstance: true});
             await inputPinCode()
             await element(by.id('tab-browser')).tap()
         });

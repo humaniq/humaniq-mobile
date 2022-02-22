@@ -5,13 +5,12 @@ import {inputPinCode} from "../elements/setPincode";
 export const walletScreens = () => {
     describe('Wallet screen', () => {
         beforeAll(async () => {
-            await device.launchApp();
-            try {
-                await inputPinCode()
-            } catch (e) {
-                await element(by.id('loginWalletBtn')).tap()
-                await inputPinCode()
-            }
+            await device.launchApp({newInstance: true});
+            await inputPinCode()
+            await element(by.id('tab-settings')).tap()
+            await element(by.id(`menuItem-network`)).tap()
+            await element(by.id(`itemSelector-rinkeby`)).tap()
+            await element(by.id('tab-wallet')).tap()
         });
 
         it('Wallets List Screen', async () => {
@@ -40,11 +39,11 @@ export const walletScreens = () => {
             await element(by.id(`changeCurrentFiatCurrency-${selfAddresses[0]}`)).tap()
         })
 
-        it('Self address qr code dialog', async () => {
-            await element(by.id(`selfAddressQrCode-${selfAddresses[0]}`)).tap()
-            await expect(element(by.id(`selfAddressQrCodeDialog`))).toBeVisible()
-            await element(by.id(`copyAddress`)).tap()
-        })
+        // it('Self address qr code dialog', async () => {
+        //     await element(by.id(`selfAddressQrCode-${selfAddresses[0]}`)).tap()
+        //     await expect(element(by.id(`selfAddressQrCodeDialog`))).toBeVisible()
+        //     await element(by.id(`copyAddress`)).tap()
+        // })
 
         it('Open ERC20 transaction list', async () => {
             await element(by.id(`tokenItem-USDT`)).tap()
