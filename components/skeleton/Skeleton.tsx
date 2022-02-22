@@ -6,6 +6,7 @@ import { Colors } from "react-native-ui-lib"
 const DELAY_DURATION = 1000
 const SHIM_DURATION = 500
 const SKELETON_COLORS = [ Colors.rgba("#e0e0e0", 0.4), Colors.rgba("#c5c5c5", 0.5), "#ebebeb" ]
+const GRADIENT_LOCATIONS = [ 0.3, 0.5, 0.7 ]
 
 export enum SkeletonTemplateTypes {
     TRANSACTION_LIST = 'transaction_list',
@@ -252,32 +253,30 @@ export const Skeleton = ({
             { overflow: 'hidden' },
             wrapperStyle,
         ] }>
-            { isLoading && (
-                <View style={ { flex: 1, backgroundColor: bgColor, overflow: 'hidden' } }>
-                    <Animated.View style={ {
-                        flex: 1,
-                        transform: [ {
-                            translateX: shimAnimation.interpolate({
-                                inputRange: [ -1, 1 ],
-                                outputRange: [ -width, width ],
-                            })
-                        } ]
-                    } }>
-                        <LinearGradient
-                            colors={ colors }
-                            style={ { flex: 1, width } }
-                            start={ {
-                                x: -1,
-                                y: 0.5,
-                            } }
-                            end={ {
-                                x: 2,
-                                y: 0.5,
-                            } }
-                            locations={ [ 0.3, 0.5, 0.7 ] }/>
-                    </Animated.View>
-                </View>
-            ) }
+            { isLoading && <View style={ { flex: 1, backgroundColor: bgColor, overflow: 'hidden' } }>
+                <Animated.View style={ {
+                    flex: 1,
+                    transform: [ {
+                        translateX: shimAnimation.interpolate({
+                            inputRange: [ -1, 1 ],
+                            outputRange: [ -width, width ],
+                        })
+                    } ]
+                } }>
+                    <LinearGradient
+                        colors={ colors }
+                        style={ { flex: 1, width } }
+                        start={ {
+                            x: -1,
+                            y: 0.5,
+                        } }
+                        end={ {
+                            x: 2,
+                            y: 0.5,
+                        } }
+                        locations={ GRADIENT_LOCATIONS }/>
+                </Animated.View>
+            </View> }
         </View>
     );
 };
@@ -294,7 +293,7 @@ export const Skeleton = ({
  */
 export const SkeletonView = ({
                                  type = SkeletonTemplateTypes.TRANSACTION_LIST,
-                                 isLoading = true,
+                                 isLoading = false,
                                  skeletonProps = {} as any,
                                  containerStyle = {},
                                  contentStyle = {}
