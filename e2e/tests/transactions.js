@@ -1,12 +1,11 @@
-import {inputPinCode} from "../elements/setPincode";
 import {selfAddresses} from "../env";
-import {sleep} from "../elements/utills";
+import {inputPinCode} from "../elements/setPincode";
 
 export const transactions = () => {
     describe('Transactions', () => {
 
         beforeAll(async () => {
-            await device.launchApp();
+            await device.launchApp({newInstance: true});
             await inputPinCode()
             await element(by.id('tab-wallet')).tap()
         });

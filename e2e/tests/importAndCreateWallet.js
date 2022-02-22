@@ -8,14 +8,15 @@ export const importAndCreateWallet = () => {
             await device.launchApp({newInstance: true});
         });
 
-        // it('Create wallet', async () => {
-        //     await element(by.id('createWalletBtn')).tap()
-        //     await expect(element(by.id('lockerScreen'))).toBeVisible()
-        //     await setPinCode()
-        //     await expect(element(by.id('allAddressesOrCreateWalletBtn'))).toBeVisible()
-        // })
+        it('Create wallet', async () => {
+            await element(by.id('createWalletBtn')).tap()
+            await expect(element(by.id('lockerScreen'))).toBeVisible()
+            await setPinCode()
+            await expect(element(by.id('allAddressesOrCreateWalletBtn'))).toBeVisible()
+        })
 
         it('Import wallet', async () => {
+            await element(by.id(`backBtn`)).tap()
             await importWallet()
         });
     })
