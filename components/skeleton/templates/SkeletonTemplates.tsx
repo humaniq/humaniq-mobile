@@ -45,7 +45,7 @@ export const TransactionListScreenSkeleton = ({
             marginHorizontal: 16
         } }/>
 
-        <SkeletonView type={ SkeletonTemplateTypes.TRANSACTION_LIST } containerStyle={ { marginTop: 22 } }/>
+        <SkeletonView isLoading={ isLoading } type={ SkeletonTemplateTypes.TRANSACTION_LIST } containerStyle={ { marginTop: 22 } }/>
     </View>
 }
 

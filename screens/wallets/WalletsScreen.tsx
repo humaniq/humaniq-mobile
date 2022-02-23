@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Colors, View } from "react-native-ui-lib";
+import { Button, Colors, LoaderScreen, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { WalletsScreenModel } from "./WalletsScreenModel";
 
@@ -19,7 +19,6 @@ import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
 import { useNavigation } from "@react-navigation/native";
 import { getWalletStore } from "../../App";
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
-import { WalletListScreenSkeleton } from "../../components/skeleton/templates/SkeletonTemplates";
 
 const renderTittle = ({ item }) => <WalletTittle { ...item } />
 const renderBody = ({ item }) => <WalletBody { ...item } />
@@ -104,7 +103,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                     </View>
                 </> }
                 {
-                    !view.allInitialized && <WalletListScreenSkeleton/>
+                    !view.allInitialized && <LoaderScreen/>
                 }
             </>
         </Screen> }

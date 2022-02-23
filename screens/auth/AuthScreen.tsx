@@ -123,7 +123,7 @@ const Auth = observer(function () {
                                         fontFamily: "Roboto-Medium"
                                     } : {
                                         left: 12,
-                                        top: 13,
+                                        top: 12,
                                         backgroundColor: Colors.white,
                                         zIndex: 10,
                                         paddingLeft: 4,
