@@ -12,7 +12,6 @@ import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
 import { Splash } from "../../components/splash/Splash";
-import { toLowerCase } from "../../utils/general";
 
 const Auth = observer(function () {
     const view = useInstance(AuthViewModel)
@@ -124,7 +123,7 @@ const Auth = observer(function () {
                                         fontFamily: "Roboto-Medium"
                                     } : {
                                         left: 12,
-                                        top: 11,
+                                        top: 12,
                                         backgroundColor: Colors.white,
                                         zIndex: 10,
                                         paddingLeft: 4,
@@ -144,13 +143,15 @@ const Auth = observer(function () {
                                         borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
                                     } }
                                 />
-                                <Text text10 robotoR marginR-6 style={ {
-                                    color: Colors.textGrey,
-                                    alignSelf: "flex-end"
-                                } }>{ `${ toLowerCase(t("common.words")) }: ${ view.wordsCount }` }</Text>
-                                <Text text14 robotoR marginL-10 style={ {
-                                    color: view.isInvalidRecover ? Colors.error : Colors.textGrey
-                                } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
+                                <View row paddingL-10 paddingT-4 style={ { alignItems: "center", justifyContent: "space-between" } }>
+                                    <Text robotoR style={ {
+                                        fontSize: 13,
+                                        color: view.isInvalidRecover ? Colors.error : Colors.textGrey
+                                    } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
+                                    <Text text14 robotoM style={ {
+                                        color: Colors.textGrey,
+                                    } }>{ `${ t("common.words") }:${ view.wordsCount }` }</Text>
+                                </View>
                             </View>
                             <View flex-5 bottom paddingB-20 paddingH-16>
                                 <Button

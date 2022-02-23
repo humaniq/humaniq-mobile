@@ -1,13 +1,18 @@
-import React, { ReactNode, useEffect, useRef } from "react";
-import { Animated, Easing, StyleProp, View, ViewStyle } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { Colors } from "react-native-ui-lib";
-import { SCREEN_WIDTH } from "../../utils/screenUtils";
+import React, { useEffect, useRef } from "react"
+import { Animated, Easing, StyleProp, View, ViewStyle } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
+import { Colors } from "react-native-ui-lib"
+
+const DELAY_DURATION = 1000
+const SHIM_DURATION = 500
+const SKELETON_COLORS = [ Colors.rgba("#e0e0e0", 0.4), Colors.rgba("#c5c5c5", 0.5), "#ebebeb" ]
+const GRADIENT_LOCATIONS = [ 0.3, 0.5, 0.7 ]
 
 export enum SkeletonTemplateTypes {
     TRANSACTION_LIST = 'transaction_list',
-    WALLET = 'wallet',
-    ROW = 'row',
+    WALLET_BUTTONS = 'wallet_buttons',
+    AVATAR = 'avatar',
+    ROW = 'row'
 }
 
 export interface SkeletonProps {
@@ -48,27 +53,19 @@ export interface SkeletonProps {
      * Skeleton container style.
      */
     wrapperStyle?: StyleProp<ViewStyle>;
-    /**
-     * Skeleton children style.
-     */
-    childrenStyle?: StyleProp<ViewStyle>;
-    /**
-     * React children.
-     */
-    children?: ReactNode;
 }
 
 export interface SkeletonViewProps {
     /**
      * The type of the skeleton view.
-     * Types: TRANSACTION_LIST, WALLET and ROW
+     * Types: TRANSACTION_LIST, WALLET_BUTTONS, AVATAR and ROW
      */
     type?: SkeletonTemplateTypes;
     /**
      * Skeleton view props based on type.
-     * Types: TRANSACTION_LIST, WALLET and ROW
+     * Types: TRANSACTION_LIST, WALLET_BUTTONS, AVATAR and ROW
      */
-    skeletonProps?: SkeletonListStyle | SkeletonWalletStyle | SkeletonRowStyle;
+    skeletonProps?: SkeletonListStyle | SkeletonWalletButtonsStyle | SkeletonAvatarStyle | SkeletonRowStyle;
     /**
      * Skeleton view container style.
      */
@@ -81,10 +78,6 @@ export interface SkeletonViewProps {
      * Whether skeleton view is loading.
      */
     isLoading?: boolean;
-    /**
-     * React children.
-     */
-    children?: ReactNode;
 }
 
 export interface SkeletonStyle {
@@ -144,49 +137,40 @@ export interface SkeletonListStyle extends SkeletonStyle {
      */
     isDivider?: boolean;
     /**
+     * Divider color if enabled
+     */
+    dividerColor?: string;
+    /**
      * List item avatar radius, if enabled.
      * By default avatar is circle.
      */
     avatarRadius?: number;
 }
 
-export interface SkeletonWalletStyle extends SkeletonStyle {
+export interface SkeletonWalletButtonsStyle extends SkeletonStyle {
     /**
-     * Button width.
+     * Width of the button.
      */
-    buttonWidth?: number;
+    buttonWidth?: number,
     /**
-     * Button height.
+     * Height of the button.
      */
-    buttonHeight?: number;
+    buttonHeight?: number,
     /**
      * Button border radius.
      */
-    buttonBorderRadius?: number;
-    /**
-     * Wallet title width.
-     */
-    titleWidth?: number;
-    /**
-     * Wallet title height.
-     */
-    titleHeight?: number;
-    /**
-     * Wallet subTitle width.
-     */
-    subTitleWidth?: number;
-    /**
-     * Wallet subTitle height.
-     */
-    subTitleHeight?: number;
-    /**
-     * Whether avatar is enabled.
-     */
-    isAvatar?: boolean;
+    borderRadius?: number,
+}
+
+export interface SkeletonAvatarStyle extends SkeletonStyle {
     /**
      * Size of the avatar if enabled.
      */
     avatarSize?: number;
+    /**
+     * Avatar border radius.
+     */
+    borderRadius?: number;
 }
 
 export interface SkeletonRowStyle extends SkeletonStyle {
@@ -215,13 +199,11 @@ export interface SkeletonRowStyle extends SkeletonStyle {
  * @param height
  * @param isLoading
  * @param wrapperStyle
- * @param contentStyle
  * @param shimDuration
  * @param shimEnabled
  * @param delay
  * @param colors
  * @param backgroundColor
- * @param children
  * @constructor
  */
 export const Skeleton = ({
@@ -233,8 +215,6 @@ export const Skeleton = ({
                              delay,
                              colors,
                              wrapperStyle = {},
-                             childrenStyle = {},
-                             children,
                              backgroundColor
                          }: SkeletonProps) => {
     const bgColor = backgroundColor || colors[0]
@@ -273,36 +253,30 @@ export const Skeleton = ({
             { overflow: 'hidden' },
             wrapperStyle,
         ] }>
-            <View style={ [
-                isLoading && { width: 0, height: 0, opacity: 0 },
-                !isLoading && childrenStyle,
-            ] }>{ children }</View>
-            { isLoading && (
-                <View style={ { flex: 1, backgroundColor: bgColor, overflow: 'hidden' } }>
-                    <Animated.View style={ {
-                        flex: 1,
-                        transform: [ {
-                            translateX: shimAnimation.interpolate({
-                                inputRange: [ -1, 1 ],
-                                outputRange: [ -width, width ],
-                            })
-                        } ]
-                    } }>
-                        <LinearGradient
-                            colors={ colors }
-                            style={ { flex: 1, width } }
-                            start={ {
-                                x: -1,
-                                y: 0.5,
-                            } }
-                            end={ {
-                                x: 2,
-                                y: 0.5,
-                            } }
-                            locations={ [ 0.3, 0.5, 0.7 ] }/>
-                    </Animated.View>
-                </View>
-            ) }
+            { isLoading && <View style={ { flex: 1, backgroundColor: bgColor, overflow: 'hidden' } }>
+                <Animated.View style={ {
+                    flex: 1,
+                    transform: [ {
+                        translateX: shimAnimation.interpolate({
+                            inputRange: [ -1, 1 ],
+                            outputRange: [ -width, width ],
+                        })
+                    } ]
+                } }>
+                    <LinearGradient
+                        colors={ colors }
+                        style={ { flex: 1, width } }
+                        start={ {
+                            x: -1,
+                            y: 0.5,
+                        } }
+                        end={ {
+                            x: 2,
+                            y: 0.5,
+                        } }
+                        locations={ GRADIENT_LOCATIONS }/>
+                </Animated.View>
+            </View> }
         </View>
     );
 };
@@ -312,7 +286,6 @@ export const Skeleton = ({
  *
  * @param type
  * @param isLoading
- * @param children
  * @param skeletonProps
  * @param containerStyle
  * @param contentStyle
@@ -320,7 +293,7 @@ export const Skeleton = ({
  */
 export const SkeletonView = ({
                                  type = SkeletonTemplateTypes.TRANSACTION_LIST,
-                                 isLoading = true,
+                                 isLoading = false,
                                  skeletonProps = {} as any,
                                  containerStyle = {},
                                  contentStyle = {}
@@ -333,218 +306,204 @@ export const SkeletonView = ({
         return <View
             style={ [ { backgroundColor: Colors.white, marginHorizontal: 16, borderRadius: 16 }, containerStyle ] }>
             { [ ...Array(style.itemsCount).keys() ].map((item, index) => {
-                return <View key={ `skeleton_list_item_${ index }` }
-                             style={ [ { flexDirection: 'row' }, {
-                                 marginHorizontal: 16,
-                                 marginVertical: 16
-                             }, contentStyle ] }>
-                    { style.isAvatar && <View style={ { alignItems: "center", justifyContent: "center" } }>
-                        <Skeleton
-                            width={ style.avatarSize }
-                            height={ style.avatarSize }
-                            isLoading={ isLoading }
-                            shimDuration={ style.shimDuration }
-                            shimEnabled={ style.shimEnabled }
-                            wrapperStyle={ {
-                                marginRight: 10,
-                                borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
-                            } }
-                            delay={ style.delay }
-                            colors={ style.colors }/></View> }
-                    <View style={ [ { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
-                        style.isDivider && dividerDefaultStyles
-                    ] }>
-                        <View style={ { justifyContent: "center" } }>
-                            { [ ...Array(style.rowCount).keys() ].map((item, index) => {
-                                return <View key={ `skeleton_content_row_item_${ index }` }
-                                             style={ { flexDirection: "row", alignItems: "center" } }>
-                                    <View style={ { overflow: 'hidden' } }>
-                                        <Skeleton
-                                            width={ index % 2 !== 0 ? style.rowWidth : style.rowWidth / 1.3 }
-                                            height={ style.rowHeight }
-                                            isLoading={ isLoading }
-                                            colors={ style.colors }
-                                            delay={ style.delay }
-                                            shimDuration={ style.shimDuration }
-                                            shimEnabled={ style.shimEnabled }
-                                            wrapperStyle={ {
-                                                marginTop: index === 0 ? 0 : style.rowMargin,
-                                                borderRadius: style.rowBorderRadius
-                                            } }/></View>
-                                </View>
-                            }) }
-                        </View>
+                return <View key={ `skeleton_list_item_${ index }` }>
+                    <View style={ [ { flexDirection: 'row' }, {
+                        marginHorizontal: 12,
+                        marginVertical: 16,
+                    }, contentStyle ] }>
+                        { style.isAvatar && <View style={ { alignItems: "center", justifyContent: "center" } }>
+                            <Skeleton
+                                width={ style.avatarSize }
+                                height={ style.avatarSize }
+                                isLoading={ isLoading }
+                                shimDuration={ style.shimDuration }
+                                shimEnabled={ style.shimEnabled }
+                                wrapperStyle={ {
+                                    marginRight: 10,
+                                    borderRadius: typeof style.avatarRadius === 'number' ? style.avatarRadius : style.avatarSize / 2
+                                } }
+                                delay={ style.delay }
+                                colors={ style.colors }/></View> }
+                        <View style={ {
+                            flex: 1,
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between"
+                        } }>
+                            <View style={ { justifyContent: "center" } }>
+                                { [ ...Array(style.rowCount).keys() ].map((item, index) => {
+                                    return <View key={ `skeleton_content_row_item_${ index }` }
+                                                 style={ { flexDirection: "row", alignItems: "center" } }>
+                                        <View style={ { overflow: 'hidden' } }>
+                                            <Skeleton
+                                                width={ index % 2 === 0 ? style.rowWidth : style.rowWidth / 2 }
+                                                height={ style.rowHeight }
+                                                isLoading={ isLoading }
+                                                colors={ style.colors }
+                                                delay={ style.delay }
+                                                shimDuration={ style.shimDuration }
+                                                shimEnabled={ style.shimEnabled }
+                                                wrapperStyle={ {
+                                                    marginTop: index === 0 ? 0 : style.rowMargin,
+                                                    borderRadius: style.rowBorderRadius
+                                                } }/></View>
+                                    </View>
+                                }) }
+                            </View>
 
-                        <View style={ { alignItems: "center" } }>
-                            <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
-                                <Skeleton
-                                    width={ 60 }
-                                    height={ style.rowHeight }
-                                    isLoading={ isLoading }
-                                    colors={ style.colors }
-                                    delay={ style.delay }
-                                    shimDuration={ style.shimDuration }
-                                    shimEnabled={ style.shimEnabled }
-                                    wrapperStyle={ {
-                                        borderRadius: style.rowBorderRadius
-                                    } }/></View>
-                            <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
-                                <Skeleton
-                                    width={ 70 }
-                                    height={ style.rowHeight }
-                                    isLoading={ isLoading }
-                                    colors={ style.colors }
-                                    delay={ style.delay }
-                                    shimDuration={ style.shimDuration }
-                                    shimEnabled={ style.shimEnabled }
-                                    wrapperStyle={ {
-                                        marginTop: style.rowMargin,
-                                        borderRadius: style.rowBorderRadius
-                                    } }/></View>
+                            <View style={ { alignItems: "center" } }>
+                                <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
+                                    <Skeleton
+                                        width={ 64 }
+                                        height={ style.rowHeight }
+                                        isLoading={ isLoading }
+                                        colors={ style.colors }
+                                        delay={ style.delay }
+                                        shimDuration={ style.shimDuration }
+                                        shimEnabled={ style.shimEnabled }
+                                        wrapperStyle={ {
+                                            borderRadius: style.rowBorderRadius
+                                        } }/></View>
+                                <View style={ { overflow: 'hidden', alignSelf: "flex-end" } }>
+                                    <Skeleton
+                                        width={ 36 }
+                                        height={ style.rowHeight }
+                                        isLoading={ isLoading }
+                                        colors={ style.colors }
+                                        delay={ style.delay }
+                                        shimDuration={ style.shimDuration }
+                                        shimEnabled={ style.shimEnabled }
+                                        wrapperStyle={ {
+                                            marginTop: style.rowMargin,
+                                            borderRadius: style.rowBorderRadius
+                                        } }/></View>
+                            </View>
                         </View>
                     </View>
+                    { style.isDivider && index !== style.itemsCount - 1 && <View style={ {
+                        height: 1,
+                        backgroundColor: style.dividerColor,
+                    } }/> }
                 </View>
             }) }
         </View>
-    } else if (type === SkeletonTemplateTypes.WALLET) {
-        style = { ...getDefaultSkeletonStyle(type) as SkeletonWalletStyle, ...skeletonProps }
+    } else if (type === SkeletonTemplateTypes.AVATAR) {
+        style = { ...getDefaultSkeletonStyle(type) as SkeletonAvatarStyle, ...skeletonProps }
 
-        return <View>
-            <View style={ { alignItems: "center", justifyContent: "center", paddingTop: 10 } }>
-                <Skeleton
-                    width={ style.avatarSize }
-                    height={ style.avatarSize }
-                    isLoading={ isLoading }
-                    shimDuration={ style.shimDuration }
-                    shimEnabled={ style.shimEnabled }
-                    delay={ style.delay }
-                    colors={ style.colors }/>
-            </View>
-
-            <View style={ { alignItems: "center", justifyContent: "center" } }>
-                <Skeleton
-                    width={ style.titleWidth }
-                    height={ style.titleHeight }
-                    isLoading={ isLoading }
-                    shimDuration={ style.shimDuration }
-                    shimEnabled={ style.shimEnabled }
-                    wrapperStyle={ {
-                        marginTop: 8
-                    } }
-                    delay={ style.delay }
-                    colors={ style.colors }/>
-
-                <Skeleton
-                    width={ style.subTitleWidth }
-                    height={ style.subTitleHeight }
-                    isLoading={ isLoading }
-                    shimDuration={ style.shimDuration }
-                    shimEnabled={ style.shimEnabled }
-                    wrapperStyle={ {
-                        marginTop: 6
-                    } }
-                    delay={ style.delay }
-                    colors={ style.colors }/>
-            </View>
-
-            <View style={ {
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "center",
+        return <Skeleton
+            width={ style.avatarSize }
+            height={ style.avatarSize }
+            isLoading={ isLoading }
+            shimDuration={ style.shimDuration }
+            shimEnabled={ style.shimEnabled }
+            wrapperStyle={ [ {
+                borderRadius: style.borderRadius ?? style.avatarSize / 2,
                 marginHorizontal: 16,
-                marginTop: 20
-            } }>
-                <Skeleton
-                    width={ style.buttonWidth }
-                    height={ style.buttonHeight }
-                    isLoading={ isLoading }
-                    shimDuration={ style.shimDuration }
-                    shimEnabled={ style.shimEnabled }
-                    wrapperStyle={ {
-                        flex: 1,
-                        borderRadius: style.buttonBorderRadius,
-                        marginRight: 8
-                    } }
-                    delay={ style.delay }
-                    colors={ style.colors }/>
-            </View>
-        </View>
-    } else {
-        style = { ...getDefaultSkeletonStyle(type) as SkeletonRowStyle, ...skeletonProps }
+            }, containerStyle
+            ] }
+            delay={ style.delay }
+            colors={ style.colors }/>
+    } else if (type === SkeletonTemplateTypes.WALLET_BUTTONS) {
+        style = { ...getDefaultSkeletonStyle(type) as SkeletonWalletButtonsStyle, ...skeletonProps }
 
-        return <View style={ { marginHorizontal: 16, marginTop: 16, marginBottom: 6 } }>
+        return <View style={ [ {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+        }, containerStyle ] }>
             <Skeleton
-                width={ style.rowWidth }
-                height={ style.rowHeight }
+                width={ style.buttonWidth }
+                height={ style.buttonHeight }
                 isLoading={ isLoading }
                 shimDuration={ style.shimDuration }
                 shimEnabled={ style.shimEnabled }
                 wrapperStyle={ {
-                    marginTop: 8
+                    flex: 0.5,
+                    borderRadius: style.borderRadius,
+                    marginRight: 8
+                } }
+                delay={ style.delay }
+                colors={ style.colors }/>
+            <Skeleton
+                width={ style.buttonWidth }
+                height={ style.buttonHeight }
+                isLoading={ isLoading }
+                shimDuration={ style.shimDuration }
+                shimEnabled={ style.shimEnabled }
+                wrapperStyle={ {
+                    flex: 0.5,
+                    borderRadius: style.borderRadius,
+                    marginLeft: 8
                 } }
                 delay={ style.delay }
                 colors={ style.colors }/>
         </View>
+    } else {
+        style = { ...getDefaultSkeletonStyle(type) as SkeletonRowStyle, ...skeletonProps }
+
+        return <Skeleton
+            width={ style.rowWidth }
+            height={ style.rowHeight }
+            isLoading={ isLoading }
+            shimDuration={ style.shimDuration }
+            shimEnabled={ style.shimEnabled }
+            wrapperStyle={ [ { borderRadius: style.rowBorderRadius }, containerStyle ] }
+            delay={ style.delay }
+            colors={ style.colors }/>
     }
 }
 
 /**
  * Default values of the skeleton view styles
- * Based on skeleton types: TRANSACTION_LIST, WALLET and ROW
+ * Based on skeleton types: TRANSACTION_LIST, WALLET_BUTTONS, AVATAR and ROW
  *
  * @param type
  */
 const getDefaultSkeletonStyle = (type: SkeletonTemplateTypes) => {
     if (type === SkeletonTemplateTypes.TRANSACTION_LIST) {
         return {
-            colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 800,
-            shimDuration: 400,
+            colors: SKELETON_COLORS,
+            delay: DELAY_DURATION,
+            shimDuration: SHIM_DURATION,
             shimEnabled: true,
             isAvatar: true,
-            isDivider: false,
+            isDivider: true,
             rowCount: 2,
-            rowMargin: 14,
-            rowWidth: 150,
-            rowHeight: 14,
-            rowBorderRadius: 0,
-            itemsCount: 10,
-            avatarSize: 40
+            rowMargin: 11,
+            rowWidth: 138,
+            rowHeight: 11,
+            rowBorderRadius: 12,
+            itemsCount: 3,
+            avatarSize: 46,
+            dividerColor: Colors.rgba("#e0e0e0", 0.4)
         } as SkeletonListStyle
-    } else if (type === SkeletonTemplateTypes.WALLET) {
+    } else if (type === SkeletonTemplateTypes.AVATAR) {
         return {
-            colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 800,
-            shimDuration: 400,
+            colors: SKELETON_COLORS,
+            delay: DELAY_DURATION,
+            shimDuration: SHIM_DURATION,
             shimEnabled: true,
-            isAvatar: true,
             avatarSize: 80,
-            titleWidth: 80,
-            titleHeight: 16,
-            subTitleWidth: 150,
-            subTitleHeight: 14,
-            buttonWidth: SCREEN_WIDTH,
-            buttonHeight: 40,
-            buttonBorderRadius: 0,
-        } as SkeletonWalletStyle
+        } as SkeletonAvatarStyle
+    } else if (type === SkeletonTemplateTypes.WALLET_BUTTONS) {
+        return {
+            colors: SKELETON_COLORS,
+            delay: DELAY_DURATION,
+            shimDuration: SHIM_DURATION,
+            shimEnabled: true,
+            buttonWidth: 200,
+            buttonHeight: 42,
+            borderRadius: 12
+        } as SkeletonWalletButtonsStyle
     } else {
         return {
-            colors: [ "#ebebeb", "#c5c5c5", "#ebebeb" ],
-            delay: 800,
-            shimDuration: 400,
+            colors: SKELETON_COLORS,
+            delay: DELAY_DURATION,
+            shimDuration: SHIM_DURATION,
             shimEnabled: true,
             rowWidth: 140,
             rowHeight: 16,
             rowBorderRadius: 0,
         } as SkeletonRowStyle
     }
-}
-
-/**
- * Default style of the list item divider
- */
-const dividerDefaultStyles = {
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.grey,
-    paddingBottom: 6,
 }
