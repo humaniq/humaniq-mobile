@@ -123,6 +123,16 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 /**
  * Architectures to build native code for in debug.
  */
@@ -158,17 +168,21 @@ android {
     }
     signingConfigs {
         debug {
-            storeFile file('humaniqmobile.keystore')
-            storePassword '123456'
-            keyAlias 'com.humaniqmobile'
-            keyPassword '123456'
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['UPLOAD_STORE_FILE'])
+                storePassword keystoreProperties['UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProperties['UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProperties['UPLOAD_KEY_PASSWORD']
+            }
         }
         release {
-            storeFile file('humaniqmobile.keystore')
-            storePassword '123456'
-            keyAlias 'com.humaniqmobile'
-            keyPassword '123456'
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['UPLOAD_STORE_FILE'])
+                storePassword keystoreProperties['UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProperties['UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProperties['UPLOAD_KEY_PASSWORD']
             }
+        }
     }
     buildTypes {
         debug {
