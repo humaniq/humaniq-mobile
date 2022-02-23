@@ -65,6 +65,7 @@ Anyone is welcome to participate in the wallet development:
 # Building locally
 - install dependencies `yarn`
 - start development mode `yarn start` and second terminal `yarn android`
+- add keystore.properties file under android/app folder
 - build release `yarn build android` & `yarn release-android`
 
 # e2e test
