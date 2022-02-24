@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { observer } from "mobx-react-lite";
-import { Button, Colors, LoaderScreen, View } from "react-native-ui-lib";
+import { Button, Colors, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { WalletsScreenModel } from "./WalletsScreenModel";
 
 import { Screen } from "../../components";
 import Carousel from 'react-native-snap-carousel';
-import { Dimensions } from "react-native";
+import { Dimensions, InteractionManager } from "react-native";
 import { t } from "../../i18n";
 import { WalletTittle } from "./wallet/WalletTittle";
 import { WalletBody } from "./wallet/WalletBody";
@@ -34,7 +34,9 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
     const carouselBodyRef = useRef<Carousel<any>>()
 
     useEffect(() => {
-        view.init(route.params?.force)
+        InteractionManager.runAfterInteractions(async () => {
+            view.init(route.params?.force)
+        })
         nav.addListener('focus', async () => {
             if (!carouselBodyRef.current) return
             if (carouselBodyRef?.current.currentIndex !== getWalletStore().selectedWalletIndex) {
