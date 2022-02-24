@@ -35,7 +35,7 @@ import { RequestStore } from "./store/api/RequestStore"
 import { DictionaryStore } from "./store/dictionary/DictionaryStore"
 import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
-import { EthereumProvider } from "./store/provider/EthereumProvider"
+import { EVMProvider } from "./store/provider/EVMProvider"
 import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
 import {
     SendTransactionViewModel as LegacySendTransactonViewModel
@@ -96,8 +96,8 @@ const profileStore = createContext<ProfileStore>()
 export const getProfileStore = () => profileStore.getDefault()
 const providerStore = createContext<ProviderStore>()
 export const getProviderStore = () => providerStore.getDefault()
-const ethereumProvider = createContext<EthereumProvider>()
-export const getEthereumProvider = () => ethereumProvider.getDefault()
+const EVMProviderStore = createContext<EVMProvider>()
+export const getEVMProvider = () => EVMProviderStore.getDefault()
 const browserStore = createContext<BrowserStore>()
 export const getBrowserStore = () => browserStore.getDefault()
 
@@ -111,7 +111,7 @@ function createRootStore() {
     dictionaryStore.setDefault(rootStore.dictionaryStore)
     profileStore.setDefault(rootStore.profileStore)
     providerStore.setDefault(rootStore.providerStore)
-    ethereumProvider.setDefault(rootStore.providerStore.eth)
+    EVMProviderStore.setDefault(rootStore.providerStore.eth)
     browserStore.setDefault(rootStore.browserStore)
     return rootStore
 }
@@ -192,7 +192,7 @@ App.register(
     // QRScannerView
 )
 
-if(isDev) {
+if(!isDev) {
     Sentry.init({
         dsn: CENTRY_URL,
         tracesSampleRate: 1.0,

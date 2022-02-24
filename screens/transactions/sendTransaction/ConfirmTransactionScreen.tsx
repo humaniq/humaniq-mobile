@@ -8,9 +8,7 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { renderShortAddress } from "../../../utils/address";
 import { Header } from "../../../components/header/Header";
-import * as Animatable from "react-native-animatable";
-import { getEthereumProvider, getWalletStore } from "../../../App";
-import { currencyFormat } from "../../../utils/number";
+import { getEVMProvider } from "../../../App";
 
 export const ConfirmTransactionScreen = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -47,20 +45,19 @@ export const ConfirmTransactionScreen = observer(() => {
         <View centerV padding-16 paddingT-0>
             <View row spread centerV marginB-16>
                 <Text text16 robotoM>{ t("transactionScreen.howMany") }</Text>
-                <Button onPress={ () => {
-                    view.selectTransactionFeeDialog.wallet = view.walletAddress
-                    view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
-                    view.selectTransactionFeeDialog.display = true
-                } }
-                        link
-                >
-                    <Animatable.Text style={ { color: Colors.primary } }
-                                     animation={ getEthereumProvider().gasStation.pending ? "pulse" : undefined }
-                                     iterationCount={ "infinite" }
-                                     direction="alternate">
-                        { `${ view.selectedGasPriceLabel.toLowerCase() }  ${ currencyFormat(view.transactionFiatFee, getWalletStore().currentFiatCurrency) }` }
-                    </Animatable.Text>
-                </Button>
+                { !getEVMProvider().gasStation.isBSC &&
+                    <Button onPress={ () => {
+                        view.selectTransactionFeeDialog.wallet = view.walletAddress
+                        view.selectTransactionFeeDialog.gasLimit = view.txData.gasLimit
+                        view.selectTransactionFeeDialog.display = true
+                    } }
+                            link
+                    >
+                        <Text style={ { color: Colors.primary } }>
+                            { `${ t("transactionScreen.changeFee") }` }
+                        </Text>
+                    </Button>
+                }
             </View>
             <Card>
                 <View row spread padding-12 centerV>
@@ -79,7 +76,7 @@ export const ConfirmTransactionScreen = observer(() => {
                     </View>
                     <View right>
                         <Text robotoM text16>{ view.txHumanReadable.feeFiat }</Text>
-                        <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ "ETH" }` }</Text>
+                        <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                     </View>
                 </View>
                 <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>

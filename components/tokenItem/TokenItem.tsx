@@ -3,6 +3,7 @@ import { Avatar } from "../avatar/Avatar";
 import { getDictionary } from "../../App";
 import React from "react";
 import Ripple from "react-native-material-ripple";
+import { NATIVE_COIN } from "../../config/network";
 
 export interface TokenItemProps {
     symbol: string
@@ -24,11 +25,15 @@ export const TokenItem = (props: TokenItemProps) => {
             <View row centerV>
                 <View flex-2 center>
                     {
-                        props.logo === "ethereum" &&
-                        <Av size={ 44 } source={ require("../../assets/images/ethereum-logo.png") }/>
+                        props.logo === NATIVE_COIN.ETHEREUM &&
+                        <Av size={ 44 } source={ require(`../../assets/images/ethereum-logo.png`) }/>
                     }
                     {
-                        props.logo !== "ethereum" &&
+                        props.logo === NATIVE_COIN.BINANCECOIN &&
+                        <Av size={ 44 } source={ require(`../../assets/images/binancecoin-logo.png`) }/>
+                    }
+                    {
+                        (props.logo !== NATIVE_COIN.ETHEREUM && props.logo !== NATIVE_COIN.BINANCECOIN) &&
                         <Avatar address={ props.tokenAddress } size={ 44 }
                                 source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
                     }

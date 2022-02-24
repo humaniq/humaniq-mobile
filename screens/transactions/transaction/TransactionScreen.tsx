@@ -7,10 +7,11 @@ import { Screen } from "../../../components";
 import { t } from "../../../i18n";
 import { renderShortAddress } from "../../../utils/address";
 import { Linking } from "react-native";
-import { getEthereumProvider, getWalletStore } from "../../../App";
-import { TRANSACTION_STATUS } from "../../../store/wallet/transaction/EthereumTransaction";
+import { getEVMProvider, getWalletStore } from "../../../App";
+import { TRANSACTION_STATUS } from "../../../store/wallet/transaction/NativeTransaction";
 import { Header, ICON_HEADER } from "../../../components/header/Header";
 import { currencyFormat } from "../../../utils/number";
+import { EVM_NETWORKS_NAMES, NATIVE_COIN_SYMBOL } from "../../../config/network";
 
 const Transaction = observer<{ route: any }>(({ route }) => {
     const view = useInstance(TransactionScreenViewModel)
@@ -38,11 +39,13 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         t("transactionScreen.transactionDetails")
                     }</Text>
                     <Button onPress={ async () => {
-                        const baseUrl = getEthereumProvider().currentNetwork.type === "mainnet" ? "https://etherscan.io/tx/" : `https://${ getEthereumProvider().currentNetwork.type }.etherscan.io/tx/`
+                        const baseUrl = getEVMProvider().currentNetwork.nativeSymbol === NATIVE_COIN_SYMBOL.BNB ?
+                            getEVMProvider().currentNetwork.type === EVM_NETWORKS_NAMES.BSC ? "https://bscscan.com/tx/" : `https://testnet.bscscan.com/tx/`
+                            : getEVMProvider().currentNetwork.type === EVM_NETWORKS_NAMES.MAINNET ? "https://etherscan.io/tx/" : `https://${ getEVMProvider().currentNetwork.type }.etherscan.io/tx/`
                         const url = baseUrl + view.transaction.hash
                         await Linking.openURL(url)
                     }
-                    } robotoM link text14 label={ t("transactionScreen.viewOnEtherScan") }/>
+                    } robotoM link text14 label={ t("transactionScreen.viewOnEtherScan", { 0: getEVMProvider().currentNetwork.nativeSymbol === NATIVE_COIN_SYMBOL.BNB ? "BscScan" : "Etherscan" } ) }/>
                 </View>
                 <View padding-16>
                     <Card>
@@ -93,7 +96,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                 <Text black text16 robotoM>{ view.transaction.formatFiatValue }</Text>
                                 <Text text-grey
                                       robotoR
-                                      text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                      text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                             </View>
 
                         </View>
@@ -108,7 +111,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                           robotoM>{ currencyFormat(view.transaction.fiatFee, getWalletStore().currentFiatCurrency) }</Text>
                                     <Text text-grey
                                           robotoR
-                                          text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                          text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>
                             </View>
                         </View>
@@ -124,14 +127,14 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                           robotoM>{ currencyFormat(view.transaction.fiatTotal, getWalletStore().currentFiatCurrency) }</Text>
                                     <Text text-grey
                                           robotoR
-                                          text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || 'ETH' }` }</Text>
+                                          text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>
                             </View>
                         </View>
                         }
                     </Card>
                 </View>
-                { view.transaction.receiptStatus === TRANSACTION_STATUS.PENDING &&
+                { view.transaction.receiptStatus === TRANSACTION_STATUS.PENDING && getEVMProvider().currentNetwork.nativeSymbol !== NATIVE_COIN_SYMBOL.BNB &&
                     <View flex bottom padding-20>
                         <Button testID={ 'cancelTransaction' } disabled={ !view.transaction.canRewriteTransaction }
                                 onPress={ view.transaction.cancelTx }

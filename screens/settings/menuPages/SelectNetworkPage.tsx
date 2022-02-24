@@ -4,8 +4,8 @@ import { provider, useInstance } from "react-ioc";
 import { Colors } from "react-native-ui-lib";
 import { Screen } from "../../../components"
 import React from "react";
-import { ETHEREUM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
-import { getEthereumProvider } from "../../../App";
+import { EVM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
+import { getEVMProvider } from "../../../App";
 import * as storage from "../../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone";
 import { useNavigation } from "@react-navigation/native";
@@ -21,11 +21,11 @@ export class SelectNetworkPageViewModel {
         return [
             {
                 tittle: t("settingsScreen.menu.mainNets"),
-                items: Object.values(ETHEREUM_NETWORKS).filter(n => n.env === NETWORK_TYPE.PRODUCTION)
+                items: Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.PRODUCTION)
             },
             {
                 tittle: t("settingsScreen.menu.testNets"),
-                items: Object.values(ETHEREUM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST)
+                items: Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST)
             }
         ]
     }
@@ -37,11 +37,11 @@ export const SelectNetwork = observer(() => {
     const nav = useNavigation()
     return <Screen style={ { minHeight: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                    statusBarBg={ Colors.bg }>
-        <ItemSelector selected={ getEthereumProvider().currentNetworkName } items={ view.networks }
+        <ItemSelector selected={ getEVMProvider().currentNetworkName } items={ view.networks }
                       headerTittle={ t("settingsScreen.menu.network") }
                       onPressItem={ async (n) => {
                           runUnprotected(() => {
-                              getEthereumProvider().currentNetworkName = n.name
+                              getEVMProvider().currentNetworkName = n.name
                           })
                           storage.save("currentNetworkName", n.name)
                           nav.goBack()

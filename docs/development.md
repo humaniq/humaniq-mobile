@@ -30,6 +30,8 @@
     ...
 ```
 
+- delete `keytool -delete -keystore humaniqmobile.keystore -alias com.humaniqmobile -storepass 123456`
+
 ### Troubleshooting
 
 https://stackoverflow.com/questions/53239705/react-native-error-duplicate-resources-android

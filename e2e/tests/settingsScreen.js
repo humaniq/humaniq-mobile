@@ -3,7 +3,7 @@ import {inputPinCode, setPinCode} from "../elements/setPincode";
 export const settingsScreen = () => {
     describe('Settings screen', () => {
         beforeAll(async () => {
-            await device.launchApp();
+            await device.launchApp({newInstance: true});
             await inputPinCode()
             await element(by.id('tab-settings')).tap()
         });

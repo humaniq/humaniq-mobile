@@ -14,171 +14,171 @@ import { RootNavigation } from "../../navigators";
 export const PIN_LENGTH = 4
 
 export class LockerViewModel {
-  initialized = false
-  lastAppState: APP_STATE
-  pin = ""
-  disabled = false
-  settledPin = ""
-  confirmationPin = ""
-  step = 0
-  message: string
-  encrypted
-  incorrectCount = 0
-  isBioAvailable = false
-  isVibrationEnabled = true
+    initialized = false
+    lastAppState: APP_STATE
+    pin = ""
+    disabled = false
+    settledPin = ""
+    confirmationPin = ""
+    step = 0
+    message: string
+    encrypted
+    incorrectCount = 0
+    isBioAvailable = false
+    isVibrationEnabled = true
 
-  constructor() {
-    makeAutoObservable(this, {}, { autoBind: true })
-  }
+    constructor() {
+        makeAutoObservable(this, {}, { autoBind: true })
+    }
 
-  async init() {
-    this.encrypted = await localStorage.load("hm-wallet")
-    this.initialized = true
-    const { available } = await ReactNativeBiometrics.isSensorAvailable()
-    this.isBioAvailable = available
+    async init() {
+        this.encrypted = await localStorage.load("hm-wallet")
+        this.initialized = true
+        const { available } = await ReactNativeBiometrics.isSensorAvailable()
+        this.isBioAvailable = available
 
-    AppState.addEventListener("change", async (nextState) => {
-      if (nextState === "active" && this.mode === LOCKER_MODE.CHECK) {
-        setTimeout(async () => {
-          await this.checkBio()
+        AppState.addEventListener("change", async (nextState) => {
+            if (nextState === "active" && this.mode === LOCKER_MODE.CHECK && getAppStore().isLocked) {
+                setTimeout(async () => {
+                    await this.checkBio()
+                })
+            }
         })
-      }
-    })
-  }
-
-  async checkBio() {
-    if (!this.isFingerprintEnabled) return
-    try {
-      const result = await ReactNativeBiometrics.simplePrompt({
-        promptMessage: t("lockerScreen.fingerprint"),
-        cancelButtonText: t('common.cancel')
-      })
-      if (!result.success) return
-      const cr = await Keychain.getGenericPassword()
-      if (cr) {
-        getAppStore().setLocker(true)
-        getAppStore().setPin(cr.password)
-        this.done()
-      }
-    } catch (e) {
-      console.log("input pin code")
     }
-  }
 
-  handleClick(digit) {
-    if (this.isVibrationEnabled) Vibration.vibrate(100)
-    this.pin += digit
-  }
-
-  removeDigit() {
-    if (this.isVibrationEnabled) Vibration.vibrate(150)
-    this.pin = this.pin.substring(0, this.pin.length - 1);
-  }
-
-  get mode() {
-    return getAppStore().lockerMode
-  }
-
-  get isChangingPin() {
-    return getAppStore().lockerPreviousScreen === "settings"
-  }
-
-  get isFingerprintEnabled() {
-    return this.isBioAvailable && this.mode === LOCKER_MODE.CHECK
-  }
-
-  async validatePin() {
-    if (this.mode === LOCKER_MODE.CHECK) {
-      const cryptr = new Cryptr(this.pin)
-      const result = cryptr.decrypt(this.encrypted)
-      let isCorrect = false
-      try {
-        const res = JSON.parse(result)
-        isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
-      } catch (e) {
-        isCorrect = false
-      }
-
-      getAppStore().setLocker(isCorrect)
-      if (!isCorrect) {
-        this.incorrectCount++
-        if (this.incorrectCount > 2) this.exit()
-        this.message = t("lockerScreen.incorrectPin")
-        this.disabled = true
-        setTimeout(() => {
-          this.message = ""
-          this.disabled = false
-        }, 1000 * this.incorrectCount)
-      } else {
-        getAppStore().setPin(this.pin)
-        this.done()
-      }
-    } else if (this.mode === LOCKER_MODE.SET) {
-      if (this.step === 0) {
-        this.confirmationPin = this.pin
-        this.step = 1
-        this.disabled = false
-      } else if (this.step === 1) {
-        if (this.pin === this.confirmationPin) {
-          getAppStore().setPin(this.pin)
-          this.settledPin = this.pin
-          this.message = t("lockerScreen.correctPin")
-          this.disabled = true
-          await getAppStore().setLocker(true)
-          this.done()
-          this.disabled = false
-        } else {
-          await getAppStore().setLocker(false)
-          this.message = t("lockerScreen.pinFormErrorIncorrectConfirmationMessage")
-          setTimeout(() => {
-            this.message = ""
-          }, 1000)
+    async checkBio() {
+        if (!this.isFingerprintEnabled) return
+        try {
+            const result = await ReactNativeBiometrics.simplePrompt({
+                promptMessage: t("lockerScreen.fingerprint"),
+                cancelButtonText: t('common.cancel')
+            })
+            if (!result.success) return
+            const cr = await Keychain.getGenericPassword()
+            if (cr) {
+                getAppStore().setLocker(true)
+                getAppStore().setPin(cr.password)
+                this.done()
+            }
+        } catch (e) {
+            console.log("input pin code")
         }
-        this.confirmationPin = ""
-        this.step = 0
-        this.disabled = false
-      }
     }
-    this.reset()
-  }
 
-  done() {
-    runUnprotected(() => {
-      if (getAppStore().lockerPreviousScreen === "settings" && this.step === 0) {
+    handleClick(digit) {
+        if (this.isVibrationEnabled) Vibration.vibrate(100)
+        this.pin += digit
+    }
+
+    removeDigit() {
+        if (this.isVibrationEnabled) Vibration.vibrate(150)
+        this.pin = this.pin.substring(0, this.pin.length - 1);
+    }
+
+    get mode() {
+        return getAppStore().lockerMode
+    }
+
+    get isChangingPin() {
+        return getAppStore().lockerPreviousScreen === "settings"
+    }
+
+    get isFingerprintEnabled() {
+        return this.isBioAvailable && this.mode === LOCKER_MODE.CHECK
+    }
+
+    async validatePin() {
+        if (this.mode === LOCKER_MODE.CHECK) {
+            const cryptr = new Cryptr(this.pin)
+            const result = cryptr.decrypt(this.encrypted)
+            let isCorrect = false
+            try {
+                const res = JSON.parse(result)
+                isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
+            } catch (e) {
+                isCorrect = false
+            }
+
+            getAppStore().setLocker(isCorrect)
+            if (!isCorrect) {
+                this.incorrectCount++
+                if (this.incorrectCount > 2) this.exit()
+                this.message = t("lockerScreen.incorrectPin")
+                this.disabled = true
+                setTimeout(() => {
+                    this.message = ""
+                    this.disabled = false
+                }, 1000 * this.incorrectCount)
+            } else {
+                getAppStore().setPin(this.pin)
+                this.done()
+            }
+        } else if (this.mode === LOCKER_MODE.SET) {
+            if (this.step === 0) {
+                this.confirmationPin = this.pin
+                this.step = 1
+                this.disabled = false
+            } else if (this.step === 1) {
+                if (this.pin === this.confirmationPin) {
+                    getAppStore().setPin(this.pin)
+                    this.settledPin = this.pin
+                    this.message = t("lockerScreen.correctPin")
+                    this.disabled = true
+                    await getAppStore().setLocker(true)
+                    this.done()
+                    this.disabled = false
+                } else {
+                    await getAppStore().setLocker(false)
+                    this.message = t("lockerScreen.pinFormErrorIncorrectConfirmationMessage")
+                    setTimeout(() => {
+                        this.message = ""
+                    }, 1000)
+                }
+                this.confirmationPin = ""
+                this.step = 0
+                this.disabled = false
+            }
+        }
+        this.reset()
+    }
+
+    done() {
+        runUnprotected(() => {
+            if (getAppStore().lockerPreviousScreen === "settings" && this.step === 0) {
+                this.pin = ""
+                this.disabled = false
+                getAppStore().lockerMode = LOCKER_MODE.SET
+            } else if (getAppStore().lockerPreviousScreen === "settings" && this.step === 1) {
+                this.step = 0
+                this.exit()
+            } else if (getAppStore().lockerPreviousScreen === "recovery") {
+                this.exit()
+                setTimeout(() => {
+                    RootNavigation.navigate("recoveryPhrase")
+                }, 10)
+
+            } else {
+                this.exit()
+            }
+        })
+    }
+
+    exit() {
+        runUnprotected(() => {
+            getAppStore().isLockerDirty = true
+            getAppStore().isLocked = false
+        })
+        this.step = 0
+    }
+
+    reset() {
         this.pin = ""
-        this.disabled = false
-        getAppStore().lockerMode = LOCKER_MODE.SET
-      } else if (getAppStore().lockerPreviousScreen === "settings" && this.step === 1) {
-        this.step = 0
-        this.exit()
-      } else if (getAppStore().lockerPreviousScreen === "recovery") {
-        this.exit()
-        setTimeout(() => {
-          RootNavigation.navigate("recoveryPhrase")
-        }, 10)
-
-      } else {
-        this.exit()
-      }
-    })
-  }
-
-  exit() {
-    runUnprotected(() => {
-      getAppStore().isLockerDirty = true
-      getAppStore().isLocked = false
-    })
-    this.step = 0
-  }
-
-  reset() {
-    this.pin = ""
-  }
-
-  watchPin = reaction(() => this.pin, async (val) => {
-    if (val && val.length === PIN_LENGTH) {
-      this.disabled = true
-      await this.validatePin()
     }
-  })
+
+    watchPin = reaction(() => this.pin, async (val) => {
+        if (val && val.length === PIN_LENGTH) {
+            this.disabled = true
+            await this.validatePin()
+        }
+    })
 }

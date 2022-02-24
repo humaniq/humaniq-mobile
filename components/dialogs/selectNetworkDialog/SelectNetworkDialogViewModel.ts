@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx"
-import { ETHEREUM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
+import { EVM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
 import { t } from "../../../i18n";
 
 export class SelectNetworkDialogViewModel {
@@ -7,11 +7,11 @@ export class SelectNetworkDialogViewModel {
   display = false
 
   get mainNetworks() {
-    return Object.values(ETHEREUM_NETWORKS).filter(n => n.env === NETWORK_TYPE.PRODUCTION)
+    return Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.PRODUCTION)
   }
 
   get testNetworks() {
-    return Object.values(ETHEREUM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST)
+    return Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST)
   }
 
   get networks() {

@@ -28,7 +28,7 @@
     "fast": "Fast",
     "speedUp": "Speed up",
     "receive": "Receive",
-    "sendTo": "Send to",
+    "sendTo": "To send",
     "refresh": "Refreshing",
     "noData": "No data",
     "next": "Next",
@@ -55,8 +55,8 @@
     "goExisting": "Go to existing wallet",
     "walletCreating": "Wallet is being created",
     "walletRecoverTitle": "Sign in with a recovery phrase",
-    "recoveryError": "Incorrect, please check 12 words ",
-    "recoveryDescription": "12 words separated by single spaces",
+    "recoveryError": "Incorrect, please check words",
+    "recoveryDescription": "Separate words by single space",
     "createNewWallet": "Create a new wallet"
   },
   "lockerScreen": {
@@ -118,7 +118,7 @@
       "network": "Network",
       "aboutApplication": "About application",
       "signOut": "Sign Out",
-      "recoveryDescription": "The recovery phrase proves wallet ownership, never diclose it to anyone. \n\nIf you lose your recovery phrase, even Humaniq will not be able to get your resources back.",
+      "recoveryDescription": "The recovery phrase proves wallet ownership, never disclose it to anyone. \n\nIf you lose your recovery phrase, even Humaniq will not be able to get your resources back.",
       "recoveryWarning": "I understand the risks",
       "recoveryBtn": "View recovery phrase",
       "recoveryPhraseDescription": "Write these words in the right order on paper and store in a safe place. \nIf you lose device or reinstall wallet, you would need it.",
@@ -156,7 +156,8 @@
     "step": "Step 1 of 3",
     "step2": "Step 2 of 3",
     "step3": "Step 3 of 3",
-    "nextBtn": "Next"
+    "nextBtn": "Next",
+    "fee": "Fee"
   },
   "selectAddressScreen": {
     "inputMessage": "Please enter address or use a scanner",
@@ -192,7 +193,7 @@
   },
   "transactionScreen": {
     "transactionDetails": "Transaction details",
-    "viewOnEtherScan": "View on Etherscan",
+    "viewOnEtherScan": "View on %{0}",
     "status": "Status",
     "date": "Date",
     "from": "From",
@@ -203,7 +204,8 @@
     "cancelTransaction": "Cancel transaction",
     "speedUpTransaction": "Speed up transaction",
     "howMany": "How many",
-    "adjustFee": "Adjust miner fee"
+    "adjustFee": "Adjust miner fee",
+    "changeFee": "Change fee"
   },
   "transactionModel": {
     "status": {

@@ -1,11 +1,12 @@
 import { Card, LoaderScreen } from "react-native-ui-lib";
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { getWalletStore } from "../../../App";
+import { getEVMProvider, getWalletStore } from "../../../App";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { beautifyNumber } from "../../../utils/number";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { RootNavigation } from "../../../navigators";
+import { capitalize } from "../../../utils/general";
 
 export const WalletBody = observer<any>(({ address }) => {
   // const store = useInstance(RootStore)
@@ -18,19 +19,19 @@ export const WalletBody = observer<any>(({ address }) => {
               <TokenItem
                   onPress={ () => RootNavigation.navigate("walletTransactions", {
                     wallet: wallet.address,
-                    symbol: 'ETH',
+                    symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
                     animate: true
                   } ) }
-                  symbol={ "ETH" }
+                  symbol={ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }
                   tokenAddress={ wallet.address }
-                  logo={ "ethereum" }
-                  name={ "Ethereum" }
+                  logo={ getEVMProvider().currentNetwork.nativeCoin }
+                  name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
                   formatBalance={ beautifyNumber(+wallet.formatBalance) }
                   formatFiatBalance={ wallet.formatFiatBalance }
                   index={ 0 }
               />
             {
-              wallet.erc20List.length > 0 && wallet.erc20List.map((p, i) => {
+              wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
                 return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
                                   formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
                                   logo={ p.logo } name={ p.name } index={ i + 1 }

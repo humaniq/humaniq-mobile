@@ -31,22 +31,21 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                    }
                                })
                            } }>
-                <Button outlineColor={ Colors.white }
-                        labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                        style={ { backgroundColor: Colors.white } } primary outline
-                        label={ t("common.send") }
+                <Button outlineColor={ Colors.transparent }
+                        labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
+                        primary outline label={ t("common.send") }
                 >
                     <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
                 </Button>
             </RippleWrapper>
-            <RippleWrapper style={ { flex: 0.5, marginRight: 8 } }
+            <RippleWrapper style={ { flex: 0.5, marginLeft: 8 } }
                            onClick={ async () => {
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
                                selfAddressQrCodeDialogViewModel.display = true
                            } }>
-                <Button outlineColor={ Colors.white }
-                        labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 14 } }
-                        style={ { backgroundColor: Colors.white } } primary outline
+                <Button outlineColor={ Colors.transparent }
+                        labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
+                        primary outline
                         label={ t("common.receive") }
                 >
                     <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>

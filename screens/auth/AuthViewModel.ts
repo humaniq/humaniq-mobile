@@ -50,7 +50,6 @@ export class AuthViewModel {
     get isValidRecover() {
         return this.wordsCount === 12
             && bip39.validateMnemonic(this.input)
-            && this.input.length <= 74
             && !isEmpty(this.input)
     }
 

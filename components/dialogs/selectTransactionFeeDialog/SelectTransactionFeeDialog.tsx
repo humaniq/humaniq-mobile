@@ -1,12 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { ActionSheet, Avatar, Colors, Text, View } from "react-native-ui-lib";
+import { ActionSheet, Avatar, Button, Colors, Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "./SelectTransactionFeeDialogViewModel";
 import Ripple from "react-native-material-ripple"
 import { t } from "../../../i18n";
 import { currencyFormat } from "../../../utils/number";
-import { DialogHeader } from "../dialogHeader/DalogHeader";
 import { getWalletStore } from "../../../App";
 
 export const SelectTransactionFeeDialog = observer(() => {
@@ -15,20 +14,44 @@ export const SelectTransactionFeeDialog = observer(() => {
     return <ActionSheet
         testID={ 'selectTransactionFeeDialog' }
         visible={ view.display }
+        containerStyle={ {
+            backgroundColor: Colors.bg,
+            borderTopRightRadius: 16,
+            borderTopLeftRadius: 16,
+        } }
+        optionsStyle={ {
+            backgroundColor: Colors.white,
+            borderRadius: 12,
+            marginLeft: 16,
+            marginRight: 16,
+            marginBottom: 16
+        } }
         dialogStyle={ {
-            borderTopRightRadius: 30,
-            borderTopLeftRadius: 30,
-            paddingBottom: 16,
+            paddingTop: 20,
+            backgroundColor: 'transparent'
         } }
         options={ view.options }
         renderTitle={ () =>
             <>
-                <DialogHeader onPressIn={ () => {
-                    view.display = false
-                } }/>
-                <View center padding-16>
+                <TouchableOpacity>
+                    <View row paddingV-2 center>
+                        <View flex center paddingH-20 paddingV-5>
+                            <Button onPressIn={ () => {
+                                view.display = false
+                            } } avoidInnerPadding avoidMinWidth
+                                    style={ {
+                                        marginTop: -16,
+                                        padding: 2,
+                                        paddingHorizontal: 22,
+                                        backgroundColor: Colors.white
+                                    } }/>
+                        </View>
+                    </View>
+                </TouchableOpacity>
+                <View padding-16>
                     <Text text16 black robotoM>{ t("selectTransactionFeeDialog.name") }</Text>
-                    <Text textGrey robotoR> { t("selectTransactionFeeDialog.description") }</Text>
+                    <Text text14 marginT-6 black robotoR
+                          color={ Colors.textGrey }>{ t("selectTransactionFeeDialog.description") }</Text>
                 </View>
             </>
         }
@@ -62,7 +85,8 @@ export const SelectTransactionFeeDialog = observer(() => {
                         </View>
                     </View>
                 </View>
-                <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 70 } }/>
+                { index !== view.options.length - 1 &&
+                    <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 70 } }/> }
             </Ripple>
         } }
         onDismiss={ () => {

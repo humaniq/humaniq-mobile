@@ -11,9 +11,9 @@ import {navigateThroughTabs} from "./tests/navigateThroughTabs";
 
 describe('Humaniq mobile tests', () => {
     importAndCreateWallet()
-    browserScreen()
-    settingsScreen()
     walletScreens()
     transactions()
+    browserScreen()
+    settingsScreen()
     navigateThroughTabs()
 })

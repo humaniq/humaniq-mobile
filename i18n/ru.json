@@ -156,7 +156,8 @@
     "step": "Шаг 1 из 3",
     "step2": "Шаг 2 из 3",
     "step3": "Шаг 3 из 3",
-    "nextBtn": "Далее"
+    "nextBtn": "Далее",
+    "fee": "Комиссия"
   },
   "selectAddressScreen": {
     "inputMessage": "Пожалуйста введите адрес или используйте сканер",
@@ -192,7 +193,7 @@
   },
   "transactionScreen": {
     "transactionDetails": "Детали транзакции",
-    "viewOnEtherScan": "Посмотреть на Etherscan",
+    "viewOnEtherScan": "Посмотреть на %{0}",
     "status": "Статус",
     "date": "Дата",
     "from": "От",
@@ -203,7 +204,8 @@
     "cancelTransaction": "Отменить транзакцию",
     "speedUpTransaction": "Ускорить транзакцию",
     "howMany": "Как много",
-    "adjustFee": "Настроить комиссию"
+    "adjustFee": "Настроить комиссию",
+    "changeFee": "Изменить комиссию"
   },
   "transactionModel": {
     "status": {

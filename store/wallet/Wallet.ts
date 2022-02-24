@@ -17,12 +17,12 @@ import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../.
 import { v4 as uuidv4 } from 'uuid';
 import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
-import { getEthereumProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
-import { EthereumTransaction } from "./transaction/EthereumTransaction"
+import { getEVMProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
+import { NativeTransaction } from "./transaction/NativeTransaction"
 import { changeCaseObj } from "../../utils/general"
-import { ERC20 } from "./erc20/ERC20"
-import { ERC20Transaction } from "./transaction/ERC20Transaction";
-import { EthereumTransactionStore } from "./transaction/EthereumTransactionStore";
+import { Token } from "./token/Token"
+import { TokenTransaction } from "./transaction/TokenTransaction";
+import { NativeTransactionStore } from "./transaction/NativeTransactionStore";
 import { localStorage } from "../../utils/localStorage";
 
 export interface TransactionsRequestResult {
@@ -56,11 +56,12 @@ export class Wallet extends Model({
         usd: t.number,
         rub: t.number,
         cny: t.number,
-        jpy: t.number
+        jpy: t.number,
+        eth: t.number
     })))),
-    transactions: p(t.model<EthereumTransactionStore>(EthereumTransactionStore), () => new EthereumTransactionStore({})),
-    erc20: p(t.objectMap(t.model<ERC20>(ERC20)), () => objectMap<ERC20>()),
-    erc20TransactionsInitialized: p(t.boolean, false),
+    transactions: p(t.model<NativeTransactionStore>(NativeTransactionStore), () => new NativeTransactionStore({})),
+    token: p(t.objectMap(t.model<Token>(Token)), () => objectMap<Token>()),
+    tokenTransactionsInitialized: p(t.boolean, false),
 }) {
 
     @observable
@@ -71,13 +72,13 @@ export class Wallet extends Model({
         if (!this.initialized || force) {
             try {
                 this.pending = true
-                this.ether = new ethers.Wallet(this.privateKey, getEthereumProvider().currentProvider) // root.providerStore.eth.currenProvider || undefined);
+                this.ether = new ethers.Wallet(this.privateKey, getEVMProvider().jsonRPCProvider) // root.providerStore.eth.currenProvider || undefined);
 
                 yield Promise.all([
                     this.updateBalanceFromProvider(),
                     // this.updateBalanceFromApi(),
                     this.getCoinCost(),
-                    this.getErc20Balances()
+                    this.getTokenBalances()
                 ])
             } catch (e) {
                 console.log("ERROR", e)
@@ -121,11 +122,11 @@ export class Wallet extends Model({
     @modelFlow
     * getCoinCost() {
         const cost = yield getRequest().get(COINGECKO_ROUTES.GET_TOKEN_PRICE, {
-            ids: "ethereum",
-            vs_currencies: "usd,eur,rub,cny,jpy"
+            ids: getEVMProvider().currentNetwork.nativeCoin,
+            vs_currencies: "usd,eur,rub,cny,jpy,eth"
         })
         if (cost.ok) {
-            this.prices = cost.data.ethereum
+            this.prices = cost.data[getEVMProvider().currentNetwork.nativeCoin]
         } else {
             this.isError = true
         }
@@ -133,74 +134,79 @@ export class Wallet extends Model({
 
     @modelFlow
     * loadTransactions(init = false) {
-        if (!this.transactions.canLoad && !init) return
-        if (init) {
-            this.transactions.page = 0
-            this.transactions.map.clear()
-        }
-        const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
-        this.transactions.loading = true
+        try {
+            if (!this.transactions.canLoad && !init) return
+            if (init) {
+                this.transactions.page = 0
+                this.transactions.map.clear()
+            }
+            const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
+            this.transactions.loading = true
 
-        const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.address }`))) || []
-        pendingTransactions.forEach(t => {
-            const pTx = fromSnapshot<EthereumTransaction>(t)
-            pTx.applyToWallet()
-            pTx.waitTransaction()
-        })
+            const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || []
 
-        const result = yield getMoralisRequest().get(route, {
-            chain: getEthereumProvider().currentNetworkName,
-            offset: this.transactions.pageSize * this.transactions.page,
-            limit: this.transactions.pageSize
-        })
-        if (result.ok && (result.data as TransactionsRequestResult).total) {
-            (result.data as TransactionsRequestResult).result.forEach(r => {
-                const tr = new EthereumTransaction({
-                    ...changeCaseObj(r),
-                    chainId: getEthereumProvider().currentNetwork.chainID,
-                    walletAddress: this.address.toLowerCase(),
-                    blockTimestamp: new Date(r.block_timestamp),
-                    prices: getSnapshot(this.prices)
-                })
-                runUnprotected(() => {
-                    this.transactions.map.set(tr.hash, tr)
-                })
+            storedTransactions.forEach(t => {
+                const pTx = fromSnapshot<NativeTransaction>(t)
+                pTx.applyToWallet()
+                pTx.waitTransaction()
             })
-            this.transactions.total = result.data.total
-            this.transactions.incrementOffset()
-            this.transactions.loading = false
-            this.transactions.initialized = true
+
+            const result = yield getMoralisRequest().get(route, {
+                chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }`,
+                offset: this.transactions.pageSize * this.transactions.page,
+                limit: this.transactions.pageSize
+            })
+            if (result.ok && (result.data as TransactionsRequestResult).total) {
+                (result.data as TransactionsRequestResult).result.forEach(r => {
+                    const tr = new NativeTransaction({
+                        ...changeCaseObj(r),
+                        chainId: getEVMProvider().currentNetwork.chainID,
+                        walletAddress: this.address.toLowerCase(),
+                        blockTimestamp: new Date(r.block_timestamp),
+                        prices: getSnapshot(this.prices)
+                    })
+                    runUnprotected(() => {
+                        this.transactions.map.set(tr.hash, tr)
+                    })
+                })
+                this.transactions.total = result.data.total
+                this.transactions.incrementOffset()
+                this.transactions.loading = false
+                this.transactions.initialized = true
+            }
+        } catch (e) {
+            console.log("ER", e)
         }
     }
 
     @modelFlow
-    * getERC20Transactions(init = false) {
+    * getTokenTransactions(init = false) {
         try {
             if (init) {
-                this.erc20List.map(l => l.transactions.clear())
+                this.tokenList.map(l => l.transactions.clear())
             }
             const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
                 address: this.address
             })
-            const result = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName })
+            const result = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
 
             if (result.ok && (result.data as TransactionsRequestResult).total) {
                 (result.data as TransactionsRequestResult).result.forEach(r => {
 
-                    const currentToken = this.erc20.get(r.address)
+                    const currentToken = this.token.get(r.address)
 
-                    const tr = new ERC20Transaction({
+                    const tr = new TokenTransaction({
                         ...changeCaseObj(r),
                         symbol: currentToken.symbol,
                         decimals: currentToken.decimals,
-                        chainId: getEthereumProvider().currentNetwork.chainID,
+                        chainId: getEVMProvider().currentNetwork.chainID,
                         walletAddress: this.address.toLowerCase(),
                         blockTimestamp: new Date(r.block_timestamp),
                         prices: currentToken.prices
                     })
                     if (currentToken) {
                         runUnprotected(() => {
-                            this.erc20TransactionsInitialized = true
+                            this.tokenTransactionsInitialized = true
                             currentToken.transactions.set(tr.transactionHash, tr)
                         })
                     }
@@ -212,16 +218,16 @@ export class Wallet extends Model({
     }
 
     @modelFlow
-    * getErc20Balances() {
+    * getTokenBalances() {
 
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
         })
-        const erc20 = yield getMoralisRequest().get(route, { chain: getEthereumProvider().currentNetworkName })
+        const erc20 = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
         if (erc20.ok) {
             erc20.data.forEach(t => {
-                const erc20Token = new ERC20({ ...changeCaseObj(t), walletAddress: this.address })
-                this.erc20.set(t.token_address, erc20Token)
+                const erc20Token = new Token({ ...changeCaseObj(t), walletAddress: this.address })
+                this.token.set(t.token_address, erc20Token)
                 erc20Token.init()
             })
         } else {
@@ -231,7 +237,7 @@ export class Wallet extends Model({
 
     @computed
     get pendingTransaction() {
-        return Object.values<EthereumTransaction>(this.transactions).find(t => !t.receiptStatus)
+        return Object.values<NativeTransaction>(this.transactions).find(t => !t.receiptStatus)
     }
 
     @computed
@@ -240,8 +246,8 @@ export class Wallet extends Model({
     }
 
     @computed
-    get erc20List() {
-        return Object.values<ERC20>(this.erc20.items)
+    get tokenList() {
+        return Object.values<Token>(this.token.items)
     }
 
     @computed
@@ -280,7 +286,7 @@ export class Wallet extends Model({
 
     @computed
     get totalWalletFiatBalance() {
-        return this.fiatBalance + this.erc20List.reduce((acc, item) => {
+        return this.fiatBalance + this.tokenList.reduce((acc, item) => {
             acc += item.fiatBalance
             return acc
         }, 0)

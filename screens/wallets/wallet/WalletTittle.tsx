@@ -36,8 +36,8 @@ export const WalletTittle = observer<any>(({ address }) => {
                             }, 3000)
                         } } style={ {
                             backgroundColor: Colors.rgba(Colors.primary, 0.1),
-                            borderRadius: 20,
-                        } } paddingT-8 paddingB-8 textM primary label={ wallet.formatAddress }/>
+                            borderRadius: 12,
+                        } } paddingT-8 paddingB-8 paddingL-12 paddingR-16 textM primary label={ wallet.formatAddress }/>
                     </View>
                 </View>
             }
