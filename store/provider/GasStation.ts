@@ -53,7 +53,7 @@ export class GasStation extends Model({
             baseURL: GAS_STATION_URL,
             timeout: DEFAULT_API_CONFIG.timeout
         });
-        reaction(() => getSnapshot(this.enableAutoUpdate), (val) => {
+        reaction(() => this.enableAutoUpdate, (val) => {
             if (!val) return clearInterval(this.intId)
             this.update()
             this.intId = setInterval(() => {

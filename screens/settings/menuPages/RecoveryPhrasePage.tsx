@@ -28,10 +28,12 @@ export class RecoveryPhraseViewModel {
     async init() {
         if (!getWalletStore()?.storedWallets?.mnemonic?.mnemonic) {
             const encrypted = await localStorage.load("hm-wallet")
-            const cryptr = new Cryptr(getAppStore().savedPin)
-            const result = cryptr.decrypt(encrypted)
-            const res = JSON.parse(result)
-            this.mnemonic = res.mnemonic.mnemonic
+            if(encrypted) {
+                const cryptr = new Cryptr(getAppStore().savedPin)
+                const result = cryptr.decrypt(encrypted)
+                const res = JSON.parse(result)
+                this.mnemonic = res.mnemonic.mnemonic
+            }
         }
     }
 }

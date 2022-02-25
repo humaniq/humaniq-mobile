@@ -100,7 +100,7 @@ export class BrowserTabScreenViewModel {
         this.go(props.initialUrl, true)
 
 
-        this.disposerChangeNetwork = reaction(() => getSnapshot(getEVMProvider().currentNetworkName), () => {
+        this.disposerChangeNetwork = reaction(() => getEVMProvider().currentNetworkName, () => {
             // this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
             this.reloadWebView()
 
@@ -110,7 +110,7 @@ export class BrowserTabScreenViewModel {
             // })
         })
 
-        this.disposerChangeAddress = reaction(() => getSnapshot(getWalletStore().selectedWallet.address), () => {
+        this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet.address , () => {
             this.reloadWebView()
             // this.postMessage({
             //   type: "accountsChanged",

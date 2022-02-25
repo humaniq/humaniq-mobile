@@ -24,6 +24,7 @@ import { Token } from "./token/Token"
 import { TokenTransaction } from "./transaction/TokenTransaction";
 import { NativeTransactionStore } from "./transaction/NativeTransactionStore";
 import { localStorage } from "../../utils/localStorage";
+import { InteractionManager } from "react-native";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -36,8 +37,8 @@ export interface TransactionsRequestResult {
 @model("Wallet")
 export class Wallet extends Model({
     isError: prop<boolean>(false),
-    pending: prop<boolean>(false),
-    initialized: prop<string>(""),
+    pending: prop<boolean>(false).withSetter(),
+    initialized: prop<string>("").withSetter(),
     address: prop<string>(""),
     name: prop<string>(""),
     balance: prop<string>(""),
@@ -67,27 +68,31 @@ export class Wallet extends Model({
     @observable
     ether: Signer
 
-    @modelFlow
-    * init(force = false) {
-        if (!this.initialized || force) {
-            try {
-                this.pending = true
-                this.ether = new ethers.Wallet(this.privateKey, getEVMProvider().jsonRPCProvider) // root.providerStore.eth.currenProvider || undefined);
+    async init(force = false) {
+        InteractionManager.runAfterInteractions(async () => {
+            if (!this.initialized || force) {
+                try {
+                    // @ts-ignore
+                    this.setPending(true)
+                    this.ether = new ethers.Wallet(this.privateKey, getEVMProvider().jsonRPCProvider) // root.providerStore.eth.currenProvider || undefined);
 
-                yield Promise.all([
-                    this.updateBalanceFromProvider(),
-                    // this.updateBalanceFromApi(),
-                    this.getCoinCost(),
-                    this.getTokenBalances()
-                ])
-            } catch (e) {
-                console.log("ERROR", e)
-                this.isError = true
-            } finally {
-                this.initialized = uuidv4()
-                this.pending = false
+                    await Promise.all([
+                        this.updateBalanceFromProvider(),
+                        // this.updateBalanceFromApi(),
+                        this.getCoinCost(),
+                        this.getTokenBalances()
+                    ])
+                } catch (e) {
+                    console.log("ERROR", e)
+                    this.isError = true
+                } finally {
+                    runUnprotected(() => {
+                        this.initialized = uuidv4()
+                        this.pending = false
+                    })
+                }
             }
-        }
+        })
     }
 
     @modelFlow
