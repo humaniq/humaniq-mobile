@@ -44,6 +44,7 @@ export class LockerViewModel {
                 })
             }
         })
+        await this.checkBio()
     }
 
     async checkBio() {
@@ -89,13 +90,17 @@ export class LockerViewModel {
 
     async validatePin() {
         if (this.mode === LOCKER_MODE.CHECK) {
-            const cryptr = new Cryptr(this.pin)
-            const result = cryptr.decrypt(this.encrypted)
             let isCorrect = false
-            try {
-                const res = JSON.parse(result)
-                isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
-            } catch (e) {
+            if (this.encrypted) {
+                const cryptr = new Cryptr(this.pin)
+                const result = cryptr.decrypt(this.encrypted)
+                try {
+                    const res = JSON.parse(result)
+                    isCorrect = bip39.validateMnemonic(res.mnemonic.mnemonic)
+                } catch (e) {
+                    isCorrect = false
+                }
+            } else {
                 isCorrect = false
             }
 

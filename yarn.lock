@@ -2283,9 +2283,9 @@
     tslib "^1.9.3"
 
 "@sentry/cli@^1.52.4", "@sentry/cli@^1.72.0":
-  version "1.72.1"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.72.1.tgz#3e83e6ffad0a95bf5a6568dc9a4432c8b71c4ca5"
-  integrity sha512-SCh32bMYnkCZd4Old/GjArnjtyt3PuQXC6fOmBqKWPpvi56H3rYYjrT0FVxRRu8ovU2Qws1AhPdUbLPOEEj8lQ==
+  version "1.73.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.73.0.tgz#0d0bce913e0060ae192741c6693c57e50078c886"
+  integrity sha512-n4YINqmoncGUkLEpd4WuW+oD+aoUyQPhRbSBSYkbCFxPPmopn1VExCB2Vvzwj7vjXYRRGkix6keBMS0LLs3A3Q==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -2602,6 +2602,11 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/eslint-visitor-keys/-/eslint-visitor-keys-1.0.0.tgz#1ee30d79544ca84d68d4b3cdb0af4f205663dd2d"
   integrity sha512-OCutwjDZ4aFS6PB1UZ988C4YgwlBHJd6wCeQqaLdmadZ/7e+w79+hbMUFC1QXDNCmdyoRfAFdm0RypzwR+Qpag==
+
+"@types/events@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
+  integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
@@ -3965,7 +3970,7 @@ buffer@^4.9.1:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.0.0, buffer@^5.4.3:
+buffer@^5.0.0, buffer@^5.4.3, buffer@^5.6.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -6075,7 +6080,7 @@ events@^1.0.2, events@^1.1.1:
   resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
   integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
 
-events@^3.0.0:
+events@^3.0.0, events@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
@@ -6964,6 +6969,17 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
+"humaniq-ethereum-provider@git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.1.1":
+  version "0.1.1"
+  resolved "git+https://github.com/humaniq/humaniq-ethereum-provider.git#5f22b8853066bcc09e1d50290ccb9ad5b55f14a5"
+  dependencies:
+    "@types/events" "^3.0.0"
+    buffer "^5.6.0"
+    eth-sig-util "^3.0.1"
+    events "^3.3.0"
+    isutf8 "^3.1.1"
+    web3 "^0.20.7"
+
 "humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.1":
   version "1.0.0"
   resolved "git+https://github.com/humaniq/humaniq-icon-set.git#ce4fd7b9fb3c0bce11e72e436814c6cd6efac76d"
@@ -7534,6 +7550,11 @@ istanbul-reports@^3.1.3:
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
+
+isutf8@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/isutf8/-/isutf8-3.1.1.tgz#3f2ac77f49affb23ae54813da1a4ab44aadf1d7b"
+  integrity sha512-5P2FgGyDsSnRMaLPVGVIgYgMxj50lBujvi5lsVgP1qvMWhxvkmVBWtPcIKgXw9j+/RnmxSvHg3e9tbDnPxx6dw==
 
 jest-changed-files@^27.4.2:
   version "27.4.2"

@@ -165,11 +165,13 @@ export class AppStore extends Model({
         if (this.savedPin && this.savedPin !== pin) {
             const cryptr = new Cryptr(this.savedPin)
             const encrypted = yield* _await(localStorage.load("hm-wallet"))
-            const result = cryptr.decrypt(encrypted)
-            const storedWallets = JSON.parse(result)
-            const newCryptr = new Cryptr(pin)
-            const encoded = yield* _await(newCryptr.encrypt(JSON.stringify(storedWallets)))
-            yield* _await(localStorage.save("hm-wallet", encoded))
+            if(encrypted) {
+                const result = cryptr.decrypt(encrypted)
+                const storedWallets = JSON.parse(result)
+                const newCryptr = new Cryptr(pin)
+                const encoded = yield* _await(newCryptr.encrypt(JSON.stringify(storedWallets)))
+                yield* _await(localStorage.save("hm-wallet", encoded))
+            }
         }
         this.savedPin = pin
     }

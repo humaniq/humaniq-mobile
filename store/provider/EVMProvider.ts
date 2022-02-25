@@ -56,7 +56,7 @@ export class EVMProvider extends Model({
                     break
             }
             if (!this.initialized) {
-                reaction(() => getSnapshot(this.currentNetworkName), () => {
+                reaction(() => this.currentNetworkName, () => {
                     this.init()
                 })
             }

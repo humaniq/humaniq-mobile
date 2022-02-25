@@ -54,7 +54,7 @@ export class SendTransactionViewModel {
     selectWalletTokenDialog = inject(this, SelectWalletTokenViewModel)
     selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
 
-    changeTokenAddress = reaction(() => getSnapshot(this.selectWalletTokenDialog.tokenAddress), async (val) => {
+    changeTokenAddress = reaction(() => this.selectWalletTokenDialog.tokenAddress, async (val) => {
         this.txData.value = ""
         this.tokenAddress = Object.values(NATIVE_COIN_SYMBOL).includes(val.toLowerCase() as NATIVE_COIN_SYMBOL) ? "" : val
         this.inputFiat = false

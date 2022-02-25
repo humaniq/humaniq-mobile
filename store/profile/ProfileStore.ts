@@ -14,17 +14,6 @@ export class ProfileStore extends Model({
 
     @modelFlow
     * init() {
-        // if (!this.initialized) {
-        //     reaction(() => getSnapshot(getAuthStore().loggedIn), async (val) => {
-        //         if (val) {
-        //             await this.load()
-        //             console.log("LOGGED_IN")
-        //             runUnprotected(() => {
-        //                 this.initialized = uuid.v4()
-        //             })
-        //         }
-        //     })
-        // }
     }
 
     @computed
