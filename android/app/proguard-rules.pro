@@ -10,3 +10,5 @@
 # Add any project specific keep options here:
 
 -keep public class com.horcrux.svg.** {*;}
+-keep class com.swmansion.reanimated.** { *; }
+-keep class com.facebook.react.turbomodule.** { *; }
