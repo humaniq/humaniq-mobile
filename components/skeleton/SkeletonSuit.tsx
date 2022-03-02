@@ -13,7 +13,7 @@ import { Colors } from "react-native-ui-lib";
 
 const SHIM_DURATION = 1200
 const SHIM_DELAY = 0
-const DEFAULT_SKELETON_COLOR = "#f1efef"
+const DEFAULT_SKELETON_COLOR = Colors.grey
 
 export interface SkeletonLoaderProps {
     /**

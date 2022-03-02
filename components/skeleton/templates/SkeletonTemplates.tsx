@@ -88,7 +88,6 @@ export const ListSkeleton = ({
  * WalletsScreen loader
  *
  * @param backgroundColor
- * @param isLoading
  * @constructor
  */
 export const WalletsScreenSkeleton = ({ backgroundColor = Colors.bg }: SkeletonScreenProps) => {
@@ -144,7 +143,6 @@ export const WalletsScreenSkeleton = ({ backgroundColor = Colors.bg }: SkeletonS
  * TransactionListScreen loader
  *
  * @param backgroundColor
- * @param isLoading
  * @constructor
  */
 export const TransactionListScreenSkeleton = ({
