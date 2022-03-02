@@ -135,7 +135,7 @@ export const WalletsScreenSkeleton = ({ backgroundColor = Colors.bg }: SkeletonS
                 } }/>
             </View>
         </SkeletonSuit>
-        <ListSkeleton/>
+        <ListSkeleton marginV={ 20 }/>
     </View>
 }
 
