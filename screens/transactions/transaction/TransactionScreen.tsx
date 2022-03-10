@@ -61,7 +61,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                 <Text text-grey>
                                     { t("transactionScreen.date") }
                                 </Text>
-                                <Text black robotoR robotoM>{ view.transaction.formatDate }</Text>
+                                <Text black text16 robotoR>{ view.transaction.formatDate }</Text>
                             </View>
                         </View>
                         <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
@@ -70,8 +70,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                 <Text text-grey>
                                     { t("transactionScreen.from") }
                                 </Text>
-                                <Text text16 robotoR black>{ renderShortAddress(view.transaction.fromAddress) }</Text>
-
+                                <Text black text16 robotoR>{ renderShortAddress(view.transaction.fromAddress) }</Text>
                             </View>
                         </View>
                         <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
@@ -81,35 +80,33 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                     { t("transactionScreen.to") }
                                 </Text>
                                 <Text black text16 robotoR>{ renderShortAddress(view.transaction.toAddress) }</Text>
-
                             </View>
                         </View>
                     </Card>
                 </View>
                 <View padding-16>
                     <Card>
-                        <View row spread margin-16 centerV>
+                        <View row spread marginH-16 centerV>
                             <Text black text16 robotoM>
                                 { t("transactionScreen.amount") }
                             </Text>
-                            <View right>
-                                <Text black text16 robotoM>{ view.transaction.formatFiatValue }</Text>
-                                <Text text-grey
+                            <View right marginV-8>
+                                <Text black text16 marginB-3 robotoM>{ view.transaction.formatFiatValue }</Text>
+                                <Text text-grey marginT-3
                                       robotoR
                                       text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                             </View>
-
                         </View>
                         { !!view.transaction?.fiatFee && <View>
                             <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
-                            <View row spread margin-16 centerV>
+                            <View row spread marginH-16 centerV>
                                 <Text black text16 robotoM>
                                     { t("transactionScreen.suggestedFee") }
                                 </Text>
-                                <View right>
-                                    <Text black text16
+                                <View right marginV-8>
+                                    <Text black text16 marginB-3
                                           robotoM>{ currencyFormat(view.transaction.fiatFee, getWalletStore().currentFiatCurrency) }</Text>
-                                    <Text text-grey
+                                    <Text text-grey marginT-3
                                           robotoR
                                           text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>
@@ -118,14 +115,14 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                         }
                         { !!view.transaction?.fiatTotal && <View>
                             <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
-                            <View row spread margin-16 centerV>
+                            <View row spread marginH-16 centerV>
                                 <Text black text16 robotoM>
                                     { t("transactionScreen.total") }
                                 </Text>
-                                <View right>
-                                    <Text black text16
+                                <View right marginV-8>
+                                    <Text black text16 marginB-3
                                           robotoM>{ currencyFormat(view.transaction.fiatTotal, getWalletStore().currentFiatCurrency) }</Text>
-                                    <Text text-grey
+                                    <Text text-grey marginT-3
                                           robotoR
                                           text14>{ `${ view.transaction.formatTotal } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>

@@ -171,7 +171,7 @@
   },
   "approvalDappConnectDialog": {
     "wontToConnect": "Connect to",
-    "attention": "With you agreement, you allow DApp get address your wallet and connect Web3",
+    "attention": "With your agreement, you allow DApp get address your wallet and connect Web3",
     "deny": "Maybe later",
     "allow": "Yes, connect this address"
   },

@@ -38,7 +38,7 @@ const Auth = observer(function () {
                             <View bottom row flex style={ { width: "100%" } }>
                                 <View style={ { width: "100%" } } paddingH-16>
                                     <Button testID={ 'recoveryWalletBtn' } outline br50 bg-primary robotoM
-                                            onPress={ view.goRecover } marginB-10
+                                            onPress={ view.goRecover } marginB-16
                                             label={ view.isSavedWallet ? t("registerScreen.recoverFromMnemonicTwo") :
                                                 t("registerScreen.recoverFromMnemonicOne") }/>
 
