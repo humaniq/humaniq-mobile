@@ -6,7 +6,6 @@ import { getAppStore, getWalletStore } from "../../App"
 import { runUnprotected } from "mobx-keystone";
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 
-
 export class WalletsScreenModel {
   initialized = false;
   refreshing = false;
