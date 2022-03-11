@@ -104,7 +104,7 @@ export const RecoveryPhrase = observer(() => {
                     }
                 </View>
                 <View flex bottom marginT-20>
-                    <View row absB style={ { alignItems: "center" } }>
+                    <View row absB centerV>
                         <View style={ { backgroundColor: Colors.rgba(Colors.error, 0.07) } }
                               width={ 32 }
                               height={ 32 }
