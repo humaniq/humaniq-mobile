@@ -52,7 +52,7 @@ export const CircularProgress = ({
                                      color = Colors.primary,
                                      maxValue = 100,
                                      indeterminate = false,
-                                     indeterminateDuration = 3000,
+                                     indeterminateDuration = 1300,
                                      textSize = 14,
                                      textColor = Colors.primary,
                                      textEnabled = true,
@@ -71,59 +71,80 @@ export const CircularProgress = ({
     })
 
     useEffect(() => {
-        const indeterminateDelta = 30 * Math.PI;
+        let loopAnimation
+        let spinAnimation
+
+        const indeterminateDelta = 50 * Math.PI;
         const finalValue = indeterminateDelta - (indeterminateDelta * 80) / 100;
 
-        let loopAnimation = Animated.loop(
-            Animated.parallel([
+        if (indeterminate) {
+            loopAnimation = Animated.loop(
+                Animated.sequence([
+                    Animated.timing(animatedValue, {
+                        toValue: finalValue,
+                        duration: indeterminateDuration,
+                        easing: Easing.linear,
+                        useNativeDriver: true,
+                        isInteraction: false,
+                    }),
+                    Animated.timing(animatedValue, {
+                        toValue: circumference,
+                        duration: indeterminateDuration,
+                        easing: Easing.linear,
+                        useNativeDriver: true,
+                        isInteraction: false,
+                    })
+                ])
+            )
+
+            spinAnimation = Animated.loop(
                 Animated.timing(animatedSpinValue, {
                     toValue: 1,
-                    duration: indeterminateDuration,
-                    easing: Easing.out(Easing.ease),
+                    duration: 800,
+                    easing: Easing.linear,
                     useNativeDriver: true,
+                    isInteraction: false
                 }),
+            )
 
-                Animated.timing(animatedValue, {
-                    toValue: finalValue * 30,
-                    duration: indeterminateDuration,
-                    easing: Easing.out(Easing.ease),
-                    useNativeDriver: true,
-                })
-            ])
-        )
-
-        if (indeterminate) {
+            spinAnimation?.start()
             loopAnimation?.start()
         }
 
         return () => {
-            loopAnimation?.stop()
-            loopAnimation = null;
+            if (indeterminate) {
+                spinAnimation?.stop()
+                loopAnimation?.stop()
+            }
         }
-    }, [ indeterminate ])
+    }, [])
 
     useEffect(() => {
-        let progressAnim = Animated.timing(animatedValue, {
-            toValue: strokeDashoffset,
-            duration,
-            useNativeDriver: false,
-            easing: Easing.out(Easing.ease),
-        });
+        let progressAnim
 
         if (!indeterminate) {
+            progressAnim = Animated.timing(animatedValue, {
+                toValue: strokeDashoffset,
+                duration,
+                useNativeDriver: true,
+                isInteraction: false,
+                easing: Easing.out(Easing.ease),
+            });
+
             progressAnim?.start()
         }
 
         return () => {
-            progressAnim?.stop()
-            progressAnim = null
+            if (!indeterminate) {
+                progressAnim?.stop()
+            }
         }
     }, [ currentValue, indeterminate ]);
 
     const transform = indeterminate ? { transform: [ { rotate: spin } ] } : {}
 
     return (
-        <View>
+        <View style={ { overflow: "hidden" } }>
             <Animated.View style={ { width: radius * 2, height: radius * 2, ...transform } }>
                 <Svg
                     width={ radius * 2 }
@@ -166,7 +187,8 @@ export const CircularProgress = ({
             { children && <View style={ {
                 ...StyleSheet.absoluteFillObject,
                 alignItems: "center",
-                justifyContent: "center"
+                alignSelf: "center",
+                justifyContent: "center",
             } }>
                 { children }
             </View> }

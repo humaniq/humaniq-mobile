@@ -30,7 +30,7 @@ export const AppToast = observer(() => {
           <View row centerV flex padding-12 width={ Dimensions.get("window").width - 32 }>
             {
               view.appStore.toast.type === TOASTER_TYPE.PENDING &&
-              <CircularProgress strokeWidth={2} indeterminate radius={18}>
+              <CircularProgress strokeWidth={ 2 } indeterminate radius={ 18 }>
                 <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
                   <HIcon name={ "clock-arrows" } size={ 18 } color={ Colors.warning }/></Avatar>
               </CircularProgress>

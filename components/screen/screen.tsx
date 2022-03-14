@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Appearance, KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StatusBar, View } from "react-native";
+import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StatusBar, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
@@ -22,7 +22,7 @@ function ScreenWithoutScrolling(props: ScreenProps) {
         >
             <StatusBar
                 translucent
-                barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
+                barStyle={ props.statusBar || "dark-content" }
                 backgroundColor={ props.statusBarBg || Colors.bg }/>
             <View testID={ props.testID } style={ [ preset.inner, style, insetStyle ] }>{ props.children }</View>
         </KeyboardAvoidingView>
@@ -49,7 +49,7 @@ function ScreenWithScrolling(props: ScreenProps) {
         >
             <StatusBar
                 translucent
-                barStyle={ props.statusBar || Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content" }
+                barStyle={ props.statusBar || "dark-content" }
                 backgroundColor={ props.statusBarBg || Colors.bg }/>
             <View testID={ props.testID } style={ [ preset.outer, backgroundStyle, insetStyle ] }>
                 <ScrollView
