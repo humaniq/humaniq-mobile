@@ -239,7 +239,9 @@
     "shareTitle": "Ethereum адрес"
   },
   "appToasts": {
-    "addressCopied": "Ваш публичный адрес скопирован"
+    "addressCopied": "Ваш публичный адрес скопирован",
+    "connected": "Соединение восстановлено",
+    "disconnected": "Соединение потеряно"
   },
   "qRScanner": {
     "allowDialog": {

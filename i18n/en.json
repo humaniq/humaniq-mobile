@@ -239,7 +239,9 @@
     "shareTitle": "Ethereum address"
   },
   "appToasts": {
-    "addressCopied": "Your public address copied"
+    "addressCopied": "Your public address copied",
+    "connected": "Connected to internet",
+    "disconnected": "Your internet connection is lost"
   },
   "qRScanner": {
     "allowDialog": {

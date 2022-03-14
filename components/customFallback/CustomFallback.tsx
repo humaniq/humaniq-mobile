@@ -7,7 +7,8 @@ import { isDev } from "../../shim";
 import RNRestart from 'react-native-restart';
 
 export const CustomFallback = (props: { error?: Error }) => (
-    <Screen preset={ "fixed" } style={ { minHeight: "100%" } } backgroundColor={ Colors.white }
+    <Screen disableConnectionInfo={ true } preset={ "fixed" } style={ { minHeight: "100%" } }
+            backgroundColor={ Colors.white }
             statusBarBg={ Colors.white }>
         <View flex centerH>
             <View flex paddingT-83>

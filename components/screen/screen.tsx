@@ -3,11 +3,14 @@ import { KeyboardAvoidingView, Platform, RefreshControl, ScrollView, StatusBar, 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScreenProps } from "./screen.props";
 import { isNonScrolling, offsets, presets } from "./screen.presets";
-import { Colors } from "react-native-ui-lib";
+import { Colors, Text, View as UIView } from "react-native-ui-lib";
+import { t } from "../../i18n";
+import { getAppStore } from "../../App";
+import { observer } from "mobx-react-lite";
 
 const isIos = Platform.OS === "ios";
 
-function ScreenWithoutScrolling(props: ScreenProps) {
+const ScreenWithoutScrolling = observer((props: ScreenProps) => {
     const insets = useSafeAreaInsets();
     const preset = presets.fixed;
     const style = props.style || {};
@@ -24,12 +27,18 @@ function ScreenWithoutScrolling(props: ScreenProps) {
                 translucent
                 barStyle={ props.statusBar || "dark-content" }
                 backgroundColor={ props.statusBarBg || Colors.bg }/>
-            <View testID={ props.testID } style={ [ preset.inner, style, insetStyle ] }>{ props.children }</View>
+            <View testID={ props.testID } style={ [ preset.inner, style, insetStyle ] }>
+                {
+                    !props.disableConnectionInfo && !getAppStore().isConnected && <UIView bg-error padding-8
+                    ><Text white>{ t("appToasts.disconnected") }</Text></UIView>
+                }
+                { props.children }
+            </View>
         </KeyboardAvoidingView>
     );
-}
+})
 
-function ScreenWithScrolling(props: ScreenProps) {
+const ScreenWithScrolling = observer((props: ScreenProps) => {
     const insets = useSafeAreaInsets();
     const preset = presets.scroll;
     const style = props.style || {};
@@ -52,6 +61,10 @@ function ScreenWithScrolling(props: ScreenProps) {
                 barStyle={ props.statusBar || "dark-content" }
                 backgroundColor={ props.statusBarBg || Colors.bg }/>
             <View testID={ props.testID } style={ [ preset.outer, backgroundStyle, insetStyle ] }>
+                {
+                    !props.disableConnectionInfo && !getAppStore().isConnected && <UIView bg-error padding-8
+                    ><Text white>{ t("appToasts.disconnected") }</Text></UIView>
+                }
                 <ScrollView
                     style={ [ preset.outer, backgroundStyle ] }
                     contentContainerStyle={ [ preset.inner, style ] }
@@ -63,17 +76,17 @@ function ScreenWithScrolling(props: ScreenProps) {
             </View>
         </KeyboardAvoidingView>
     );
-}
+})
 
 /**
  * The starting component on every screen in the app.
  *
  * @param props The screen props
  */
-export function Screen(props: ScreenProps) {
+export const Screen = observer((props: ScreenProps) => {
     if (isNonScrolling(props.preset)) {
         return <ScreenWithoutScrolling { ...props } />;
     } else {
         return <ScreenWithScrolling { ...props } />;
     }
-}
+})

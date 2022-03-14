@@ -49,4 +49,5 @@ export interface ScreenProps {
   refreshing?: boolean
   onRefresh?: any
   testID?: string
+  disableConnectionInfo?: boolean
 }
