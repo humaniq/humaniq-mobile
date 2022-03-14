@@ -60,6 +60,8 @@ import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
 import { isDev } from "./shim";
 import { CENTRY_URL } from "./config/api";
+import { View, Text } from "react-native-ui-lib";
+import { t } from "./i18n";
 
 applyTheme()
 
@@ -157,11 +159,11 @@ const AppScreen = observer(() => {
                             routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
                         } }
                     />
-                        <AppToast/>
                         <CreateWalletToast/>
                         <SigningDialog/>
                         <SendTransactionDialog/>
                     </> }
+                { !store.appStore.isLocked && <AppToast/>}
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&

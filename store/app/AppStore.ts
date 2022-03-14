@@ -17,6 +17,8 @@ import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 import Cryptr from "react-native-cryptr"
+import NetInfo from "@react-native-community/netinfo";
+import { setConnectionInfo } from "../wallet/transaction/utils";
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -30,13 +32,15 @@ export enum LOCKER_MODE {
 
 export enum TOASTER_TYPE {
     SUCCESS = 'SUCCESS',
-    PENDING = 'PENDING'
+    PENDING = 'PENDING',
+    ERROR = 'ERROR'
 }
 
 @model("AppStore")
 export class AppStore extends Model({
     lastBackgroundDate: p(t.number).withTransform(timestampToDateTransform()).withSetter(),
     initialized: p(t.boolean, false),
+    isConnected: p(t.boolean, true).withSetter(),
     walletPageInitialized: p(t.boolean, false),
     appState: p(t.enum(APP_STATE), APP_STATE.AUTH),
     isLocked: p(t.boolean, false),
@@ -119,6 +123,16 @@ export class AppStore extends Model({
             this.typedMessageManager.hub.on('unapprovedMessage', messageParams =>
                 this.onUnapprovedMessage(messageParams, 'typed')
             )
+
+            NetInfo.addEventListener(state => {
+                // @ts-ignore
+                if(!this.isConnected && state.isInternetReachable) {
+                    setConnectionInfo(true)
+                    getWalletStore().updateWalletsInfo();
+                }
+                // @ts-ignore
+                this.setIsConnected(state.isInternetReachable)
+            });
 
             this.initialized = true
         }
