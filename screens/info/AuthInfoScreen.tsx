@@ -32,14 +32,16 @@ export const AuthInfoScreen = observer<{ route: any }>(function ({ route }) {
                             { t("infoScreen.createWallet.description") }
                         </Text>
                     </View>
-                    { route.params?.isSavedWallet && <View marginT-30>
-                        <Text text16 robotoM>
-                            { t("infoScreen.enterPin.title") }
-                        </Text>
-                        <Text marginT-12 text16 robotoR>
-                            { t("infoScreen.enterPin.description") }
-                        </Text>
-                    </View> }
+                    {
+                        route.params?.isSavedWallet && <View marginT-30>
+                            <Text text16 robotoM>
+                                { t("infoScreen.enterPin.title") }
+                            </Text>
+                            <Text marginT-12 text16 robotoR>
+                                { t("infoScreen.enterPin.description") }
+                            </Text>
+                        </View>
+                    }
                 </View>
             </Screen>
         </View>

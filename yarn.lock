@@ -6980,9 +6980,9 @@ human-signals@^2.1.0:
     isutf8 "^3.1.1"
     web3 "^0.20.7"
 
-"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.1":
+"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.2":
   version "1.0.0"
-  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#ce4fd7b9fb3c0bce11e72e436814c6cd6efac76d"
+  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#e47bdad7c758b7ac6a9aa2d18ceb5ae181cbbcb6"
 
 i18n-js@3.8.0:
   version "3.8.0"
