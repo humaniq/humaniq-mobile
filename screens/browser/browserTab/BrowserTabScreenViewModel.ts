@@ -2,11 +2,8 @@ import { makeAutoObservable, reaction } from "mobx"
 import { MutableRefObject } from "react"
 import { DAPPS_CONFIG } from "../../../config/dapp"
 import { getAppStore, getBrowserStore, getEVMProvider, getWalletStore } from "../../../App"
-// import { createAsyncMiddleware, JsonRpcRequest, PendingJsonRpcResponse } from "json-rpc-engine"
 import { NavigationProp } from "@react-navigation/native"
-// import BackgroundBridge from "../../core/BackgroundBridge"
 import { dappsProvider } from "../../../utils/DappsProvider"
-import { getSnapshot } from "mobx-keystone"
 import { JS_POST_MESSAGE_TO_PROVIDER, SET_NETWORK_ID } from "../../../utils/browserScripts"
 import { inject } from "react-ioc"
 import {
@@ -18,7 +15,7 @@ import { SendTransactionViewModel } from "../../../components/dialogs/sendTransa
 import { IBrowserTab } from "./BrowserTabScreen";
 import { NativeTransaction } from "../../../store/wallet/transaction/NativeTransaction";
 import { InteractionManager } from "react-native";
-import { closeToast, setPendingAppToast } from "../../../store/wallet/transaction/utils";
+import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { t } from "../../../i18n";
 import { TOAST_POSITION } from "../../../components/toasts/appToast/AppToast";
 import { HistoryItem } from "../../../store/browser/BrowserStore";
@@ -110,7 +107,7 @@ export class BrowserTabScreenViewModel {
             // })
         })
 
-        this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet.address , () => {
+        this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet.address, () => {
             this.reloadWebView()
             // this.postMessage({
             //   type: "accountsChanged",

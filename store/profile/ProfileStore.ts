@@ -1,44 +1,37 @@
-import { model, Model, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { computed } from "mobx"
+import { _await, model, Model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { localStorage } from "../../utils/localStorage";
 
+export enum SUGGESTION_STEP {
+    SUGGESTION = 'SUGGESTION',
+    ENTER_ID = 'ENTER_ID',
+    VERIFICATION = 'VERIFICATION'
+}
 
 @model("ProfileStore")
 export class ProfileStore extends Model({
-    lastName: p(t.string, ""),
-    firstName: p(t.string, ""),
-    email: p(t.string, ""),
-    photoUrl: p(t.string, ""),
+    isSuggested: p(t.boolean, false),
     initialized: p(t.string, "").withSetter(),
-    loaded: p(t.boolean, false)
+    formStep: p(t.enum(SUGGESTION_STEP), SUGGESTION_STEP.SUGGESTION).withSetter(),
+    loaded: p(t.boolean, false),
+    verified: p(t.boolean, false),
 }) {
 
     @modelFlow
     * init() {
+        this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
+        this.verified = (yield* _await(localStorage.load("hm-wallet-humaniqid-verified"))) || false
+        this.initialized = true
     }
 
-    @computed
-    get fullName() {
-        return this.firstName + " " + this.lastName
+    @modelAction
+    async setIsSuggested(val: boolean) {
+        this.isSuggested = val
+        await localStorage.save("hm-wallet-humaniqid-suggest", val)
     }
 
-    @modelFlow
-    * load() {
-        // const profile = yield getAuthRequest().get(ROUTES.PROFILE.GET)
-        // if (profile.ok) {
-        //     this.lastName = profile.data.data.attributes.last_name
-        //     this.firstName = profile.data.data.attributes.first_name
-        //     this.email = profile.data.data.attributes.email
-        //     this.photoUrl = profile.data.data.attributes.photoUrl
-        //     this.loaded = true
-        // }
-    }
-
-    @modelFlow
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    * update(profile: object) {
-        // const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile)
-        // if (res.ok) {
-        //     this.load()
-        // }
+    @modelAction
+    async setVerified(val: boolean) {
+        this.verified = val
+        await localStorage.save("hm-wallet-humaniqid-verified", val)
     }
 }

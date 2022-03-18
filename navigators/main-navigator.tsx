@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react"
 import { Colors, View } from "react-native-ui-lib"
 import { SettingsScreen } from "../screens/settings/SettingsScreen"
 import { createStackNavigator } from "@react-navigation/stack"
-import { ProfileScreen } from "../screens/profile/ProfileScreen"
 import { BrowserScreen } from "../screens/browser/BrowserScreen"
 import { WalletsScreen } from "../screens/wallets/WalletsScreen";
 import { HIcon } from "../components/icon";
@@ -116,7 +115,6 @@ export function SettingsStack() {
             headerShown: false,
         } }>
             <Stack.Screen options={ { title: "Настройки" } } name="settings-main" component={ SettingsScreen }/>
-            <Stack.Screen name="settings-profile" component={ ProfileScreen }/>
         </Stack.Navigator>
     )
 }

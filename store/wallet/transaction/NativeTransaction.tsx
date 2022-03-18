@@ -21,7 +21,7 @@ import { renderShortAddress } from "../../../utils/address";
 import { getAppStore, getEVMProvider, getWalletStore } from "../../../App";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon";
-import { closeToast, setPendingAppToast } from "./utils";
+import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
 
 
