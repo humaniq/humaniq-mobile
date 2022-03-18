@@ -12,6 +12,7 @@ import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
 import { Splash } from "../../components/splash/Splash";
+import Vector from "../../assets/images/Vector.svg";
 
 const Auth = observer(function () {
     const view = useInstance(AuthViewModel)
@@ -29,8 +30,11 @@ const Auth = observer(function () {
                 backgroundColor={ Colors.white }
                 statusBarBg={ Colors.white }>
                 { view.state === AUTH_STATE.MAIN &&
-
                     <View flex center>
+                        <TouchableOpacity onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }
+                                          style={ { alignSelf: "flex-end", marginRight: 16, marginTop: 16 } }>
+                            <Vector width={ 22 } height={ 22 } color={ Colors.primary }/>
+                        </TouchableOpacity>
                         <View bottom flex>
                             <LogoBrandFull width={ 160 } height={ 160 }/>
                         </View>

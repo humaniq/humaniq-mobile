@@ -16,6 +16,7 @@ import SearchPicture from "../../../assets/images/search.svg"
 import { Header } from "../../../components/header/Header";
 import { NATIVE_COIN } from "../../../config/network";
 import { ListSkeleton, TransactionListScreenSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
+import { CryptoCard } from "../../../components/card/CryptoCard";
 
 const TransactionsList = observer<{ route: any }>(({ route }) => {
     const view = useInstance(TransactionsListScreenViewModel)
@@ -50,91 +51,81 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                 preset="fixed"
             >
                 <Header title={ view.token.name }/>
-                { view.initialized &&
-                    <>
-                        <ScrollView
-                            testID={ 'transactionsListScreen' }
-                            refreshControl={
-                                <RefreshControl
-                                    refreshing={ view.refreshing }
-                                    onRefresh={ async () => {
-                                        view.refreshing = true
-                                        if (!view.tokenAddress) {
-                                            await view.wallet.loadTransactions(true)
-                                        } else {
-                                            await view.wallet.getTokenTransactions(true)
-                                        }
-                                        view.refreshing = false
-                                    } }
-                                />
-                            }
-                            ref={ scrollRef }
-                            onScroll={ ({ nativeEvent }) => {
-                                if (isCloseToBottom(nativeEvent)) {
-                                    if (!view.tokenAddress) {
-                                        view.wallet.loadTransactions();
-                                        // @ts-ignore
-                                        scrollRef?.current.scrollToEnd()
-                                    }
+                { view.initialized && <ScrollView
+                    testID={ 'transactionsListScreen' }
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={ view.refreshing }
+                            onRefresh={ async () => {
+                                view.refreshing = true
+                                if (!view.tokenAddress) {
+                                    await view.wallet.loadTransactions(true)
+                                } else {
+                                    await view.wallet.getTokenTransactions(true)
                                 }
-
+                                view.refreshing = false
                             } }
-                            scrollEventThrottle={ 400 }
-                        >
-                            <View>
-                                <View row center paddingT-10>
-                                    {
-                                        view.token.logo === NATIVE_COIN.ETHEREUM &&
-                                        <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>
-                                    }
-                                    {
-                                        view.token.logo === NATIVE_COIN.BINANCECOIN &&
-                                        <Av size={ 80 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
-                                    }
-                                    {
-                                        !view.token.logo &&
-                                        <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                                source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
-                                    }
-                                </View>
-                                <View row center>
-                                    <Text h5>
-                                        { view.token.formatFiatBalance }
-                                    </Text>
-                                </View>
-                                <View row center>
-                                    <Text>
-                                        { `${ view.token.formatBalance } ${ view.token.symbol }` }
-                                    </Text>
-                                </View>
-                                <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
-                            </View>
-                            <View padding-16>
-                                <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
-                            </View>
-                            { view.refreshing && <ListSkeleton marginV={ 0 }/> }
+                        />
+                    }
+                    ref={ scrollRef }
+                    onScroll={ ({ nativeEvent }) => {
+                        if (isCloseToBottom(nativeEvent)) {
+                            if (!view.tokenAddress) {
+                                view.wallet.loadTransactions();
+                                // @ts-ignore
+                                scrollRef?.current.scrollToEnd()
+                            }
+                        }
+
+                    } }
+                    scrollEventThrottle={ 400 }
+                >
+                    <CryptoCard>
+                        <View row center>
                             {
-                                !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
-                                    { view.transactions.map((item, index) => renderItem({
-                                        item,
-                                        index
-                                    }))
-                                    }
-                                    {
-                                        view.loadingTransactions && <View padding-15><LoaderScreen/></View>
-                                    }
-                                </Card>
+                                view.token.logo === NATIVE_COIN.ETHEREUM &&
+                                <Av size={ 60 } source={ require("../../../assets/images/ethereum-logo.png") }/>
                             }
                             {
-                                !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
-                                <View center padding-20>
-                                    <SearchPicture width={ 200 } height={ 200 }/>
-                                    <Text robotoR textGrey text16>{ t("walletMenuDialog.noTransactions") }</Text>
-                                </View>
+                                view.token.logo === NATIVE_COIN.BINANCECOIN &&
+                                <Av size={ 60 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
                             }
-                        </ScrollView>
-                    </>
-                }
+                            {
+                                !view.token.logo &&
+                                <Avatar address={ view.token.tokenAddress } size={ 80 }
+                                        source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                            }
+                        </View>
+                        <Text white robotoM text24 center marginT-8>
+                            { view.token.formatFiatBalance }
+                        </Text>
+                        <Text white robotoM text14 center marginT-4 marginB-16>
+                            { `${ view.token.formatBalance } ${ view.token.symbol }` }
+                        </Text>
+                        <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
+                    </CryptoCard>
+                    <Text textM marginH-16 marginV-14>{ t("walletMenuDialog.transactionHistory") }</Text>
+                    { view.refreshing && <ListSkeleton marginV={ 0 }/> }
+                    {
+                        !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
+                            { view.transactions.map((item, index) => renderItem({
+                                item,
+                                index
+                            }))
+                            }
+                            {
+                                view.loadingTransactions && <View padding-15><LoaderScreen/></View>
+                            }
+                        </Card>
+                    }
+                    {
+                        !view.refreshing && (!view.transactions || view.transactions.length === 0) &&
+                        <View center padding-20>
+                            <SearchPicture width={ 200 } height={ 200 }/>
+                            <Text robotoR textGrey text16>{ t("walletMenuDialog.noTransactions") }</Text>
+                        </View>
+                    }
+                </ScrollView> }
                 { !view.initialized && <TransactionListScreenSkeleton/> }
             </Screen>
         }
