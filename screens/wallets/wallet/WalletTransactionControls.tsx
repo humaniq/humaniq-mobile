@@ -18,7 +18,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
     const view = useInstance(WalletsScreenModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
-    return <View paddingV-20 paddingH-16>
+    return <View>
         <View row center flex>
             <RippleWrapper testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
                            style={ { flex: 0.5, marginRight: 8 } }
@@ -31,11 +31,11 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                    }
                                })
                            } }>
-                <Button outlineColor={ Colors.transparent }
+                <Button paddingT-7 paddingB-7 outlineColor={ Colors.white } color={ Colors.white } borderRadius={ 14 }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
                         primary outline label={ t("common.send") }
                 >
-                    <HIcon name="arrow-to-top" size={ 14 } color={ Colors.primary }/>
+                    <HIcon name="arrow-to-top" size={ 14 } color={ Colors.white }/>
                 </Button>
             </RippleWrapper>
             <RippleWrapper style={ { flex: 0.5, marginLeft: 8 } }
@@ -43,12 +43,12 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
                                selfAddressQrCodeDialogViewModel.display = true
                            } }>
-                <Button outlineColor={ Colors.transparent }
+                <Button paddingT-7 paddingB-7 outlineColor={ Colors.white } color={ Colors.white } borderRadius={ 14 }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
                         primary outline
                         label={ t("common.receive") }
                 >
-                    <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.primary }/>
+                    <HIcon name="arrow-to-bottom" size={ 14 } color={ Colors.white }/>
                 </Button>
             </RippleWrapper>
         </View></View>
