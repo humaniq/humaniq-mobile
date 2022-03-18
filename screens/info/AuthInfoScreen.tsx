@@ -17,7 +17,7 @@ export const AuthInfoScreen = observer<{ route: any }>(function ({ route }) {
                     <View>
                         <Text text16 robotoM>
                             { t("infoScreen.signIn.title", {
-                                key: t(route.params?.isSavedWallet ? "infoScreen.signIn.recoverMnemonicTwo" : "infoScreen.signIn.recoverMnemonicOne")
+                                key: `“${t(route.params?.isSavedWallet ? "registerScreen.recoverFromMnemonicTwo" : "registerScreen.recoverFromMnemonicOne")}”`
                             }) }
                         </Text>
                         <Text marginT-12 text16 robotoR>

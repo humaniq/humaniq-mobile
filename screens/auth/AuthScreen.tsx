@@ -29,42 +29,43 @@ const Auth = observer(function () {
                 backgroundColor={ Colors.white }
                 statusBarBg={ Colors.white }>
                 { view.state === AUTH_STATE.MAIN &&
-                    <View flex center>
-                        <TouchableOpacity marginT-16 marginR-16 right onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }
-                                          style={ { alignSelf: "flex-end" } }>
+                    <>
+                        <TouchableOpacity marginT-16 marginR-16 right
+                                          onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }>
                             <HIcon name={ "info" } size={ 22 } color={ Colors.blueOcean }/>
                         </TouchableOpacity>
-                        <View bottom flex>
-                            <LogoBrandFull width={ 160 } height={ 160 }/>
-                        </View>
-                        <View bottom flex paddingB-20>
-                            <View bottom row flex style={ { width: "100%" } }>
-                                <View style={ { width: "100%" } } paddingH-16>
-                                    <Button testID={ 'recoveryWalletBtn' } outline br50 bg-primary robotoM
-                                            onPress={ view.goRecover } marginB-16
-                                            label={ view.isSavedWallet ? t("registerScreen.recoverFromMnemonicTwo") :
-                                                t("registerScreen.recoverFromMnemonicOne") }/>
-
-                                    <Button testID={ 'createWalletBtn' } fullWidth bg-primary
-                                            onPress={ view.goRegister }
-                                            style={ { borderRadius: 12 } }
-                                            label={ t("registerScreen.createNewWallet") }/>
-                                    {
-                                        view.isSavedWallet && <View row center paddingT-20>
-                                            <Text>{ t("registerScreen.goExisting") }.</Text>
-                                            <Button
-                                                testID={ 'loginWalletBtn' }
-                                                link bg-primary marginV-10 marginL-10
+                        <View flex center>
+                            <View bottom flex>
+                                <LogoBrandFull width={ 160 } height={ 160 }/>
+                            </View>
+                            <View bottom flex paddingB-20>
+                                <View bottom row flex style={ { width: "100%" } }>
+                                    <View style={ { width: "100%" } } paddingH-16>
+                                        <Button testID={ 'recoveryWalletBtn' } outline br50 bg-primary robotoM
+                                                onPress={ view.goRecover } marginB-16
+                                                label={ view.isSavedWallet ? t("registerScreen.recoverFromMnemonicTwo") :
+                                                    t("registerScreen.recoverFromMnemonicOne") }/>
+                                        <Button testID={ 'createWalletBtn' } fullWidth bg-primary
+                                                onPress={ view.goRegister }
                                                 style={ { borderRadius: 12 } }
-                                                onPress={ view.goLogin }
-                                                labelStyle={ { fontSize: 14 } }
-                                                label={ t("registerScreen.enterPin") }/>
-                                        </View>
-                                    }
+                                                label={ t("registerScreen.createNewWallet") }/>
+                                        {
+                                            view.isSavedWallet && <View row center paddingT-20>
+                                                <Text>{ t("registerScreen.goExisting") }.</Text>
+                                                <Button
+                                                    testID={ 'loginWalletBtn' }
+                                                    link bg-primary marginV-10 marginL-10
+                                                    style={ { borderRadius: 12 } }
+                                                    onPress={ view.goLogin }
+                                                    labelStyle={ { fontSize: 14 } }
+                                                    label={ t("registerScreen.enterPin") }/>
+                                            </View>
+                                        }
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </View>
+                    </>
                 }
                 { view.state === AUTH_STATE.REGISTER &&
                     <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>

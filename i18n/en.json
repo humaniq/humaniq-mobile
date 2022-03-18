@@ -253,8 +253,6 @@
   },
   "infoScreen": {
     "signIn": {
-      "recoverMnemonicOne": "“I already have a wallet”",
-      "recoverMnemonicTwo": "“Sign in with another wallet”",
       "title": "%{key} button means:",
       "description": "If you have a wallet you can paste your secret 12 words and transfer your account to Humaniq wallet app"
     },
