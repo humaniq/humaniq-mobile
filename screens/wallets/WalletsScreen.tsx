@@ -10,7 +10,6 @@ import { Dimensions, InteractionManager } from "react-native";
 import { t } from "../../i18n";
 import { WalletTittle } from "./wallet/WalletTittle";
 import { WalletBody } from "./wallet/WalletBody";
-import { WalletTransactionControls } from "./wallet/WalletTransactionControls";
 import {
     SelfAddressQrCodeDialogViewModel
 } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialogViewModel";
@@ -69,7 +68,7 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                         />
                     </View>
                     <View paddingB-10>
-                        <View height={ 100 } testID={ 'titleWalletBlock' }>
+                        <View testID={ 'titleWalletBlock' }>
                             <Carousel
                                 vertical={ false }
                                 useScrollView={ true }
@@ -89,7 +88,6 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                                 } }
                             />
                         </View>
-                        <WalletTransactionControls/>
                         <Carousel
                             vertical={ false }
                             scrollEnabled={ false }

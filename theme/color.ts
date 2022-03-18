@@ -7,6 +7,7 @@ Colors.loadColors({
   warning: "#FD9900",
   textBlack: "#001833",
   black: "#001833",
+  blueOcean: "#001833",
   "text-grey": "#9B9B9B",
   textGrey: "#9B9B9B",
   bg: "#F5FAFF",
