@@ -40,7 +40,7 @@ export const Header = observer<HeaderProps>((
     const props = rightText ? { spread: true } : {}
 
     return <TouchableOpacity testID={ 'backBtn' } padding-20 paddingB-0 left row centerV
-                             onPress={ onBackPress || canGoBack && nav.goBack
+                             onPress={ onBackPress || canGoBack ? nav.goBack : () => false
                              } { ...props }>
         { backEnabled && canGoBack && icon === ICON_HEADER.ARROW ?
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> :

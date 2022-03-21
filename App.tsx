@@ -60,7 +60,7 @@ import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
 import { isDev } from "./shim";
 import { CENTRY_URL } from "./config/api";
-import { HumaniqIDSuggestionScreen } from "./screens/humaniqidsuggestion/HumaniqIDSuggestionScreen";
+import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
 
 applyTheme()
 
@@ -167,7 +167,7 @@ const AppScreen = observer(() => {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&
                     !store.appStore.isLocked && !store.profileStore.isSuggested &&
-                    <HumaniqIDSuggestionScreen/>
+                    <HumaniqIDScreen/>
                 }
                 {
                     store.appStore.initialized &&

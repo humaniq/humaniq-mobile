@@ -78,8 +78,10 @@ export class AppStore extends Model({
     * logout() {
         yield* _await(localStorage.remove("hm-wallet"))
         yield* _await(localStorage.remove("hm-wallet-humaniqid-suggest"))
+        yield* _await(localStorage.remove("hm-wallet-humaniqid-verified"))
         this.setAppState(APP_STATE.AUTH)
         getProfileStore().setIsSuggested(false)
+        getProfileStore().setVerified(false)
         // @ts-ignore
         getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
         this.storedPin = null
@@ -131,7 +133,7 @@ export class AppStore extends Model({
 
             NetInfo.addEventListener(state => {
                 // @ts-ignore
-                if(!this.isConnected && state.isInternetReachable) {
+                if (!this.isConnected && state.isInternetReachable) {
                     setConnectionInfo(true)
                     getWalletStore().updateWalletsInfo();
                 }
@@ -184,7 +186,7 @@ export class AppStore extends Model({
         if (this.savedPin && this.savedPin !== pin) {
             const cryptr = new Cryptr(this.savedPin)
             const encrypted = yield* _await(localStorage.load("hm-wallet"))
-            if(encrypted) {
+            if (encrypted) {
                 const result = cryptr.decrypt(encrypted)
                 const storedWallets = JSON.parse(result)
                 const newCryptr = new Cryptr(pin)

@@ -19,6 +19,7 @@ import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrase
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrencyPage";
+import { HumaniqIDNavScreen, HumaniqIDScreen } from "../screens/humaniqid/HumaniqIDScreen";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -45,7 +46,8 @@ export type RootParamList = {
     termsOfServicePage,
     privacyPolicyPage,
     aboutPage,
-    selectCurrency
+    selectCurrency,
+    humaniqID
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -77,6 +79,8 @@ const RootStack = () => {
             <Stack.Screen name="aboutPage" component={ AboutPage }/>
             <Stack.Screen name="privacyPolicyPage" component={ PrivacyPolicyPage }/>
             <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
+            <Stack.Screen name="humaniqID" component={ HumaniqIDNavScreen }/>
+
         </Stack.Navigator>
     )
 }

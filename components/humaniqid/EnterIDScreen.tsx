@@ -11,6 +11,7 @@ import { InteractionManager } from "react-native";
 import CloseIcon from "../../assets/images/circle-xmark-solid.svg";
 import { makeAutoObservable } from "mobx";
 import { closeToast, setToast } from "../../utils/toast";
+import {useNavigation as navigation } from "@react-navigation/native";
 
 
 class EnterIDViewModel {
@@ -30,9 +31,18 @@ class EnterIDViewModel {
     }
 }
 
-const EnterID = observer(() => {
+export interface EnterIDProps {
+    useNavigation: boolean
+}
+
+const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
 
     const view = useInstance(EnterIDViewModel)
+
+    let nav
+    if(useNavigation) {
+        nav = navigation()
+    }
 
     const inputRef = useRef()
 
@@ -137,11 +147,13 @@ const EnterID = observer(() => {
                     onPress={ () => {
                         // @ts-ignore
                         getProfileStore().setVerified(true)
-                        // @ts-ignore
-                        getProfileStore().setFormStep(SUGGESTION_STEP.VERIFICATION)
+                        if (!useNavigation) getProfileStore().setFormStep(SUGGESTION_STEP.VERIFICATION)
+                        if(useNavigation) nav.goBack()
                         setToast(t("humaniqID.approved"))
                         closeToast()
                         setTimeout(() => {
+                            // @ts-ignore
+                            getProfileStore().setVerified(true)
                             // @ts-ignore
                             getProfileStore().setIsSuggested(true)
                         }, 3000)

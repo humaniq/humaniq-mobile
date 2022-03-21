@@ -32,6 +32,7 @@ export class ProfileStore extends Model({
     @modelAction
     async setVerified(val: boolean) {
         this.verified = val
+        this.formStep = SUGGESTION_STEP.SUGGESTION
         await localStorage.save("hm-wallet-humaniqid-verified", val)
     }
 }
