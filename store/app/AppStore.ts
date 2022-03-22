@@ -76,9 +76,7 @@ export class AppStore extends Model({
 
     @modelFlow
     * logout() {
-        yield* _await(localStorage.remove("hm-wallet"))
-        yield* _await(localStorage.remove("hm-wallet-humaniqid-suggest"))
-        yield* _await(localStorage.remove("hm-wallet-humaniqid-verified"))
+        yield* _await(localStorage.clear())
         this.setAppState(APP_STATE.AUTH)
         getProfileStore().setIsSuggested(false)
         getProfileStore().setVerified(false)

@@ -210,26 +210,22 @@ export class NativeTransaction extends Model({
     @modelFlow
     * storeTransaction() {
         const saveTx = getSnapshot(this)
-        const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || []
-        pendingTransactions.push(saveTx)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, pendingTransactions))
+        const transactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || {}
+        transactions[saveTx.hash] = saveTx
+        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, transactions))
     }
 
     @modelFlow
     * removeFromStore() {
-        let pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || []
-        pendingTransactions = pendingTransactions.filter(t => t.hash !== this.key)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, pendingTransactions))
+        const transactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`))) || {}
+        delete transactions[this.key]
+        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }`, transactions))
     }
 
     @modelFlow
     * applyToWallet() {
         try {
-            if (this.receiptStatus === TRANSACTION_STATUS.PENDING || this.receiptStatus === TRANSACTION_STATUS.CANCELLING) {
-                this.storeTransaction()
-            } else {
-                this.removeFromStore()
-            }
+            this.storeTransaction()
             this.wallet.transactions.set(this.key, this)
         } catch (e) {
             console.log("ERROR-APPLY-TO-WALLET", e)
