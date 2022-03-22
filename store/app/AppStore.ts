@@ -75,7 +75,7 @@ export class AppStore extends Model({
 
     @modelFlow
     * logout() {
-        yield* _await(localStorage.remove("hm-wallet"))
+        yield* _await(localStorage.clear())
         this.setAppState(APP_STATE.AUTH)
         this.storedPin = null
         this.isLockerDirty = true

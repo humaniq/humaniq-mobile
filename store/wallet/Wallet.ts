@@ -148,13 +148,8 @@ export class Wallet extends Model({
             const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
             this.transactions.loading = true
 
-            const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || []
-
-            storedTransactions.forEach(t => {
-                const pTx = fromSnapshot<NativeTransaction>(t)
-                pTx.applyToWallet()
-                pTx.waitTransaction()
-            })
+            const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || {}
+            const transactionsArr = Object.values(storedTransactions)
 
             const result = yield getMoralisRequest().get(route, {
                 chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }`,
@@ -174,6 +169,18 @@ export class Wallet extends Model({
                         this.transactions.map.set(tr.hash, tr)
                     })
                 })
+
+                transactionsArr.forEach(t => {
+                    const pTx = fromSnapshot<NativeTransaction>(t)
+                    const existTr = this.transactions.map.get(pTx.hash)
+                    if (!existTr) {
+                        pTx.applyToWallet()
+                        pTx.waitTransaction()
+                    } else {
+                        pTx.removeFromStore()
+                    }
+                })
+
                 this.transactions.total = result.data.total
                 this.transactions.incrementOffset()
                 this.transactions.loading = false
@@ -193,6 +200,8 @@ export class Wallet extends Model({
             const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_TRANSFERS, {
                 address: this.address
             })
+
+            const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-token-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || {}
             const result = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
 
             if (result.ok && (result.data as TransactionsRequestResult).total) {
@@ -211,11 +220,24 @@ export class Wallet extends Model({
                     })
                     if (currentToken) {
                         runUnprotected(() => {
-                            this.tokenTransactionsInitialized = true
                             currentToken.transactions.set(tr.transactionHash, tr)
+
+                            const storedTx = storedTransactions[tr.transactionHash]
+                            if (storedTx) {
+                                const pTx = fromSnapshot<TokenTransaction>(storedTx)
+                                pTx.removeFromStore()
+                                delete storedTransactions[tr.transactionHash]
+                            }
                         })
                     }
                 })
+                const transactionsArr = Object.values(storedTransactions)
+                transactionsArr.forEach(t => {
+                    const pTx = fromSnapshot<TokenTransaction>(t)
+                    pTx.applyToWallet()
+                    pTx.waitTransaction()
+                })
+                this.tokenTransactionsInitialized = true
             }
         } catch (e) {
             console.log("ERROR", e)
