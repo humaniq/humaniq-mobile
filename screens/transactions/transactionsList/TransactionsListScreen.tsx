@@ -107,7 +107,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                     <Text textM marginH-16 marginV-14>{ t("walletMenuDialog.transactionHistory") }</Text>
                     { view.refreshing && <ListSkeleton marginV={ 0 }/> }
                     {
-                        !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
+                        !view.refreshing && !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
                             { view.transactions.map((item, index) => renderItem({
                                 item,
                                 index
