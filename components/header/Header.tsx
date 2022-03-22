@@ -32,6 +32,10 @@ export const Header = observer<HeaderProps>((
 
     const nav = useNavigation()
 
+    const goBack = () => {
+        if (onBackPress || canGoBack) nav.goBack()
+    }
+
     useEffect(() => {
         setDark(isDarkMode())
         setBack(nav.canGoBack())
@@ -40,14 +44,13 @@ export const Header = observer<HeaderProps>((
     const props = rightText ? { spread: true } : {}
 
     return <TouchableOpacity testID={ 'backBtn' } padding-20 paddingB-0 left row centerV
-                             onPress={ onBackPress || canGoBack ? nav.goBack : () => false
-                             } { ...props }>
+                             onPress={ goBack } { ...props }>
         { backEnabled && canGoBack && icon === ICON_HEADER.ARROW ?
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> :
             backEnabled &&
             <HIcon name={ "cross" } size={ 14 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
         { title &&
-            <Button onPress={ onBackPress || canGoBack && nav.goBack } paddingL-30={ backEnabled } link textM black
+            <Button onPress={ goBack } paddingL-30={ backEnabled } link textM black
                     text20
                     label={ title }/> }
         { rightText && <Text robotoR text-grey>{ rightText }</Text> }
