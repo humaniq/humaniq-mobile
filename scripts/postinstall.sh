@@ -17,3 +17,6 @@ npx jetify
 #echo "5. Init git submodules"
 #echo "This may take a while..."
 #git submodule update --init
+
+echo "3 copy provider"
+cp node_modules/humaniq-ethereum-provider/dist/humaniq-provider.js android/app/src/main/assets/provider.js
