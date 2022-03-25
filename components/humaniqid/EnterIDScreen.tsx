@@ -3,15 +3,15 @@ import { observer } from "mobx-react-lite";
 import { Button, Colors, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { HIcon } from "../icon";
-import { getProfileStore } from "../../App";
+import { getProfileStore, getWalletStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import { t } from "../../i18n";
 import { throttle } from "../../utils/general";
 import { InteractionManager } from "react-native";
 import CloseIcon from "../../assets/images/circle-xmark-solid.svg";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 import { closeToast, setToast } from "../../utils/toast";
-import {useNavigation as navigation } from "@react-navigation/native";
+import { useNavigation as navigation } from "@react-navigation/native";
 
 
 class EnterIDViewModel {
@@ -21,9 +21,16 @@ class EnterIDViewModel {
     }
 
     value = ""
+    invalidCode = false
+
+    obst = reaction(() => this.value, async (val) => {
+        if (val.length === 6) {
+            this.invalidCode = !await getProfileStore().checkCode(val)
+        }
+    })
 
     get inputValueError() {
-        return this.value && this.value.length > 6
+        return this.value && this.value.length > 6 || this.invalidCode
     }
 
     get inputValueErrorMessage() {
@@ -40,7 +47,7 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
     const view = useInstance(EnterIDViewModel)
 
     let nav
-    if(useNavigation) {
+    if (useNavigation) {
         nav = navigation()
     }
 
@@ -141,19 +148,21 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
         </View>
         }
         <View flex bottom padding-16>
-            <Button testID={ 'nextStep' } disabled={ view.inputValueError || !view.value }
+            <Button testID={ 'nextStep' } disabled={ view.inputValueError || !view.value || view.value.length !== 6 }
                     style={ { width: "100%", borderRadius: 12 } }
                     label={ t("selectValueScreen.nextBtn") }
-                    onPress={ () => {
+                    onPress={ async () => {
                         // @ts-ignore
-                        getProfileStore().setVerified(true)
                         if (!useNavigation) getProfileStore().setFormStep(SUGGESTION_STEP.VERIFICATION)
-                        if(useNavigation) nav.goBack()
+                        if (useNavigation) {
+                            await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
+                            nav.goBack()
+                        }
                         setToast(t("humaniqID.approved"))
                         closeToast()
                         setTimeout(() => {
                             // @ts-ignore
-                            getProfileStore().setVerified(true)
+                            getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
                             // @ts-ignore
                             getProfileStore().setIsSuggested(true)
                         }, 3000)
