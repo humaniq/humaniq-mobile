@@ -15,7 +15,7 @@ export default {
     show(message: string, duration: number = ToastConstants.SHORT) {
         Toast.show(message, duration)
     },
-    showWithGravity(message: string, duration: number = ToastConstants.SHORT, gravity = ToastConstants.BOTTOM) {
+    showWithGravity(message: string, duration: number = ToastConstants.SHORT, gravity: string = ToastConstants.BOTTOM) {
         Toast.showWithGravity(message, duration, gravity)
     }
 }

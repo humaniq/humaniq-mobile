@@ -160,7 +160,7 @@ export class QRScannerView {
           NativeToast.show(t("qRScanner.qrCodeDetectionError"))
           return
         }
-        this.onBarCodeRead({ data: decodedQRResult.values[0] })
+        this.onBarCodeRead({ data: possiblyDetectedQRCode })
       } else {
         NativeToast.show(t("qRScanner.qrCodeDetectionError"))
       }
