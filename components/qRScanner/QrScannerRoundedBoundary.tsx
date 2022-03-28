@@ -4,6 +4,7 @@ import Svg, { Defs, Mask, Rect } from "react-native-svg";
 import { Animated, Dimensions, Easing } from "react-native";
 import { HIcon } from "../icon";
 import { isEmpty } from "../../utils/general";
+import { initialWindowMetrics } from "react-native-safe-area-context";
 
 const deviceWidth = Dimensions.get('screen').width;
 const deviceHeight = Dimensions.get('screen').height;
@@ -189,7 +190,7 @@ export const QrScannerRoundedBoundary = ({
             position: 'absolute',
             left: 16,
             right: 16,
-            bottom: 20,
+            bottom: initialWindowMetrics?.insets.bottom + 20,
             borderRadius: 10
         } } onPress={ bottomButtonOnClick } label={ bottomButtonTitle }/> : null }
         { typeof closeButtonOnClick === 'function' && <TouchableOpacity style={ {

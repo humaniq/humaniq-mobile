@@ -249,7 +249,8 @@
       "message": "Для сканирования QR кодов с адресами получателей"
     },
     "scanning": "Направьте вашу камеру на QR код",
-    "chooseFromGallery": "Выбрать из галереи"
+    "chooseFromGallery": "Выбрать из галереи",
+    "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении"
   },
   "infoScreen": {
     "signIn": {
