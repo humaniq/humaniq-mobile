@@ -78,6 +78,7 @@ export class AppStore extends Model({
     * logout() {
         yield* _await(localStorage.clear())
         this.setAppState(APP_STATE.AUTH)
+        getWalletStore().storedWallets = null
         getProfileStore().setIsSuggested(false)
         getProfileStore().setVerified(false)
         // @ts-ignore
