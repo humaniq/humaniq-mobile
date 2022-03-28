@@ -12,13 +12,14 @@ import {
 import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
-import { getWalletStore } from "../../App"
+import { getProfileStore, getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 import Cryptr from "react-native-cryptr"
 import NetInfo from "@react-native-community/netinfo";
-import { setConnectionInfo } from "../wallet/transaction/utils";
+import { setConnectionInfo } from "../../utils/toast";
+import { SUGGESTION_STEP } from "../profile/ProfileStore";
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -77,6 +78,10 @@ export class AppStore extends Model({
     * logout() {
         yield* _await(localStorage.clear())
         this.setAppState(APP_STATE.AUTH)
+        getProfileStore().setIsSuggested(false)
+        getProfileStore().setVerified(false)
+        // @ts-ignore
+        getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
         this.storedPin = null
         this.isLockerDirty = true
         this.isLocked = false
@@ -126,7 +131,7 @@ export class AppStore extends Model({
 
             NetInfo.addEventListener(state => {
                 // @ts-ignore
-                if(!this.isConnected && state.isInternetReachable) {
+                if (!this.isConnected && state.isInternetReachable) {
                     setConnectionInfo(true)
                     getWalletStore().updateWalletsInfo();
                 }
@@ -179,7 +184,7 @@ export class AppStore extends Model({
         if (this.savedPin && this.savedPin !== pin) {
             const cryptr = new Cryptr(this.savedPin)
             const encrypted = yield* _await(localStorage.load("hm-wallet"))
-            if(encrypted) {
+            if (encrypted) {
                 const result = cryptr.decrypt(encrypted)
                 const storedWallets = JSON.parse(result)
                 const newCryptr = new Cryptr(pin)

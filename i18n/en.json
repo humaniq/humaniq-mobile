@@ -252,6 +252,33 @@
     "chooseFromGallery": "Choose from gallery",
     "qrCodeDetectionError": "Failed to detect QR code in image"
   },
+  "humaniqID": {
+    "presentation": {
+      "tittle": "Humaniq ID allows you to:",
+      "first": "Get charity donations",
+      "second": "Find a job",
+      "third": "Get business course",
+      "canGet": "You can get Humaniq ID in Telegram bot"
+    },
+    "skip": "Skip",
+    "singUp": "Sing up with Humaniq ID",
+    "form": {
+      "tittle": "Paste your code from Humaniq ID bot which was received in Telegram",
+      "label": "Humaniq ID code",
+      "paste": "Paste code",
+      "helper": "It looks like: 234t6",
+      "error": "Incorrect, please check you code"
+    },
+    "approved": "Humqniq ID code has approved",
+    "settings": {
+      "tittle": "Humaniq ID",
+      "passed": "You have passed identification",
+      "attached": "Humaniq ID has attached to this address",
+      "notConnected": "Humaniq ID not connected",
+      "getAccess": "Get access to Humaniq services: charity, job, education",
+      "pasteID": "Paste Humaniq ID"
+    }
+  },
   "infoScreen": {
     "signIn": {
       "title": "%{key} button means:",

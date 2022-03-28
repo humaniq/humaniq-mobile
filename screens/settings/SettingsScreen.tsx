@@ -8,12 +8,13 @@ import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { HIcon } from "../../components/icon";
 import { MenuItem } from "../../components/menuItem/MenuItem";
-import { getAppStore, getEVMProvider, getWalletStore } from "../../App";
+import { getAppStore, getEVMProvider, getProfileStore, getWalletStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import { LOCKER_MODE } from "../../store/app/AppStore";
 import { capitalize, toUpperCase } from "../../utils/general";
+import { HumqniqIDCard } from "../../components/humaniqid/HumqniqIDCard";
 
 const Settings = observer<{ route: any }>(function ({ route }) {
     const view = useInstance(SettingsScreenModel)
@@ -34,8 +35,9 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                     view.initialized &&
                     <>
                         <Header backEnabled={ false } title={ t("settingsScreen.name") }/>
-                        <View testID={ 'settingsScreen' } flex paddingT-20 paddingH-16>
-                            <Card padding-10 padding-0>
+                        <View testID={ 'settingsScreen' } flex >
+                            <HumqniqIDCard verified={ getProfileStore().verified }/>
+                            <Card marginH-16>
                                 <MenuItem icon={ "key" }
                                           name={ t("settingsScreen.menu.recoveryPhrase") }
                                           value={ !view.recoveryRead &&
@@ -60,7 +62,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           } }
                                 />
                                 <View
-                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "lock" }
                                           name={ t("settingsScreen.menu.changePin") }
                                           onPress={ () => {
@@ -72,7 +74,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           } }
                                 />
                             </Card>
-                            <Card padding-10 padding-0 marginT-16>
+                            <Card padding-10 marginT-16 marginH-16>
                                 <MenuItem icon={ "double-arrows" }
                                           name={ t("settingsScreen.menu.currency") }
                                           value={ <Text text16
@@ -94,7 +96,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           onPress={ () => nav.navigate("aboutPage") }
                                 />
                             </Card>
-                            <Card padding-10 padding-0 marginT-16>
+                            <Card marginT-16 marginH-16>
                                 <MenuItem icon={ "logout" }
                                           name={ t("settingsScreen.menu.signOut") }
                                           showArrow={ false }

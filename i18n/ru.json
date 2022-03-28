@@ -252,6 +252,33 @@
     "chooseFromGallery": "Выбрать из галереи",
     "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении"
   },
+  "humaniqID": {
+    "presentation": {
+      "tittle": "Humaniq ID позволяет вам:",
+      "first": "Получить благотворительность",
+      "second": "Найти работу",
+      "third": "Получить учебные курсы",
+      "canGet": "Вы можете получить Humaniq ID в Telegram боте"
+    },
+    "skip": "Пропустить",
+    "singUp": "Войти в Humaniq ID",
+    "form": {
+      "tittle": "Введите свой код в Humaniq ID, полученный с помошью Telegram бота",
+      "label": "Humaniq ID код",
+      "paste": "Вставить код",
+      "helper": "Выглядит так: 234t6",
+      "error": "Неправильно, пожалуйста проверьте код"
+    },
+    "approved": "Humqniq ID код подтвержден",
+    "settings": {
+      "tittle": "Humaniq ID",
+      "passed": "Вы прошли идентификацию",
+      "attached": "Humaniq ID связан с вашим адресом",
+      "notConnected": "Humaniq ID не подключен",
+      "getAccess": "Получить доступ к сервисам Humaniq: благотворительность, работа, образование",
+      "pasteID": "Ввести Humaniq ID"
+    }
+  },
   "infoScreen": {
     "signIn": {
       "title": "Кнопка %{key} означает:",

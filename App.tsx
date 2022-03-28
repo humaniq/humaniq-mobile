@@ -60,8 +60,7 @@ import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
 import { isDev } from "./shim";
 import { CENTRY_URL } from "./config/api";
-import { View, Text } from "react-native-ui-lib";
-import { t } from "./i18n";
+import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
 
 applyTheme()
 
@@ -163,11 +162,17 @@ const AppScreen = observer(() => {
                         <SigningDialog/>
                         <SendTransactionDialog/>
                     </> }
-                { !store.appStore.isLocked && <AppToast/>}
+                { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked &&
+                    !store.appStore.isLocked && !store.profileStore.isSuggested &&
+                    <HumaniqIDScreen/>
+                }
+                {
+                    store.appStore.initialized &&
+                    store.appStore.appState === APP_STATE.AUTH &&
+                    !store.appStore.isLocked && store.profileStore.isSuggested &&
                     <AuthNavigator/>
                 }
                 {
@@ -194,7 +199,7 @@ App.register(
     // QRScannerView
 )
 
-if(!isDev) {
+if (!isDev) {
     Sentry.init({
         dsn: CENTRY_URL,
         tracesSampleRate: 1.0,
