@@ -3970,7 +3970,7 @@ buffer@^4.9.1:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.0.0, buffer@^5.4.3, buffer@^5.6.0:
+buffer@^5.0.0, buffer@^5.4.3:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -6969,16 +6969,12 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-"humaniq-ethereum-provider@git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.1.1":
+"humaniq-ethereum-provider@git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.2.0":
   version "0.1.1"
-  resolved "git+https://github.com/humaniq/humaniq-ethereum-provider.git#5f22b8853066bcc09e1d50290ccb9ad5b55f14a5"
+  resolved "git+https://github.com/humaniq/humaniq-ethereum-provider.git#caed9ecadb47aaa61082fae82b9978968f6578a3"
   dependencies:
     "@types/events" "^3.0.0"
-    buffer "^5.6.0"
-    eth-sig-util "^3.0.1"
     events "^3.3.0"
-    isutf8 "^3.1.1"
-    web3 "^0.20.7"
 
 "humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.2":
   version "1.0.0"
@@ -7550,11 +7546,6 @@ istanbul-reports@^3.1.3:
   dependencies:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
-
-isutf8@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/isutf8/-/isutf8-3.1.1.tgz#3f2ac77f49affb23ae54813da1a4ab44aadf1d7b"
-  integrity sha512-5P2FgGyDsSnRMaLPVGVIgYgMxj50lBujvi5lsVgP1qvMWhxvkmVBWtPcIKgXw9j+/RnmxSvHg3e9tbDnPxx6dw==
 
 jest-changed-files@^27.4.2:
   version "27.4.2"
@@ -10520,6 +10511,11 @@ react-native-hyperlink@^0.0.19:
     linkify-it "^2.2.0"
     mdurl "^1.0.0"
 
+react-native-image-picker@^4.7.3:
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.7.3.tgz#f5863b27bf2e76c83649dd8efea4598426bd04e8"
+  integrity sha512-eRKm4wlsmZHmsWFyv77kYc2F+ZyEVqe0m7mqhsMzWk6TQT4FBDtEDxmRDDFq+ivCu/1QD+EPhmYcAIpeGr7Ekg==
+
 react-native-iphone-x-helper@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.3.1.tgz#20c603e9a0e765fd6f97396638bdeb0e5a60b010"
@@ -10654,6 +10650,11 @@ react-native-share@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-7.2.0.tgz#235f6c10c26fc7aee0ac17a20f1e54e532fa293c"
   integrity sha512-BLuAspWBQZwBBoR6jebG/c+kSwNEgDsH2++X2yk/7xNDjbVewXbdGHjYThez8xwGcJg4zWv2jVfFKt2mYnKW+Q==
+
+react-native-simple-toast@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/react-native-simple-toast/-/react-native-simple-toast-1.1.3.tgz#4d0835891fe5c9342341fc4a88ed01ebb1a34bd5"
+  integrity sha512-bkZy25axqlU4L6IoTysSl5KOQA7qdxzivbXz/L/yAw9g9fENxjzYvUUtv5wWtgq7mzOe5HiJ7GCQrOl3MhIevQ==
 
 react-native-slider@^0.11.0:
   version "0.11.0"
@@ -11206,6 +11207,11 @@ rn-nodeify@tradle/rn-nodeify:
     run-parallel "^1.1.2"
     semver "^5.0.1"
     xtend "^4.0.0"
+
+rn-qr-generator@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/rn-qr-generator/-/rn-qr-generator-1.2.0.tgz#c604f3c1379652b65c697a4b19c9a696bc60e96e"
+  integrity sha512-eymfK0yHZ//iEz9WhTA39jHYZzH4h8uBFRgDVxpr/JBKLp0gvjkQF0chX5lwVtc6MYK97cWeJ8SDsLHR2Ti2lw==
 
 rsvp@^4.8.4:
   version "4.8.5"

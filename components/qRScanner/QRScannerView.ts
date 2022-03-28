@@ -3,6 +3,11 @@ import { InteractionManager } from "react-native";
 import { failedSeedPhraseRequirements } from "../../utils/validators";
 import { ethers } from "ethers";
 import { parse } from 'eth-url-parser';
+import { ImageLibraryOptions, launchImageLibrary } from 'react-native-image-picker';
+import RNQRGenerator from 'rn-qr-generator';
+import NativeToast from "../toasts/nativeToast/NativeToast";
+import { t } from "../../i18n";
+import { isEmpty } from "../../utils/general";
 
 export class QRScannerView {
   constructor() {
@@ -128,5 +133,37 @@ export class QRScannerView {
     if (event.cameraStatus === 'NOT_AUTHORIZED') {
       this.navigation.goBack();
     }
+  }
+
+  openQRImageFromGallery = async () => {
+    const options: ImageLibraryOptions = {
+      mediaType: 'photo',
+      includeBase64: false,
+      quality: 0.3
+    };
+
+    try {
+      const result = await launchImageLibrary(options);
+
+      if (!result || result.errorCode || !result.assets || result.assets.length === 0) {
+        return;
+      }
+
+      const decodedQRResult = await RNQRGenerator.detect({
+        uri: result.assets[0].uri
+      })
+
+      if (decodedQRResult.values.length > 0) {
+        const possiblyDetectedQRCode = decodedQRResult.values[0]
+
+        if (isEmpty(possiblyDetectedQRCode)) {
+          NativeToast.show(t("qRScanner.qrCodeDetectionError"))
+          return
+        }
+        this.onBarCodeRead({ data: possiblyDetectedQRCode })
+      } else {
+        NativeToast.show(t("qRScanner.qrCodeDetectionError"))
+      }
+    } catch (e) {}
   }
 }

@@ -249,7 +249,8 @@
       "message": "Required to scan codes for adding contacts and payments"
     },
     "scanning": "Point the camera of your phone to the QR code ",
-    "chooseFromGallery": "Choose from gallery"
+    "chooseFromGallery": "Choose from gallery",
+    "qrCodeDetectionError": "Failed to detect QR code in image"
   },
   "humaniqID": {
     "presentation": {

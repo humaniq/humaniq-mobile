@@ -19,30 +19,29 @@ export const TransactionListScreenSkeleton = ({
                                                   backgroundColor = Colors.bg,
                                               }: SkeletonScreenProps) => {
     return <View flex-1 backgroundColor={ backgroundColor }>
-        <Skeleton width={ 76 } height={ 76 } borderRadius={ 38 } wrapperStyle={ {
-            marginHorizontal: 16,
-            marginTop: 10,
-            alignSelf: "center"
-        } }/>
-        <View center>
-            <Skeleton width={ 160 } height={ 23 } borderRadius={ 12 } wrapperStyle={ {
-                marginTop: 13,
+        <View backgroundColor={ Colors.white } marginH-16 marginT-16 style={ { borderRadius: 12 } }>
+            <Skeleton width={ 60 } height={ 60 } borderRadius={ 30 } wrapperStyle={ {
+                marginTop: 10,
+                alignSelf: "center"
             } }/>
-            <Skeleton width={ 96 } height={ 12 } borderRadius={ 12 } wrapperStyle={ {
-                marginTop: 13,
-            } }/>
+            <View center marginT-13>
+                <Skeleton width={ 140 } height={ 24 } borderRadius={ 12 }/>
+                <Skeleton width={ 96 } height={ 14 } borderRadius={ 12 } wrapperStyle={ {
+                    marginTop: 8,
+                } }/>
+            </View>
+            <View row center marginT-22 marginH-8 marginB-16>
+                <Skeleton width={ 200 } height={ 38 } borderRadius={ 12 } wrapperStyle={ {
+                    flex: 0.5,
+                    marginRight: 8,
+                } }/>
+                <Skeleton width={ 200 } height={ 38 } borderRadius={ 12 } wrapperStyle={ {
+                    flex: 0.5,
+                    marginLeft: 8,
+                } }/>
+            </View>
         </View>
-        <View row center marginT-26 marginH-16>
-            <Skeleton width={ 200 } height={ 42 } borderRadius={ 12 } wrapperStyle={ {
-                flex: 0.5,
-                marginRight: 8,
-            } }/>
-            <Skeleton width={ 200 } height={ 42 } borderRadius={ 12 } wrapperStyle={ {
-                flex: 0.5,
-                marginLeft: 8,
-            } }/>
-        </View>
-        <ListSkeleton marginV={ 20 }/>
+        <ListSkeleton marginV={ 16 }/>
     </View>
 }
 
@@ -58,24 +57,24 @@ export const WalletListScreenSkeleton = ({ backgroundColor = Colors.bg }: Skelet
             marginTop: 28,
             marginHorizontal: 16
         } }/>
-        <View row marginT-30 marginH-16 style={ { justifyContent: "space-between" } }>
-            <View>
-                <Skeleton width={ 90 } height={ 22 } borderRadius={ 12 }/>
-                <Skeleton width={ 136 } height={ 12 } borderRadius={ 12 } wrapperStyle={ { marginTop: 12 } }/>
+        <View backgroundColor={ Colors.white } marginT-16 marginH-16 style={ { borderRadius: 12 } }>
+            <View marginT-16 marginH-8>
+                <Skeleton width={ 120 } height={ 32 } borderRadius={ 12 } wrapperStyle={ { alignSelf: "flex-end" } }/>
+                <Skeleton width={ 132 } height={ 34 } borderRadius={ 12 } wrapperStyle={ { marginTop: 16 } }/>
+                <Skeleton width={ 112 } height={ 12 } borderRadius={ 12 } wrapperStyle={ { marginTop: 12 } }/>
             </View>
-            <Skeleton width={ 120 } height={ 40 } borderRadius={ 12 }/>
+            <View row center marginT-20 marginB-16 marginH-8>
+                <Skeleton width={ 200 } height={ 38 } borderRadius={ 12 } wrapperStyle={ {
+                    flex: 0.5,
+                    marginRight: 8,
+                } }/>
+                <Skeleton width={ 200 } height={ 38 } borderRadius={ 12 } wrapperStyle={ {
+                    flex: 0.5,
+                    marginLeft: 8,
+                } }/>
+            </View>
         </View>
-        <View row center marginT-34 marginH-16>
-            <Skeleton width={ 200 } height={ 42 } borderRadius={ 12 } wrapperStyle={ {
-                flex: 0.5,
-                marginRight: 8,
-            } }/>
-            <Skeleton width={ 200 } height={ 42 } borderRadius={ 12 } wrapperStyle={ {
-                flex: 0.5,
-                marginLeft: 8,
-            } }/>
-        </View>
-        <ListSkeleton marginV={ 20 }/>
+        <ListSkeleton marginV={ 16 }/>
     </View>
 }
 
@@ -95,7 +94,7 @@ export const ListSkeleton = ({
                                  marginV = 16
                              }: SkeletonScreenProps) => {
     return <View style={ { backgroundColor, marginHorizontal: marginH, marginVertical: marginV, borderRadius: 12 } }>
-        <View marginH-16>
+        <View marginH-8>
             { [ ...Array(count).keys() ].map((item, index) => {
                 return <View key={ `skeleton_list_item_${ index }` }>
                     <View row marginV-16>
