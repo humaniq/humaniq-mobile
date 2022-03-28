@@ -81,33 +81,36 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                     scrollEventThrottle={ 400 }
                 >
                     <CryptoCard>
-                        <View row center>
-                            {
-                                view.token.logo === NATIVE_COIN.ETHEREUM &&
-                                <Av size={ 60 } source={ require("../../../assets/images/ethereum-logo.png") }/>
-                            }
-                            {
-                                view.token.logo === NATIVE_COIN.BINANCECOIN &&
-                                <Av size={ 60 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
-                            }
-                            {
-                                !view.token.logo &&
-                                <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                        source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
-                            }
+                        <View marginV-16 marginH-16>
+                            <View row center>
+                                {
+                                    view.token.logo === NATIVE_COIN.ETHEREUM &&
+                                    <Av size={ 60 } source={ require("../../../assets/images/ethereum-logo.png") }/>
+                                }
+                                {
+                                    view.token.logo === NATIVE_COIN.BINANCECOIN &&
+                                    <Av size={ 60 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
+                                }
+                                {
+                                    !view.token.logo &&
+                                    <Avatar address={ view.token.tokenAddress } size={ 80 }
+                                            source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                                }
+                            </View>
+                            <Text white robotoM text24 center marginT-8>
+                                { view.token.formatFiatBalance }
+                            </Text>
+                            <Text white robotoM text14 center marginT-4 marginB-16>
+                                { `${ view.token.formatBalance } ${ view.token.symbol }` }
+                            </Text>
+                            <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
                         </View>
-                        <Text white robotoM text24 center marginT-8>
-                            { view.token.formatFiatBalance }
-                        </Text>
-                        <Text white robotoM text14 center marginT-4 marginB-16>
-                            { `${ view.token.formatBalance } ${ view.token.symbol }` }
-                        </Text>
-                        <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
                     </CryptoCard>
                     <Text textM marginH-16 marginV-14>{ t("walletMenuDialog.transactionHistory") }</Text>
                     { view.refreshing && <ListSkeleton marginV={ 0 }/> }
                     {
-                        !view.refreshing && !!view.transactions && !!view.transactions.length && <Card marginH-16 paddingV-8>
+                        !view.refreshing && !!view.transactions && !!view.transactions.length &&
+                        <Card marginH-16 paddingV-8>
                             { view.transactions.map((item, index) => renderItem({
                                 item,
                                 index
