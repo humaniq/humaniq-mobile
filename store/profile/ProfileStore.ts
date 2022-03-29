@@ -67,7 +67,6 @@ export class ProfileStore extends Model({
     @modelFlow
     * init() {
         this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
-        console.log("DDDDD", (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))))
         this.verified = (yield* _await(localStorage.load("hm-wallet-humaniqid-verified"))) || false
         this.checked = (yield* _await(localStorage.load("hm-wallet-humaniqid-checked"))) || false
         this.user = (yield* _await(localStorage.load("hm-wallet-humaniqid-user"))) || null
