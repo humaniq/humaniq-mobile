@@ -158,13 +158,13 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                             await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
                             nav.goBack()
                         }
+                        getProfileStore().setIsSuggested(true)
                         setToast(t("humaniqID.approved"))
                         closeToast()
                         setTimeout(() => {
                             // @ts-ignore
                             getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
                             // @ts-ignore
-                            getProfileStore().setIsSuggested(true)
                         }, 3000)
                     } }
             />

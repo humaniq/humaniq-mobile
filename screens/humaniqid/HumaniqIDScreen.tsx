@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { Screen } from "../../components";
 import { Colors, View } from "react-native-ui-lib";
@@ -7,6 +7,7 @@ import { EnterIDScreen } from "../../components/humaniqid/EnterIDScreen";
 import { getProfileStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import LogoBrandFull from "../../assets/images/logo-brand-full.svg";
+import { localStorage } from "../../utils/localStorage";
 
 export interface HumaniqIDScreenProps {
     useNavigation?: boolean
@@ -19,6 +20,10 @@ export const HumaniqIDScreen = observer<HumaniqIDScreenProps>(({
                                                                    invitationMode = true,
                                                                    verified = false
                                                                }) => {
+
+    useEffect(() => {
+        localStorage.load("hm-wallet-humaniqid-suggest").then(console.log)
+    })
 
     return <View testID={ "HumaniqIDScreen" } flex bg>
         <Screen

@@ -1,7 +1,6 @@
-import { _await, model, Model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { _await, model, Model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { localStorage } from "../../utils/localStorage";
 import { RequestStore } from "../api/RequestStore";
-import { getRequest } from "../../App";
 import { API_HUMANIQ_TOKEN, API_HUMANIQ_URL, HUMANIQ_ROUTES } from "../../config/api";
 
 export enum SUGGESTION_STEP {
@@ -63,11 +62,12 @@ export class ProfileStore extends Model({
         // @ts-ignore
         this.setVerified(result.ok)
     }
-    
+
 
     @modelFlow
     * init() {
         this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
+        console.log("DDDDD", (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))))
         this.verified = (yield* _await(localStorage.load("hm-wallet-humaniqid-verified"))) || false
         this.checked = (yield* _await(localStorage.load("hm-wallet-humaniqid-checked"))) || false
         this.user = (yield* _await(localStorage.load("hm-wallet-humaniqid-user"))) || null
@@ -76,16 +76,17 @@ export class ProfileStore extends Model({
         this.api.init(API_HUMANIQ_URL, { "x-auth-token": API_HUMANIQ_TOKEN })
     }
 
-    @modelAction
-    async setIsSuggested(val: boolean) {
+    @modelFlow
+    * setIsSuggested(val: boolean) {
         this.isSuggested = val
-        await localStorage.save("hm-wallet-humaniqid-suggest", val)
+        yield* _await(localStorage.save("hm-wallet-humaniqid-suggest", val))
+        localStorage.load("hm-wallet-humaniqid-suggest").then(val => console.log("SUGGESTED", val))
     }
 
-    @modelAction
-    async setVerified(val: boolean) {
+    @modelFlow
+    * setVerified(val: boolean) {
         this.verified = val
         this.formStep = SUGGESTION_STEP.SUGGESTION
-        await localStorage.save("hm-wallet-humaniqid-verified", val)
+        yield* _await(localStorage.save("hm-wallet-humaniqid-verified", val))
     }
 }

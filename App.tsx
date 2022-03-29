@@ -131,10 +131,10 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
             await store.requestStore.init()
-            await store.profileStore.init()
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
