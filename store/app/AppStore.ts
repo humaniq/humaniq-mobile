@@ -80,8 +80,8 @@ export class AppStore extends Model({
         yield* _await(localStorage.clear())
         this.setAppState(APP_STATE.AUTH)
         getWalletStore().storedWallets = null
-        getProfileStore().setIsSuggested(false)
-        getProfileStore().setVerified(false)
+        yield getProfileStore().setIsSuggested(false)
+        yield getProfileStore().setVerified(false)
         // @ts-ignore
         getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
         getEVMProvider().currentNetworkName = EVM_NETWORKS_NAMES.BSC

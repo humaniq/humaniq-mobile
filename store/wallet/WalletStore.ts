@@ -172,12 +172,8 @@ export class WalletStore extends Model({
     @modelFlow
     * createWallet(recoveryPhrase?: string) {
         this.keyring = recoveryPhrase ? new HDKeyring({ mnemonic: recoveryPhrase }) : this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring()
-        if (recoveryPhrase) {
-            yield* _await(localStorage.clear())
-        }
         yield* _await(this.keyring.addAccounts())
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        const mnemonic = (yield* _await(this.keyring.serialize())) as {}
+        const mnemonic = (yield* _await(this.keyring.serialize())) as unknown
         return {
             mnemonic,
             allWallets: this.keyring.wallets
