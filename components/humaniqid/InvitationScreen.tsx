@@ -36,13 +36,13 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                         { t("humaniqID.presentation.tittle") }
                     </Text>
                     <Text text16 RobotoR marginL-10>
-                        &#9679; { t("humaniqID.presentation.first") }
+                        &#8226; { t("humaniqID.presentation.first") }
                     </Text>
                     <Text text16 RobotoR marginL-10>
-                        &#9679; { t("humaniqID.presentation.second") }
+                        &#8226; { t("humaniqID.presentation.second") }
                     </Text>
                     <Text text16 RobotoR marginL-10>
-                        &#9679; { t("humaniqID.presentation.third") }
+                        &#8226; { t("humaniqID.presentation.third") }
                     </Text>
                     {
                         !verified && <>

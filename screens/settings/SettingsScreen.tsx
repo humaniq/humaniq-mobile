@@ -29,7 +29,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
 
     return (
         <>
-            <Screen style={ { height: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
+            <Screen style={ { minHeight: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                     statusBarBg={ Colors.bg }>
                 {
                     view.initialized &&
@@ -74,7 +74,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           } }
                                 />
                             </Card>
-                            <Card padding-10 marginT-16 marginH-16>
+                            <Card marginT-16 marginH-16>
                                 <MenuItem icon={ "double-arrows" }
                                           name={ t("settingsScreen.menu.currency") }
                                           value={ <Text text16

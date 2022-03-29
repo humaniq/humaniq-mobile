@@ -12,7 +12,7 @@ import {
 import { AppState } from "react-native"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { localStorage } from "../../utils/localStorage"
-import { getProfileStore, getWalletStore } from "../../App"
+import { getEVMProvider, getProfileStore, getWalletStore } from "../../App"
 import 'react-native-get-random-values'
 import { MessageManager, PersonalMessageManager, PhishingController, TypedMessageManager } from "@metamask/controllers"
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
@@ -20,6 +20,7 @@ import Cryptr from "react-native-cryptr"
 import NetInfo from "@react-native-community/netinfo";
 import { setConnectionInfo } from "../../utils/toast";
 import { SUGGESTION_STEP } from "../profile/ProfileStore";
+import { EVM_NETWORKS_NAMES } from "../../config/network";
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -83,6 +84,7 @@ export class AppStore extends Model({
         getProfileStore().setVerified(false)
         // @ts-ignore
         getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
+        getEVMProvider().currentNetworkName = EVM_NETWORKS_NAMES.BSC
         this.storedPin = null
         this.isLockerDirty = true
         this.isLocked = false
