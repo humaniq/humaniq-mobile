@@ -38,22 +38,22 @@ export const HumqniqIDCard: React.FC<HumqniqIDCardProps> = ({ verified = false }
     return <CryptoCard>
         <Ripple onPress={ () => nav.navigate("humaniqID") } rippleColor={ Colors.primary }>
             <View row height={ 122 }>
-                <View padding-16>
+                <View flex padding-8 centerV>
                     <Text text22 robotoB white>{ t("humaniqID.settings.tittle") }</Text>
-                    <Text white robotoM>{ t("humaniqID.settings.passed") }</Text>
+                    <Text numberOfLines={2} white robotoM>{ t("humaniqID.settings.passed") }</Text>
                 </View>
-                <View center>
+                <View center paddingR-16>
                     <CardImg width={ 121 }/>
                 </View>
             </View>
             <View row bg-white height={ 68 }>
                 <View padding-8>
                     <Text text22 robotoB>{ getWalletStore().allWallets[0].formatAddress }</Text>
-                    <Text text12 robotoM>{ t("humaniqID.settings.attached") }</Text>
+                    <Text numberOfLines={2} text12 robotoM>{ t("humaniqID.settings.attached") }</Text>
                 </View>
                 <View flex>
                     <View flex
-                          style={ { transform: [ { rotate: '90deg' } ], position: "absolute", right: 16, top: 26 } }>
+                          style={ { transform: [ { rotate: '90deg' } ], position: "absolute", right: 8, top: 26 } }>
                         <HIcon
                             name="up"
                             size={ 14 }

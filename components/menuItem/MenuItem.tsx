@@ -15,7 +15,7 @@ export interface MenuItemProps {
 }
 
 export const MenuItem = ({ icon, iconStyle, name, value, onPress, showArrow = true, testID }: MenuItemProps) => {
-    return <Ripple onPress={ onPress && onPress } rippleColor={ Colors.primary } style={ { padding: 10 } }>
+    return <Ripple onPress={ onPress && onPress } rippleColor={ Colors.primary } style={ { padding: 8 } }>
         <View testID={ `menuItem-${ icon || testID }` } row center>
             { icon && <View>
                 <View bg-greyLight padding-9 br100 style={ iconStyle }>
@@ -34,7 +34,7 @@ export const MenuItem = ({ icon, iconStyle, name, value, onPress, showArrow = tr
             <View flex-2 right>
                 { value }
             </View>
-            <View flex-1 centerV>
+            <View centerV paddingR-8>
                 <View flex centerH style={ { transform: [ { rotate: '90deg' } ] } }>
                     { showArrow && <HIcon
                         name="up"

@@ -72,7 +72,7 @@ export class ProfileStore extends Model({
         this.checked = (yield* _await(localStorage.load("hm-wallet-humaniqid-checked"))) || false
         this.user = (yield* _await(localStorage.load("hm-wallet-humaniqid-user"))) || null
         this.initialized = true
-        this.api = getRequest()
+        this.api = new RequestStore({}) // getRequest()
         this.api.init(API_HUMANIQ_URL, { "x-auth-token": API_HUMANIQ_TOKEN })
     }
 

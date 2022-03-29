@@ -7,7 +7,7 @@ import { AUTH_STATE, AuthViewModel } from "./AuthViewModel"
 import { t } from "../../i18n"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
-import { getAppStore } from "../../App"
+import { getAppStore, getProfileStore } from "../../App"
 import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
@@ -30,10 +30,17 @@ const Auth = observer(function () {
                 statusBarBg={ Colors.white }>
                 { view.state === AUTH_STATE.MAIN &&
                     <>
-                        <TouchableOpacity marginT-16 marginR-16 right
-                                          onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }>
-                            <HIcon name={ "info" } size={ 22 } color={ Colors.blueOcean }/>
-                        </TouchableOpacity>
+                        <View row spread>
+                            <TouchableOpacity marginT-16 marginL-16 right
+                                              onPress={ () => getProfileStore().setIsSuggested(false) }>
+                                <HIcon name={ "arrow-left" } size={ 16 } color={ Colors.blueOcean }/>
+                            </TouchableOpacity>
+                            <TouchableOpacity marginT-16 marginR-16 right
+                                              onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }>
+                                <HIcon name={ "info" } size={ 22 } color={ Colors.blueOcean }/>
+                            </TouchableOpacity>
+                        </View>
+
                         <View flex center>
                             <View bottom flex>
                                 <LogoBrandFull width={ 160 } height={ 160 }/>
@@ -119,7 +126,9 @@ const Auth = observer(function () {
                                             alignSelf: "center",
                                             marginRight: 15,
                                         },
-                                        onPress: () => { view.clearWordsCount() }
+                                        onPress: () => {
+                                            view.clearWordsCount()
+                                        }
                                     } : {} }
                                     floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
                                         left: 15,
@@ -147,7 +156,8 @@ const Auth = observer(function () {
                                         borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
                                     } }
                                 />
-                                <View row paddingL-10 paddingT-4 style={ { alignItems: "center", justifyContent: "space-between" } }>
+                                <View row paddingL-10 paddingT-4
+                                      style={ { alignItems: "center", justifyContent: "space-between" } }>
                                     <Text robotoR style={ {
                                         fontSize: 13,
                                         color: view.isInvalidRecover ? Colors.error : Colors.textGrey
