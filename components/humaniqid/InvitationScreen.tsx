@@ -49,7 +49,7 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                             <Text text16 RobotoR marginT-16>
                                 { t("humaniqID.presentation.canGet") }
                             </Text>
-                            <Text primary onPress={ () => Linking.openURL('https://google.com') }>@HumaniqID_bot</Text>
+                            <Text primary onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
                         </>
                     }
                 </View>
