@@ -123,10 +123,11 @@
     "timers-browserify": "^1.4.2",
     "tty-browserify": "0.0.0",
     "url": "^0.10.3",
-    "url-parse": "^1.5.3",
+    "url-parse": "^1.5.9",
     "util": "^0.10.4",
     "uuid": "^8.3.2",
-    "vm-browserify": "0.0.4"
+    "vm-browserify": "0.0.4",
+    "buffer": "^4.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -163,7 +164,13 @@
     "typescript": "^3.8.3"
   },
   "resolutions": {
-    "@types/react": "^17"
+    "@types/react": "^17",
+    "node-fetch": "^2.6.7",
+    "shelljs": ">=0.8.5",
+    "bl": "^1.2.3",
+    "follow-redirects": "^1.14.8",
+    "nth-check": "^2.0.1",
+    "tmpl": "^1.0.5"
   },
   "jest": {
     "preset": "react-native",

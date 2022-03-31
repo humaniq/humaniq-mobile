@@ -11,7 +11,7 @@ export const transactions = () => {
         });
 
         it('Send eth transaction', async () => {
-            await element(by.id('sendTransaction-eth')).tap()
+            await element(by.id('sendTransaction-eth')).atIndex(0).tap()
 
             await expect(element(by.id('selectAddressScreen'))).toBeVisible()
             await element(by.id('inputAddress')).typeText(selfAddresses[1])
