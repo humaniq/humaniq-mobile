@@ -74,7 +74,8 @@ LogBox.ignoreLogs([
     "componentWillReceiveProps",
     'Non-serializable values were found in the navigation state',
     "new NativeEventEmitter()",
-    "rightButtonProps.iconSource"
+    "rightButtonProps.iconSource",
+    "RNUILib TextField component will soon be replaced"
 ])
 
 enableScreens()

@@ -79,7 +79,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                     multiline={ true }
                     selectionColor={ Colors.primary }
                     errorColor={ view.inputAddressError ? Colors.error : Colors.textGrey }
-                    error={ view.inputAddressErrorMessage }
+                    validationMessage={ view.inputAddressErrorMessage }
                     onChangeText={ (val) => {
                         view.txData.to = val
                     } }

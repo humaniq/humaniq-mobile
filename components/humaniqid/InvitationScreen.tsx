@@ -55,7 +55,7 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                 </View>
                 <View flex-2 bottom>
                     { !verified && invitationMode && <Button testID={"skipBtn"} onPress={ onSkip } label={ t("humaniqID.skip") } marginB-16
-                                                             outline br50 bg-primary robotoM
+                                                             outline br50 robotoM
                     /> }
                     { !verified && <Button onPress={ onSingUp }
                                            label={ invitationMode ? t("humaniqID.singUp") : t("humaniqID.settings.pasteID") }

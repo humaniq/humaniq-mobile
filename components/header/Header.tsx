@@ -50,7 +50,7 @@ export const Header = observer<HeaderProps>((
             backEnabled &&
             <HIcon name={ "cross" } size={ 14 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> }
         { title &&
-            <Button onPress={ goBack } paddingL-30={ backEnabled } link textM black
+            <Button onPress={ goBack } paddingL-30={ backEnabled } link textM color={ Colors.black }
                     text20
                     label={ title }/> }
         { rightText && <Text robotoR text-grey>{ rightText }</Text> }
