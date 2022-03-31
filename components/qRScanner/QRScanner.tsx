@@ -19,13 +19,11 @@ const styles = StyleSheet.create({
 });
 
 const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
-
   const view = useInstance(QRScannerView)
 
   useEffect(() => {
     view.init(route, navigation)
   }, [])
-
 
   return <>
     <StatusBar
@@ -45,9 +43,10 @@ const QR = observer<{ route: any, navigation }>(({ route, navigation }) => {
             buttonPositive: t('common.allow'),
             buttonNegative: t('common.deny')
           } }
-          onStatusChange={ view.onStatusChange }
-      >
+          onStatusChange={ view.onStatusChange }>
           <QrScannerRoundedBoundary closeButtonOnClick={ view.goBack }
+                                    bottomButtonOnClick={ view.openQRImageFromGallery }
+                                    bottomButtonTitle={ t('qRScanner.chooseFromGallery') }
                                     helperText={ t('qRScanner.scanning') }/>
       </RNCamera>
     </View>

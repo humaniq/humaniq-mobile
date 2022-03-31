@@ -27,7 +27,7 @@ export const SelectWallet: React.FC<IWalletsListProps> = ({
         <View padding-16>
             <View row spread centerV>
                 <View>
-                    <Text h2 black>{ totalBalance }</Text>
+                    <Text black text32 robotoB>{ totalBalance }</Text>
                     <Text text-grey>{ t("walletScreen.totalBalanceTittle") }</Text>
                 </View>
             </View>

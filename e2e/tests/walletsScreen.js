@@ -6,6 +6,10 @@ export const walletScreens = () => {
     describe('Wallet screen', () => {
         beforeAll(async () => {
             await device.launchApp({newInstance: true});
+            try {
+                await element(by.id('skipBtn')).tap()
+            } catch  {}
+
             await inputPinCode()
             await element(by.id('tab-settings')).tap()
             await element(by.id(`menuItem-network`)).tap()

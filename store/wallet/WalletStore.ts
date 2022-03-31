@@ -105,23 +105,23 @@ export class WalletStore extends Model({
                 this.initialized = uuidv4()
             }
             if (!this.initialized) {
-                reaction(() => getSnapshot(getEVMProvider().initialized), () => {
+                reaction(() => getEVMProvider().initialized, () => {
                     this.init(true)
                 })
-                reaction(() => getSnapshot(getAppStore().savedPin), async (pin) => {
+                reaction(() => getAppStore().savedPin, async (pin) => {
                     if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
                         await runUnprotected(async () => {
                             const cryptr = new Cryptr(pin)
                             const encrypted = await localStorage.load("hm-wallet")
-                            const result = cryptr.decrypt(encrypted)
-                            this.storedWallets = JSON.parse(result)
-                            await this.init()
-                            // runUnprotected(() => this.initialized = uuid.v4())
-                            // getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
+                            if(encrypted) {
+                                const result = cryptr.decrypt(encrypted)
+                                this.storedWallets = JSON.parse(result)
+                                await this.init()
+                            }
                         })
                     }
                 })
-                reaction(() => getSnapshot(getAppStore().isLocked), (value) => {
+                reaction(() => getAppStore().isLocked, (value) => {
                     if (value) {
                         this.storedWallets = null
                     }
@@ -172,12 +172,8 @@ export class WalletStore extends Model({
     @modelFlow
     * createWallet(recoveryPhrase?: string) {
         this.keyring = recoveryPhrase ? new HDKeyring({ mnemonic: recoveryPhrase }) : this.storedWallets ? new HDKeyring(this.storedWallets.mnemonic) : new HDKeyring()
-        if (recoveryPhrase) {
-            yield* _await(localStorage.clear())
-        }
         yield* _await(this.keyring.addAccounts())
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        const mnemonic = (yield* _await(this.keyring.serialize())) as {}
+        const mnemonic = (yield* _await(this.keyring.serialize())) as unknown
         return {
             mnemonic,
             allWallets: this.keyring.wallets

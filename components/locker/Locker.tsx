@@ -24,15 +24,6 @@ const L = observer(function (props) {
 
     useEffect(() => {
         view.init()
-
-        // reaction(() => getAppStore().lockerStatus, async () => {
-        //   view.pin = ""
-        //   view.settledPin = getAppStore().savedPin
-        //   view.confirmationPin = ""
-        //   view.step = 0
-        //   view.message = ""
-        // })
-
     }, [])
 
   return <Screen testID={ 'lockerScreen' } backgroundColor={ Colors.white } statusBarBg={ Colors.white }>

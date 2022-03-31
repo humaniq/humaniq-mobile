@@ -1,55 +1,90 @@
-import { model, Model, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { computed } from "mobx"
+import { _await, model, Model, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { localStorage } from "../../utils/localStorage";
+import { RequestStore } from "../api/RequestStore";
+import { API_HUMANIQ_TOKEN, API_HUMANIQ_URL, HUMANIQ_ROUTES } from "../../config/api";
 
+export enum SUGGESTION_STEP {
+    SUGGESTION = 'SUGGESTION',
+    ENTER_ID = 'ENTER_ID',
+    VERIFICATION = 'VERIFICATION'
+}
 
 @model("ProfileStore")
 export class ProfileStore extends Model({
-    lastName: p(t.string, ""),
-    firstName: p(t.string, ""),
-    email: p(t.string, ""),
-    photoUrl: p(t.string, ""),
+    isSuggested: p(t.boolean, false),
     initialized: p(t.string, "").withSetter(),
-    loaded: p(t.boolean, false)
+    requested: p(t.boolean, false),
+    formStep: p(t.enum(SUGGESTION_STEP), SUGGESTION_STEP.SUGGESTION).withSetter(),
+    loaded: p(t.boolean, false),
+    verified: p(t.boolean, false),
+    checked: p(t.boolean, false),
+    key: p(t.string, ""),
+    user: p(t.maybeNull(t.object(() => ({
+        uid: t.string,
+        birthDate: t.string,
+        country: t.string,
+        city: t.string,
+        firstName: t.string,
+        lastName: t.string,
+        createdAt: t.dateTimestamp
+    }))))
 }) {
+
+    api: RequestStore
+
+    @modelFlow
+    * checkCode(value) {
+        try {
+            const result = yield* _await(this.api.post(HUMANIQ_ROUTES.INTROSPECT.POST_SIGNUP_CHECK, { confirmKey: value }))
+            if (result.ok) {
+                this.checked = true
+                this.user = result.data
+                this.key = value
+                localStorage.save("hm-wallet-humaniqid-checked", true)
+                localStorage.save("hm-wallet-humaniqid-user", this.user)
+                this.requested = true
+                return result.data
+            } else {
+                this.requested = true
+                return false
+            }
+        } catch (e) {
+            console.log("ERROR", e)
+        }
+    }
+
+    @modelFlow
+    * verify(key, address) {
+        const result = yield* _await(this.api.post(HUMANIQ_ROUTES.INTROSPECT.POST_SIGNUP_CONFIRM, {
+            confirmKey: key,
+            walletId: address
+        }))
+        // @ts-ignore
+        this.setVerified(result.ok)
+    }
+
 
     @modelFlow
     * init() {
-        // if (!this.initialized) {
-        //     reaction(() => getSnapshot(getAuthStore().loggedIn), async (val) => {
-        //         if (val) {
-        //             await this.load()
-        //             console.log("LOGGED_IN")
-        //             runUnprotected(() => {
-        //                 this.initialized = uuid.v4()
-        //             })
-        //         }
-        //     })
-        // }
-    }
-
-    @computed
-    get fullName() {
-        return this.firstName + " " + this.lastName
+        this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
+        this.verified = (yield* _await(localStorage.load("hm-wallet-humaniqid-verified"))) || false
+        this.checked = (yield* _await(localStorage.load("hm-wallet-humaniqid-checked"))) || false
+        this.user = (yield* _await(localStorage.load("hm-wallet-humaniqid-user"))) || null
+        this.initialized = true
+        this.api = new RequestStore({}) // getRequest()
+        this.api.init(API_HUMANIQ_URL, { "x-auth-token": API_HUMANIQ_TOKEN })
     }
 
     @modelFlow
-    * load() {
-        // const profile = yield getAuthRequest().get(ROUTES.PROFILE.GET)
-        // if (profile.ok) {
-        //     this.lastName = profile.data.data.attributes.last_name
-        //     this.firstName = profile.data.data.attributes.first_name
-        //     this.email = profile.data.data.attributes.email
-        //     this.photoUrl = profile.data.data.attributes.photoUrl
-        //     this.loaded = true
-        // }
+    * setIsSuggested(val: boolean) {
+        this.isSuggested = val
+        yield* _await(localStorage.save("hm-wallet-humaniqid-suggest", val))
     }
 
     @modelFlow
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    * update(profile: object) {
-        // const res = yield getAuthRequest().patch(ROUTES.PROFILE.UPDATE_PATH, profile)
-        // if (res.ok) {
-        //     this.load()
-        // }
+    * setVerified(val: boolean) {
+        this.verified = val
+        this.formStep = SUGGESTION_STEP.SUGGESTION
+        yield* _await(localStorage.save("hm-wallet-humaniqid-verified", val))
     }
 }

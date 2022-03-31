@@ -239,7 +239,9 @@
     "shareTitle": "Ethereum адрес"
   },
   "appToasts": {
-    "addressCopied": "Ваш публичный адрес скопирован"
+    "addressCopied": "Ваш публичный адрес скопирован",
+    "connected": "Соединение восстановлено",
+    "disconnected": "Соединение потеряно"
   },
   "qRScanner": {
     "allowDialog": {
@@ -247,6 +249,48 @@
       "message": "Для сканирования QR кодов с адресами получателей"
     },
     "scanning": "Направьте вашу камеру на QR код",
-    "chooseFromGallery": "Выбрать из галереи"
+    "chooseFromGallery": "Выбрать из галереи",
+    "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении"
+  },
+  "humaniqID": {
+    "presentation": {
+      "tittle": "Humaniq ID позволяет вам:",
+      "first": "Получить благотворительность",
+      "second": "Найти работу",
+      "third": "Получить учебные курсы",
+      "canGet": "Вы можете получить Humaniq ID в Telegram боте"
+    },
+    "skip": "Пропустить",
+    "singUp": "Войти в Humaniq ID",
+    "form": {
+      "tittle": "Введите свой код в Humaniq ID, полученный с помошью Telegram бота",
+      "label": "Humaniq ID код",
+      "paste": "Вставить код",
+      "helper": "Выглядит так: 234t6",
+      "error": "Неправильно, пожалуйста проверьте код"
+    },
+    "approved": "Humaniq ID код подтвержден",
+    "settings": {
+      "tittle": "Humaniq ID",
+      "passed": "Вы прошли идентификацию",
+      "attached": "Humaniq ID связан с вашим адресом",
+      "notConnected": "Humaniq ID не подключен",
+      "getAccess": "Получить доступ к сервисам Humaniq: благотворительность, работа, образование",
+      "pasteID": "Ввести Humaniq ID"
+    }
+  },
+  "infoScreen": {
+    "signIn": {
+      "title": "Кнопка %{key} означает:",
+      "description": "Если у вас есть кошелек, вы можете вставить свои секретные 12 слов и перенести свою учетную запись в приложение кошелька Humaniq."
+    },
+    "createWallet": {
+      "title": "Кнопка “Создать новый кошелек” означает:",
+      "description": "Если у вас нет кошелька, вы можете создать его здесь, в приложении кошелька Humaniq."
+    },
+    "enterPin": {
+      "title": "Кнопка “Введите PIN-код” означает:",
+      "description": "Введите PIN-код, чтобы войти в существующий кошелек"
+    }
   }
 }

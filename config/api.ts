@@ -5,6 +5,8 @@ export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/ass
 const timeout = 10000
 export const GAS_STATION_URL = "https://ethgasstation.info/api"
 export const CENTRY_URL= "https://f36147161d1d4bc79211d02daebb4134@o1114073.ingest.sentry.io/6145030"
+export const API_HUMANIQ_URL = "https://signupbot.humaniq.com/api/v1"
+export const API_HUMANIQ_TOKEN = "XMaLhU75ZFklvAiV7yBZBNnlWsE9IowU"
 
 export interface ApiConfig {
     url: string;
@@ -61,4 +63,13 @@ export const MORALIS_ROUTES = {
 
 export const COINGECKO_ROUTES = {
     GET_TOKEN_PRICE: '/simple/price'
+}
+
+export const HUMANIQ_ROUTES = {
+    INTROSPECT: {
+        POST_SIGNUP_CHECK: "/introspect/signup/check",
+        POST_SIGNUP_CONFIRM: "/introspect/signup/confirm",
+        GET_SIGNUP_OBJECT: "/introspect/signup/object/:uid",
+        GET_SIGNUP_PHOTO: "/introspect/signup/photo/:uid"
+    }
 }

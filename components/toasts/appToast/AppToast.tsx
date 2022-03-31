@@ -11,14 +11,15 @@ import { CircularProgress } from "../../progress/CircularProgress";
 
 export enum TOAST_POSITION {
   UNDER_TAB_BAR = "UNDER_TAB_BAR",
-  BOTTOM = "BOTTOM"
+  BOTTOM = "BOTTOM",
+  TOP = 'TOP'
 }
 
 export const AppToast = observer(() => {
   const view = useInstance(RootStore)
   return <Toast
       zIndex={ 2147483647 }
-      position={ "bottom" }
+      position={ TOAST_POSITION.TOP === view.appStore.toast.position ? "top" : "bottom" }
       visible={ view.appStore.toast.display }
       backgroundColor={ Colors.transparent }
   >
@@ -30,7 +31,7 @@ export const AppToast = observer(() => {
           <View row centerV flex padding-12 width={ Dimensions.get("window").width - 32 }>
             {
               view.appStore.toast.type === TOASTER_TYPE.PENDING &&
-              <CircularProgress strokeWidth={2} indeterminate radius={18}>
+              <CircularProgress strokeWidth={ 2 } indeterminate radius={ 18 }>
                 <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 32 }>
                   <HIcon name={ "clock-arrows" } size={ 18 } color={ Colors.warning }/></Avatar>
               </CircularProgress>
@@ -39,6 +40,11 @@ export const AppToast = observer(() => {
               view.appStore.toast.type === TOASTER_TYPE.SUCCESS &&
               <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 32 }>
                   <HIcon name={ "done" } size={ 18 } color={ Colors.success }/></Avatar>
+            }
+            {
+                view.appStore.toast.type === TOASTER_TYPE.ERROR &&
+                <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 32 }>
+                  <HIcon name={ "cross" } size={ 14 } color={ Colors.error }/></Avatar>
             }
             <Text marginL-8 robotoR> { view.appStore.toast.message } </Text>
           </View>

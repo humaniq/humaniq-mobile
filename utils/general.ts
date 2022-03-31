@@ -44,7 +44,9 @@ export const toUpperCase = (str?: string) => typeof str === 'string' ? str.toUpp
 
 export const toLowerCase = (str?: string) => typeof str === 'string' ? str.toLowerCase() : ''
 
-export const isEmpty = (str?: string)  => typeof str === 'string' ? str.trim() === '' : true;
+export const isEmpty = (str?: string) => typeof str === 'string' ? str.trim() === '' : true;
+
+export const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const toLowerCaseEquals = (a, b) => {
   if (!a && !b) return false

@@ -8,7 +8,7 @@ import { NavigationProp } from "@react-navigation/native"
 import { localStorage } from "../../utils/localStorage"
 import Cryptr from "react-native-cryptr"
 import bip39 from "react-native-bip39"
-import { getAppStore, getWalletStore } from "../../App"
+import { getAppStore, getProfileStore, getWalletStore } from "../../App"
 import * as Keychain from 'react-native-keychain';
 import { isEmpty } from "../../utils/general";
 
@@ -192,7 +192,9 @@ export class AuthViewModel {
             getAppStore().recoverPhrase = ""
             getAppStore().appState = APP_STATE.APP
             await getWalletStore().init(true)
-            // getAuthStore().registrationOrLogin(getWalletStore().allWallets[0].address)
+            if (getProfileStore().key) {
+                getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
+            }
         })
         await getAppStore().init()
     }

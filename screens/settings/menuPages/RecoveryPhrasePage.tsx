@@ -28,10 +28,12 @@ export class RecoveryPhraseViewModel {
     async init() {
         if (!getWalletStore()?.storedWallets?.mnemonic?.mnemonic) {
             const encrypted = await localStorage.load("hm-wallet")
-            const cryptr = new Cryptr(getAppStore().savedPin)
-            const result = cryptr.decrypt(encrypted)
-            const res = JSON.parse(result)
-            this.mnemonic = res.mnemonic.mnemonic
+            if(encrypted) {
+                const cryptr = new Cryptr(getAppStore().savedPin)
+                const result = cryptr.decrypt(encrypted)
+                const res = JSON.parse(result)
+                this.mnemonic = res.mnemonic.mnemonic
+            }
         }
     }
 }
@@ -102,18 +104,20 @@ export const RecoveryPhrase = observer(() => {
                     }
                 </View>
                 <View flex bottom marginT-20>
-                    <View row absB paddingH-16>
+                    <View row absB centerV>
                         <View style={ { backgroundColor: Colors.rgba(Colors.error, 0.07) } }
                               width={ 32 }
                               height={ 32 }
                               padding-6
+                              marginL-16
+                              center
                               br100>
                             <HIcon
                                 name="warning"
                                 size={ 18 }
                                 color={ Colors.error }/>
                         </View>
-                        <Text marginH-16>
+                        <Text flex-1 marginL-8 marginR-16>
                             { t("settingsScreen.menu.recoveryPhraseWarning") }
                         </Text>
                     </View>

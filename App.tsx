@@ -60,6 +60,7 @@ import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
 import { isDev } from "./shim";
 import { CENTRY_URL } from "./config/api";
+import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
 
 applyTheme()
 
@@ -73,7 +74,8 @@ LogBox.ignoreLogs([
     "componentWillReceiveProps",
     'Non-serializable values were found in the navigation state',
     "new NativeEventEmitter()",
-    "rightButtonProps.iconSource"
+    "rightButtonProps.iconSource",
+    "RNUILib TextField component will soon be replaced"
 ])
 
 enableScreens()
@@ -130,10 +132,10 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
             await store.requestStore.init()
-            await store.profileStore.init()
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
@@ -157,15 +159,21 @@ const AppScreen = observer(() => {
                             routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
                         } }
                     />
-                        <AppToast/>
                         <CreateWalletToast/>
                         <SigningDialog/>
                         <SendTransactionDialog/>
                     </> }
+                { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked &&
+                    !store.appStore.isLocked && !store.profileStore.isSuggested &&
+                    <HumaniqIDScreen/>
+                }
+                {
+                    store.appStore.initialized &&
+                    store.appStore.appState === APP_STATE.AUTH &&
+                    !store.appStore.isLocked && store.profileStore.isSuggested &&
                     <AuthNavigator/>
                 }
                 {
@@ -192,7 +200,7 @@ App.register(
     // QRScannerView
 )
 
-if(!isDev) {
+if (!isDev) {
     Sentry.init({
         dsn: CENTRY_URL,
         tracesSampleRate: 1.0,

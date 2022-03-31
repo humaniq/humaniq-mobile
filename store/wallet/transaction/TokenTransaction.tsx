@@ -24,7 +24,7 @@ import { getAppStore, getEVMProvider, getWalletStore } from "../../../App";
 import { contractAbiErc20 } from "../../../utils/abi";
 import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon"
-import { closeToast, setPendingAppToast } from "./utils";
+import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
 
 @model("TokenTransaction")
@@ -201,27 +201,24 @@ export class TokenTransaction extends Model({
     @modelFlow
     * storeTransaction() {
         const saveTx = getSnapshot(this)
-        const pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }-${ this.address }`))) || []
-        pendingTransactions.push(saveTx)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }-${ this.address }`, pendingTransactions))
+        const transactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-token-${ this.chainId }-${ this.walletAddress }`))) || {}
+        transactions[saveTx.transactionHash] = saveTx
+        _await(localStorage.save(`humaniq-pending-transactions-token-${ this.chainId }-${ this.walletAddress }`, transactions))
     }
 
     @modelFlow
     * removeFromStore() {
-        let pendingTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }-${ this.address }`))) || []
-        pendingTransactions = pendingTransactions.filter(t => t.transactionHash !== this.key)
-        _await(localStorage.save(`humaniq-pending-transactions-eth-${ this.chainId }-${ this.walletAddress }-${ this.address }`, pendingTransactions))
+        const transactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-token-${ this.chainId }-${ this.walletAddress }`))) || {}
+        delete transactions[this.key]
+        _await(localStorage.save(`humaniq-pending-transactions-token-${ this.chainId }-${ this.walletAddress }`, transactions))
     }
 
     @modelFlow
     * applyToWallet() {
         try {
-            if (this.receiptStatus === TRANSACTION_STATUS.PENDING || this.receiptStatus === TRANSACTION_STATUS.CANCELLING) {
-                yield this.storeTransaction()
-            } else {
-                yield this.removeFromStore()
-            }
-            this.token.transactions.set(this.key, this)
+            this.storeTransaction()
+            const currentToken = this.wallet.token.get(this.address)
+            currentToken.transactions.set(this.key, this)
         } catch (e) {
             console.log("ERROR-APPLY-TO-WALLET", e)
         }
