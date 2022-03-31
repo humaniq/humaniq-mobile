@@ -79,7 +79,6 @@ export class ProfileStore extends Model({
     * setIsSuggested(val: boolean) {
         this.isSuggested = val
         yield* _await(localStorage.save("hm-wallet-humaniqid-suggest", val))
-        localStorage.load("hm-wallet-humaniqid-suggest").then(val => console.log("SUGGESTED", val))
     }
 
     @modelFlow
