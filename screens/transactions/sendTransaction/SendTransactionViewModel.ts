@@ -21,6 +21,8 @@ import { contractAbiErc20 } from "../../../utils/abi";
 import { TokenTransaction } from "../../../store/wallet/transaction/TokenTransaction";
 import { capitalize, throttle } from "../../../utils/general";
 import { NATIVE_COIN_SYMBOL } from "../../../config/network";
+import { profiler } from "../../../utils/profiler/profiler";
+import { EVENTS } from "../../../config/events";
 
 export class SendTransactionViewModel {
 
@@ -113,6 +115,7 @@ export class SendTransactionViewModel {
     }
 
     async getTransactionData() {
+        const id = profiler.start(EVENTS.GET_TRANSACTION_DATA)
         try {
             this.pending = true
             this.txData.chainId = getEVMProvider().currentNetwork.chainID
@@ -130,6 +133,7 @@ export class SendTransactionViewModel {
         } catch (e) {
             console.log("ERROR-get-transaction-data", e)
         }
+        profiler.end(id)
     }
 
     setMaxValue() {

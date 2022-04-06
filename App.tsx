@@ -58,9 +58,10 @@ import { BrowserStore } from "./store/browser/BrowserStore";
 import * as Sentry from "@sentry/react-native";
 import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
-import { isDev } from "./shim";
 import { CENTRY_URL } from "./config/api";
 import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
+import { profiler } from "./utils/profiler/profiler";
+import { EVENTS } from "./config/events";
 
 applyTheme()
 
@@ -132,6 +133,7 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            const id = profiler.start(EVENTS.INIT_APP)
             await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
@@ -140,6 +142,7 @@ const AppScreen = observer(() => {
             await store.walletStore.init()
             await store.appStore.init()
             await store.browserStore.init()
+            profiler.end(id)
         })()
     }, [])
 
@@ -197,21 +200,20 @@ App.register(
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
     SelectTransactionFeeDialogViewModel,
-    // QRScannerView
 )
 
-if (!isDev) {
-    Sentry.init({
-        dsn: CENTRY_URL,
-        tracesSampleRate: 1.0,
-        integrations: [
-            new Sentry.ReactNativeTracing({
-                routingInstrumentation,
-            }),
-        ],
-    });
+// if (!isDev) {
+Sentry.init({
+    dsn: CENTRY_URL,
+    tracesSampleRate: 1.0,
+    integrations: [
+        new Sentry.ReactNativeTracing({
+            routingInstrumentation,
+        }),
+    ],
+});
 
-    Sentry.wrap(App)
-}
+Sentry.wrap(App)
+// }
 
 export default App

@@ -21,6 +21,8 @@ import NetInfo from "@react-native-community/netinfo";
 import { setConnectionInfo } from "../../utils/toast";
 import { SUGGESTION_STEP } from "../profile/ProfileStore";
 import { EVM_NETWORKS_NAMES } from "../../config/network";
+import { profiler } from "../../utils/profiler/profiler";
+import { EVENTS } from "../../config/events";
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -93,6 +95,7 @@ export class AppStore extends Model({
     @modelFlow
     * init() {
         if (!this.initialized) {
+            const id = profiler.start(EVENTS.INIT_APP_STORE)
             this.storedPin = (yield* _await(localStorage.load("hm-wallet-settings"))) || ""
             if (!this.storedPin) {
                 AppState.addEventListener("change", (nextState) => {
@@ -143,6 +146,7 @@ export class AppStore extends Model({
             });
 
             this.initialized = true
+            profiler.end(id)
         }
     }
 
@@ -185,6 +189,7 @@ export class AppStore extends Model({
     @modelFlow
     * setPin(pin: string) {
         if (this.savedPin && this.savedPin !== pin) {
+            const id = profiler.start(EVENTS.LOAD_WALLET_FROM_STORAGE)
             const cryptr = new Cryptr(this.savedPin)
             const encrypted = yield* _await(localStorage.load("hm-wallet"))
             if (encrypted) {
@@ -193,6 +198,7 @@ export class AppStore extends Model({
                 const newCryptr = new Cryptr(pin)
                 const encoded = yield* _await(newCryptr.encrypt(JSON.stringify(storedWallets)))
                 yield* _await(localStorage.save("hm-wallet", encoded))
+                profiler.end(id)
             }
         }
         this.savedPin = pin

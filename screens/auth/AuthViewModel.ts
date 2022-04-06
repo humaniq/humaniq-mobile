@@ -11,6 +11,8 @@ import bip39 from "react-native-bip39"
 import { getAppStore, getProfileStore, getWalletStore } from "../../App"
 import * as Keychain from 'react-native-keychain';
 import { isEmpty } from "../../utils/general";
+import { profiler } from "../../utils/profiler/profiler";
+import { EVENTS } from "../../config/events";
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -101,6 +103,8 @@ export class AuthViewModel {
                 return t("registerScreen.walletCreating")
             case AUTH_STATE.RECOVER:
                 return t("registerScreen.walletRecoverTitle")
+            default:
+                return ""
         }
     }
 
@@ -181,6 +185,7 @@ export class AuthViewModel {
     }
 
     async createWallet(phrase?: string) {
+        const id = profiler.start(EVENTS.CREATE_WALLET)
         const wallet = await getWalletStore().createWallet(phrase)
         const cryptr = new Cryptr(getAppStore().savedPin)
         const encoded = await cryptr.encrypt(JSON.stringify(wallet))
@@ -197,5 +202,6 @@ export class AuthViewModel {
             }
         })
         await getAppStore().init()
+        profiler.end(id)
     }
 }

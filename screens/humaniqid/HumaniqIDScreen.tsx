@@ -12,7 +12,7 @@ import { localStorage } from "../../utils/localStorage";
 export interface HumaniqIDScreenProps {
     useNavigation?: boolean
     invitationMode?: boolean,
-    verified: boolean
+    verified?: boolean
 }
 
 export const HumaniqIDScreen = observer<HumaniqIDScreenProps>(({
