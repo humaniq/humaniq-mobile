@@ -23,6 +23,9 @@ import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon";
 import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
+import * as Sentry from "@sentry/react-native";
+import { profiler } from "../../../utils/profiler/profiler";
+import { EVENTS } from "../../../config/events";
 
 
 export interface IEthereumTransactionConstructor {
@@ -100,23 +103,26 @@ export class NativeTransaction extends Model({
 
     @modelFlow
     * sendTransaction() {
+        const id = profiler.start(EVENTS.SEND_TRANSACTION)
         try {
             const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
             this.hash = tx.hash
+            profiler.end(id)
             return tx
         } catch (e) {
             console.log("ERROR-SEND-TRANSACTION", e)
+            Sentry.captureException(e)
+            profiler.end(id)
             return false
         }
     }
 
     @modelFlow
     * waitTransaction() {
-        console.log("wait-transaction")
+        const id = profiler.start(EVENTS.WAIT_TRANSACTION)
         try {
             getEVMProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
-                console.log("mined-transaction")
                 await runUnprotected(async () => {
                     this.blockTimestamp = new Date()
                     this.transactionIndex = confirmedTx.transactionIndex
@@ -131,6 +137,7 @@ export class NativeTransaction extends Model({
         } catch (e) {
             console.log("ERROR_WAIT_TRANSACTIONS", e)
         }
+        profiler.end(id)
     }
 
     @action
@@ -142,6 +149,7 @@ export class NativeTransaction extends Model({
     @modelFlow
     * cancelTransaction() {
         if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+            const id = profiler.start(EVENTS.CANCEL_TRANSACTION)
             try {
                 setPendingAppToast(tr("transactionScreen.cancelTransaction"))
                 this.receiptStatus = TRANSACTION_STATUS.CANCELLING
@@ -168,6 +176,7 @@ export class NativeTransaction extends Model({
                 console.log("ERROR-CANCELLING-TRANSACTION", e)
                 closeToast()
             }
+            profiler.end(id)
         }
     }
 
@@ -181,6 +190,7 @@ export class NativeTransaction extends Model({
     @modelFlow
     * speedUpTransaction() {
         if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+            const id = profiler.start(EVENTS.SPEED_UP_TRANSACTION)
             try {
                 setPendingAppToast(tr("transactionScreen.speedUpTransaction"))
                 this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
@@ -204,6 +214,7 @@ export class NativeTransaction extends Model({
                 console.log("ERROR-SPEED-UP-TRANSACTION", e)
                 closeToast()
             }
+            profiler.end(id)
         }
     }
 

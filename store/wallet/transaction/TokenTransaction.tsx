@@ -26,6 +26,8 @@ import { localStorage } from "../../../utils/localStorage";
 import { HIcon } from "../../../components/icon"
 import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
+import { profiler } from "../../../utils/profiler/profiler";
+import { EVENTS } from "../../../config/events";
 
 @model("TokenTransaction")
 export class TokenTransaction extends Model({
@@ -74,6 +76,7 @@ export class TokenTransaction extends Model({
 
     @modelFlow
     * sendTransaction() {
+        const id = profiler.start(EVENTS.SEND_TRANSACTION)
         try {
             const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
             const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
@@ -83,15 +86,18 @@ export class TokenTransaction extends Model({
                 type: 0
             }))) as ethers.providers.TransactionResponse
             this.transactionHash = tx.hash
+            profiler.end(id)
             return tx
         } catch (e) {
             console.log("ERROR-SEND-TRANSACTION", e)
+            profiler.end(id)
             return null
         }
     }
 
     @modelFlow
     * waitTransaction() {
+        const id = profiler.start(EVENTS.WAIT_TRANSACTION)
         try {
             getEVMProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
@@ -107,6 +113,7 @@ export class TokenTransaction extends Model({
         } catch (e) {
             console.log("ERROR_WAIT_TRANSACTIONS", e)
         }
+        profiler.end(id)
     }
 
     @action
@@ -118,6 +125,7 @@ export class TokenTransaction extends Model({
     @modelFlow
     * cancelTransaction() {
         if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+            const id = profiler.start(EVENTS.CANCEL_TRANSACTION)
             try {
                 setPendingAppToast(tr("transactionScreen.cancelTransaction"))
                 this.receiptStatus = TRANSACTION_STATUS.CANCELLING
@@ -155,6 +163,7 @@ export class TokenTransaction extends Model({
                 getAppStore().toast.display = false
                 yield this.removeFromStore()
             }
+            profiler.end(id)
         }
     }
 
@@ -167,6 +176,7 @@ export class TokenTransaction extends Model({
     @modelFlow
     * speedUpTransaction() {
         if (this.receiptStatus === TRANSACTION_STATUS.PENDING && this.canRewriteTransaction) {
+            const id = profiler.start(EVENTS.SPEED_UP_TRANSACTION)
             try {
                 setPendingAppToast(tr("transactionScreen.speedUpTransaction"))
                 this.gasPrice = (this.gasPrice * 1.5).toFixed(0).toString()
@@ -195,6 +205,7 @@ export class TokenTransaction extends Model({
             } catch (e) {
                 console.log("ERROR-SPEED-UP-TRANSACTION", e)
             }
+            profiler.end(id)
         }
     }
 

@@ -1,14 +1,4 @@
-import {
-    _await,
-    getSnapshot,
-    Model,
-    model,
-    modelAction,
-    modelFlow,
-    runUnprotected,
-    tProp as p,
-    types as t,
-} from "mobx-keystone"
+import { _await, Model, model, modelAction, modelFlow, runUnprotected, tProp as p, types as t, } from "mobx-keystone"
 import { computed, observable, reaction } from "mobx"
 import * as storage from "../../utils/localStorage"
 import { localStorage } from "../../utils/localStorage"
@@ -24,6 +14,8 @@ import { getAppStore, getEVMProvider, getWalletStore } from "../../App"
 import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { currencyFormat } from "../../utils/number";
 import { CURRENCIES, CURRENCIES_ARR } from "../../config/common";
+import { profiler } from "../../utils/profiler/profiler";
+import { EVENTS } from "../../config/events";
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -82,6 +74,7 @@ export class WalletStore extends Model({
     @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
+            const id = profiler.start(EVENTS.INIT_WALLET_STORE)
             const currentFiatCurrency = (yield* _await(storage.load("currentFiatCurrency"))) || CURRENCIES.USD
             // @ts-ignore
             getWalletStore().setCurrentFiatCurrency(currentFiatCurrency)
@@ -127,6 +120,7 @@ export class WalletStore extends Model({
                     }
                 })
             }
+            profiler.end(id)
         }
     }
 

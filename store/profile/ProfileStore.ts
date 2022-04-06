@@ -2,6 +2,8 @@ import { _await, model, Model, modelFlow, tProp as p, types as t } from "mobx-ke
 import { localStorage } from "../../utils/localStorage";
 import { RequestStore } from "../api/RequestStore";
 import { API_HUMANIQ_TOKEN, API_HUMANIQ_URL, HUMANIQ_ROUTES } from "../../config/api";
+import { profiler } from "../../utils/profiler/profiler";
+import { EVENTS } from "../../config/events";
 
 export enum SUGGESTION_STEP {
     SUGGESTION = 'SUGGESTION',
@@ -66,6 +68,7 @@ export class ProfileStore extends Model({
 
     @modelFlow
     * init() {
+        const id = profiler.start(EVENTS.INIT_PROFILE_STORE)
         this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
         this.verified = (yield* _await(localStorage.load("hm-wallet-humaniqid-verified"))) || false
         this.checked = (yield* _await(localStorage.load("hm-wallet-humaniqid-checked"))) || false
@@ -73,6 +76,7 @@ export class ProfileStore extends Model({
         this.initialized = true
         this.api = new RequestStore({}) // getRequest()
         this.api.init(API_HUMANIQ_URL, { "x-auth-token": API_HUMANIQ_TOKEN })
+        profiler.end(id)
     }
 
     @modelFlow
