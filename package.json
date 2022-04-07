@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "private": false,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "yarn rnuc:prod && react-native run-android",
+    "android:dev": "yarn rnuc:dev && react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test:build": "detox build -c android.emu.release",
@@ -15,11 +16,15 @@
     "adb": "adb reverse tcp:9090 tcp:9090 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9001 tcp:9001 && adb reverse tcp:8081 tcp:8081",
     "build-ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output ios/main.jsbundle --assets-dest ios",
     "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
-    "release-android": "cd ./android && ./gradlew assembleRelease",
-    "release-abb-android": "cd ./android && ./gradlew bundleRelease",
+    "release-android": "yarn rnuc:prod && cd ./android && ./gradlew assembleRelease",
+    "release-android:dev": "yarn rnuc:dev && cd ./android && ./gradlew assembleRelease",
+    "release-aab-android": "yarn rnuc:prod && cd ./android && ./gradlew bundleRelease",
+    "release-aab-android:dev": "yarn rnuc:dev && cd ./android && ./gradlew bundleRelease",
     "clean": "react-native-clean-project",
     "clean-all": "npx react-native clean-project-auto",
-    "postinstall": "cp ./react.gradle ./node_modules/react-native/react.gradle &&  bash ./scripts/postinstall.sh"
+    "postinstall": "cp ./react.gradle ./node_modules/react-native/react.gradle &&  bash ./scripts/postinstall.sh",
+    "rnuc:dev": "yarn rnuc ./envs/dev.yml",
+    "rnuc:prod": "yarn rnuc ./envs/prod.yml"
   },
   "dependencies": {
     "@ethersproject/shims": "^5.5.0",
@@ -39,6 +44,7 @@
     "assert": "^1.5.0",
     "bip39": "^3.0.4",
     "browserify-zlib": "^0.1.4",
+    "buffer": "^4.9.1",
     "change-case": "^4.1.2",
     "console-browserify": "^1.2.0",
     "constants-browserify": "^1.0.0",
@@ -110,6 +116,7 @@
     "react-native-tcp": "^3.3.2",
     "react-native-udp": "^2.7.0",
     "react-native-ui-lib": "^6.4.0",
+    "react-native-ultimate-config": "^3.4.2",
     "react-native-url-polyfill": "^1.3.0",
     "react-native-vector-icons": "^9.0.0",
     "react-native-view-shot": "^3.1.2",
@@ -126,8 +133,7 @@
     "url-parse": "^1.5.9",
     "util": "^0.10.4",
     "uuid": "^8.3.2",
-    "vm-browserify": "0.0.4",
-    "buffer": "^4.9.1"
+    "vm-browserify": "0.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

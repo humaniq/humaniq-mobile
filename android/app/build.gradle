@@ -84,6 +84,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-ultimate-config/android/rnuc.gradle"
 apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
 /**
@@ -143,16 +144,16 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-     dexOptions {
+    dexOptions {
         javaMaxHeapSize "4g"
-      }
+    }
 
     defaultConfig {
-        applicationId "com.humaniqmobile"
+        applicationId project.config.get("APPLICATION_ID")
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0.0"
+        versionCode project.config.get("APP_VERSION_CODE")
+        versionName project.config.get("APP_VERSION_NAME")
         multiDexEnabled true
         missingDimensionStrategy 'react-native-camera', 'general'
         testBuildType System.getProperty('testBuildType', 'debug')
