@@ -10,3 +10,6 @@
 # Add any project specific keep options here:
 
 -keep public class com.horcrux.svg.** {*;}
+-keepclassmembers class com.humaniqmobile.BuildConfig {
+   public static <fields>;
+}

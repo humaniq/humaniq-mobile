@@ -176,4 +176,7 @@ android/keystore.properties
 # Android memory profiler files
 *.hprof
 
+# react-native-ultimate-config
+rnuc.xcconfig
+
 env.js
