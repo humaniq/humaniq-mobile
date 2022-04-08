@@ -53,6 +53,7 @@ export class AppStore extends Model({
     lockerPreviousScreen: p(t.string, ""),
     isLockerDirty: p(t.boolean, false),
     savedPin: p(t.string),
+    bioEnabled: p(t.boolean, true),
     recoverPhrase: p(t.string, "").withSetter(),
     storedPin: p(t.string, ""),
     signMessageParams: p(t.unchecked<any>()),
@@ -122,6 +123,10 @@ export class AppStore extends Model({
                 this.appState = APP_STATE.APP
                 this.isLocked = false
             }
+            const enabled = (yield* _await(localStorage.load("hm-wallet-settings-bio")))
+            console.log(enabled)
+            this.bioEnabled = enabled === undefined ? true : (yield* _await(localStorage.load("hm-wallet-settings-bio")))
+
 
             this.messageManager.hub.on('unapprovedMessage', messageParams =>
                 this.onUnapprovedMessage(messageParams, 'eth')

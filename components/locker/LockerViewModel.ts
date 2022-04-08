@@ -38,13 +38,13 @@ export class LockerViewModel {
         this.isBioAvailable = available
 
         AppState.addEventListener("change", async (nextState) => {
-            if (nextState === "active" && this.mode === LOCKER_MODE.CHECK && getAppStore().isLocked) {
+            if (nextState === "active" && this.mode === LOCKER_MODE.CHECK && getAppStore().isLocked && getAppStore().bioEnabled) {
                 setTimeout(async () => {
                     await this.checkBio()
                 })
             }
         })
-        await this.checkBio()
+        getAppStore().bioEnabled && await this.checkBio()
     }
 
     async checkBio() {
