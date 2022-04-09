@@ -7,93 +7,59 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* HumaniqMobileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* HumaniqMobileTests.m */; };
+		097F756B2880F930F6B70FF9 /* libPods-HumaniqMobile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 048857B3A2FFB7E633BF544C /* libPods-HumaniqMobile.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		4445F48659BE412DA6F0A8B0 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6D3D89334064EF0A304747C /* Roboto-Bold.ttf */; };
-		C30E109A9A134BE0AE0388E6 /* Roboto-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 954ED78B7F7641D990DB7A78 /* Roboto-BoldItalic.ttf */; };
-		E23A6CA08DE54135813EA6DC /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39747C2F127F4AF5A6CF4C8A /* Roboto-Italic.ttf */; };
-		57D6B2B984C14B358345BC64 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */; };
-		05CA86D688D7496EB03EC720 /* Roboto-MediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71F401D3C9784AF5938DF504 /* Roboto-MediumItalic.ttf */; };
 		50A9F50279FF4E38A605248F /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8E33A0023B94D59AD2445D3 /* Roboto-Regular.ttf */; };
-		D2ED618F3B624CCEAF59C495 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C49113E5959D40CDB9CB6B1E /* AntDesign.ttf */; };
-		00F255648984430B9F410920 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 848E351F99874599A83B4B83 /* Entypo.ttf */; };
-		098C77FAC1D747E4BC8104E2 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35195A01282B4439BC9AB88E /* EvilIcons.ttf */; };
-		354EB853581F4C818459979A /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6483511276ED41BAB7535882 /* Feather.ttf */; };
-		04C560E9BA514CDBB64E39AB /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDD81C5F6184E31B23E5F42 /* FontAwesome.ttf */; };
-		E90C35237B07441B90DBDCBC /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 322BF69347C344C8A0D485AC /* FontAwesome5_Brands.ttf */; };
-		B136FFBB6B9446D5A67A9556 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94504E8EE5454EAA9E7CE1B3 /* FontAwesome5_Regular.ttf */; };
-		43E4412A49C3446F92699C45 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5F7A99D23ED14282B4FD3375 /* FontAwesome5_Solid.ttf */; };
-		2166F2C223044A66BA1CF928 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12E05398B578405C92773F9F /* Fontisto.ttf */; };
-		3FEC64D8440D4A58AF2F3A19 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 95E9B0B170B543EF8ADE31E8 /* Foundation.ttf */; };
-		75146087F9374BD8ADCC8349 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B283CA05D7ED4F4D9AAC13DC /* Ionicons.ttf */; };
-		BC3CA81D24C74E6AA378149E /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 08E13ADBF5254101B3199944 /* MaterialCommunityIcons.ttf */; };
-		D42D4CC0292845EC87703B74 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 967D08AA8DEF4038BD50AC9E /* MaterialIcons.ttf */; };
-		3F0C3ECA6DA644878928F3C6 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BEE7B49D28FE4F3FA6E94E2F /* Octicons.ttf */; };
-		CC72032A18344FF992BB234C /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 15A8376E1C214C048D380FA4 /* SimpleLineIcons.ttf */; };
-		94B491B4C6FE48039486AEBD /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D490D58D5ABE4AE58E2365D5 /* Zocial.ttf */; };
+		57D6B2B984C14B358345BC64 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */; };
+		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		A6016F892801F5080078241D /* provider.js in Resources */ = {isa = PBXBuildFile; fileRef = A6016F882801F5080078241D /* provider.js */; };
+		A66165322801426C000485BC /* rnuc.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A66165312801426C000485BC /* rnuc.xcconfig */; };
+		A661653528014454000485BC /* humaniq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A661653428014454000485BC /* humaniq.ttf */; };
+		A6EBC88E28017FA700C89374 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6EBC88D28017FA700C89374 /* File.swift */; };
+		A6EBC8952801C3E900C89374 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */; };
+		A6EBC8972801C41700C89374 /* double-conversion.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8962801C41700C89374 /* double-conversion.xcframework */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		00E356F41AD99517003FC87E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = HumaniqMobile;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		00E356EE1AD99517003FC87E /* HumaniqMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HumaniqMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* HumaniqMobileTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HumaniqMobileTests.m; sourceTree = "<group>"; };
+		048857B3A2FFB7E633BF544C /* libPods-HumaniqMobile.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HumaniqMobile.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* HumaniqMobile.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HumaniqMobile.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = HumaniqMobile/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = HumaniqMobile/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = HumaniqMobile/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = HumaniqMobile/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = HumaniqMobile/main.m; sourceTree = "<group>"; };
+		1F5FDECAE7C4398A74244789 /* Pods-HumaniqMobile-HumaniqMobileTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile-HumaniqMobileTests.release.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile-HumaniqMobileTests/Pods-HumaniqMobile-HumaniqMobileTests.release.xcconfig"; sourceTree = "<group>"; };
+		454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
+		652E7E61FE62FB69C236B925 /* Pods-HumaniqMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile.debug.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HumaniqMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		9482A8A99056825F2EF0635A /* Pods-HumaniqMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile.release.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile.release.xcconfig"; sourceTree = "<group>"; };
+		A6016F882801F5080078241D /* provider.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = provider.js; path = ../provider.js; sourceTree = "<group>"; };
+		A66165312801426C000485BC /* rnuc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = rnuc.xcconfig; sourceTree = "<group>"; };
+		A661653428014454000485BC /* humaniq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = humaniq.ttf; path = ../android/app/src/main/assets/fonts/humaniq.ttf; sourceTree = "<group>"; };
+		A6EBC88D28017FA700C89374 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		A6EBC88F28017FB500C89374 /* HumaniqMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HumaniqMobile-Bridging-Header.h"; sourceTree = "<group>"; };
+		A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
+		A6EBC8962801C41700C89374 /* double-conversion.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = "double-conversion.xcframework"; path = "Pods/Flipper-DoubleConversion/Frameworks/double-conversion.xcframework"; sourceTree = "<group>"; };
+		B14E3CFA85C58C60CA59A9DF /* Pods-HumaniqMobile-HumaniqMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile-HumaniqMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile-HumaniqMobileTests/Pods-HumaniqMobile-HumaniqMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
+		C32CFB68D34A0445B78F0A8A /* libPods-HumaniqMobile-HumaniqMobileTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-HumaniqMobile-HumaniqMobileTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6D3D89334064EF0A304747C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
+		C8E33A0023B94D59AD2445D3 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		C6D3D89334064EF0A304747C /* Roboto-Bold.ttf */ = {isa = PBXFileReference; name = "Roboto-Bold.ttf"; path = "../assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		954ED78B7F7641D990DB7A78 /* Roboto-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-BoldItalic.ttf"; path = "../assets/fonts/Roboto-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		39747C2F127F4AF5A6CF4C8A /* Roboto-Italic.ttf */ = {isa = PBXFileReference; name = "Roboto-Italic.ttf"; path = "../assets/fonts/Roboto-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; name = "Roboto-Medium.ttf"; path = "../assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		71F401D3C9784AF5938DF504 /* Roboto-MediumItalic.ttf */ = {isa = PBXFileReference; name = "Roboto-MediumItalic.ttf"; path = "../assets/fonts/Roboto-MediumItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C8E33A0023B94D59AD2445D3 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; name = "Roboto-Regular.ttf"; path = "../assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C49113E5959D40CDB9CB6B1E /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		848E351F99874599A83B4B83 /* Entypo.ttf */ = {isa = PBXFileReference; name = "Entypo.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		35195A01282B4439BC9AB88E /* EvilIcons.ttf */ = {isa = PBXFileReference; name = "EvilIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6483511276ED41BAB7535882 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7BDD81C5F6184E31B23E5F42 /* FontAwesome.ttf */ = {isa = PBXFileReference; name = "FontAwesome.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		322BF69347C344C8A0D485AC /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Brands.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		94504E8EE5454EAA9E7CE1B3 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Regular.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5F7A99D23ED14282B4FD3375 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Solid.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		12E05398B578405C92773F9F /* Fontisto.ttf */ = {isa = PBXFileReference; name = "Fontisto.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Fontisto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		95E9B0B170B543EF8ADE31E8 /* Foundation.ttf */ = {isa = PBXFileReference; name = "Foundation.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B283CA05D7ED4F4D9AAC13DC /* Ionicons.ttf */ = {isa = PBXFileReference; name = "Ionicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		08E13ADBF5254101B3199944 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; name = "MaterialCommunityIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		967D08AA8DEF4038BD50AC9E /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BEE7B49D28FE4F3FA6E94E2F /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		15A8376E1C214C048D380FA4 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		D490D58D5ABE4AE58E2365D5 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		00E356EB1AD99517003FC87E /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8C1A680F5B00A75B9A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6EBC8972801C41700C89374 /* double-conversion.xcframework in Frameworks */,
+				A6EBC8952801C3E900C89374 /* OpenSSL.xcframework in Frameworks */,
+				097F756B2880F930F6B70FF9 /* libPods-HumaniqMobile.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +83,17 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0314010F9E97D5A6AADF2684 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				652E7E61FE62FB69C236B925 /* Pods-HumaniqMobile.debug.xcconfig */,
+				9482A8A99056825F2EF0635A /* Pods-HumaniqMobile.release.xcconfig */,
+				B14E3CFA85C58C60CA59A9DF /* Pods-HumaniqMobile-HumaniqMobileTests.debug.xcconfig */,
+				1F5FDECAE7C4398A74244789 /* Pods-HumaniqMobile-HumaniqMobileTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* HumaniqMobile */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,7 +110,11 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A6EBC8962801C41700C89374 /* double-conversion.xcframework */,
+				A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
+				048857B3A2FFB7E633BF544C /* libPods-HumaniqMobile.a */,
+				C32CFB68D34A0445B78F0A8A /* libPods-HumaniqMobile-HumaniqMobileTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,12 +129,17 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A6016F882801F5080078241D /* provider.js */,
+				A6EBC88F28017FB500C89374 /* HumaniqMobile-Bridging-Header.h */,
+				A6EBC88D28017FA700C89374 /* File.swift */,
+				A66165312801426C000485BC /* rnuc.xcconfig */,
 				13B07FAE1A68108700A75B9A /* HumaniqMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* HumaniqMobileTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				ECD3D4AE1AA04AFDB8857049 /* Resources */,
+				0314010F9E97D5A6AADF2684 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -164,72 +150,37 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* HumaniqMobile.app */,
-				00E356EE1AD99517003FC87E /* HumaniqMobileTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
 		ECD3D4AE1AA04AFDB8857049 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
+				A661653428014454000485BC /* humaniq.ttf */,
 				C6D3D89334064EF0A304747C /* Roboto-Bold.ttf */,
-				954ED78B7F7641D990DB7A78 /* Roboto-BoldItalic.ttf */,
-				39747C2F127F4AF5A6CF4C8A /* Roboto-Italic.ttf */,
 				454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */,
-				71F401D3C9784AF5938DF504 /* Roboto-MediumItalic.ttf */,
 				C8E33A0023B94D59AD2445D3 /* Roboto-Regular.ttf */,
-				C49113E5959D40CDB9CB6B1E /* AntDesign.ttf */,
-				848E351F99874599A83B4B83 /* Entypo.ttf */,
-				35195A01282B4439BC9AB88E /* EvilIcons.ttf */,
-				6483511276ED41BAB7535882 /* Feather.ttf */,
-				7BDD81C5F6184E31B23E5F42 /* FontAwesome.ttf */,
-				322BF69347C344C8A0D485AC /* FontAwesome5_Brands.ttf */,
-				94504E8EE5454EAA9E7CE1B3 /* FontAwesome5_Regular.ttf */,
-				5F7A99D23ED14282B4FD3375 /* FontAwesome5_Solid.ttf */,
-				12E05398B578405C92773F9F /* Fontisto.ttf */,
-				95E9B0B170B543EF8ADE31E8 /* Foundation.ttf */,
-				B283CA05D7ED4F4D9AAC13DC /* Ionicons.ttf */,
-				08E13ADBF5254101B3199944 /* MaterialCommunityIcons.ttf */,
-				967D08AA8DEF4038BD50AC9E /* MaterialIcons.ttf */,
-				BEE7B49D28FE4F3FA6E94E2F /* Octicons.ttf */,
-				15A8376E1C214C048D380FA4 /* SimpleLineIcons.ttf */,
-				D490D58D5ABE4AE58E2365D5 /* Zocial.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* HumaniqMobileTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HumaniqMobileTests" */;
-			buildPhases = (
-				00E356EA1AD99517003FC87E /* Sources */,
-				00E356EB1AD99517003FC87E /* Frameworks */,
-				00E356EC1AD99517003FC87E /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				00E356F51AD99517003FC87E /* PBXTargetDependency */,
-			);
-			name = HumaniqMobileTests;
-			productName = HumaniqMobileTests;
-			productReference = 00E356EE1AD99517003FC87E /* HumaniqMobileTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		13B07F861A680F5B00A75B9A /* HumaniqMobile */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "HumaniqMobile" */;
 			buildPhases = (
+				A6C38EAACAA1BE74F2C23E64 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				DB86EB557EE9490CB2746DAA /* Upload Debug Symbols to Sentry */,
+				B4CF22DCDF45EBD756988FD2 /* [CP] Embed Pods Frameworks */,
+				2183C92936A763BAC989D209 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -248,12 +199,8 @@
 			attributes = {
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
-					00E356ED1AD99517003FC87E = {
-						CreatedOnToolsVersion = 6.2;
-						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1330;
 					};
 				};
 			};
@@ -271,47 +218,23 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* HumaniqMobile */,
-				00E356ED1AD99517003FC87E /* HumaniqMobileTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		00E356EC1AD99517003FC87E /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6016F892801F5080078241D /* provider.js in Resources */,
+				A661653528014454000485BC /* humaniq.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				4445F48659BE412DA6F0A8B0 /* Roboto-Bold.ttf in Resources */,
-				C30E109A9A134BE0AE0388E6 /* Roboto-BoldItalic.ttf in Resources */,
-				E23A6CA08DE54135813EA6DC /* Roboto-Italic.ttf in Resources */,
 				57D6B2B984C14B358345BC64 /* Roboto-Medium.ttf in Resources */,
-				05CA86D688D7496EB03EC720 /* Roboto-MediumItalic.ttf in Resources */,
 				50A9F50279FF4E38A605248F /* Roboto-Regular.ttf in Resources */,
-				D2ED618F3B624CCEAF59C495 /* AntDesign.ttf in Resources */,
-				00F255648984430B9F410920 /* Entypo.ttf in Resources */,
-				098C77FAC1D747E4BC8104E2 /* EvilIcons.ttf in Resources */,
-				354EB853581F4C818459979A /* Feather.ttf in Resources */,
-				04C560E9BA514CDBB64E39AB /* FontAwesome.ttf in Resources */,
-				E90C35237B07441B90DBDCBC /* FontAwesome5_Brands.ttf in Resources */,
-				B136FFBB6B9446D5A67A9556 /* FontAwesome5_Regular.ttf in Resources */,
-				43E4412A49C3446F92699C45 /* FontAwesome5_Solid.ttf in Resources */,
-				2166F2C223044A66BA1CF928 /* Fontisto.ttf in Resources */,
-				3FEC64D8440D4A58AF2F3A19 /* Foundation.ttf in Resources */,
-				75146087F9374BD8ADCC8349 /* Ionicons.ttf in Resources */,
-				BC3CA81D24C74E6AA378149E /* MaterialCommunityIcons.ttf in Resources */,
-				D42D4CC0292845EC87703B74 /* MaterialIcons.ttf in Resources */,
-				3F0C3ECA6DA644878928F3C6 /* Octicons.ttf in Resources */,
-				CC72032A18344FF992BB234C /* SimpleLineIcons.ttf in Resources */,
-				94B491B4C6FE48039486AEBD /* Zocial.ttf in Resources */,
+				A66165322801426C000485BC /* rnuc.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +255,76 @@
 			shellPath = /bin/sh;
 			shellScript = "export SENTRY_PROPERTIES=sentry.properties\nexport EXTRA_PACKAGER_ARGS=\"--sourcemap-output $DERIVED_FILE_DIR/main.jsbundle.map\"\nset -e\n\nexport NODE_BINARY=node\n../node_modules/@sentry/cli/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
+		2183C92936A763BAC989D209 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A6C38EAACAA1BE74F2C23E64 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-HumaniqMobile-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B4CF22DCDF45EBD756988FD2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 8;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		DB86EB557EE9490CB2746DAA /* Upload Debug Symbols to Sentry */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Upload Debug Symbols to Sentry";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
+		};
 		FD10A7F022414F080027D42C /* Start Packager */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -351,107 +344,32 @@
 			shellScript = "export RCT_METRO_PORT=\"${RCT_METRO_PORT:=8081}\"\necho \"export RCT_METRO_PORT=${RCT_METRO_PORT}\" > \"${SRCROOT}/../node_modules/react-native/scripts/.packager.env\"\nif [ -z \"${RCT_NO_LAUNCH_PACKAGER+xxx}\" ] ; then\n  if nc -w 5 -z localhost ${RCT_METRO_PORT} ; then\n    if ! curl -s \"http://localhost:${RCT_METRO_PORT}/status\" | grep -q \"packager-status:running\" ; then\n      echo \"Port ${RCT_METRO_PORT} already in use, packager is either not running or not running correctly\"\n      exit 2\n    fi\n  else\n    open \"$SRCROOT/../node_modules/react-native/scripts/launchPackager.command\" || echo \"Can't start packager automatically\"\n  fi\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		DB86EB557EE9490CB2746DAA /* Upload Debug Symbols to Sentry */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			name = "Upload Debug Symbols to Sentry";
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			shellScript = "export SENTRY_PROPERTIES=sentry.properties\n../node_modules/@sentry/cli/bin/sentry-cli upload-dsym";
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		00E356EA1AD99517003FC87E /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				00E356F31AD99517003FC87E /* HumaniqMobileTests.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		13B07F871A680F5B00A75B9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				A6EBC88E28017FA700C89374 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* HumaniqMobile */;
-			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin XCBuildConfiguration section */
-		00E356F61AD99517003FC87E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = HumaniqMobileTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HumaniqMobile.app/HumaniqMobile";
-			};
-			name = Debug;
-		};
-		00E356F71AD99517003FC87E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = HumaniqMobileTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-lc++",
-					"$(inherited)",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HumaniqMobile.app/HumaniqMobile";
-			};
-			name = Release;
-		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 652E7E61FE62FB69C236B925 /* Pods-HumaniqMobile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_BITCODE = NO;
+				EXCLUDED_ARCHS = arm64;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = HumaniqMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -464,6 +382,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = HumaniqMobile;
+				SWIFT_OBJC_BRIDGING_HEADER = "HumaniqMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -472,15 +391,18 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9482A8A99056825F2EF0635A /* Pods-HumaniqMobile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = HumaniqMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -488,6 +410,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = HumaniqMobile;
+				SWIFT_OBJC_BRIDGING_HEADER = "HumaniqMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -495,6 +418,7 @@
 		};
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A66165312801426C000485BC /* rnuc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -526,6 +450,8 @@
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -541,7 +467,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -559,6 +485,7 @@
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A66165312801426C000485BC /* rnuc.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
@@ -590,6 +517,8 @@
 				COPY_PHASE_STRIP = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				EXCLUDED_ARCHS = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -598,7 +527,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -617,15 +546,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "HumaniqMobileTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				00E356F61AD99517003FC87E /* Debug */,
-				00E356F71AD99517003FC87E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "HumaniqMobile" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

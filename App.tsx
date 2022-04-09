@@ -76,7 +76,8 @@ LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
     "new NativeEventEmitter()",
     "rightButtonProps.iconSource",
-    "RNUILib TextField component will soon be replaced"
+    "RNUILib TextField component will soon be replaced",
+    "Module TcpSockets requires main queue setup",
 ])
 
 enableScreens()

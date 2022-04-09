@@ -19,4 +19,7 @@ npx jetify
 #git submodule update --init
 
 echo "3 copy provider"
+# for android
 cp node_modules/humaniq-ethereum-provider/dist/humaniq-provider.js android/app/src/main/assets/provider.js
+# for ios
+cp node_modules/humaniq-ethereum-provider/dist/humaniq-provider.js provider.js
