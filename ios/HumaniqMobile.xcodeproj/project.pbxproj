@@ -15,9 +15,9 @@
 		50A9F50279FF4E38A605248F /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C8E33A0023B94D59AD2445D3 /* Roboto-Regular.ttf */; };
 		57D6B2B984C14B358345BC64 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 454C89DCEF3443AB90FD5D19 /* Roboto-Medium.ttf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		A6016F892801F5080078241D /* provider.js in Resources */ = {isa = PBXBuildFile; fileRef = A6016F882801F5080078241D /* provider.js */; };
 		A66165322801426C000485BC /* rnuc.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A66165312801426C000485BC /* rnuc.xcconfig */; };
 		A661653528014454000485BC /* humaniq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A661653428014454000485BC /* humaniq.ttf */; };
+		A6B164FC2802BD5500FA2C01 /* provider.js in Resources */ = {isa = PBXBuildFile; fileRef = A6B164FB2802BD5500FA2C01 /* provider.js */; };
 		A6EBC88E28017FA700C89374 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6EBC88D28017FA700C89374 /* File.swift */; };
 		A6EBC8952801C3E900C89374 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */; };
 		A6EBC8972801C41700C89374 /* double-conversion.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8962801C41700C89374 /* double-conversion.xcframework */; };
@@ -38,9 +38,9 @@
 		652E7E61FE62FB69C236B925 /* Pods-HumaniqMobile.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile.debug.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HumaniqMobile/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9482A8A99056825F2EF0635A /* Pods-HumaniqMobile.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HumaniqMobile.release.xcconfig"; path = "Target Support Files/Pods-HumaniqMobile/Pods-HumaniqMobile.release.xcconfig"; sourceTree = "<group>"; };
-		A6016F882801F5080078241D /* provider.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = provider.js; path = ../provider.js; sourceTree = "<group>"; };
 		A66165312801426C000485BC /* rnuc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = rnuc.xcconfig; sourceTree = "<group>"; };
 		A661653428014454000485BC /* humaniq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = humaniq.ttf; path = ../android/app/src/main/assets/fonts/humaniq.ttf; sourceTree = "<group>"; };
+		A6B164FB2802BD5500FA2C01 /* provider.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = provider.js; path = ../provider/provider.js; sourceTree = "<group>"; };
 		A6EBC88D28017FA700C89374 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		A6EBC88F28017FB500C89374 /* HumaniqMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HumaniqMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				A6016F882801F5080078241D /* provider.js */,
+				A6B164FB2802BD5500FA2C01 /* provider.js */,
 				A6EBC88F28017FB500C89374 /* HumaniqMobile-Bridging-Header.h */,
 				A6EBC88D28017FA700C89374 /* File.swift */,
 				A66165312801426C000485BC /* rnuc.xcconfig */,
@@ -227,7 +227,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A6016F892801F5080078241D /* provider.js in Resources */,
+				A6B164FC2802BD5500FA2C01 /* provider.js in Resources */,
 				A661653528014454000485BC /* humaniq.ttf in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -366,7 +366,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = "${APP_VERSION_CODE}";
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = arm64;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -375,12 +375,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = "${APP_VERSION_NAME}";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "${APPLICATION_ID}";
 				PRODUCT_NAME = HumaniqMobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "HumaniqMobile-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -395,20 +396,21 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = "${APP_VERSION_CODE}";
 				EXCLUDED_ARCHS = arm64;
 				INFOPLIST_FILE = HumaniqMobile/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = "${APP_VERSION_NAME}";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = "${APPLICATION_ID}";
 				PRODUCT_NAME = HumaniqMobile;
 				SWIFT_OBJC_BRIDGING_HEADER = "HumaniqMobile-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

@@ -180,7 +180,7 @@ android/keystore.properties
 rnuc.xcconfig
 
 # Provider
-provider.js
+provider/provider.js
 android/app/src/main/assets/provider.js
 
 env.js
