@@ -18,10 +18,21 @@
 		A66165322801426C000485BC /* rnuc.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A66165312801426C000485BC /* rnuc.xcconfig */; };
 		A661653528014454000485BC /* humaniq.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A661653428014454000485BC /* humaniq.ttf */; };
 		A6B164FC2802BD5500FA2C01 /* provider.js in Resources */ = {isa = PBXBuildFile; fileRef = A6B164FB2802BD5500FA2C01 /* provider.js */; };
+		A6B165042802C7CA00FA2C01 /* HumaniqMobileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6B165032802C7CA00FA2C01 /* HumaniqMobileTests.swift */; };
 		A6EBC88E28017FA700C89374 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6EBC88D28017FA700C89374 /* File.swift */; };
 		A6EBC8952801C3E900C89374 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */; };
 		A6EBC8972801C41700C89374 /* double-conversion.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6EBC8962801C41700C89374 /* double-conversion.xcframework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A6B165052802C7CA00FA2C01 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
+			remoteInfo = HumaniqMobile;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -41,6 +52,8 @@
 		A66165312801426C000485BC /* rnuc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = rnuc.xcconfig; sourceTree = "<group>"; };
 		A661653428014454000485BC /* humaniq.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = humaniq.ttf; path = ../android/app/src/main/assets/fonts/humaniq.ttf; sourceTree = "<group>"; };
 		A6B164FB2802BD5500FA2C01 /* provider.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = provider.js; path = ../provider/provider.js; sourceTree = "<group>"; };
+		A6B165012802C7CA00FA2C01 /* HumaniqMobileTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HumaniqMobileTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6B165032802C7CA00FA2C01 /* HumaniqMobileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumaniqMobileTests.swift; sourceTree = "<group>"; };
 		A6EBC88D28017FA700C89374 /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		A6EBC88F28017FB500C89374 /* HumaniqMobile-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HumaniqMobile-Bridging-Header.h"; sourceTree = "<group>"; };
 		A6EBC8942801C3E900C89374 /* OpenSSL.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OpenSSL.xcframework; path = "Pods/OpenSSL-Universal/Frameworks/OpenSSL.xcframework"; sourceTree = "<group>"; };
@@ -60,6 +73,13 @@
 				A6EBC8972801C41700C89374 /* double-conversion.xcframework in Frameworks */,
 				A6EBC8952801C3E900C89374 /* OpenSSL.xcframework in Frameworks */,
 				097F756B2880F930F6B70FF9 /* libPods-HumaniqMobile.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6B164FE2802C7CA00FA2C01 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,6 +156,7 @@
 				13B07FAE1A68108700A75B9A /* HumaniqMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* HumaniqMobileTests */,
+				A6B165022802C7CA00FA2C01 /* HumaniqMobileTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				ECD3D4AE1AA04AFDB8857049 /* Resources */,
@@ -150,8 +171,17 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* HumaniqMobile.app */,
+				A6B165012802C7CA00FA2C01 /* HumaniqMobileTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		A6B165022802C7CA00FA2C01 /* HumaniqMobileTests */ = {
+			isa = PBXGroup;
+			children = (
+				A6B165032802C7CA00FA2C01 /* HumaniqMobileTests.swift */,
+			);
+			path = HumaniqMobileTests;
 			sourceTree = "<group>";
 		};
 		ECD3D4AE1AA04AFDB8857049 /* Resources */ = {
@@ -191,16 +221,39 @@
 			productReference = 13B07F961A680F5B00A75B9A /* HumaniqMobile.app */;
 			productType = "com.apple.product-type.application";
 		};
+		A6B165002802C7CA00FA2C01 /* HumaniqMobileTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A6B165092802C7CA00FA2C01 /* Build configuration list for PBXNativeTarget "HumaniqMobileTests" */;
+			buildPhases = (
+				A6B164FD2802C7CA00FA2C01 /* Sources */,
+				A6B164FE2802C7CA00FA2C01 /* Frameworks */,
+				A6B164FF2802C7CA00FA2C01 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A6B165062802C7CA00FA2C01 /* PBXTargetDependency */,
+			);
+			name = HumaniqMobileTests;
+			productName = HumaniqMobileTests;
+			productReference = A6B165012802C7CA00FA2C01 /* HumaniqMobileTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
 						LastSwiftMigration = 1330;
+					};
+					A6B165002802C7CA00FA2C01 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 				};
 			};
@@ -218,6 +271,7 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* HumaniqMobile */,
+				A6B165002802C7CA00FA2C01 /* HumaniqMobileTests */,
 			);
 		};
 /* End PBXProject section */
@@ -235,6 +289,13 @@
 				57D6B2B984C14B358345BC64 /* Roboto-Medium.ttf in Resources */,
 				50A9F50279FF4E38A605248F /* Roboto-Regular.ttf in Resources */,
 				A66165322801426C000485BC /* rnuc.xcconfig in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A6B164FF2802C7CA00FA2C01 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,7 +418,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A6B164FD2802C7CA00FA2C01 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6B165042802C7CA00FA2C01 /* HumaniqMobileTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A6B165062802C7CA00FA2C01 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 13B07F861A680F5B00A75B9A /* HumaniqMobile */;
+			targetProxy = A6B165052802C7CA00FA2C01 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
@@ -545,6 +622,66 @@
 			};
 			name = Release;
 		};
+		A6B165072802C7CA00FA2C01 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.humaniqmobile.HumaniqMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HumaniqMobile.app/HumaniqMobile";
+			};
+			name = Debug;
+		};
+		A6B165082802C7CA00FA2C01 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.humaniqmobile.HumaniqMobileTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HumaniqMobile.app/HumaniqMobile";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -562,6 +699,15 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A6B165092802C7CA00FA2C01 /* Build configuration list for PBXNativeTarget "HumaniqMobileTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A6B165072802C7CA00FA2C01 /* Debug */,
+				A6B165082802C7CA00FA2C01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
