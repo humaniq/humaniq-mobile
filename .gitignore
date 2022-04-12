@@ -179,4 +179,8 @@ android/keystore.properties
 # react-native-ultimate-config
 rnuc.xcconfig
 
+# Provider
+provider/provider.js
+android/app/src/main/assets/provider.js
+
 env.js
