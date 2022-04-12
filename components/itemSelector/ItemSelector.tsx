@@ -18,7 +18,8 @@ export interface ISelectNetworkProps<ItemType> {
     onBackPress?: () => void
     backIcon?: ICON_HEADER
     selected: string,
-    headerTittle: string
+    headerTittle: string,
+    labelTransform?: (i: ItemType) => string
 }
 
 export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
@@ -27,7 +28,8 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                                                                           onBackPress,
                                                                           backIcon,
                                                                           selected,
-                                                                          headerTittle
+                                                                          headerTittle,
+                                                                          labelTransform= (i: ItemType) => i.name
                                                                       }) => {
     return <View flex bg-bg>
         <Header title={ headerTittle } onBackPress={ onBackPress } icon={ backIcon }/>
@@ -43,13 +45,14 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                         <Card padding-0 flex>
                             {
                                 i.items.map((n, i) => {
-                                    return <Ripple testID={`itemSelector-${n.name}`} key={ n.name } rippleColor={ Colors.primary }
+                                    return <Ripple testID={ `itemSelector-${ n.name }` } key={ n.name }
+                                                   rippleColor={ Colors.primary }
                                                    style={ { padding: 12 } }
                                                    onPress={ () => onPressItem(n) }
                                     >
                                         <View row>
                                             <View flex-5>
-                                                <Text text16 style={ { textTransform: "uppercase" } }>{ n.name }</Text>
+                                                <Text text16 >{ labelTransform(n) }</Text>
                                             </View>
                                             <View right flex-5>
                                                 <RadioButton

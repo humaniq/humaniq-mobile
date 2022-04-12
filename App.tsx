@@ -217,4 +217,4 @@ Sentry.init({
 Sentry.wrap(App)
 // }
 
-export default App
+export default Sentry.withProfiler(App)

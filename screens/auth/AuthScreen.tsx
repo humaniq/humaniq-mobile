@@ -178,7 +178,8 @@ const Auth = observer(function () {
                     </Animatable.View> }
             </Screen>
             }
-            { !view.initialized && <Splash showLoader={ view.needLoader }/>
+            {
+                !view.initialized && <Splash text={ t("loadingText") } showLoader={ view.needLoader }/>
             }
         </View>
     )

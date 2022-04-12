@@ -7,7 +7,7 @@ import { getProfileStore, getWalletStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import { t } from "../../i18n";
 import { throttle } from "../../utils/general";
-import { InteractionManager } from "react-native";
+import { InteractionManager, Linking } from "react-native";
 import CloseIcon from "../../assets/images/circle-xmark-solid.svg";
 import { makeAutoObservable, reaction } from "mobx";
 import { closeToast, setToast } from "../../utils/toast";
@@ -26,6 +26,8 @@ class EnterIDViewModel {
     obst = reaction(() => this.value, async (val) => {
         if (val.length === 6) {
             this.invalidCode = !await getProfileStore().checkCode(val)
+        } else {
+            this.invalidCode = false
         }
     })
 
@@ -77,6 +79,10 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                               getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
                           } }>
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: Colors.black } }/>
+            <View flex right>
+                <Text style={ { textDecorationLine: "underline" } } primary robotoM
+                      onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
+            </View>
         </TouchableOpacity>
         <View padding-16>
             <Text text16 robotoM>
