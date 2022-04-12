@@ -57,11 +57,13 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                 }
                 {
                     verified && <View>
-                        <Text text16 robotoM>{t("humaniqID.verified.tittle")}</Text>
-                        <Text text16 marginT-10>{t("humaniqID.verified.firstLine")}</Text>
+                        <Text text16 robotoM>{ t("humaniqID.verified.tittle") }</Text>
+                        <Text text16 marginT-10>{ t("humaniqID.verified.firstLine") }</Text>
                         <Text text16 style={ { textDecorationLine: "underline" } } primary robotoM
-                              onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
-                        <Text text16 marginT-10>{t("humaniqID.verified.secondLine")}</Text>
+                              onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>
+                            @HumaniqID_bot
+                        </Text>
+                        <Text text16 marginT-10>{ t("humaniqID.verified.secondLine") }</Text>
                     </View>
                 }
                 <View flex-2 bottom>
