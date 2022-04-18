@@ -62,6 +62,13 @@ import { CENTRY_URL } from "./config/api";
 import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
 import { profiler } from "./utils/profiler/profiler";
 import { EVENTS } from "./config/events";
+import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
+import {
+    ApprovalWalletConnectDialogViewModel
+} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialogViewModel";
+import {
+    ApprovalWalletConnectDialog
+} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
 
 applyTheme()
 
@@ -104,6 +111,8 @@ const EVMProviderStore = createContext<EVMProvider>()
 export const getEVMProvider = () => EVMProviderStore.getDefault()
 const browserStore = createContext<BrowserStore>()
 export const getBrowserStore = () => browserStore.getDefault()
+const walletConnectStore = createContext<WalletConnectStore>()
+export const getWalletConnectStore = () => walletConnectStore.getDefault()
 
 function createRootStore() {
     const rootStore = new RootStore({})
@@ -117,12 +126,15 @@ function createRootStore() {
     providerStore.setDefault(rootStore.providerStore)
     EVMProviderStore.setDefault(rootStore.providerStore.eth)
     browserStore.setDefault(rootStore.browserStore)
+    walletConnectStore.setDefault(rootStore.walletConnectStore)
     return rootStore
 }
 
 const AppScreen = observer(() => {
     const navigationRef = useRef<NavigationContainerRef<any>>(null)
     const store = useInstance(RootStore)
+    const approvalDialog = useInstance(ApprovalWalletConnectDialogViewModel)
+    const sendTransactionDialog = useInstance(LegacySendTransactonViewModel)
 
     setRootNavigation(navigationRef)
     useBackButtonHandler(navigationRef, canExit)
@@ -143,6 +155,7 @@ const AppScreen = observer(() => {
             await store.walletStore.init()
             await store.appStore.init()
             await store.browserStore.init()
+            await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
             profiler.end(id)
         })()
     }, [])
@@ -166,6 +179,7 @@ const AppScreen = observer(() => {
                         <CreateWalletToast/>
                         <SigningDialog/>
                         <SendTransactionDialog/>
+                        <ApprovalWalletConnectDialog />
                     </> }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
@@ -201,6 +215,7 @@ App.register(
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
     SelectTransactionFeeDialogViewModel,
+    ApprovalWalletConnectDialogViewModel
 )
 
 // if (!isDev) {

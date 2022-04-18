@@ -63,7 +63,7 @@ export class WalletStore extends Model({
 
     @computed
     get selectedWallet() {
-        return this.wallets[this.selectedWalletIndex]
+        return this?.wallets[this.selectedWalletIndex]
     }
 
     @modelAction

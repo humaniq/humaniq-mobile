@@ -65,7 +65,7 @@ export class TokenTransaction extends Model({
             chainId: +this.chainId,
             nonce: +this.nonce,
             gasPrice: +this.gasPrice,
-            gasLimit: +this.gas,
+            gas: +this.gas,
             to: this.toAddress,
             from: this.fromAddress,
             value: BigNumber.from(this.value),
@@ -81,7 +81,7 @@ export class TokenTransaction extends Model({
             const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
             const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
                 gasPrice: this.txBody.gasPrice,
-                gasLimit: this.txBody.gasLimit,
+                gas: this.txBody.gasLimit,
                 nonce: this.txBody.nonce,
                 type: 0
             }))) as ethers.providers.TransactionResponse
@@ -137,7 +137,7 @@ export class TokenTransaction extends Model({
                     chainId: this.txBody.chainId,
                     nonce: this.txBody.nonce,
                     gasPrice: this.txBody.gasPrice,
-                    gasLimit: this.txBody.gasLimit,
+                    gas: this.txBody.gasLimit,
                     to: this.txBody.to,
                     from: this.txBody.from,
                     value: BigNumber.from(this.value),
@@ -183,7 +183,7 @@ export class TokenTransaction extends Model({
                 const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
                 const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
                     gasPrice: this.txBody.gasPrice,
-                    gasLimit: this.txBody.gasLimit,
+                    gas: this.txBody.gasLimit,
                     nonce: this.txBody.nonce,
                     type: 0
                 }))) as ethers.providers.TransactionResponse

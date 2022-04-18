@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Colors, Dialog, ExpandableSection, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Avatar, Button, Card, Colors, Dialog, ExpandableSection, Text, View } from "react-native-ui-lib"
 import React, { useState } from "react"
 import { useInstance } from "react-ioc"
 import { observer } from "mobx-react-lite"
@@ -8,7 +8,6 @@ import { t } from "../../../i18n"
 import { getWalletStore } from "../../../App"
 import { HIcon } from "../../icon";
 import { WalletItem } from "../../walletItem/WalletItem";
-import { currencyFormat } from "../../../utils/number";
 import Ripple from "react-native-material-ripple"
 import { ScrollView } from "react-native";
 
@@ -109,20 +108,24 @@ export const SendTransactionDialog = observer(() => {
                                             <HIcon name={ "up" } width={ 14 } style={ { color: Colors.black } }/> }
                                     </Button>
                                 </View>
-                                { expanded && <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 8 } }/> }
+                                    { expanded && <View style={ {
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: Colors.grey,
+                                        marginLeft: 8
+                                    } }/> }
                                 </> }
                             >
                                 <View row spread padding-16>
                                     {
                                         view.transactionFeeView.options.map((option, index) => {
                                             return <Ripple onPress={ () => option.onOptionPress() } key={ index }
-                                                           style={{
+                                                           style={ {
                                                                borderWidth: 1,
                                                                borderRadius: 12,
                                                                borderColor: Colors.grey,
                                                                width: '30%',
                                                                overflow: 'hidden'
-                                                           }}
+                                                           } }
                                             >
                                                 <View paddingH-16 paddingV-10 width={ '100%' }>
                                                     <View centerH>

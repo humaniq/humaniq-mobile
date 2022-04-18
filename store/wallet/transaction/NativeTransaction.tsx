@@ -92,7 +92,7 @@ export class NativeTransaction extends Model({
             chainId: +this.chainId,
             nonce: +this.nonce,
             gasPrice: +this.gasPrice,
-            gasLimit: +this.gas,
+            gas: +this.gas,
             to: this.toAddress,
             from: this.fromAddress,
             value: BigNumber.from(this.value),

@@ -45,7 +45,7 @@ export class SendTransactionViewModel {
         nonce: undefined,
         value: "",
         to: "",
-        gasLimit: 21000,
+        gas: 21000,
     }
 
     txError = false
@@ -98,6 +98,7 @@ export class SendTransactionViewModel {
     async init(route) {
         this.tokenAddress = route?.tokenAddress
         this.walletAddress = route?.walletAddress
+        this.txData.to = route?.to
         if (!this.initialized) {
             await this.getTransactionData();
 
@@ -326,7 +327,7 @@ export class SendTransactionViewModel {
         this.initialized = false
         this.txData = {
             chainId: 0,
-            gasLimit: 0,
+            gas: 0,
             nonce: "",
             value: "",
             to: "",

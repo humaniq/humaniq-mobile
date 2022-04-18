@@ -118,7 +118,7 @@ export class QRScannerView {
       data = { target_address: content, action: 'send-eth' };
     } else if (content.split('wc:').length > 1) {
       this.shouldReadBarCode = false;
-      data = { walletConnectURI: content };
+      data = { walletConnectURI: content, action: 'wallet-connect' };
     } else {
       // EIP-945 allows scanning arbitrary data
       data = content;

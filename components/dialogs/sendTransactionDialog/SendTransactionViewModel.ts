@@ -26,7 +26,7 @@ export class SendTransactionViewModel {
     txData = {
         data: undefined,
         chainId: 0,
-        gasLimit: 21000,
+        gas: 21000,
         nonce: undefined,
         value: 0,
         to: "",
@@ -40,7 +40,6 @@ export class SendTransactionViewModel {
     transactionFeeView = inject(this, SelectTransactionFeeDialogViewModel)
 
     async init(txData, meta) {
-        console.log(txData)
         try {
             this.pending = true
             this.meta = meta
@@ -48,6 +47,9 @@ export class SendTransactionViewModel {
                 ...this.txData,
                 ...txData
             }
+
+            console.log({ txData: this.txData })
+
             this.display = true
             this.initialized = true
             this.txData.chainId = getEVMProvider().currentNetwork.chainID
@@ -55,9 +57,9 @@ export class SendTransactionViewModel {
                 await getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
             ])
             this.txData.nonce = nonce
-            this.txData.gasLimit = Number(txData.gas || txData.gasLimit) || this.txData.gasLimit
+            this.txData.gas = Number(txData.gas || txData.gasLimit) || this.txData.gas
             this.transactionFeeView.wallet = this.wallet.address
-            this.transactionFeeView.gasLimit = this.txData.gasLimit
+            this.transactionFeeView.gasLimit = this.txData.gas
             getEVMProvider().gasStation.setEnableAutoUpdate(true)
             this.pending = false
         } catch (e) {
@@ -83,7 +85,7 @@ export class SendTransactionViewModel {
 
     get transactionMaxFee() {
         try {
-            return this.txData.gasLimit ? +ethers.utils.formatEther((+this.selectedGasPrice * this.txData.gasLimit).toString()) : 0
+            return this.txData.gas ? +ethers.utils.formatEther((+this.selectedGasPrice * this.txData.gas).toString()) : 0
         } catch (e) {
             console.log("ERROR", e)
             return 0
@@ -91,7 +93,7 @@ export class SendTransactionViewModel {
     }
 
     get transactionFee() {
-        return this.txData.gasLimit ? +ethers.utils.formatEther((+this.selectedGasPrice * this.txData.gasLimit).toString()) : 0
+        return this.txData.gas ? +ethers.utils.formatEther((+this.selectedGasPrice * this.txData.gas).toString()) : 0
     }
 
     get transactionFiatFee() {
@@ -99,7 +101,7 @@ export class SendTransactionViewModel {
     }
 
     get transactionTotalAmount() {
-        return this.txData.gasLimit ? +ethers.utils.formatEther(Number(this.txData.value).toString()) + this.transactionFee : 0
+        return this.txData.gas ? +ethers.utils.formatEther(Number(this.txData.value).toString()) + this.transactionFee : 0
     }
 
     get price() {
@@ -142,7 +144,7 @@ export class SendTransactionViewModel {
                 chainId: this.txData.chainId.toString(),
                 nonce: this.txData.nonce.toString(),
                 gasPrice: this.selectedGasPrice.toString(),
-                gas: this.txData.gasLimit.toString(),
+                gas: this.txData.gas.toString(),
                 toAddress: this.txData.to,
                 walletAddress: this.wallet.address,
                 fromAddress: this.txData.from,
@@ -161,7 +163,7 @@ export class SendTransactionViewModel {
     get enoughBalance() {
         return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
             .gt(BigNumber.from((+this.txData.value).toString()).add(
-                    BigNumber.from((+this.selectedGasPrice * this.txData.gasLimit).toString())
+                    BigNumber.from((+this.selectedGasPrice * this.txData.gas).toString())
                 )
             ) : false
     }
