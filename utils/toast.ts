@@ -29,13 +29,20 @@ export const setConnectionInfo = (isConnected) => {
     })
 }
 
-export const setToast = (message: string, type = TOASTER_TYPE.SUCCESS, position = TOAST_POSITION.BOTTOM) => {
+export const setToast = (message: string, type = TOASTER_TYPE.SUCCESS, position = TOAST_POSITION.BOTTOM, withtimeout = false) => {
     runUnprotected(() => {
         getAppStore().toast.type = type
         getAppStore().toast.message = message
         getAppStore().toast.display = true
         getAppStore().toast.position = position
     })
+    if(withtimeout) {
+        setTimeout(() => {
+            runUnprotected(() => {
+                getAppStore().toast.display = false
+            })
+        }, 3000)
+    }
 }
 
 export const closeToast = () => {

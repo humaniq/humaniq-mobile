@@ -1,5 +1,6 @@
 {
   "common": {
+    "delete": "удалить",
     "ok": "OK!",
     "cancel": "Закрыть",
     "back": "Назад",
@@ -130,7 +131,8 @@
       "privacyPolicyDescription": "",
       "termsOfServiceName": "Условия использования",
       "termsOfServiceDescription": "",
-      "disableBio": "Вход по биометрии"
+      "disableBio": "Вход по биометрии",
+      "walletConnect": "Wallet connect"
     }
   },
   "selectTransactionFeeDialog": {

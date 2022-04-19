@@ -2,12 +2,13 @@ import { Model, model, modelFlow, runUnprotected, tProp as p, types as t } from 
 import RNWalletConnect from '@walletconnect/client';
 import { CLIENT_OPTIONS, WALLET_CONNECT_ORIGIN } from "../../config/common";
 import { getAppStore, getEVMProvider, getWalletConnectStore, getWalletStore } from "../../App";
-import { closeToast, setPendingAppToast } from "../../utils/toast";
+import { closeToast, setPendingAppToast, setToast } from "../../utils/toast";
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 import { InteractionManager } from "react-native";
 import { NativeTransaction } from "../wallet/transaction/NativeTransaction";
 import { t as trans } from "../../i18n"
 import { reaction } from "mobx";
+import { TOASTER_TYPE } from "../app/AppStore";
 
 @model("WalletConnect")
 export class WalletConnect extends Model({
@@ -28,6 +29,7 @@ export class WalletConnect extends Model({
         }
 
         this.walletConnector = new RNWalletConnect({ ...options, ...CLIENT_OPTIONS })
+        this.updateSession()
 
         this.walletConnector.on('session_request', async (error, payload) => {
             console.log("WC:", payload)
@@ -69,7 +71,6 @@ export class WalletConnect extends Model({
             }
 
             const meta = this.walletConnector.session.peerMeta;
-            console.log(payload.method)
             if (payload.method) {
                 if (payload.method === 'eth_sendTransaction') {
                     if (getWalletConnectStore().sendTransactionDialog.display) return
@@ -78,13 +79,11 @@ export class WalletConnect extends Model({
                         Object.assign(txParams, {
                             to: payload.params[0].to,
                             from: payload.params[0].from,
-                            value: payload.params[0].value,
-                            gas: payload.params[0].gas,
-                            gasPrice: payload.params[0].gasPrice,
+                            value: payload.params[0].value || 0,
+                            gas: payload.params[0].gas || 0,
+                            gasPrice: payload.params[0].gasPrice || 0,
                             data: payload.params[0].data
                         })
-
-                        console.log({ txParams })
 
                         await getWalletConnectStore().sendTransactionDialog.init(txParams, meta ? WALLET_CONNECT_ORIGIN + meta.url : undefined)
                         getWalletConnectStore().sendTransactionDialog.display = true
@@ -101,32 +100,32 @@ export class WalletConnect extends Model({
 
                         InteractionManager.runAfterInteractions(async () => {
                             // @ts-ignore
-                            console.log("here-here")
                             const tx = new NativeTransaction(approved.tx)
                             const result = await tx.sendTransaction()
-                            if (!result) {
-
+                            if (result) {
+                                this.walletConnector.approveRequest({
+                                    id: payload.id,
+                                    result: tx.hash,
+                                });
+                                tx.applyToWallet()
+                                setTimeout(async () => {
+                                    await tx.waitTransaction()
+                                }, 10)
+                                closeToast()
+                            } else {
+                                setToast("Error send transaction", TOASTER_TYPE.ERROR, null, true)
                                 this.walletConnector.rejectRequest({
                                     id: payload.id,
                                     error: "Error send transaction",
                                 });
                             }
-                            closeToast()
-                            this.walletConnector.approveRequest({
-                                id: payload.id,
-                                result: tx.hash,
-                            });
-                            tx.applyToWallet()
-                            setTimeout(async () => {
-                                await tx.waitTransaction()
-                            }, 10)
                         })
 
 
                     } catch (error) {
                         this.walletConnector.rejectRequest({
                             id: payload.id,
-                            error,
+                            error: "user reject request",
                         });
                     }
                 } else if (payload.method === 'eth_sign') {
@@ -252,8 +251,7 @@ export class WalletConnect extends Model({
             getWalletConnectStore().persistSessions();
         });
 
-        this.walletConnector.on('session_update', (error, payload) => {
-            console.log('WC: Session update', payload);
+        this.walletConnector.on('session_update', (error) => {
             if (error) {
                 throw error;
             }

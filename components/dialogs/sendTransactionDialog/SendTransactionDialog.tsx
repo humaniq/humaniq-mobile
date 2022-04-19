@@ -14,7 +14,7 @@ import { ScrollView } from "react-native";
 export const SendTransactionDialog = observer(() => {
     const view = useInstance(SendTransactionViewModel)
 
-    const [ expanded, setExpanded ] = useState(true)
+    const [ expanded, setExpanded ] = useState(false)
 
     return <Dialog
         testID={ 'sendTransactionDialog' }

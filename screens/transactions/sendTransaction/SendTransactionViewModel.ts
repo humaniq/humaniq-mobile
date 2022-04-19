@@ -45,7 +45,7 @@ export class SendTransactionViewModel {
         nonce: undefined,
         value: "",
         to: "",
-        gas: 21000,
+        gasLimit: 21000,
     }
 
     txError = false
@@ -327,7 +327,7 @@ export class SendTransactionViewModel {
         this.initialized = false
         this.txData = {
             chainId: 0,
-            gas: 0,
+            gasLimit: 0,
             nonce: "",
             value: "",
             to: "",

@@ -48,8 +48,6 @@ export class SendTransactionViewModel {
                 ...txData
             }
 
-            console.log({ txData: this.txData })
-
             this.display = true
             this.initialized = true
             this.txData.chainId = getEVMProvider().currentNetwork.chainID
@@ -57,10 +55,13 @@ export class SendTransactionViewModel {
                 await getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
             ])
             this.txData.nonce = nonce
-            this.txData.gas = Number(txData.gas || txData.gasLimit) || this.txData.gas
+            this.txData.gas = Number(txData.gas) || this.txData.gas
             this.transactionFeeView.wallet = this.wallet.address
             this.transactionFeeView.gasLimit = this.txData.gas
             getEVMProvider().gasStation.setEnableAutoUpdate(true)
+
+            console.log({ txData: this.txData })
+
             this.pending = false
         } catch (e) {
             console.log("ERROR", e)

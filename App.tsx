@@ -179,7 +179,7 @@ const AppScreen = observer(() => {
                         <CreateWalletToast/>
                         <SigningDialog/>
                         <SendTransactionDialog/>
-                        <ApprovalWalletConnectDialog />
+                        <ApprovalWalletConnectDialog/>
                     </> }
                 { !store.appStore.isLocked && <AppToast/> }
                 {

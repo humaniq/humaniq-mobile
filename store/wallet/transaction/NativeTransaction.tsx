@@ -92,7 +92,7 @@ export class NativeTransaction extends Model({
             chainId: +this.chainId,
             nonce: +this.nonce,
             gasPrice: +this.gasPrice,
-            gas: +this.gas,
+            gasLimit: +this.gas,
             to: this.toAddress,
             from: this.fromAddress,
             value: BigNumber.from(this.value),
@@ -103,6 +103,7 @@ export class NativeTransaction extends Model({
 
     @modelFlow
     * sendTransaction() {
+        console.log("BODY", this.txBody)
         const id = profiler.start(EVENTS.SEND_TRANSACTION)
         try {
             const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
