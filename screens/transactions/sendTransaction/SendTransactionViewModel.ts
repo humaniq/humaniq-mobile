@@ -98,6 +98,7 @@ export class SendTransactionViewModel {
     async init(route) {
         this.tokenAddress = route?.tokenAddress
         this.walletAddress = route?.walletAddress
+        this.txData.to = route?.to
         if (!this.initialized) {
             await this.getTransactionData();
 

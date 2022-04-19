@@ -91,6 +91,12 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 />
                                 <View
                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                                <MenuItem icon={ "wallet-connect" }
+                                          name={ t("settingsScreen.menu.walletConnect") }
+                                          onPress={ () => nav.navigate("walletConnectSessions") }
+                                />
+                                <View
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "switch" }
                                           name={ t("settingsScreen.menu.aboutApplication") }
                                           onPress={ () => nav.navigate("aboutPage") }

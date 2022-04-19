@@ -1,5 +1,6 @@
 {
   "common": {
+    "delete": "delete",
     "ok": "OK!",
     "cancel": "Cancel",
     "back": "Back",
@@ -130,7 +131,8 @@
       "privacyPolicyDescription": "",
       "termsOfServiceName": "Terms of service",
       "termsOfServiceDescription": "",
-      "disableBio": "Biometrics access"
+      "disableBio": "Biometrics access",
+      "walletConnect": "Wallet connect"
     }
   },
   "selectTransactionFeeDialog": {

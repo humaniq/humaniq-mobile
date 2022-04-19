@@ -186,7 +186,7 @@ export class Wallet extends Model({
                 transactionsArr.forEach(t => {
                     const pTx = fromSnapshot<NativeTransaction>(t)
                     const existTr = this.transactions.map.get(pTx.hash)
-                    if (!existTr) {
+                    if (!existTr && pTx.hash) {
                         pTx.applyToWallet()
                         pTx.waitTransaction()
                     } else {
