@@ -16,7 +16,7 @@ export class WalletConnect extends Model({
     autosign: p(t.boolean, false),
 }) {
 
-    walletConnector
+    walletConnector: RNWalletConnect
 
     @modelFlow
     * init(options: any) {
@@ -268,6 +268,7 @@ export class WalletConnect extends Model({
 
     updateSession() {
         try {
+            if (!this.walletConnector.session.connected) return
             this.walletConnector.updateSession({
                 chainId: getEVMProvider().currentNetwork.chainID,
                 accounts: [ getWalletStore().selectedWallet.address ],
