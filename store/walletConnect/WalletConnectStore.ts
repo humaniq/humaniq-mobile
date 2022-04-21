@@ -2,6 +2,7 @@ import { _await, Model, model, modelFlow, tProp as p, types as t } from "mobx-ke
 import { localStorage } from "../../utils/localStorage";
 import { WalletConnect } from "./WalletConnect";
 import { parseWalletConnectUri } from '@walletconnect/utils';
+import { Linking } from "react-native";
 
 @model("WalletConnectStore")
 export class WalletConnectStore extends Model({
@@ -25,6 +26,16 @@ export class WalletConnectStore extends Model({
                 this.sessions.push(wc);
             });
         }
+        Linking.addEventListener('url', (e) => {
+            try {
+                const url = new URL(e.url);
+                if (url.protocol === "wc:") {
+                    this.newSession(e.url)
+                }
+            } catch (e) {
+                console.log("ERROR", e)
+            }
+        });
         this.initialized = true;
     }
 
