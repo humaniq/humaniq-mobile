@@ -9,11 +9,10 @@ export const importAndCreateWallet = () => {
         });
 
         it('Create wallet', async () => {
-            await element(by.id('skipBtn')).tap()
+           // await element(by.id('skipBtn')).tap()
             await element(by.id('createWalletBtn')).tap()
             await expect(element(by.id('lockerScreen'))).toBeVisible()
             await setPinCode()
-            await expect(element(by.id('allAddressesOrCreateWalletBtn'))).toBeVisible()
         })
 
         it('Import wallet', async () => {
