@@ -280,7 +280,7 @@
       "attached": "Humaniq ID has attached to this address",
       "notConnected": "Humaniq ID not connected",
       "getAccess": "Get access to Humaniq services: charities, jobs, education",
-      "pasteID": "Paste Humaniq ID",
+      "pasteID": "Paste Humaniq ID"
     },
     "verified": {
       "tittle": "Awesome! Your Humaniq ID is ready!",
@@ -302,5 +302,15 @@
       "description": "Enter PIN code to sign in your existing wallet"
     }
   },
-  "loadingText": "Please wait... \n It might take up a few minutes"
+  "loadingText": "Please wait... \n It might take up a few minutes",
+  "offers": {
+    "humaniqId": {
+      "tittle": "Humaniq ID - Anonumous",
+      "description": "Get access to Humaniq services: charity, job, education"
+    },
+    "seed": {
+      "tittle": "Recovery phrase",
+      "description": "Check out your secret phrase to restore your wallet"
+    }
+  }
 }

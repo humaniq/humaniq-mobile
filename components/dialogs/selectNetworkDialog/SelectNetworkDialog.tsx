@@ -17,11 +17,13 @@ export const SelectNetworkDialog = observer(() => {
         } }
         animationType={ "slide" }
         visible={ view.display }
-        testID={'selectNetworkModal'}
+        testID={ 'selectNetworkModal' }
     >
         <ItemSelector selected={ getEVMProvider().currentNetworkName } backIcon={ ICON_HEADER.CROSS }
                       headerTittle={ t("settingsScreen.menu.network") }
-                      onBackPress={ () => view.display = false } items={ view.networks }
+                      onBackPress={ () => {
+                          view.display = false
+                      } } items={ view.networks }
                       onPressItem={
                           async (n) => {
                               // @ts-ignore

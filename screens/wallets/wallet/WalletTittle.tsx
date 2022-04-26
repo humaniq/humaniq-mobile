@@ -17,7 +17,7 @@ export const WalletTittle = observer<any>(({ address }) => {
     if (!wallet.initialized) return null
 
     return <CryptoCard>
-        <View marginV-16 marginH-16>
+        <View marginT-16 marginB-16 marginH-16>
             <Button outline outlineColor={ Colors.white } testID={ `copyWalletAddress-${ address }` } onPress={ () => {
                 Clipboard.setString(wallet.address)
                 runUnprotected(() => {

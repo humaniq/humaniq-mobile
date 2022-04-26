@@ -19,7 +19,7 @@ import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrase
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrencyPage";
-import { HumaniqIDNavScreen, HumaniqIDScreen } from "../screens/humaniqid/HumaniqIDScreen";
+import { HumaniqIDNavScreen } from "../screens/humaniqid/HumaniqIDScreen";
 import { WalletConnectSessionsList } from "../screens/settings/menuPages/WalletConnectSessionsList";
 
 /**
@@ -59,19 +59,19 @@ const RootStack = () => {
         <Stack.Navigator screenOptions={ { headerShown: false } }>
             <Stack.Screen name="mainStack" component={ MainNavigator }/>
             <Stack.Screen name="walletsList" component={ WalletsListScreen }
-                          options={ ( { route: { params } } ) => ( {
+                          options={ ({ route: { params } }) => ({
                               cardStyleInterpolator: params?.animate
                                   ? CardStyleInterpolators.forHorizontalIOS
                                   : CardStyleInterpolators.forScaleFromCenterAndroid,
-                          } ) }
-                />
+                          }) }
+            />
             <Stack.Screen name="walletTransactions" component={ TransactionsListScreen }
-                          options={ ( { route: { params } } ) => ( {
+                          options={ ({ route: { params } }) => ({
                               cardStyleInterpolator: params?.animate
                                   ? CardStyleInterpolators.forHorizontalIOS
                                   : CardStyleInterpolators.forScaleFromCenterAndroid,
-                          } ) }
-                />
+                          }) }
+            />
             <Stack.Screen name="walletTransaction" component={ TransactionScreen }/>
             <Stack.Screen name="sendTransaction" component={ SendTransactionStack }/>
             <Stack.Screen name="QRScanner" component={ QRScanner }/>
@@ -103,9 +103,9 @@ const SendTransactionStack = () => {
 export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     Partial<React.ComponentProps<typeof NavigationContainer>>>((props, ref) => {
     return (
-            <NavigationContainer { ...props } ref={ ref }>
-                <RootStack/>
-            </NavigationContainer>
+        <NavigationContainer { ...props } ref={ ref }>
+            <RootStack/>
+        </NavigationContainer>
     )
 })
 

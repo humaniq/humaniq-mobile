@@ -10,7 +10,7 @@ export interface CryptoCardProps {
 }
 
 export const CryptoCard = ({ children, cardColor = Colors.blueOcean, width = 280, height = 230 }: CryptoCardProps) => {
-    return <View marginV-16 marginH-16
+    return <View marginT-16 marginB-8 marginH-16
                  style={ {
                      borderRadius: 10,
                      overflow: "hidden",

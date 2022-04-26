@@ -59,7 +59,6 @@ import * as Sentry from "@sentry/react-native";
 import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
 import { CENTRY_URL } from "./config/api";
-import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
 import { profiler } from "./utils/profiler/profiler";
 import { EVENTS } from "./config/events";
 import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
@@ -69,6 +68,8 @@ import {
 import {
     ApprovalWalletConnectDialog
 } from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
+import { HumaniqIDModal } from "./screens/humaniqid/HumaniqIDScreen";
+import { BannerStore } from "./store/banner/BannerStore";
 
 applyTheme()
 
@@ -113,6 +114,8 @@ const browserStore = createContext<BrowserStore>()
 export const getBrowserStore = () => browserStore.getDefault()
 const walletConnectStore = createContext<WalletConnectStore>()
 export const getWalletConnectStore = () => walletConnectStore.getDefault()
+const bannerStore = createContext<BannerStore>()
+export const getBannerStore = () => bannerStore.getDefault()
 
 function createRootStore() {
     const rootStore = new RootStore({})
@@ -127,6 +130,7 @@ function createRootStore() {
     EVMProviderStore.setDefault(rootStore.providerStore.eth)
     browserStore.setDefault(rootStore.browserStore)
     walletConnectStore.setDefault(rootStore.walletConnectStore)
+    bannerStore.setDefault(rootStore.bannerStore)
     return rootStore
 }
 
@@ -156,6 +160,7 @@ const AppScreen = observer(() => {
             await store.appStore.init()
             await store.browserStore.init()
             await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
+            store.bannerStore.init()
             profiler.end(id)
         })()
     }, [])
@@ -180,18 +185,13 @@ const AppScreen = observer(() => {
                         <SigningDialog/>
                         <SendTransactionDialog/>
                         <ApprovalWalletConnectDialog/>
+                        <HumaniqIDModal/>
                     </> }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked && !store.profileStore.isSuggested &&
-                    <HumaniqIDScreen/>
-                }
-                {
-                    store.appStore.initialized &&
-                    store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked && store.profileStore.isSuggested &&
+                    !store.appStore.isLocked &&
                     <AuthNavigator/>
                 }
                 {

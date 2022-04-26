@@ -70,6 +70,7 @@ export const HUMANIQ_ROUTES = {
         POST_SIGNUP_CHECK: "/introspect/signup/check",
         POST_SIGNUP_CONFIRM: "/introspect/signup/confirm",
         GET_SIGNUP_OBJECT: "/introspect/signup/object/:uid",
-        GET_SIGNUP_PHOTO: "/introspect/signup/photo/:uid"
+        GET_SIGNUP_PHOTO: "/introspect/signup/photo/:uid",
+        GET_SIGNUP_WALLET: "/introspect/signup/wallet/:wallet"
     }
 }
