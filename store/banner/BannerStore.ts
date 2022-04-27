@@ -45,7 +45,7 @@ export class BannerStore extends Model({
 
     @modelFlow
     * init() {
-        const humqniqId = new Banner({
+        const humaniqId = new Banner({
             id: BANNERS_NAMES.HUMANIQ_ID,
             tittle: trans("offers.humaniqId.tittle"),
             description: trans("offers.humaniqId.description"),
@@ -54,8 +54,8 @@ export class BannerStore extends Model({
             locations: [ 0, 0.5 ]
         })
 
-        humqniqId.image = require("../../assets/images/girl.svg")
-        humqniqId.onPress = () => {
+        humaniqId.image = require("../../assets/images/girl.svg")
+        humaniqId.onPress = () => {
             RootNavigation.navigate("humaniqID")
         }
 
@@ -77,10 +77,10 @@ export class BannerStore extends Model({
             })
         }
 
-        yield humqniqId.init()
+        yield humaniqId.init()
         yield checkSeed.init()
 
-        this.allBanners = [ humqniqId, checkSeed ]
+        this.allBanners = [ humaniqId, checkSeed ]
         this.initialized = true
     }
 
