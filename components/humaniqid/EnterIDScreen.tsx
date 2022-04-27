@@ -3,15 +3,16 @@ import { observer } from "mobx-react-lite";
 import { Button, Colors, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { HIcon } from "../icon";
-import { getProfileStore, getWalletStore } from "../../App";
+import { getBannerStore, getProfileStore, getWalletStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import { t } from "../../i18n";
 import { throttle } from "../../utils/general";
 import { InteractionManager, Linking } from "react-native";
 import CloseIcon from "../../assets/images/circle-xmark-solid.svg";
 import { makeAutoObservable, reaction } from "mobx";
-import { closeToast, setToast } from "../../utils/toast";
+import { setToast } from "../../utils/toast";
 import { useNavigation as navigation } from "@react-navigation/native";
+import { BANNERS_NAMES } from "../../store/banner/BannerStore";
 
 
 class EnterIDViewModel {
@@ -159,19 +160,13 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                     label={ t("selectValueScreen.nextBtn") }
                     onPress={ async () => {
                         // @ts-ignore
-                        if (!useNavigation) getProfileStore().setFormStep(SUGGESTION_STEP.VERIFICATION)
+                        await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
                         if (useNavigation) {
-                            await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
                             nav.goBack()
                         }
                         getProfileStore().setIsSuggested(true)
-                        setToast(t("humaniqID.approved"))
-                        closeToast()
-                        setTimeout(() => {
-                            // @ts-ignore
-                            getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
-                            // @ts-ignore
-                        }, 3000)
+                        getBannerStore().setSuggest(BANNERS_NAMES.HUMANIQ_ID, true)
+                        setToast(t("humaniqID.approved"), undefined, undefined, true)
                     } }
             />
         </View>

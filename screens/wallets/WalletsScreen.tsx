@@ -16,11 +16,12 @@ import {
 import { SelfAddressQrCodeDialog } from "../../components/dialogs/selfAddressQrCodeDialog/SelfAddressQrCodeDialog";
 import { BlurWrapper } from "../../components/blurWrapper/BlurWrapper"
 import { useNavigation } from "@react-navigation/native";
-import { getWalletConnectStore, getWalletStore } from "../../App";
+import { getBannerStore, getWalletConnectStore, getWalletStore } from "../../App";
 import { TOAST_POSITION } from "../../components/toasts/appToast/AppToast";
 import { WalletListScreenSkeleton } from "../../components/skeleton/templates/SkeletonTemplates";
 import { HIcon } from "../../components/icon";
 import { RootNavigation } from "../../navigators";
+import { Banners } from "../../components/banner/Banner";
 
 const renderTittle = ({ item }) => <WalletTittle { ...item } />
 const renderBody = ({ item }) => <WalletBody { ...item } />
@@ -109,6 +110,9 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                                     carouselBodyRef.current.snapToItem(index)
                                 } }
                             />
+                        </View>
+                        <View row flex>
+                            <Banners banners={ getBannerStore().banners }/>
                         </View>
                         <Carousel
                             vertical={ false }

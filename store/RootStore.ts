@@ -8,6 +8,7 @@ import { ProfileStore } from "./profile/ProfileStore"
 import { MoralisRequestStore } from "./api/MoralisRequestStore"
 import { BrowserStore } from "./browser/BrowserStore";
 import { WalletConnectStore } from "./walletConnect/WalletConnectStore";
+import { BannerStore } from "./banner/BannerStore";
 
 setGlobalConfig({
     modelAutoTypeChecking: ModelAutoTypeCheckingMode.AlwaysOff
@@ -24,7 +25,8 @@ export class RootStore extends Model({
     profileStore: p(t.model<ProfileStore>(ProfileStore), () => new ProfileStore({})),
     providerStore: p(t.model<ProviderStore>(ProviderStore), () => new ProviderStore({})),
     browserStore: p(t.model<BrowserStore>(BrowserStore), () => new BrowserStore({})),
-    walletConnectStore: p(t.model<WalletConnectStore>(WalletConnectStore), () => new WalletConnectStore({}))
+    walletConnectStore: p(t.model<WalletConnectStore>(WalletConnectStore), () => new WalletConnectStore({})),
+    bannerStore: p(t.model<BannerStore>(BannerStore), () => new BannerStore({}))
 }) {
 
 }

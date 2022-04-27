@@ -197,7 +197,8 @@ export class AuthViewModel {
             getAppStore().recoverPhrase = ""
             getAppStore().appState = APP_STATE.APP
             await getWalletStore().init(true)
-            if (getProfileStore().key) {
+
+            if (!getProfileStore().checkWallet() && getProfileStore().key) {
                 getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
             }
         })

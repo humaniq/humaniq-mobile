@@ -4,13 +4,14 @@ import React, { useEffect } from "react";
 import { t } from "../../../i18n";
 import { Header } from "../../../components/header/Header";
 import { makeAutoObservable } from "mobx";
-import { getAppStore, getWalletStore } from "../../../App";
+import { getAppStore, getBannerStore, getWalletStore } from "../../../App";
 import { provider, useInstance } from "react-ioc";
 import { observer } from "mobx-react-lite";
 import RecoveryImage from "../../../assets/images/recovery.svg"
 import { HIcon } from "../../../components/icon";
 import { localStorage } from "../../../utils/localStorage";
 import Cryptr from "react-native-cryptr"
+import { BANNERS_NAMES } from "../../../store/banner/BannerStore";
 
 export class RecoveryPhraseViewModel {
     understandRisc = false
@@ -28,7 +29,7 @@ export class RecoveryPhraseViewModel {
     async init() {
         if (!getWalletStore()?.storedWallets?.mnemonic?.mnemonic) {
             const encrypted = await localStorage.load("hm-wallet")
-            if(encrypted) {
+            if (encrypted) {
                 const cryptr = new Cryptr(getAppStore().savedPin)
                 const result = cryptr.decrypt(encrypted)
                 const res = JSON.parse(result)
@@ -59,16 +60,17 @@ export const RecoveryPhrase = observer(() => {
                 </Text>
             </View>
             <View row paddingH-16>
-                <Checkbox testID={'understandRisc'} value={ view.understandRisc }
+                <Checkbox testID={ 'understandRisc' } value={ view.understandRisc }
                           onValueChange={ () => {
                               view.understandRisc = !view.understandRisc
                           }
                           } label={ t("settingsScreen.menu.recoveryWarning") }/>
             </View>
             <View flex bottom paddingH-16 paddingT-16>
-                <Button testID={'showRecoveryPhrase'} onPress={ async () => {
+                <Button testID={ 'showRecoveryPhrase' } onPress={ async () => {
                     view.showRecoveryPhrase = true
                     await localStorage.save("hm-wallet-recovery-read", true)
+                    getBannerStore().setSuggest(BANNERS_NAMES.CHECK_SEED, true)
                 } } disabled={ !view.understandRisc } br50 label={ t("settingsScreen.menu.recoveryBtn") } absB/>
             </View>
         </View>
