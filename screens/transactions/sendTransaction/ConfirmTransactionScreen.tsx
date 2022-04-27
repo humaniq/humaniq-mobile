@@ -93,7 +93,7 @@ export const ConfirmTransactionScreen = observer(() => {
         </View>
         <View style={ { width: "100%" } } flex bottom padding-20>
             <Button testID={ 'sendTransaction' }
-                    disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
+                    disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to || view.updating }
                     style={ { width: "100%", borderRadius: 12 } }
                     label={ !view.pendingTransaction ? `${ t("common.send") } ${ view.txHumanReadable.totalFiat }` : "" }
                     onPress={ view.sendTx }
