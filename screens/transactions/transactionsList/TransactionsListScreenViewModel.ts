@@ -38,7 +38,6 @@ export class TransactionsListScreenViewModel {
   }
 
   async init(params) {
-    console.log(params)
     try {
       this.currentWalletAddress = params.wallet
       this.tokenAddress = params.tokenAddress
