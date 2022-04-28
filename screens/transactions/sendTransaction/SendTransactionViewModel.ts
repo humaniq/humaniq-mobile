@@ -28,6 +28,7 @@ export class SendTransactionViewModel {
 
     display = false
     pending = false
+    updating = false
     pendingTransaction = false
     initialized = false
     walletAddress = ""
@@ -57,30 +58,41 @@ export class SendTransactionViewModel {
     selectTransactionFeeDialog = inject(this, SelectTransactionFeeDialogViewModel)
 
     changeTokenAddress = reaction(() => this.selectWalletTokenDialog.tokenAddress, async (val) => {
+        this.updating = true
         this.txData.value = ""
         this.tokenAddress = Object.values(NATIVE_COIN_SYMBOL).includes(val.toLowerCase() as NATIVE_COIN_SYMBOL) ? "" : val
         this.inputFiat = false
-        this.getTransactionData()
+        await this.getTransactionData()
         if (this.tokenAddress && !this.wallet.tokenTransactionsInitialized) {
-            this.wallet.getTokenTransactions()
+            await this.wallet.getTokenTransactions()
         } else if (!this.wallet.transactions.initialized) {
-            this.wallet.loadTransactions()
+            await this.wallet.loadTransactions()
         }
+        this.updating = false
     })
 
-    changeReceiverAddress = reaction(() => this.txData.to, (val) => {
+    changeReceiverAddress = reaction(() => this.txData.to, async (val) => {
+        this.updating = true
         this.txData.to = val
         this.inputFiat = false
-        this.getTransactionData()
+        await this.getTransactionData()
+        this.updating = false
     })
 
     changeTokenValue = reaction(() => this.txData.value, throttle(async () => {
+        this.updating = true
         try {
-            this.txData.gasLimit = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))).toString()) : 21000
+            const lastVal = this.parsedValue.toString()
+            const result = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))).toString()) : 21000
+            if (lastVal === this.parsedValue.toString()) {
+                this.txData.gasLimit = result
+            }
         } catch (e) {
             console.log("ERROR-estimate-gas", e)
+        } finally {
+            this.updating = false
         }
-    }, 200))
+    }, 100))
 
     get wallet(): Wallet {
         return getWalletStore().walletsMap.get(this.walletAddress)
