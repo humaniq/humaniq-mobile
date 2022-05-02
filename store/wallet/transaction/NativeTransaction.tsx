@@ -127,7 +127,7 @@ export class NativeTransaction extends Model({
                     this.blockTimestamp = new Date()
                     this.transactionIndex = confirmedTx.transactionIndex
                     this.receiptContractAddress = confirmedTx.contractAddress
-                    this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+                    this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
                     this.applyToWallet()
@@ -344,6 +344,7 @@ export class NativeTransaction extends Model({
             case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
                 return Colors.warning
             case this.action === 5:
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return Colors.error
             default:
                 return Colors.textGray
@@ -370,6 +371,7 @@ export class NativeTransaction extends Model({
                         <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/></Avatar>
                 </CircularProgress>
             case this.action === 5:
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
                     <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/></Avatar>
             default:
@@ -381,6 +383,8 @@ export class NativeTransaction extends Model({
     @computed
     get actionName() {
         switch (true) {
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
+                return tr('transactionModel.action.error')
             case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
                 return tr('transactionModel.action.cancelling')
             case this.receiptStatus === TRANSACTION_STATUS.PENDING:
