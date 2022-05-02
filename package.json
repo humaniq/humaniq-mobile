@@ -1,6 +1,6 @@
 {
   "name": "humaniqmobile",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": false,
   "scripts": {
     "android": "yarn rnuc:prod && react-native run-android",

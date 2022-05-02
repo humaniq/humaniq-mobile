@@ -1,7 +1,8 @@
 import { _await, model, Model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { localStorage } from "../../utils/localStorage";
 import { RequestStore } from "../api/RequestStore";
-import { API_HUMANIQ_TOKEN, API_HUMANIQ_URL, HUMANIQ_ROUTES } from "../../config/api";
+import { API_HUMANIQ_URL, HUMANIQ_ROUTES } from "../../config/api";
+import { API_HUMANIQ_TOKEN } from "../../envs/env"
 import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS } from "../../config/events";
 import { getBannerStore, getWalletStore } from "../../App";
