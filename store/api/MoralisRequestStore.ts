@@ -1,6 +1,7 @@
 import { _async, _await, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
 import { ApisauceInstance, create } from "apisauce"
-import { DEFAULT_API_CONFIG, MORALIS_TOKEN } from "../../config/api"
+import { DEFAULT_API_CONFIG } from "../../config/api"
+import { MORALIS_TOKEN } from "../../envs/env"
 
 
 @model("MoralisRequestStore")

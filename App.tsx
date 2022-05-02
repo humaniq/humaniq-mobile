@@ -58,7 +58,7 @@ import { BrowserStore } from "./store/browser/BrowserStore";
 import * as Sentry from "@sentry/react-native";
 import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
-import { CENTRY_URL } from "./config/api";
+import { CENTRY_URL } from "./envs/env";
 import { profiler } from "./utils/profiler/profiler";
 import { EVENTS } from "./config/events";
 import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
