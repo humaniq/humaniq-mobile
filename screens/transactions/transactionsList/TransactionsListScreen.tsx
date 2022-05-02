@@ -92,9 +92,8 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                     <Av size={ 60 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
                                 }
                                 {
-                                    !view.token.logo &&
                                     <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                            source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                                            source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
                                 }
                             </View>
                             <Text white robotoM text24 center marginT-8>
