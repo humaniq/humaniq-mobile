@@ -6,9 +6,6 @@ export const walletScreens = () => {
     describe('Wallet screen', () => {
         beforeAll(async () => {
             await device.launchApp({newInstance: true});
-            try {
-                await element(by.id('skipBtn')).tap()
-            } catch  {}
 
             await inputPinCode()
             await element(by.id('tab-settings')).tap()
@@ -49,13 +46,13 @@ export const walletScreens = () => {
         //     await element(by.id(`copyAddress`)).tap()
         // })
 
-        it('Open ERC20 transaction list', async () => {
-            await element(by.id(`tokenItem-USDT`)).tap()
+        it('Open ethereum transactions list', async () => {
+            await element(by.id(`tokenItem`)).atIndex(0).tap()
             await device.pressBack()
         })
 
-        it('Open ethereum transactions list', async () => {
-            await element(by.id(`tokenItem-ETH`)).tap()
+        it('Open ERC20 transaction list', async () => {
+            await element(by.id(`tokenItem`)).atIndex(1).tap()
             await device.pressBack()
         })
     })

@@ -4,7 +4,7 @@ import { provider, useInstance } from "react-ioc";
 import { Colors } from "react-native-ui-lib";
 import { Screen } from "../../../components"
 import React from "react";
-import { EVM_NETWORKS, NETWORK_TYPE } from "../../../config/network";
+import { EVM_NETWORKS, NATIVE_COIN, NETWORK_TYPE } from "../../../config/network";
 import { getEVMProvider } from "../../../App";
 import * as storage from "../../../utils/localStorage"
 import { runUnprotected } from "mobx-keystone";
@@ -25,11 +25,14 @@ export class SelectNetworkPageViewModel {
             },
             {
                 tittle: t("settingsScreen.menu.testNets"),
-                items: Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST)
+                items: Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST && n.nativeCoin === NATIVE_COIN.ETHEREUM)
+            },
+            {
+                tittle: t("settingsScreen.menu.bscNets"),
+                items: Object.values(EVM_NETWORKS).filter(n => n.env === NETWORK_TYPE.TEST && n.nativeCoin === NATIVE_COIN.BINANCECOIN)
             }
         ]
     }
-
 }
 
 export const SelectNetwork = observer(() => {
@@ -37,7 +40,8 @@ export const SelectNetwork = observer(() => {
     const nav = useNavigation()
     return <Screen style={ { minHeight: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                    statusBarBg={ Colors.bg }>
-        <ItemSelector selected={ getEVMProvider().currentNetworkName } items={ view.networks }
+        <ItemSelector labelTransform={ (i) => i.name === "mainnet" ? "ETHEREUM" : i.name.toUpperCase() }
+                      selected={ getEVMProvider().currentNetworkName } items={ view.networks }
                       headerTittle={ t("settingsScreen.menu.network") }
                       onPressItem={ async (n) => {
                           runUnprotected(() => {

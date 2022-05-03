@@ -11,6 +11,7 @@ import {
     tProp as p,
     types as t
 } from "mobx-keystone"
+import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
@@ -25,6 +26,8 @@ import { TokenTransaction } from "./transaction/TokenTransaction";
 import { NativeTransactionStore } from "./transaction/NativeTransactionStore";
 import { localStorage } from "../../utils/localStorage";
 import { InteractionManager } from "react-native";
+import { profiler } from "../../utils/profiler/profiler";
+import { EVENTS } from "../../config/events";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -71,6 +74,7 @@ export class Wallet extends Model({
     async init(force = false) {
         InteractionManager.runAfterInteractions(async () => {
             if (!this.initialized || force) {
+                const id = profiler.start(EVENTS.INIT_WALLET)
                 try {
                     // @ts-ignore
                     this.setPending(true)
@@ -78,17 +82,18 @@ export class Wallet extends Model({
 
                     await Promise.all([
                         this.updateBalanceFromProvider(),
-                        // this.updateBalanceFromApi(),
                         this.getCoinCost(),
                         this.getTokenBalances()
                     ])
                 } catch (e) {
                     console.log("ERROR", e)
+                    Sentry.captureException(e)
                     this.isError = true
                 } finally {
                     runUnprotected(() => {
                         this.initialized = uuidv4()
                         this.pending = false
+                        profiler.end(id)
                     })
                 }
             }
@@ -97,6 +102,7 @@ export class Wallet extends Model({
 
     @modelFlow
     * updateBalanceFromProvider() {
+        const id = profiler.start(EVENTS.UPDATE_BALANCE_FROM_PROVIDER)
         try {
             const bn = yield* _await(this.ether.getBalance())
             this.balance = this.isConnected ? bn.toString() : this.balance
@@ -107,8 +113,10 @@ export class Wallet extends Model({
             }
         } catch (e) {
             console.log("ERROR", e)
+            Sentry.captureException(e)
             this.isError = true
         }
+        profiler.end(id)
     }
 
     @modelFlow
@@ -120,12 +128,14 @@ export class Wallet extends Model({
         if (balances.ok) {
             this.balances = balances.data.item
         } else {
+            Sentry.captureException(balances)
             this.isError = true
         }
     }
 
     @modelFlow
     * getCoinCost() {
+        const id = profiler.start(EVENTS.GET_COIN_COST)
         const cost = yield getRequest().get(COINGECKO_ROUTES.GET_TOKEN_PRICE, {
             ids: getEVMProvider().currentNetwork.nativeCoin,
             vs_currencies: "usd,eur,rub,cny,jpy,eth"
@@ -134,11 +144,14 @@ export class Wallet extends Model({
             this.prices = cost.data[getEVMProvider().currentNetwork.nativeCoin]
         } else {
             this.isError = true
+            Sentry.captureException(cost?.problem?.origianalError)
         }
+        profiler.end(id)
     }
 
     @modelFlow
     * loadTransactions(init = false) {
+        const id = profiler.start(EVENTS.LOAD_TRANSACTIONS)
         try {
             if (!this.transactions.canLoad && !init) return
             if (init) {
@@ -173,7 +186,7 @@ export class Wallet extends Model({
                 transactionsArr.forEach(t => {
                     const pTx = fromSnapshot<NativeTransaction>(t)
                     const existTr = this.transactions.map.get(pTx.hash)
-                    if (!existTr) {
+                    if (!existTr && pTx.hash) {
                         pTx.applyToWallet()
                         pTx.waitTransaction()
                     } else {
@@ -187,12 +200,15 @@ export class Wallet extends Model({
                 this.transactions.initialized = true
             }
         } catch (e) {
-            console.log("ER", e)
+            console.log("ERROR", e)
+            Sentry.captureException(e)
         }
+        profiler.end(id)
     }
 
     @modelFlow
     * getTokenTransactions(init = false) {
+        const id = profiler.start(EVENTS.LOAD_ERC20_TRANSACTIONS)
         try {
             if (init) {
                 this.tokenList.map(l => l.transactions.clear())
@@ -238,15 +254,19 @@ export class Wallet extends Model({
                     pTx.waitTransaction()
                 })
                 this.tokenTransactionsInitialized = true
+            } else {
+                // Sentry.captureException(result?.problem?.origianalError)
             }
         } catch (e) {
             console.log("ERROR", e)
+            Sentry.captureException(e)
         }
+        profiler.end(id)
     }
 
     @modelFlow
     * getTokenBalances() {
-
+        const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
         })
@@ -258,8 +278,10 @@ export class Wallet extends Model({
                 erc20Token.init()
             })
         } else {
-            console.log("ERROR-GET-ERC20")
+            console.log("ERROR-GET-ERC20", erc20)
+            // Sentry.captureException(erc20?.problem?.origianalError)
         }
+        profiler.end(id)
     }
 
     @computed

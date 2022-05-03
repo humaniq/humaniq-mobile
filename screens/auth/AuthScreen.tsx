@@ -30,11 +30,7 @@ const Auth = observer(function () {
                 statusBarBg={ Colors.white }>
                 { view.state === AUTH_STATE.MAIN &&
                     <>
-                        <View row spread>
-                            <TouchableOpacity marginT-16 marginL-16 right
-                                              onPress={ () => getProfileStore().setIsSuggested(false) }>
-                                <HIcon name={ "arrow-left" } size={ 16 } color={ Colors.blueOcean }/>
-                            </TouchableOpacity>
+                        <View row right>
                             <TouchableOpacity marginT-16 marginR-16 right
                                               onPress={ () => navigation.navigate("info", { isSavedWallet: view.isSavedWallet }) }>
                                 <HIcon name={ "info" } size={ 22 } color={ Colors.blueOcean }/>
@@ -178,7 +174,8 @@ const Auth = observer(function () {
                     </Animatable.View> }
             </Screen>
             }
-            { !view.initialized && <Splash showLoader={ view.needLoader }/>
+            {
+                !view.initialized && <Splash text={ t("loadingText") } showLoader={ view.needLoader }/>
             }
         </View>
     )

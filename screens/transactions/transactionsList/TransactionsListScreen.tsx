@@ -85,16 +85,15 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                             <View row center>
                                 {
                                     view.token.logo === NATIVE_COIN.ETHEREUM &&
-                                    <Av size={ 60 } source={ require("../../../assets/images/ethereum-logo.png") }/>
+                                    <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>
                                 }
                                 {
                                     view.token.logo === NATIVE_COIN.BINANCECOIN &&
-                                    <Av size={ 60 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
+                                    <Av size={ 80 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
                                 }
-                                {
-                                    !view.token.logo &&
+                                { view.token.logo !== NATIVE_COIN.ETHEREUM && view.token.logo !== NATIVE_COIN.BINANCECOIN &&
                                     <Avatar address={ view.token.tokenAddress } size={ 80 }
-                                            source={ { uri: getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                                            source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
                                 }
                             </View>
                             <Text white robotoM text24 center marginT-8>

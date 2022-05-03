@@ -58,9 +58,18 @@ import { BrowserStore } from "./store/browser/BrowserStore";
 import * as Sentry from "@sentry/react-native";
 import { applyTheme } from "./theme/componentTheme";
 import { CustomFallback } from "./components/customFallback/CustomFallback";
-import { isDev } from "./shim";
-import { CENTRY_URL } from "./config/api";
-import { HumaniqIDScreen } from "./screens/humaniqid/HumaniqIDScreen";
+import { CENTRY_URL } from "./envs/env";
+import { profiler } from "./utils/profiler/profiler";
+import { EVENTS } from "./config/events";
+import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
+import {
+    ApprovalWalletConnectDialogViewModel
+} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialogViewModel";
+import {
+    ApprovalWalletConnectDialog
+} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
+import { HumaniqIDModal } from "./screens/humaniqid/HumaniqIDScreen";
+import { BannerStore } from "./store/banner/BannerStore";
 
 applyTheme()
 
@@ -75,7 +84,8 @@ LogBox.ignoreLogs([
     'Non-serializable values were found in the navigation state',
     "new NativeEventEmitter()",
     "rightButtonProps.iconSource",
-    "RNUILib TextField component will soon be replaced"
+    "RNUILib TextField component will soon be replaced",
+    "Module TcpSockets requires main queue setup",
 ])
 
 enableScreens()
@@ -102,6 +112,10 @@ const EVMProviderStore = createContext<EVMProvider>()
 export const getEVMProvider = () => EVMProviderStore.getDefault()
 const browserStore = createContext<BrowserStore>()
 export const getBrowserStore = () => browserStore.getDefault()
+const walletConnectStore = createContext<WalletConnectStore>()
+export const getWalletConnectStore = () => walletConnectStore.getDefault()
+const bannerStore = createContext<BannerStore>()
+export const getBannerStore = () => bannerStore.getDefault()
 
 function createRootStore() {
     const rootStore = new RootStore({})
@@ -115,12 +129,16 @@ function createRootStore() {
     providerStore.setDefault(rootStore.providerStore)
     EVMProviderStore.setDefault(rootStore.providerStore.eth)
     browserStore.setDefault(rootStore.browserStore)
+    walletConnectStore.setDefault(rootStore.walletConnectStore)
+    bannerStore.setDefault(rootStore.bannerStore)
     return rootStore
 }
 
 const AppScreen = observer(() => {
     const navigationRef = useRef<NavigationContainerRef<any>>(null)
     const store = useInstance(RootStore)
+    const approvalDialog = useInstance(ApprovalWalletConnectDialogViewModel)
+    const sendTransactionDialog = useInstance(LegacySendTransactonViewModel)
 
     setRootNavigation(navigationRef)
     useBackButtonHandler(navigationRef, canExit)
@@ -132,6 +150,7 @@ const AppScreen = observer(() => {
 
     useEffect(() => {
         ;(async () => {
+            const id = profiler.start(EVENTS.INIT_APP)
             await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
@@ -140,6 +159,9 @@ const AppScreen = observer(() => {
             await store.walletStore.init()
             await store.appStore.init()
             await store.browserStore.init()
+            await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
+            store.bannerStore.init()
+            profiler.end(id)
         })()
     }, [])
 
@@ -162,18 +184,14 @@ const AppScreen = observer(() => {
                         <CreateWalletToast/>
                         <SigningDialog/>
                         <SendTransactionDialog/>
+                        <ApprovalWalletConnectDialog/>
+                        <HumaniqIDModal/>
                     </> }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked && !store.profileStore.isSuggested &&
-                    <HumaniqIDScreen/>
-                }
-                {
-                    store.appStore.initialized &&
-                    store.appStore.appState === APP_STATE.AUTH &&
-                    !store.appStore.isLocked && store.profileStore.isSuggested &&
+                    !store.appStore.isLocked &&
                     <AuthNavigator/>
                 }
                 {
@@ -197,21 +215,21 @@ App.register(
     SendTransactionViewModel,
     SelectWalletTokenViewModel,
     SelectTransactionFeeDialogViewModel,
-    // QRScannerView
+    ApprovalWalletConnectDialogViewModel
 )
 
-if (!isDev) {
-    Sentry.init({
-        dsn: CENTRY_URL,
-        tracesSampleRate: 1.0,
-        integrations: [
-            new Sentry.ReactNativeTracing({
-                routingInstrumentation,
-            }),
-        ],
-    });
+// if (!isDev) {
+Sentry.init({
+    dsn: CENTRY_URL,
+    tracesSampleRate: 1.0,
+    integrations: [
+        new Sentry.ReactNativeTracing({
+            routingInstrumentation,
+        }),
+    ],
+});
 
-    Sentry.wrap(App)
-}
+Sentry.wrap(App)
+// }
 
-export default App
+export default Sentry.withProfiler(App)

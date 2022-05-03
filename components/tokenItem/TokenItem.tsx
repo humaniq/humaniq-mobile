@@ -19,7 +19,7 @@ export interface TokenItemProps {
 }
 
 export const TokenItem = (props: TokenItemProps) => {
-    return <Ripple testID={ `tokenItem-${ props.symbol }` } onPress={ props.onPress } rippleColor={ Colors.primary }>
+    return <Ripple testID={ `tokenItem` } onPress={ props.onPress } rippleColor={ Colors.primary }>
         <View padding-10 paddingH-16 paddingL-0
               key={ props.symbol }>
             <View row centerV>

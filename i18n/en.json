@@ -1,5 +1,6 @@
 {
   "common": {
+    "delete": "delete",
     "ok": "OK!",
     "cancel": "Cancel",
     "back": "Back",
@@ -123,12 +124,15 @@
       "recoveryBtn": "View recovery phrase",
       "recoveryPhraseDescription": "Write these words in the right order on paper and store in a safe place. \nIf you lose device or reinstall wallet, you would need it.",
       "recoveryPhraseWarning": "Never share your recovery phrase with anyone, store it securely!",
-      "testNets": "ETH Testnets",
-      "mainNets": "ETH Mainnet",
+      "testNets": "Test networks",
+      "mainNets": "Mainnets",
+      "bscNets": "BSC test networks",
       "privacyPolicyName": "Privacy policy",
       "privacyPolicyDescription": "",
       "termsOfServiceName": "Terms of service",
-      "termsOfServiceDescription": ""
+      "termsOfServiceDescription": "",
+      "disableBio": "Biometrics access",
+      "walletConnect": "Wallet connect"
     }
   },
   "selectTransactionFeeDialog": {
@@ -261,7 +265,7 @@
       "canGet": "You can get Humaniq ID in Telegram bot"
     },
     "skip": "Skip",
-    "singUp": "Sing up with Humaniq ID",
+    "singUp": "Sign up with Humaniq ID",
     "form": {
       "tittle": "Paste your code from Humaniq ID bot which was received in Telegram",
       "label": "Humaniq ID code",
@@ -275,8 +279,13 @@
       "passed": "You have passed identification",
       "attached": "Humaniq ID has attached to this address",
       "notConnected": "Humaniq ID not connected",
-      "getAccess": "Get access to Humaniq services: charity, job, education",
+      "getAccess": "Get access to Humaniq services: charities, jobs, education",
       "pasteID": "Paste Humaniq ID"
+    },
+    "verified": {
+      "tittle": "Awesome! Your Humaniq ID is ready!",
+      "firstLine": "Be in touch in our Humaniq ID bot in Telegram",
+      "secondLine": "Soon we will give you info about how get donations, receive paid tasks and earn your first crypto"
     }
   },
   "infoScreen": {
@@ -291,6 +300,17 @@
     "enterPin": {
       "title": "“Enter PIN code” button means:",
       "description": "Enter PIN code to sign in your existing wallet"
+    }
+  },
+  "loadingText": "Please wait... \n It might take up a few minutes",
+  "offers": {
+    "humaniqId": {
+      "tittle": "Humaniq ID - Anonumous",
+      "description": "Get access to Humaniq services: charity, job, education"
+    },
+    "seed": {
+      "tittle": "Recovery phrase",
+      "description": "Check out your secret phrase to restore your wallet"
     }
   }
 }

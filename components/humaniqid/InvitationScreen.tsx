@@ -6,9 +6,9 @@ import { t } from "../../i18n";
 import { Linking } from "react-native";
 import { observer } from "mobx-react-lite";
 import { Header } from "../header/Header";
+import { getProfileStore } from "../../App";
 
 export interface InvitationScreenProps {
-    invitationMode?: boolean,
     onSkip?: () => any
     onSingUp?: () => any,
     useNavigation: boolean,
@@ -17,7 +17,6 @@ export interface InvitationScreenProps {
 
 export const InvitationScreen = observer<InvitationScreenProps>(
     ({
-         invitationMode = true,
          onSingUp,
          onSkip,
          useNavigation = false,
@@ -31,7 +30,7 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                 <View flex-2 center>
                     <HumqnidIDImage/>
                 </View>
-                <View flex>
+                { !verified && <View flex>
                     <Text text16 RobotoR>
                         { t("humaniqID.presentation.tittle") }
                     </Text>
@@ -46,23 +45,44 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                     </Text>
                     {
                         !verified && <>
-                            <Text text16 RobotoR marginT-16>
+                            <Text text16 robotoM marginT-16>
                                 { t("humaniqID.presentation.canGet") }
                             </Text>
-                            <Text primary onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
+                            <Text style={ { textDecorationLine: "underline" } } primary robotoM
+                                  onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
                         </>
                     }
                 </View>
-                <View flex-2 bottom>
-                    { !verified && invitationMode && <Button testID={"skipBtn"} onPress={ onSkip } label={ t("humaniqID.skip") } marginB-16
-                                                             outline br50 robotoM
-                    /> }
-                    { !verified && <Button onPress={ onSingUp }
-                                           label={ invitationMode ? t("humaniqID.singUp") : t("humaniqID.settings.pasteID") }
-                                           br50
-                                           bg-primary
-                                           robotoM/> }
-                </View>
+                }
+                {
+                    verified && <View flex>
+                        <Text text16 robotoM>{ t("humaniqID.verified.tittle") }</Text>
+                        <Text text16 marginT-10>{ t("humaniqID.verified.firstLine") }</Text>
+                        <Text text16 style={ { textDecorationLine: "underline" } } primary robotoM
+                              onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>
+                            @HumaniqID_bot
+                        </Text>
+                        <Text text16 marginT-10>{ t("humaniqID.verified.secondLine") }</Text>
+                    </View>
+                }
+                {
+                    !verified && <View flex-2 bottom>
+                        { !getProfileStore().isSuggested && <Button testID={ "skipBtn" }
+                                                                    onPress={ onSkip }
+                                                                    label={ t("humaniqID.skip") }
+                                                                    marginB-16
+                                                                    outline
+                                                                    br50
+                                                                    robotoM/>
+                        }
+                        <Button onPress={ onSingUp }
+                                label={ t("humaniqID.settings.pasteID") }
+                                br50
+                                bg-primary
+                                robotoM/>
+                    </View>
+                }
+
             </View>
         </>
     })

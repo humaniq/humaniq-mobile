@@ -3,15 +3,16 @@ import { observer } from "mobx-react-lite";
 import { Button, Colors, Text, TextField, TouchableOpacity, View } from "react-native-ui-lib";
 import { provider, useInstance } from "react-ioc";
 import { HIcon } from "../icon";
-import { getProfileStore, getWalletStore } from "../../App";
+import { getBannerStore, getProfileStore, getWalletStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import { t } from "../../i18n";
 import { throttle } from "../../utils/general";
-import { InteractionManager } from "react-native";
+import { InteractionManager, Linking } from "react-native";
 import CloseIcon from "../../assets/images/circle-xmark-solid.svg";
 import { makeAutoObservable, reaction } from "mobx";
-import { closeToast, setToast } from "../../utils/toast";
+import { setToast } from "../../utils/toast";
 import { useNavigation as navigation } from "@react-navigation/native";
+import { BANNERS_NAMES } from "../../store/banner/BannerStore";
 
 
 class EnterIDViewModel {
@@ -26,6 +27,8 @@ class EnterIDViewModel {
     obst = reaction(() => this.value, async (val) => {
         if (val.length === 6) {
             this.invalidCode = !await getProfileStore().checkCode(val)
+        } else {
+            this.invalidCode = false
         }
     })
 
@@ -77,6 +80,10 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                               getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
                           } }>
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: Colors.black } }/>
+            <View flex right>
+                <Text style={ { textDecorationLine: "underline" } } primary robotoM
+                      onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
+            </View>
         </TouchableOpacity>
         <View padding-16>
             <Text text16 robotoM>
@@ -153,19 +160,13 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                     label={ t("selectValueScreen.nextBtn") }
                     onPress={ async () => {
                         // @ts-ignore
-                        if (!useNavigation) getProfileStore().setFormStep(SUGGESTION_STEP.VERIFICATION)
+                        await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
                         if (useNavigation) {
-                            await getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
                             nav.goBack()
                         }
                         getProfileStore().setIsSuggested(true)
-                        setToast(t("humaniqID.approved"))
-                        closeToast()
-                        setTimeout(() => {
-                            // @ts-ignore
-                            getProfileStore().setFormStep(SUGGESTION_STEP.SUGGESTION)
-                            // @ts-ignore
-                        }, 3000)
+                        getBannerStore().setSuggest(BANNERS_NAMES.HUMANIQ_ID, true)
+                        setToast(t("humaniqID.approved"), undefined, undefined, true)
                     } }
             />
         </View>

@@ -1,5 +1,6 @@
 {
   "common": {
+    "delete": "удалить",
     "ok": "OK!",
     "cancel": "Закрыть",
     "back": "Назад",
@@ -123,12 +124,15 @@
       "recoveryBtn": "Посмотреть фразу восстановления",
       "recoveryPhraseDescription": "Запишите эти слова в точном порядке и сохраните в надежном месте . \nЕсли вы потеряете телефон или переустановите приложение - Вам понадобится фраза восстановления",
       "recoveryPhraseWarning": "Не показывайте свою фразу восстановления кому либо, храните ее в секрете!",
-      "testNets": "ETH Тестовые сети",
-      "mainNets": "ETH Основные сети",
+      "testNets": "Тестовые сети",
+      "mainNets": "Основные сети",
+      "bscNets": "BSC тестовые сети",
       "privacyPolicyName": "Политика конфиденциальности",
       "privacyPolicyDescription": "",
       "termsOfServiceName": "Условия использования",
-      "termsOfServiceDescription": ""
+      "termsOfServiceDescription": "",
+      "disableBio": "Вход по биометрии",
+      "walletConnect": "Wallet connect"
     }
   },
   "selectTransactionFeeDialog": {
@@ -277,6 +281,11 @@
       "notConnected": "Humaniq ID не подключен",
       "getAccess": "Получить доступ к сервисам Humaniq: благотворительность, работа, образование",
       "pasteID": "Ввести Humaniq ID"
+    },
+    "verified": {
+      "tittle": "Круто! Ваш Humaniq ID готов!",
+      "firstLine": "Подключено через Humaniq ID бот в Telegram",
+      "secondLine": "Скоро мы отправим Вами информацию как получить благотворительную помошь, получить задачи для заработка своей первой крипты"
     }
   },
   "infoScreen": {
@@ -291,6 +300,17 @@
     "enterPin": {
       "title": "Кнопка “Введите PIN-код” означает:",
       "description": "Введите PIN-код, чтобы войти в существующий кошелек"
+    }
+  },
+  "loadingText": "Пожалуйста подождите... \n Это может занять пару минут",
+  "offers": {
+    "humaniqId": {
+      "tittle": "Humaniq ID - Аноним",
+      "description": "Получите доступ к сервисам Humaniq: пожертвования, работу, образование"
+    },
+    "seed": {
+      "tittle": "Фраза восстановления",
+      "description": "Проверьте Вашу сид фразу, для восстановления кошелька"
     }
   }
 }

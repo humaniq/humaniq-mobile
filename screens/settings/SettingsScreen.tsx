@@ -35,7 +35,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                     view.initialized &&
                     <>
                         <Header backEnabled={ false } title={ t("settingsScreen.name") }/>
-                        <View testID={ 'settingsScreen' } flex >
+                        <View testID={ 'settingsScreen' } flex>
                             <HumqniqIDCard verified={ getProfileStore().verified }/>
                             <Card marginH-16>
                                 <MenuItem icon={ "key" }
@@ -62,7 +62,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           } }
                                 />
                                 <View
-                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "lock" }
                                           name={ t("settingsScreen.menu.changePin") }
                                           onPress={ () => {
@@ -86,8 +86,14 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <MenuItem icon={ "network" }
                                           name={ t("settingsScreen.menu.network") }
                                           value={ <Text text16
-                                                        textGrey> { capitalize(getEVMProvider().currentNetworkName) } </Text> }
+                                                        textGrey> { getEVMProvider().currentNetworkName === "bsc" ? "BSC" : getEVMProvider().currentNetworkName === "mainnet" ? "Ethereum" : capitalize(getEVMProvider().currentNetworkName) } </Text> }
                                           onPress={ () => nav.navigate("selectNetwork") }
+                                />
+                                <View
+                                    style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
+                                <MenuItem icon={ "wallet-connect" }
+                                          name={ t("settingsScreen.menu.walletConnect") }
+                                          onPress={ () => nav.navigate("walletConnectSessions") }
                                 />
                                 <View
                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
@@ -95,6 +101,31 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           name={ t("settingsScreen.menu.aboutApplication") }
                                           onPress={ () => nav.navigate("aboutPage") }
                                 />
+                                <>
+                                    <View style={ {
+                                        borderBottomWidth: 1,
+                                        borderBottomColor: Colors.grey,
+                                        marginLeft: 50
+                                    } }/>
+                                    <View padding-9 row spread>
+                                        <View bg-greyLight padding-9 br100>
+                                            <HIcon
+                                                name={ "fingerprint" }
+                                                size={ 14 }
+                                                color={ Colors.primary }/>
+                                        </View>
+                                        <View row flex spread centerV marginR-8>
+                                            <Text marginL-10>{ t("settingsScreen.menu.disableBio") }</Text>
+                                            <Switch key={ "bio" } onValueChange={ (val?: boolean) => {
+                                                runUnprotected(() => {
+                                                    getAppStore().bioEnabled = !!val
+                                                })
+                                                localStorage.save("hm-wallet-settings-bio", getAppStore().bioEnabled)
+                                            } }
+                                                    value={ getAppStore().bioEnabled }/>
+                                        </View>
+                                    </View>
+                                </>
                             </Card>
                             <Card marginT-16 marginH-16>
                                 <MenuItem icon={ "logout" }
