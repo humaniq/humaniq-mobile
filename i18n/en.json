@@ -223,6 +223,7 @@
       "undefined": "Undefined",
       "smartContract": "Contract",
       "reject": "Canceled",
+      "error": "Error",
       "pending": "Pending",
       "cancelling": "Cancelling"
     }

@@ -222,6 +222,7 @@
       "incoming": "Получено",
       "undefined": "Неустановлено",
       "smartContract": "Контракт",
+      "error": "Ошибка",
       "reject": "Отмена",
       "pending": "Отправляется",
       "cancelling": "Отменяется"

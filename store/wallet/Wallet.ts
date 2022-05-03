@@ -19,7 +19,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEVMProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
-import { NativeTransaction } from "./transaction/NativeTransaction"
+import { NativeTransaction, TRANSACTION_STATUS } from "./transaction/NativeTransaction"
 import { changeCaseObj } from "../../utils/general"
 import { Token } from "./token/Token"
 import { TokenTransaction } from "./transaction/TokenTransaction";
@@ -188,7 +188,9 @@ export class Wallet extends Model({
                     const existTr = this.transactions.map.get(pTx.hash)
                     if (!existTr && pTx.hash) {
                         pTx.applyToWallet()
-                        pTx.waitTransaction()
+                        if (pTx.receiptStatus !== TRANSACTION_STATUS.ERROR) {
+                            pTx.waitTransaction()
+                        }
                     } else {
                         pTx.removeFromStore()
                     }
@@ -234,6 +236,7 @@ export class Wallet extends Model({
                         blockTimestamp: new Date(r.block_timestamp),
                         prices: currentToken.prices
                     })
+
                     if (currentToken) {
                         runUnprotected(() => {
                             currentToken.transactions.set(tr.transactionHash, tr)
@@ -247,11 +250,18 @@ export class Wallet extends Model({
                         })
                     }
                 })
+
                 const transactionsArr = Object.values(storedTransactions)
                 transactionsArr.forEach(t => {
                     const pTx = fromSnapshot<TokenTransaction>(t)
-                    pTx.applyToWallet()
-                    pTx.waitTransaction()
+                    if (pTx.hash) {
+                        pTx.applyToWallet()
+                        if (pTx.receiptStatus !== TRANSACTION_STATUS.ERROR) {
+                            pTx.waitTransaction()
+                        }
+                    } else {
+                        pTx.removeFromStore()
+                    }
                 })
                 this.tokenTransactionsInitialized = true
             } else {

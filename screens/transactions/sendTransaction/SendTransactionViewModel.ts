@@ -270,7 +270,7 @@ export class SendTransactionViewModel {
             nonce: this.txData.nonce.toString(),
             gasPrice: this.selectedGasPrice.toString(),
             gas: this.txData.gasLimit.toString(),
-            value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(), // this.txBody.value.toString(),
+            value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
             walletAddress: this.wallet.address,
             toAddress: this.txData.to,
             fromAddress: this.wallet?.address,

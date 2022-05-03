@@ -103,7 +103,7 @@ export class TokenTransaction extends Model({
                 const hash = this.hash
                 await runUnprotected(async () => {
                     this.blockTimestamp = new Date()
-                    this.receiptStatus = TRANSACTION_STATUS.SUCCESS
+                    this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
                     await this.applyToWallet()
@@ -334,6 +334,7 @@ export class TokenTransaction extends Model({
                 return Colors.warning
             case this.action === 4:
             case this.action === 5:
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return Colors.error
             default:
                 return Colors.textGrey
@@ -361,6 +362,7 @@ export class TokenTransaction extends Model({
                 </CircularProgress>
             case this.action === 4:
             case this.action === 5:
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
                     <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/>
                 </Avatar>
@@ -374,6 +376,8 @@ export class TokenTransaction extends Model({
     @computed
     get actionName() {
         switch (true) {
+            case this.receiptStatus === TRANSACTION_STATUS.ERROR:
+                return tr('transactionModel.action.error')
             case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
                 return tr('transactionModel.action.cancelling')
             case this.receiptStatus === TRANSACTION_STATUS.PENDING:
