@@ -107,7 +107,7 @@ export class BrowserTabScreenViewModel {
             // })
         })
 
-        this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet.address, () => {
+        this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet?.address, () => {
             this.reloadWebView()
             // this.postMessage({
             //   type: "accountsChanged",
@@ -139,7 +139,7 @@ export class BrowserTabScreenViewModel {
             })
             this.postMessage({
                 type: "accountsChanged",
-                data: [ getWalletStore().selectedWallet.address ],
+                data: [ getWalletStore().selectedWallet?.address ],
             })
 
         } catch (e) {
@@ -249,7 +249,7 @@ export class BrowserTabScreenViewModel {
 
     getAccounts(host = this.url) {
         this.url = host || this.initialUrl
-        const selectedAddress = getWalletStore().selectedWallet.address
+        const selectedAddress = getWalletStore().selectedWallet?.address
         const isEnabled = this.approvedHosts.has(new URL(this.url).hostname)
         return isEnabled && selectedAddress ? [ selectedAddress ] : []
     }
@@ -276,7 +276,7 @@ export class BrowserTabScreenViewModel {
                 getBrowserStore().saveTabs()
             }
             if (data.permission === "web3") {
-                const selectedAddress = getWalletStore().selectedWallet.address
+                const selectedAddress = getWalletStore().selectedWallet?.address
                 if (this.getAccounts(data.params?.url).length > 0) {
                     this.postMessage({
                         messageId: data.messageId,
@@ -622,7 +622,7 @@ export class BrowserTabScreenViewModel {
         })
         this.postMessage({
             type: "accountsChanged",
-            data: [ getWalletStore().selectedWallet.address ],
+            data: [ getWalletStore().selectedWallet?.address ],
         })
         const { hostname: currentHostname } = this.url ? new URL(this.url) : { hostname: this.initialUrl }
         const { hostname } = new URL(nativeEvent.url)

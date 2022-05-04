@@ -137,7 +137,6 @@ export class WalletStore extends Model({
     @modelAction
     * resetStore() {
         this.storedWallets = null
-
     }
 
     @modelFlow
