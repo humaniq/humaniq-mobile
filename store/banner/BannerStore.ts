@@ -54,7 +54,7 @@ export class BannerStore extends Model({
             locations: [ 0, 0.5 ]
         })
 
-        humaniqId.image = require("../../assets/images/girl.svg")
+        humaniqId.image = require("../../assets/images/girl-only.svg")
         humaniqId.onPress = () => {
             RootNavigation.navigate("humaniqID")
         }

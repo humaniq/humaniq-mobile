@@ -105,14 +105,14 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                 ref={ inputRef }
                 hideUnderline
                 floatingPlaceholder
-                rightButtonProps={ {
+                rightButtonProps={ view.value ? {
                     iconSource: CloseIcon,
                     style: {
                         alignSelf: "center",
                         marginRight: 15,
                     },
                     onPress: () => view.value = ""
-                } }
+                } : {} }
                 floatingPlaceholderStyle={ !view.value ? {
                     left: 15,
                     top: 13,

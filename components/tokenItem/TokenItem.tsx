@@ -26,7 +26,9 @@ export const TokenItem = (props: TokenItemProps) => {
                 <View flex-2 center>
                     {
                         props.logo === NATIVE_COIN.ETHEREUM &&
-                        <Av size={ 44 } source={ require(`../../assets/images/ethereum-logo.png`) }/>
+                        <Av size={ 44 } containerStyle={ { position: 'relative' } }
+                            imageStyle={ { width: 36, height: 36, position: 'absolute', left: 4, top: 3 } }
+                            source={ require(`../../assets/images/ethereum-logo.png`) }/>
                     }
                     {
                         props.logo === NATIVE_COIN.BINANCECOIN &&

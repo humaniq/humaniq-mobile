@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction } from "mobx"
-import { AppState, Vibration } from "react-native"
-import { APP_STATE, LOCKER_MODE } from "../../store/app/AppStore"
+import { AppState } from "react-native"
+import { LOCKER_MODE } from "../../store/app/AppStore"
 import { t } from "../../i18n"
 import { runUnprotected } from "mobx-keystone"
 import { localStorage } from "../../utils/localStorage"
@@ -15,7 +15,6 @@ export const PIN_LENGTH = 4
 
 export class LockerViewModel {
     initialized = false
-    lastAppState: APP_STATE
     pin = ""
     disabled = false
     settledPin = ""
@@ -25,7 +24,6 @@ export class LockerViewModel {
     encrypted
     incorrectCount = 0
     isBioAvailable = false
-    isVibrationEnabled = true
 
     constructor() {
         makeAutoObservable(this, {}, { autoBind: true })
@@ -67,12 +65,10 @@ export class LockerViewModel {
     }
 
     handleClick(digit) {
-        if (this.isVibrationEnabled) Vibration.vibrate(100)
         this.pin += digit
     }
 
     removeDigit() {
-        if (this.isVibrationEnabled) Vibration.vibrate(150)
         this.pin = this.pin.substring(0, this.pin.length - 1);
     }
 
