@@ -151,13 +151,13 @@ const AppScreen = observer(() => {
     useEffect(() => {
         ;(async () => {
             const id = profiler.start(EVENTS.INIT_APP)
-            await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
             await store.requestStore.init()
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
+            await store.profileStore.init()
             await store.browserStore.init()
             await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
             store.bannerStore.init()
@@ -172,7 +172,7 @@ const AppScreen = observer(() => {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.APP &&
                     !store.appStore.isLocked &&
-                    <><RootNavigator
+                    <RootNavigator
                         ref={ navigationRef }
                         initialState={ initialNavigationState }
                         onStateChange={ onNavigationStateChange }
@@ -181,12 +181,7 @@ const AppScreen = observer(() => {
                             routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
                         } }
                     />
-                        <CreateWalletToast/>
-                        <SigningDialog/>
-                        <SendTransactionDialog/>
-                        <ApprovalWalletConnectDialog/>
-                        <HumaniqIDModal/>
-                    </> }
+                     }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&

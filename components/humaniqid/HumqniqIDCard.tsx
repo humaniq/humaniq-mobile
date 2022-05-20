@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, Colors, Text, View } from "react-native-ui-lib";
-import GirlImg from "../../assets/images/girl.svg"
+import { Avatar, Card, Colors, Text, View } from "react-native-ui-lib";
+import GirlImg from "../../assets/images/girl-only.svg"
 import { t } from "../../i18n";
 import { HIcon } from "../icon";
 import Ripple from "react-native-material-ripple";
@@ -21,7 +21,7 @@ export const HumqniqIDCard: React.FC<HumqniqIDCardProps> = ({ verified = false }
               padding-10
               centerV>
             <View>
-                <GirlImg width={ 44 } height={ 44 }/>
+                <Avatar size={ 44 } source={ GirlImg } backgroundColor={ "#7FB0E8" }/>
             </View>
             <View flex-8 paddingL-16>
                 <Text text16 robotoM>{ t("humaniqID.settings.notConnected") }</Text>
@@ -40,7 +40,7 @@ export const HumqniqIDCard: React.FC<HumqniqIDCardProps> = ({ verified = false }
             <View row height={ 122 }>
                 <View flex padding-8 centerV>
                     <Text text22 robotoB white>{ t("humaniqID.settings.tittle") }</Text>
-                    <Text numberOfLines={2} white robotoM>{ t("humaniqID.settings.passed") }</Text>
+                    <Text numberOfLines={ 2 } white robotoM>{ t("humaniqID.settings.passed") }</Text>
                 </View>
                 <View center paddingR-16>
                     <CardImg width={ 121 }/>
@@ -49,7 +49,7 @@ export const HumqniqIDCard: React.FC<HumqniqIDCardProps> = ({ verified = false }
             <View row bg-white height={ 68 }>
                 <View padding-8>
                     <Text text22 robotoB>{ getWalletStore().allWallets[0].formatAddress }</Text>
-                    <Text numberOfLines={2} text12 robotoM>{ t("humaniqID.settings.attached") }</Text>
+                    <Text numberOfLines={ 2 } text12 robotoM>{ t("humaniqID.settings.attached") }</Text>
                 </View>
                 <View flex>
                     <View flex

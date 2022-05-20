@@ -85,6 +85,7 @@ export class ProfileStore extends Model({
 
     @modelFlow
     * checkWallet() {
+        console.log("check-wallet")
         if (getWalletStore().wallets[0]) {
             const result = yield* _await(this.api.get(formatRoute(HUMANIQ_ROUTES.INTROSPECT.GET_SIGNUP_WALLET, {
                 wallet: getWalletStore().wallets[0].address
@@ -107,6 +108,9 @@ export class ProfileStore extends Model({
         this.isSuggested = (yield* _await(localStorage.load("hm-wallet-humaniqid-suggest"))) || false
         this.api = new RequestStore({}) // getRequest()
         this.api.init(API_HUMANIQ_URL, { "x-auth-token": API_HUMANIQ_TOKEN })
+        if(!this.verified) {
+            yield this.checkWallet()
+        }
         this.initialized = true
         profiler.end(id)
     }

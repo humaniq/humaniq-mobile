@@ -19,8 +19,14 @@ import { RecoveryPhrasePage } from "../screens/settings/menuPages/RecoveryPhrase
 import { SelectNetworkPage } from "../screens/settings/menuPages/SelectNetworkPage";
 import { AboutPage, PrivacyPolicyPage, TermsOfServicePage } from "../screens/settings/menuPages/AboutPage";
 import { SelectCurrencyPage } from "../screens/settings/menuPages/SelectCurrencyPage";
-import { HumaniqIDNavScreen } from "../screens/humaniqid/HumaniqIDScreen";
+import { HumaniqIDModal, HumaniqIDNavScreen } from "../screens/humaniqid/HumaniqIDScreen";
 import { WalletConnectSessionsList } from "../screens/settings/menuPages/WalletConnectSessionsList";
+import { CreateWalletToast } from "../components/toasts/createWalletToast/CreateWalletToast";
+import { SigningDialog } from "../components/dialogs/signingDialog/SigningDialog";
+import { SendTransactionDialog } from "../components/dialogs/sendTransactionDialog/SendTransactionDialog";
+import {
+    ApprovalWalletConnectDialog
+} from "../components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -105,6 +111,11 @@ export const RootNavigator = React.forwardRef<NavigationContainerRef<any>,
     return (
         <NavigationContainer { ...props } ref={ ref }>
             <RootStack/>
+            <CreateWalletToast/>
+            <SigningDialog/>
+            <SendTransactionDialog/>
+            <ApprovalWalletConnectDialog/>
+            <HumaniqIDModal/>
         </NavigationContainer>
     )
 })

@@ -6539,9 +6539,9 @@ human-signals@^2.1.0:
     "@types/events" "^3.0.0"
     events "^3.3.0"
 
-"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.3":
+"humaniq-icon-set@git+https://github.com/humaniq/humaniq-icon-set.git#0.8.4":
   version "1.0.0"
-  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#26d6ffb864ec77110fba43850d69e58f4f3e20ba"
+  resolved "git+https://github.com/humaniq/humaniq-icon-set.git#9c11d160d2ca2d31cfb14365beb47da13aa0a438"
 
 i18n-js@3.8.0:
   version "3.8.0"
