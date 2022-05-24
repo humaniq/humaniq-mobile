@@ -42,19 +42,9 @@ export class Token extends Model({
     @action
     async init() {
         try {
-            const address = getDictionary().ethToken.get(this.symbol)?.address
-            if (address) {
-                const result = await getMoralisRequest().get(formatRoute(MORALIS_ROUTES.TOKEN.GET_ERC20_PRICE, { address }), {
-                    chain: 'eth'
-                })
-                if (result.ok) {
-                    runUnprotected(() => {
-                        this.priceUSD = result.data.usdPrice
-                        this.priceEther = result.data.nativePrice.value
-                        getDictionary().ethTokenCurrentAddress.set(this.tokenAddress, this.symbol)
-                    })
-                }
-            }
+            runUnprotected(() => {
+                getDictionary().ethTokenCurrentAddress.set(this.tokenAddress, this.symbol)
+            })
         } catch (e) {
             console.log("ERROR", e)
         } finally {

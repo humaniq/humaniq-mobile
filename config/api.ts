@@ -4,7 +4,7 @@ export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/ass
 const timeout = 10000
 export const GAS_STATION_URL = "https://ethgasstation.info/api"
 export const API_HUMANIQ_URL = "https://signupbot.humaniq.com/api/v1"
-
+export const API_FINANCE = "https://apifinance.humaniq.com/api/v1"
 
 export interface ApiConfig {
     url: string;
@@ -71,4 +71,8 @@ export const HUMANIQ_ROUTES = {
         GET_SIGNUP_PHOTO: "/introspect/signup/photo/:uid",
         GET_SIGNUP_WALLET: "/introspect/signup/wallet/:wallet"
     }
+}
+
+export const FINANCE_ROUTES = {
+    GET_PRICES: "/prices/list"
 }

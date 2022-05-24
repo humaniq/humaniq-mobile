@@ -16,7 +16,7 @@ import { ethers, Signer } from "ethers"
 import { computed, observable } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
-import { COINGECKO_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
+import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
 import { getEVMProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
 import { NativeTransaction, TRANSACTION_STATUS } from "./transaction/NativeTransaction"
@@ -28,6 +28,7 @@ import { localStorage } from "../../utils/localStorage";
 import { InteractionManager } from "react-native";
 import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS } from "../../config/events";
+import { RequestStore } from "../api/RequestStore";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -71,9 +72,13 @@ export class Wallet extends Model({
     @observable
     ether: Signer
 
+    apiFinance: RequestStore
+
     async init(force = false) {
         InteractionManager.runAfterInteractions(async () => {
             if (!this.initialized || force) {
+                this.apiFinance = new RequestStore({})
+                this.apiFinance.init(API_FINANCE)
                 const id = profiler.start(EVENTS.INIT_WALLET)
                 try {
                     // @ts-ignore
@@ -282,11 +287,24 @@ export class Wallet extends Model({
         })
         const erc20 = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
         if (erc20.ok) {
-            erc20.data.forEach(t => {
-                const erc20Token = new Token({ ...changeCaseObj(t), walletAddress: this.address })
-                this.token.set(t.token_address, erc20Token)
-                erc20Token.init()
-            })
+            const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
+                symbol: erc20.data.map(t => t.symbol).join(","),
+                currency: "usd,eth"
+            }))
+            if (result.ok) {
+                erc20.data.forEach(t => {
+                    const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
+                        new Token({
+                            ...changeCaseObj(t),
+                            walletAddress: this.address,
+                            priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
+                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString()
+                        }) :
+                        new Token({ ...changeCaseObj(t), walletAddress: this.address })
+                    this.token.set(t.token_address, erc20Token)
+                    erc20Token.init()
+                })
+            }
         } else {
             console.log("ERROR-GET-ERC20", erc20)
             // Sentry.captureException(erc20?.problem?.origianalError)
