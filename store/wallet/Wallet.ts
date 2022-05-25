@@ -289,7 +289,8 @@ export class Wallet extends Model({
         if (erc20.ok) {
             const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
                 symbol: erc20.data.map(t => t.symbol).join(","),
-                currency: "usd,eth"
+                currency: "usd,eth",
+                history: "month"
             }))
             if (result.ok) {
                 erc20.data.forEach(t => {
@@ -298,7 +299,8 @@ export class Wallet extends Model({
                             ...changeCaseObj(t),
                             walletAddress: this.address,
                             priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
-                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString()
+                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
+                            history: result.data.payload[t.symbol.toLowerCase()].usd.history
                         }) :
                         new Token({ ...changeCaseObj(t), walletAddress: this.address })
                     this.token.set(t.token_address, erc20Token)

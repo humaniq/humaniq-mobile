@@ -105,6 +105,7 @@
     "react-native-qrcode-svg": "^6.1.1",
     "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "1.13.3",
+    "react-native-responsive-linechart": "^5.7.1",
     "react-native-restart": "^0.0.24",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.5.0",
@@ -180,7 +181,7 @@
     "nth-check": "^2.0.1",
     "tmpl": "^1.0.5",
     "async": "^2.6.4",
-    "cross-fetch":"^3.1.5",
+    "cross-fetch": "^3.1.5",
     "moment": "2.29.2"
   },
   "jest": {

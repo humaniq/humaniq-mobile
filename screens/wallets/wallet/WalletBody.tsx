@@ -9,48 +9,49 @@ import { RootNavigation } from "../../../navigators";
 import { capitalize } from "../../../utils/general";
 
 export const WalletBody = observer<any>(({ address }) => {
-  // const store = useInstance(RootStore)
-  // const wallet = store.walletStore.allWallets.find(w => w.address === address)
-  const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
-  return (
-      <Card marginH-16 marginB-10>
-        {
-          !!wallet.initialized && <>
-              <TokenItem
-                  onPress={ () => RootNavigation.navigate("walletTransactions", {
-                    wallet: wallet.address,
-                    symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
-                    animate: true
-                  } ) }
-                  symbol={ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }
-                  tokenAddress={ wallet.address }
-                  logo={ getEVMProvider().currentNetwork.nativeCoin }
-                  name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
-                  formatBalance={ beautifyNumber(+wallet.formatBalance) }
-                  formatFiatBalance={ wallet.formatFiatBalance }
-                  index={ 0 }
-              />
+    // const store = useInstance(RootStore)
+    // const wallet = store.walletStore.allWallets.find(w => w.address === address)
+    const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
+    return (
+        <Card marginH-16 marginB-10>
             {
-              wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
-                return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
-                                  formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
-                                  logo={ p.logo } name={ p.name } index={ i + 1 }
-                                  onPress={
-                                    () => RootNavigation.navigate("walletTransactions", {
-                                      wallet: wallet.address,
-                                      symbol: p.symbol,
-                                      tokenAddress: p.tokenAddress,
-                                      animate: true
-                                    } )
-                                  }
-                />
-              } )
+                !!wallet.initialized && <>
+                    <TokenItem
+                        onPress={ () => RootNavigation.navigate("walletTransactions", {
+                            wallet: wallet.address,
+                            symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
+                            animate: true
+                        }) }
+                        symbol={ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }
+                        tokenAddress={ wallet.address }
+                        logo={ getEVMProvider().currentNetwork.nativeCoin }
+                        name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
+                        formatBalance={ beautifyNumber(+wallet.formatBalance) }
+                        formatFiatBalance={ wallet.formatFiatBalance }
+                        index={ 0 }
+                    />
+                    {
+                        wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
+                            return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
+                                              graphData={ p.graph }
+                                              formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
+                                              logo={ p.logo } name={ p.name } index={ i + 1 }
+                                              onPress={
+                                                  () => RootNavigation.navigate("walletTransactions", {
+                                                      wallet: wallet.address,
+                                                      symbol: p.symbol,
+                                                      tokenAddress: p.tokenAddress,
+                                                      animate: true
+                                                  })
+                                              }
+                            />
+                        })
+                    }
+                </>
             }
-          </>
-        }
-        {
-          !wallet.initialized && <LoaderScreen/>
-        }
-      </Card>
-  )
+            {
+                !wallet.initialized && <LoaderScreen/>
+            }
+        </Card>
+    )
 })

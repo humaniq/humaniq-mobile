@@ -2,9 +2,7 @@ import { Model, model, objectMap, runUnprotected, tProp as p, types as t } from 
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
-import { getDictionary, getMoralisRequest, getWalletStore } from "../../../App";
-import { MORALIS_ROUTES } from "../../../config/api";
-import { formatRoute } from "../../../navigators";
+import { getDictionary, getWalletStore } from "../../../App";
 import { TokenTransaction } from "../transaction/TokenTransaction";
 import { ethers } from "ethers";
 import { CURRENCIES } from "../../../config/common";
@@ -24,8 +22,15 @@ export class Token extends Model({
     balance: p(t.string, ""),
     priceUSD: p(t.string, ""),
     priceEther: p(t.string, ""),
-    transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>())
+    transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
+    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => [])
 }) {
+
+    @computed
+    get graph() {
+        console.log(this.history.map(p => ({ x:p.price, y: new Date(p.time).getTime() })))
+        return this.history.map((p, i) => ({ y: p.price, x: i }))
+    }
 
     @computed
     get prices() {
