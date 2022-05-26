@@ -25,7 +25,8 @@ import { closeToast, setPendingAppToast } from "../../../utils/toast";
 import { CircularProgress } from "../../../components/progress/CircularProgress";
 import * as Sentry from "@sentry/react-native";
 import { profiler } from "../../../utils/profiler/profiler";
-import { EVENTS } from "../../../config/events";
+import { EVENTS, MARKETING_EVENTS } from "../../../config/events";
+import { events } from "../../../utils/events";
 
 
 export interface IEthereumTransactionConstructor {
@@ -105,6 +106,7 @@ export class NativeTransaction extends Model({
     * sendTransaction() {
         const id = profiler.start(EVENTS.SEND_TRANSACTION)
         try {
+            events.send(MARKETING_EVENTS.SENT_TRANSACTION)
             const tx = (yield* _await(this.wallet.ether.sendTransaction(this.txBody))) as ethers.providers.TransactionResponse
             this.hash = tx.hash
             profiler.end(id)
@@ -128,6 +130,9 @@ export class NativeTransaction extends Model({
                     this.transactionIndex = confirmedTx.transactionIndex
                     this.receiptContractAddress = confirmedTx.contractAddress
                     this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
+                    if(this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
+                        events.send(MARKETING_EVENTS.SENT_TRANSACTION_SUCCESSFUL)
+                    }
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
                     this.applyToWallet()

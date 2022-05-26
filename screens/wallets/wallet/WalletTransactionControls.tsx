@@ -9,6 +9,8 @@ import { WalletsScreenModel } from "../WalletsScreenModel";
 import { RootNavigation } from "../../../navigators";
 import { HIcon } from "../../../components/icon"
 import { RippleWrapper } from "../../../components/ripple/RippleWrapper";
+import { events } from "../../../utils/events";
+import { MARKETING_EVENTS } from "../../../config/events";
 
 export interface IWalletTransactionControlsProps {
     tokenAddress?: string
@@ -40,6 +42,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
             </RippleWrapper>
             <RippleWrapper style={ { flex: 0.5, marginLeft: 8 } }
                            onClick={ async () => {
+                               events.send(MARKETING_EVENTS.RECEIVE_TRANSACTION)
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
                                selfAddressQrCodeDialogViewModel.display = true
                            } }>

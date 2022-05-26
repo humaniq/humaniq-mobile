@@ -22,7 +22,8 @@ import { setConnectionInfo } from "../../utils/toast";
 import { SUGGESTION_STEP } from "../profile/ProfileStore";
 import { EVM_NETWORKS_NAMES } from "../../config/network";
 import { profiler } from "../../utils/profiler/profiler";
-import { EVENTS } from "../../config/events";
+import { EVENTS, MARKETING_EVENTS } from "../../config/events";
+import { events } from "../../utils/events";
 
 export enum APP_STATE {
     AUTH = "AUTH",
@@ -61,6 +62,7 @@ export class AppStore extends Model({
     signPageTitle: p(t.string, ""),
     signPageUrl: p(t.string, ""),
     signMessageDialogDisplay: p(t.boolean, false),
+    currentRoute: p(t.string, ""),
     toast: p(t.object(() => ({
         display: t.boolean,
         type: t.enum(TOASTER_TYPE),
@@ -104,6 +106,7 @@ export class AppStore extends Model({
                         // @ts-ignore
                         this.setLastBackgroundDate(new Date())
                     } else if (nextState === "active") {
+                        events.send(MARKETING_EVENTS.OPEN_APP)
                         if (!this.lastBackgroundDate || new Date().getTime() - (this.lastBackgroundDate?.getTime() + 15 * 1000) > 0) {
                             this.setAppState(APP_STATE.AUTH)
                             if (getWalletStore().storedWallets) {
@@ -116,6 +119,8 @@ export class AppStore extends Model({
                                 })
                             }
                         }
+                    } else if (nextState === 'inactive') {
+                        events.send(MARKETING_EVENTS.CLOSE_APP)
                     }
                 })
             } else {

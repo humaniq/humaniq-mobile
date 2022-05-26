@@ -15,7 +15,8 @@ import { AUTH_STATE } from "../../screens/auth/AuthViewModel"
 import { currencyFormat } from "../../utils/number";
 import { CURRENCIES, CURRENCIES_ARR } from "../../config/common";
 import { profiler } from "../../utils/profiler/profiler";
-import { EVENTS } from "../../config/events";
+import { EVENTS, MARKETING_EVENTS } from "../../config/events";
+import { events } from "../../utils/events";
 
 @model("WalletStore")
 export class WalletStore extends Model({
@@ -142,11 +143,13 @@ export class WalletStore extends Model({
     @modelFlow
     * addWallet() {
         try {
+            events.send(MARKETING_EVENTS.CREATE_NEW_ADDRESS)
             const wallet = yield this.createWallet()
             const cryptr = new Cryptr(getAppStore().savedPin)
             const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)))
             yield* _await(localStorage.save("hm-wallet", encoded))
             this.storedWallets = JSON.parse(JSON.stringify(wallet))
+            events.send(MARKETING_EVENTS.CREATE_NEW_ADDRESS_SUCCESSFUL)
             this.init(true)
         } catch (e) {
             console.log("ERROR", e)
