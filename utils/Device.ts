@@ -1,7 +1,16 @@
 import { Dimensions, Platform } from 'react-native';
-import { getModel, hasNotch } from 'react-native-device-info';
+import { getBaseOs, getBuildNumber, getDeviceId, getModel, hasNotch } from 'react-native-device-info';
 
 export default class Device {
+    static async getDeviceInfo() {
+        // osFamily, osVersion, device
+        return {
+            osFamily: await getBaseOs(),
+            osVersion: getBuildNumber(),
+            device: getDeviceId()
+        }
+    }
+
     static getDeviceWidth() {
         return Dimensions.get('window').width;
     }
@@ -53,6 +62,7 @@ export default class Device {
     static isIpadPortrait9_7() {
         return this.getDeviceHeight() === 1024 && this.getDeviceWidth() === 736;
     }
+
     static isIpadLandscape9_7() {
         return this.getDeviceHeight() === 736 && this.getDeviceWidth() === 1024;
     }
@@ -60,6 +70,7 @@ export default class Device {
     static isIpadPortrait10_5() {
         return this.getDeviceHeight() === 1112 && this.getDeviceWidth() === 834;
     }
+
     static isIpadLandscape10_5() {
         return this.getDeviceWidth() === 1112 && this.getDeviceHeight() === 834;
     }
@@ -86,7 +97,7 @@ export default class Device {
 
     static isIphone12() {
         const model = getModel();
-        const models = ['iPhone 12', 'iPhone 12 Pro', 'iPhone 12 Pro Max'];
+        const models = [ 'iPhone 12', 'iPhone 12 Pro', 'iPhone 12 Pro Max' ];
         return models.includes(model);
     }
 
