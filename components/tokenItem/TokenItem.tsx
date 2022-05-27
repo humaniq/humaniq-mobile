@@ -22,8 +22,6 @@ export interface TokenItemProps {
 }
 
 export const TokenItem = (props: TokenItemProps) => {
-    console.log(props.graphData, props.symbol)
-
     return <Ripple testID={ `tokenItem` } onPress={ props.onPress } rippleColor={ Colors.primary }>
         <View padding-10 paddingH-16 paddingL-0
               key={ props.symbol }>
@@ -45,7 +43,7 @@ export const TokenItem = (props: TokenItemProps) => {
                                 source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
                     }
                 </View>
-                <View flex-3>
+                <View flex-5>
                     <View>
                         <Text numberOfLines={ 1 } robotoM black text16>{ props.name }</Text>
                     </View>
@@ -54,13 +52,13 @@ export const TokenItem = (props: TokenItemProps) => {
                     </View>
                     }
                 </View>
-                <View flex-2 centerV>
-                    { !!(props.graphData && props.graphData.length) && <Chart data={props.graphData} style={{width: "100%", height: 20}}
-                                                                              padding={{ left: 10, bottom: 0, right: 0, top: 0 }}
-                    >
-                        <Line  theme={{ stroke: { color: Colors.primary, width: 2 }} }  smoothing={"bezier"} />
-                    </Chart> }
-                </View>
+                {/*<View flex-2 centerV>*/}
+                {/*    { !!(props.graphData && props.graphData.length) && <Chart data={props.graphData} style={{width: "100%", height: 20}}*/}
+                {/*                                                              padding={{ left: 10, bottom: 0, right: 0, top: 0 }}*/}
+                {/*    >*/}
+                {/*        <Line  theme={{ stroke: { color: Colors.primary, width: 2 }} }  smoothing={"bezier"} />*/}
+                {/*    </Chart> }*/}
+                {/*</View>*/}
                 <View flex-2 right>
                     <Text numberOfLines={ 1 } text16 robotoM black>
                         { props.formatFiatBalance }

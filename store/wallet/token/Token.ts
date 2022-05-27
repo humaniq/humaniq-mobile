@@ -28,7 +28,6 @@ export class Token extends Model({
 
     @computed
     get graph() {
-        console.log(this.history.map(p => ({ x:p.price, y: new Date(p.time).getTime() })))
         return this.history.map((p, i) => ({ y: p.price, x: i }))
     }
 

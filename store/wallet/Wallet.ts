@@ -29,6 +29,7 @@ import { InteractionManager } from "react-native";
 import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS } from "../../config/events";
 import { RequestStore } from "../api/RequestStore";
+import { NATIVE_COIN } from "../../config/network";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -64,6 +65,7 @@ export class Wallet extends Model({
         jpy: t.number,
         eth: t.number
     })))),
+    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
     transactions: p(t.model<NativeTransactionStore>(NativeTransactionStore), () => new NativeTransactionStore({})),
     token: p(t.objectMap(t.model<Token>(Token)), () => objectMap<Token>()),
     tokenTransactionsInitialized: p(t.boolean, false),
@@ -279,6 +281,11 @@ export class Wallet extends Model({
         profiler.end(id)
     }
 
+    @computed
+    get graph() {
+        return this.history.map((p, i) => ({ y: p.price, x: i }))
+    }
+
     @modelFlow
     * getTokenBalances() {
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
@@ -288,11 +295,13 @@ export class Wallet extends Model({
         const erc20 = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
         if (erc20.ok) {
             const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
-                symbol: erc20.data.map(t => t.symbol).join(","),
+                symbol: `${erc20.data.map(t => t.symbol).join(",")},eth,bnb,hmq`,
                 currency: "usd,eth",
                 history: "month"
             }))
             if (result.ok) {
+                this.history = result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history
+
                 erc20.data.forEach(t => {
                     const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
                         new Token({
