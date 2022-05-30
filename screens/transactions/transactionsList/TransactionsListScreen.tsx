@@ -1,20 +1,20 @@
 import React, { useEffect, useRef } from "react"
 import { observer } from "mobx-react-lite"
-import { RefreshControl, ScrollView } from "react-native"
-import { Avatar as Av, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
+import { Linking, RefreshControl, ScrollView } from "react-native"
+import { Avatar as Av, Button, Card, Colors, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { provider, useInstance } from "react-ioc"
 import { TransactionsListScreenViewModel } from "./TransactionsListScreenViewModel"
 import { BlurWrapper } from "../../../components/blurWrapper/BlurWrapper"
 import { Screen } from "../../../components"
 import { WalletTransactionControls } from "../../wallets/wallet/WalletTransactionControls";
-import { getDictionary } from "../../../App";
+import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
 import { Avatar } from "../../../components/avatar/Avatar";
 import { t } from "../../../i18n";
 import { TransactionItem } from "../../../components/transactionItem/TransactionItem";
 import { RootNavigation } from "../../../navigators";
 import SearchPicture from "../../../assets/images/search.svg"
 import { Header } from "../../../components/header/Header";
-import { NATIVE_COIN } from "../../../config/network";
+import { EVM_NETWORKS_NAMES, NATIVE_COIN, NATIVE_COIN_SYMBOL } from "../../../config/network";
 import { ListSkeleton, TransactionListScreenSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
 import { CryptoCard } from "../../../components/card/CryptoCard";
 
@@ -85,14 +85,16 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                             <View row center>
                                 {
                                     view.token.logo === NATIVE_COIN.ETHEREUM &&
-                                    <Av size={ 80 } source={ require("../../../assets/images/ethereum-logo.png") }/>
+                                    <Av size={ 44 } containerStyle={ { position: 'relative' } }
+                                        imageStyle={ { width: 36, height: 36, position: 'absolute', left: 4, top: 3 } }
+                                        source={ require("../../../assets/images/ethereum-logo.png") }/>
                                 }
                                 {
                                     view.token.logo === NATIVE_COIN.BINANCECOIN &&
-                                    <Av size={ 80 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
+                                    <Av size={ 44 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
                                 }
                                 { view.token.logo !== NATIVE_COIN.ETHEREUM && view.token.logo !== NATIVE_COIN.BINANCECOIN &&
-                                    <Avatar address={ view.token.tokenAddress } size={ 80 }
+                                    <Avatar address={ view.token.tokenAddress } size={ 44 }
                                             source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
                                 }
                             </View>
@@ -105,7 +107,21 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                             <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
                         </View>
                     </CryptoCard>
-                    <Text textM marginH-16 marginV-14>{ t("walletMenuDialog.transactionHistory") }</Text>
+                    <View row spread paddingH-16 paddingV-14>
+                        <Text textM>{ t("walletMenuDialog.transactionHistory") }</Text>
+                        <Button onPress={ async () => {
+                            const baseUrl = getEVMProvider().currentNetwork.nativeSymbol === NATIVE_COIN_SYMBOL.BNB ?
+                                getEVMProvider().currentNetwork.type === EVM_NETWORKS_NAMES.BSC ? "https://bscscan.com/address/" : `https://testnet.bscscan.com/address/`
+                                : getEVMProvider().currentNetwork.type === EVM_NETWORKS_NAMES.MAINNET ? "https://etherscan.io/address/" : `https://${ getEVMProvider().currentNetwork.type }.etherscan.io/address/`
+                            let url = baseUrl + getWalletStore().selectedWallet.address
+                            if (view.tokenAddress) {
+                                url += `?toaddress=${ view.tokenAddress }`
+                            }
+                            await Linking.openURL(url)
+                        }
+                        } robotoM link text14
+                                label={ t("transactionScreen.viewOnEtherScan", { 0: getEVMProvider().currentNetwork.nativeSymbol === NATIVE_COIN_SYMBOL.BNB ? "BscScan" : "Etherscan" }) }/>
+                    </View>
                     { view.refreshing && <ListSkeleton marginV={ 0 }/> }
                     {
                         !view.refreshing && !!view.transactions && !!view.transactions.length &&

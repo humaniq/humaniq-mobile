@@ -36,7 +36,8 @@
     "from": "From",
     "current": "Current",
     "new": "New",
-    "words": "Words"
+    "words": "Words",
+    "view": "View"
   },
   "errorBoundary": {
     "title": "Something happened!",
@@ -272,7 +273,7 @@
       "label": "Humaniq ID code",
       "paste": "Paste code",
       "helper": "It looks like: 234t6",
-      "error": "Incorrect, please check you code"
+      "error": "Incorrect, please check your code"
     },
     "approved": "Humaniq ID code has approved",
     "settings": {
@@ -306,7 +307,7 @@
   "loadingText": "Please wait... \n It might take up a few minutes",
   "offers": {
     "humaniqId": {
-      "tittle": "Humaniq ID - Anonumous",
+      "tittle": "Humaniq ID - Anonymous",
       "description": "Get access to Humaniq services: charity, job, education"
     },
     "seed": {

@@ -36,14 +36,11 @@ import { DictionaryStore } from "./store/dictionary/DictionaryStore"
 import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EVMProvider } from "./store/provider/EVMProvider"
-import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
 import {
     SendTransactionViewModel as LegacySendTransactonViewModel
 } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
-import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
-import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
 import {
     SelfAddressQrCodeDialogViewModel
@@ -65,11 +62,8 @@ import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
 import {
     ApprovalWalletConnectDialogViewModel
 } from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialogViewModel";
-import {
-    ApprovalWalletConnectDialog
-} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
-import { HumaniqIDModal } from "./screens/humaniqid/HumaniqIDScreen";
 import { BannerStore } from "./store/banner/BannerStore";
+import { events } from "./utils/events";
 
 applyTheme()
 
@@ -151,16 +145,17 @@ const AppScreen = observer(() => {
     useEffect(() => {
         ;(async () => {
             const id = profiler.start(EVENTS.INIT_APP)
-            await store.profileStore.init()
             await store.dictionaryStore.init()
             await store.moralisRequestStore.init()
             await store.requestStore.init()
             await store.providerStore.init()
             await store.walletStore.init()
             await store.appStore.init()
+            await store.profileStore.init()
             await store.browserStore.init()
             await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
             store.bannerStore.init()
+            await events.init()
             profiler.end(id)
         })()
     }, [])
@@ -172,7 +167,7 @@ const AppScreen = observer(() => {
                     store.appStore.initialized &&
                     store.appStore.appState === APP_STATE.APP &&
                     !store.appStore.isLocked &&
-                    <><RootNavigator
+                    <RootNavigator
                         ref={ navigationRef }
                         initialState={ initialNavigationState }
                         onStateChange={ onNavigationStateChange }
@@ -181,12 +176,7 @@ const AppScreen = observer(() => {
                             routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
                         } }
                     />
-                        <CreateWalletToast/>
-                        <SigningDialog/>
-                        <SendTransactionDialog/>
-                        <ApprovalWalletConnectDialog/>
-                        <HumaniqIDModal/>
-                    </> }
+                }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&

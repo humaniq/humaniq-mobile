@@ -12,7 +12,8 @@ import { getAppStore, getProfileStore, getWalletStore } from "../../App"
 import * as Keychain from 'react-native-keychain';
 import { isEmpty } from "../../utils/general";
 import { profiler } from "../../utils/profiler/profiler";
-import { EVENTS } from "../../config/events";
+import { EVENTS, MARKETING_EVENTS } from "../../config/events";
+import { events } from "../../utils/events";
 
 export enum AUTH_STATE {
     MAIN = "MAIN",
@@ -79,6 +80,7 @@ export class AuthViewModel {
         getAppStore().resetLocker(AUTH_STATE.REGISTER)
         this.initialized = true
         this.state = AUTH_STATE.REGISTER
+        events.send(MARKETING_EVENTS.CREATE_NEW_ADDRESS)
         await this.init()
     }
 
@@ -86,12 +88,14 @@ export class AuthViewModel {
         getAppStore().resetLocker(AUTH_STATE.RECOVER)
         this.initialized = true
         this.state = AUTH_STATE.RECOVER
+        events.send(MARKETING_EVENTS.SIGN_IN_WITH_ANOTHER_WALLET)
     }
 
     async goLogin() {
         getAppStore().resetLocker(AUTH_STATE.LOGIN)
         this.initialized = true
         this.state = AUTH_STATE.LOGIN
+        events.send(MARKETING_EVENTS.ENTER_PIN_CODE)
         await this.init()
     }
 
@@ -202,6 +206,7 @@ export class AuthViewModel {
                 getProfileStore().verify(getProfileStore().key, getWalletStore().allWallets[0].address)
             }
         })
+        events.send(phrase ? MARKETING_EVENTS.SIGN_IN_WITH_ANOTHER_WALLET_SUCCESSFUL : MARKETING_EVENTS.CREATE_NEW_WALLET_SUCCESSFUL)
         await getAppStore().init()
         profiler.end(id)
     }

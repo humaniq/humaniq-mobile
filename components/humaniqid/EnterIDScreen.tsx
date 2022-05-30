@@ -13,6 +13,8 @@ import { makeAutoObservable, reaction } from "mobx";
 import { setToast } from "../../utils/toast";
 import { useNavigation as navigation } from "@react-navigation/native";
 import { BANNERS_NAMES } from "../../store/banner/BannerStore";
+import { events } from "../../utils/events";
+import { MARKETING_EVENTS } from "../../config/events";
 
 
 class EnterIDViewModel {
@@ -82,7 +84,10 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: Colors.black } }/>
             <View flex right>
                 <Text style={ { textDecorationLine: "underline" } } primary robotoM
-                      onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
+                      onPress={ () => {
+                          events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_CLICK_OPEN_TELEGRAM)
+                          Linking.openURL('https://t.me/HumaniqID_bot')
+                      } }>@HumaniqID_bot</Text>
             </View>
         </TouchableOpacity>
         <View padding-16>
@@ -105,14 +110,14 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                 ref={ inputRef }
                 hideUnderline
                 floatingPlaceholder
-                rightButtonProps={ {
+                rightButtonProps={ view.value ? {
                     iconSource: CloseIcon,
                     style: {
                         alignSelf: "center",
                         marginRight: 15,
                     },
                     onPress: () => view.value = ""
-                } }
+                } : {} }
                 floatingPlaceholderStyle={ !view.value ? {
                     left: 15,
                     top: 13,
@@ -167,6 +172,7 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
                         getProfileStore().setIsSuggested(true)
                         getBannerStore().setSuggest(BANNERS_NAMES.HUMANIQ_ID, true)
                         setToast(t("humaniqID.approved"), undefined, undefined, true)
+                        events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_NEXT)
                     } }
             />
         </View>

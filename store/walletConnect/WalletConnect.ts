@@ -52,7 +52,7 @@ export class WalletConnect extends Model({
                 if (approved) {
                     await this.walletConnector.approveSession({
                         chainId: getEVMProvider().currentNetwork.chainID,
-                        accounts: [ getWalletStore().selectedWallet.address ],
+                        accounts: [ getWalletStore().selectedWallet?.address ],
                     });
                     getWalletConnectStore().persistSessions()
                 }
@@ -261,7 +261,7 @@ export class WalletConnect extends Model({
             this.updateSession()
         })
 
-        reaction(() => getWalletStore().selectedWallet.address, () => {
+        reaction(() => getWalletStore().selectedWallet?.address, () => {
             this.updateSession()
         })
     }
@@ -271,7 +271,7 @@ export class WalletConnect extends Model({
             if (!this.walletConnector.session.connected) return
             this.walletConnector.updateSession({
                 chainId: getEVMProvider().currentNetwork.chainID,
-                accounts: [ getWalletStore().selectedWallet.address ],
+                accounts: [ getWalletStore().selectedWallet?.address ],
             });
         } catch (e) {
             console.log('ERROR', e);

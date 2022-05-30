@@ -16,7 +16,7 @@ export class ApprovalWalletConnectDialogViewModel {
      */
     onAccountsConfirm = () => {
         this.display = false
-        this.approvalRequest.resolve(getWalletStore().selectedWallet.address)
+        this.approvalRequest.resolve(getWalletStore().selectedWallet?.address)
     }
 
     /**

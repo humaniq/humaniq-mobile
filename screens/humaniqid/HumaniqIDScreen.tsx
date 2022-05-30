@@ -6,6 +6,8 @@ import { InvitationScreen } from "../../components/humaniqid/InvitationScreen";
 import { EnterIDScreen } from "../../components/humaniqid/EnterIDScreen";
 import { getProfileStore } from "../../App";
 import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
+import { events } from "../../utils/events";
+import { MARKETING_EVENTS } from "../../config/events";
 
 
 export interface HumaniqIDScreenProps {
@@ -29,8 +31,12 @@ export const HumaniqIDScreen = observer<HumaniqIDScreenProps>(({
             { getProfileStore().formStep === SUGGESTION_STEP.SUGGESTION &&
                 <InvitationScreen verified={ verified }
                                   useNavigation={ useNavigation }
-                                  onSkip={ () => getProfileStore().setIsSuggested(true) }
+                                  onSkip={ () => {
+                                      events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SKIP)
+                                      getProfileStore().setIsSuggested(true)
+                                  } }
                                   onSingUp={ () => {
+                                      events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SIGN_UP)
                                       // @ts-ignore
                                       getProfileStore().setFormStep(SUGGESTION_STEP.ENTER_ID)
                                   } }/> }
