@@ -22,7 +22,7 @@ export const WalletBody = observer<any>(({ address }) => {
                             symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
                             animate: true
                         }) }
-                        // graphData={getWalletStore().selectedWallet.graph}
+                        graphData={getWalletStore().selectedWallet.graph}
                         symbol={ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }
                         tokenAddress={ wallet.address }
                         logo={ getEVMProvider().currentNetwork.nativeCoin }
@@ -34,7 +34,7 @@ export const WalletBody = observer<any>(({ address }) => {
                     {
                         wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
                             return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
-                                              // graphData={ p.graph }
+                                              graphData={ p.graph }
                                               formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
                                               logo={ p.logo } name={ p.name } index={ i + 1 }
                                               onPress={

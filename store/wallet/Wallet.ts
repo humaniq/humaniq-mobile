@@ -297,7 +297,8 @@ export class Wallet extends Model({
             const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
                 symbol: `${erc20.data.map(t => t.symbol).join(",")},eth,bnb,hmq`,
                 currency: "usd,eth",
-                history: "month"
+                history: "week",
+                historyPrecision: 7
             }))
             if (result.ok) {
                 this.history = result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history
