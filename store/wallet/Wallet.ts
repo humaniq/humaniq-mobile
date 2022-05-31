@@ -95,7 +95,9 @@ export class Wallet extends Model({
                 } catch (e) {
                     console.log("ERROR", e)
                     Sentry.captureException(e)
-                    this.isError = true
+                    runUnprotected(() => {
+                        this.isError = true
+                    })
                 } finally {
                     runUnprotected(() => {
                         this.initialized = uuidv4()

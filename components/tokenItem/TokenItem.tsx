@@ -22,7 +22,6 @@ export interface TokenItemProps {
 }
 
 export const TokenItem = (props: TokenItemProps) => {
-    console.log(props.graphData)
     return <Ripple testID={ `tokenItem` } onPress={ props.onPress } rippleColor={ Colors.primary }>
         <View padding-10 paddingH-16 paddingL-0
               key={ props.symbol }>
@@ -57,7 +56,7 @@ export const TokenItem = (props: TokenItemProps) => {
                     { !!(props.graphData && props.graphData.length) && <Chart data={props.graphData} style={{width: "100%", height: 20}}
                                                                               padding={{ left: 10, bottom: 0, right: 0, top: 0 }}
                     >
-                        <Line  theme={{ stroke: { color: Colors.primary, width: 2 }} }  smoothing={"bezier"} />
+                        <Line  theme={{ stroke: { color: Colors.primary, width: 2 }} }   />
                     </Chart> }
                 </View>
                 <View flex-2 right>
