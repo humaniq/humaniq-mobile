@@ -36,14 +36,11 @@ import { DictionaryStore } from "./store/dictionary/DictionaryStore"
 import { ProfileStore } from "./store/profile/ProfileStore"
 import { ProviderStore } from "./store/provider/ProviderStore"
 import { EVMProvider } from "./store/provider/EVMProvider"
-import { SigningDialog } from "./components/dialogs/signingDialog/SigningDialog"
 import {
     SendTransactionViewModel as LegacySendTransactonViewModel
 } from "./components/dialogs/sendTransactionDialog/SendTransactionViewModel"
-import { SendTransactionDialog } from "./components/dialogs/sendTransactionDialog/SendTransactionDialog"
 import { MoralisRequestStore } from "./store/api/MoralisRequestStore"
 import { WalletsScreenModel } from "./screens/wallets/WalletsScreenModel";
-import { CreateWalletToast } from "./components/toasts/createWalletToast/CreateWalletToast";
 import { AppToast } from "./components/toasts/appToast/AppToast";
 import {
     SelfAddressQrCodeDialogViewModel
@@ -65,11 +62,8 @@ import { WalletConnectStore } from "./store/walletConnect/WalletConnectStore";
 import {
     ApprovalWalletConnectDialogViewModel
 } from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialogViewModel";
-import {
-    ApprovalWalletConnectDialog
-} from "./components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
-import { HumaniqIDModal } from "./screens/humaniqid/HumaniqIDScreen";
 import { BannerStore } from "./store/banner/BannerStore";
+import { events } from "./utils/events";
 
 applyTheme()
 
@@ -161,6 +155,7 @@ const AppScreen = observer(() => {
             await store.browserStore.init()
             await store.walletConnectStore.init(approvalDialog, sendTransactionDialog)
             store.bannerStore.init()
+            await events.init()
             profiler.end(id)
         })()
     }, [])
@@ -181,7 +176,7 @@ const AppScreen = observer(() => {
                             routingInstrumentation && routingInstrumentation.registerNavigationContainer(navigationRef);
                         } }
                     />
-                     }
+                }
                 { !store.appStore.isLocked && <AppToast/> }
                 {
                     store.appStore.initialized &&

@@ -7,6 +7,8 @@ import { Linking } from "react-native";
 import { observer } from "mobx-react-lite";
 import { Header } from "../header/Header";
 import { getProfileStore } from "../../App";
+import { events } from "../../utils/events";
+import { MARKETING_EVENTS } from "../../config/events";
 
 export interface InvitationScreenProps {
     onSkip?: () => any
@@ -48,7 +50,10 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                             { t("humaniqID.presentation.canGet") }
                         </Text>
                         <Text style={ { textDecorationLine: "underline" } } primary robotoM
-                              onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>@HumaniqID_bot</Text>
+                              onPress={ () => {
+                                  events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_CLICK_OPEN_TELEGRAM)
+                                  Linking.openURL('https://t.me/HumaniqID_bot')
+                              } }>@HumaniqID_bot</Text>
                     </>
                     }
                     {
@@ -56,7 +61,10 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                             <Text text16 robotoM>{ t("humaniqID.verified.tittle") }</Text>
                             <Text text16 marginT-10>{ t("humaniqID.verified.firstLine") }</Text>
                             <Text text16 style={ { textDecorationLine: "underline" } } primary robotoM
-                                  onPress={ () => Linking.openURL('https://t.me/HumaniqID_bot') }>
+                                  onPress={ () => {
+                                      events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_CLICK_OPEN_TELEGRAM)
+                                      Linking.openURL('https://t.me/HumaniqID_bot')
+                                  } }>
                                 @HumaniqID_bot
                             </Text>
                             <Text text16 marginT-10>{ t("humaniqID.verified.secondLine") }</Text>

@@ -10,6 +10,8 @@ import { getAppStore } from "../../App"
 import ReactNativeBiometrics from "react-native-biometrics";
 import Keychain from "react-native-keychain";
 import { RootNavigation } from "../../navigators";
+import { events } from "../../utils/events";
+import { MARKETING_EVENTS } from "../../config/events";
 
 export const PIN_LENGTH = 4
 
@@ -145,6 +147,7 @@ export class LockerViewModel {
 
     done() {
         runUnprotected(() => {
+            events.send(MARKETING_EVENTS.ENTER_PIN_CODE)
             if (getAppStore().lockerPreviousScreen === "settings" && this.step === 0) {
                 this.pin = ""
                 this.disabled = false
