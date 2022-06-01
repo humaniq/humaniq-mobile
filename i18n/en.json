@@ -113,6 +113,7 @@
       "currentCurrency": "Current currency",
       "changePin": "Change PIN code",
       "ethNetwork": "Ethereum network",
+      "fiatFirst": "Fiat on top",
       "exportMnemonic": "Export recovery phrase",
       "recoveryPhrase": "Recovery phrase",
       "changePinCode": "Change PIN code",
@@ -219,7 +220,7 @@
       "process": "process"
     },
     "action": {
-      "outgoing": "Outgoing",
+      "outgoing": "Sent",
       "incoming": "Incoming",
       "undefined": "Undefined",
       "smartContract": "Contract",

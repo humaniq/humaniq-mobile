@@ -19,6 +19,7 @@ export interface TokenItemProps {
     short?: boolean
     single?: boolean,
     graphData?: Array<any>
+    fiatOnTop: boolean
 }
 
 export const TokenItem = (props: TokenItemProps) => {
@@ -53,18 +54,19 @@ export const TokenItem = (props: TokenItemProps) => {
                     }
                 </View>
                 <View flex-2 centerV>
-                    { !!(props.graphData && props.graphData.length) && <Chart data={props.graphData} style={{width: "100%", height: 20}}
-                                                                              padding={{ left: 10, bottom: 0, right: 0, top: 0 }}
-                    >
-                        <Line  theme={{ stroke: { color: Colors.primary, width: 2 }} }   />
-                    </Chart> }
+                    { !!(props.graphData && props.graphData.length) &&
+                        <Chart data={ props.graphData } style={ { width: "100%", height: 20 } }
+                               padding={ { left: 10, bottom: 0, right: 0, top: 0 } }
+                        >
+                            <Line theme={ { stroke: { color: Colors.primary, width: 2 } } }/>
+                        </Chart> }
                 </View>
                 <View flex-2 right>
                     <Text numberOfLines={ 1 } text16 robotoM black>
-                        { props.formatFiatBalance }
+                        { props.fiatOnTop ? props.formatFiatBalance : props.formatBalance }
                     </Text>
                     { !props.short && <Text numberOfLines={ 1 } robotoR textGrey text14 marginT-5>
-                        { props.formatBalance }
+                        { props.fiatOnTop ? props.formatBalance : props.formatFiatBalance }
                     </Text>
                     }
                 </View>

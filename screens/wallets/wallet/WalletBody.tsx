@@ -22,7 +22,7 @@ export const WalletBody = observer<any>(({ address }) => {
                             symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
                             animate: true
                         }) }
-                        graphData={getWalletStore().selectedWallet.graph}
+                        graphData={ getWalletStore().selectedWallet.graph }
                         symbol={ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }
                         tokenAddress={ wallet.address }
                         logo={ getEVMProvider().currentNetwork.nativeCoin }
@@ -30,6 +30,7 @@ export const WalletBody = observer<any>(({ address }) => {
                         formatBalance={ beautifyNumber(+wallet.formatBalance) }
                         formatFiatBalance={ wallet.formatFiatBalance }
                         index={ 0 }
+                        fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     {
                         wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
@@ -45,6 +46,7 @@ export const WalletBody = observer<any>(({ address }) => {
                                                       animate: true
                                                   })
                                               }
+                                              fiatOnTop={ getWalletStore().fiatOnTop }
                             />
                         })
                     }

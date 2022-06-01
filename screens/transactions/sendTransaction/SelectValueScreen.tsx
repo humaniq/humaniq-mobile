@@ -73,6 +73,7 @@ const SelectValue = observer(() => {
                                onPress={ () => {
                                    selectWalletTokenView.display = true
                                } }
+                               fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     { !view.isTransferAllow && <View center>
                         <View paddingB-30 absR style={ {

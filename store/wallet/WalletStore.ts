@@ -25,7 +25,8 @@ export class WalletStore extends Model({
     allWallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
     hiddenWallets: p(t.array(t.string), []),
     selectedWalletIndex: p(t.number, 0).withSetter(),
-    currentFiatCurrency: p(t.enum(CURRENCIES), CURRENCIES.USD).withSetter()
+    currentFiatCurrency: p(t.enum(CURRENCIES), CURRENCIES.USD).withSetter(),
+    fiatOnTop: p(t.boolean, true)
 }) {
 
     @modelAction
@@ -84,7 +85,7 @@ export class WalletStore extends Model({
                 if (!this.keyring.mnemonic) {
                     this.keyring = new HDKeyring(this.storedWallets.mnemonic)
                 }
-                this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
+                // this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
                 this.allWallets = this.storedWallets.allWallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -96,6 +97,10 @@ export class WalletStore extends Model({
                     wallet.init()
                     return wallet
                 }) || []
+
+                const onTop = (yield* _await(localStorage.load("hm-wallet-settings-fiat-on-top")))
+                this.fiatOnTop = onTop === undefined ? true : onTop
+
                 this.initialized = uuidv4()
             }
             if (!this.initialized) {

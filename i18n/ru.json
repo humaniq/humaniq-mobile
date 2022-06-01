@@ -114,6 +114,7 @@
       "currentCurrency": "Текущая валюта",
       "changePin": "Сменить ПИН код",
       "ethNetwork": "Сеть эфира",
+      "fiatFirst": "Фиат сверху",
       "exportMnemonic": "Экспорт фразы восстановления",
       "recoveryPhrase": "Фраза восстановления",
       "changePinCode": "Сменить ПИН код",
