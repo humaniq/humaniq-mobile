@@ -13,7 +13,7 @@ import {
 } from "mobx-keystone"
 import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
-import { computed, observable } from "mobx"
+import { computed, observable, reaction } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
@@ -29,6 +29,7 @@ import { InteractionManager } from "react-native";
 import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS } from "../../config/events";
 import { RequestStore } from "../api/RequestStore";
+import { NATIVE_COIN } from "../../config/network";
 
 export interface TransactionsRequestResult {
     page: number,
@@ -64,6 +65,7 @@ export class Wallet extends Model({
         jpy: t.number,
         eth: t.number
     })))),
+    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
     transactions: p(t.model<NativeTransactionStore>(NativeTransactionStore), () => new NativeTransactionStore({})),
     token: p(t.objectMap(t.model<Token>(Token)), () => objectMap<Token>()),
     tokenTransactionsInitialized: p(t.boolean, false),
@@ -90,10 +92,19 @@ export class Wallet extends Model({
                         this.getCoinCost(),
                         this.getTokenBalances()
                     ])
+
+                    reaction(() => getWalletStore().showGraphBool, (val) => {
+                        if (val) {
+                            this.getTokenBalances()
+                        }
+                    })
+
                 } catch (e) {
                     console.log("ERROR", e)
                     Sentry.captureException(e)
-                    this.isError = true
+                    runUnprotected(() => {
+                        this.isError = true
+                    })
                 } finally {
                     runUnprotected(() => {
                         this.initialized = uuidv4()
@@ -161,6 +172,7 @@ export class Wallet extends Model({
             if (!this.transactions.canLoad && !init) return
             if (init) {
                 this.transactions.page = 0
+                this.transactions.cursor = null
                 this.transactions.map.clear()
             }
             const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_TRANSACTIONS, { address: this.address })
@@ -171,9 +183,10 @@ export class Wallet extends Model({
 
             const result = yield getMoralisRequest().get(route, {
                 chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }`,
-                offset: this.transactions.pageSize * this.transactions.page,
+                cursor: this.transactions.cursor,
                 limit: this.transactions.pageSize
             })
+
             if (result.ok && (result.data as TransactionsRequestResult).total) {
                 (result.data as TransactionsRequestResult).result.forEach(r => {
                     const tr = new NativeTransaction({
@@ -202,6 +215,7 @@ export class Wallet extends Model({
                 })
 
                 this.transactions.total = result.data.total
+                this.transactions.cursor = result.data.cursor
                 this.transactions.incrementOffset()
                 this.transactions.loading = false
                 this.transactions.initialized = true
@@ -279,6 +293,15 @@ export class Wallet extends Model({
         profiler.end(id)
     }
 
+    @computed
+    get graph() {
+        const arr = this.history.map((p, i) => ({ y: p.price, x: i }))
+        if ((arr.length <= 1) || (arr.length > 1 && arr[arr.length - 1] === arr[arr.length - 2])) {
+            arr.lenght && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
+        }
+        return arr
+    }
+
     @modelFlow
     * getTokenBalances() {
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
@@ -288,17 +311,22 @@ export class Wallet extends Model({
         const erc20 = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
         if (erc20.ok) {
             const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
-                symbol: erc20.data.map(t => t.symbol).join(","),
-                currency: "usd,eth"
+                symbol: `${ erc20.data.map(t => t.symbol).join(",") },eth,bnb,hmq`,
+                currency: "usd,eth",
+                history: "week",
+                historyPrecision: 7
             }))
             if (result.ok) {
+                this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
+
                 erc20.data.forEach(t => {
                     const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
                         new Token({
                             ...changeCaseObj(t),
                             walletAddress: this.address,
                             priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
-                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString()
+                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
+                            history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : []
                         }) :
                         new Token({ ...changeCaseObj(t), walletAddress: this.address })
                     this.token.set(t.token_address, erc20Token)

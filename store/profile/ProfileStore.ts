@@ -85,11 +85,12 @@ export class ProfileStore extends Model({
 
     @modelFlow
     * checkWallet() {
-        console.log("check-wallet")
+        console.log("check-wallet", getWalletStore().wallets[0])
         if (getWalletStore().wallets[0]) {
             const result = yield* _await(this.api.get(formatRoute(HUMANIQ_ROUTES.INTROSPECT.GET_SIGNUP_WALLET, {
                 wallet: getWalletStore().wallets[0].address
             })))
+            console.log({ result })
             getBannerStore().setSuggest(BANNERS_NAMES.HUMANIQ_ID, result.ok)
             this.setVerified(result.ok)
             this.setIsSuggested(result.ok)

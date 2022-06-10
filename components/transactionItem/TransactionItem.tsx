@@ -1,6 +1,7 @@
 import { Colors, Text, View } from "react-native-ui-lib";
 import React from "react";
 import Ripple from "react-native-material-ripple";
+import { getWalletStore } from "../../App";
 
 export const TransactionItem = ({ item, index, onPress }) => {
     return <Ripple testID={ 'transactionItem' } rippleColor={ Colors.primary }
@@ -24,11 +25,11 @@ export const TransactionItem = ({ item, index, onPress }) => {
                 <View right centerV flex-3>
                     <View>
                         <Text numberOfLines={ 1 } black text16 robotoR
-                              color={ item.valueColor }>{ item.formatFiatValue }</Text>
+                              color={ item.valueColor }>{ getWalletStore().fiatOnTop ? item.formatFiatValue : item.formatValue }</Text>
                     </View>
                     <View paddingT-5>
-                        <Text textGrey text14 robotoR color={ item.actionColor }>
-                            { item.actionName }
+                        <Text textGrey text14 robotoR >
+                            { getWalletStore().fiatOnTop ? item.formatValue : item.formatFiatValue }
                         </Text>
                     </View>
                 </View>

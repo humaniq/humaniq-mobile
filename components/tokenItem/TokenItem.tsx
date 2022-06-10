@@ -4,6 +4,7 @@ import { getDictionary } from "../../App";
 import React from "react";
 import Ripple from "react-native-material-ripple";
 import { NATIVE_COIN } from "../../config/network";
+import { Area, Chart, Line } from "react-native-responsive-linechart";
 
 export interface TokenItemProps {
     symbol: string
@@ -15,7 +16,10 @@ export interface TokenItemProps {
     onPress?: any,
     index: number,
     short?: boolean
-    single?: boolean
+    single?: boolean,
+    graphData?: Array<any>
+    fiatOnTop: boolean,
+    showGraph: boolean
 }
 
 export const TokenItem = (props: TokenItemProps) => {
@@ -40,21 +44,33 @@ export const TokenItem = (props: TokenItemProps) => {
                                 source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
                     }
                 </View>
-                <View flex-5>
+                <View flex-4>
                     <View>
                         <Text numberOfLines={ 1 } robotoM black text16>{ props.name }</Text>
                     </View>
-                    { !props.short && <View paddingT-5>
-                        <Text numberOfLines={ 1 } robotoR textGrey text14>{ props.symbol }</Text>
+                    { !props.short && <View paddingT-4>
+                        { !!(props.graphData && props.graphData?.length && props.showGraph) ?
+                            <Chart data={ props.graphData } style={ { width: 100, height: 20 } }
+                                   padding={ { left: 10, bottom: 0, right: 0, top: 0 } }
+                            >
+                                <Area theme={ {
+                                    gradient: {
+                                        from: { color: Colors.primary, opacity: 0.2 },
+                                        to: { color: Colors.primary, opacity: 0.1 }
+                                    }
+                                } }/>
+                                <Line theme={ { stroke: { color: Colors.primary, width: 2 } } }/>
+                            </Chart>
+                            : <Text numberOfLines={ 1 } robotoR textGrey text14>{ props.symbol }</Text> }
                     </View>
                     }
                 </View>
                 <View flex-3 right>
                     <Text numberOfLines={ 1 } text16 robotoM black>
-                        { props.formatFiatBalance }
+                        { props.fiatOnTop ? props.formatFiatBalance : props.formatBalance }
                     </Text>
                     { !props.short && <Text numberOfLines={ 1 } robotoR textGrey text14 marginT-5>
-                        { props.formatBalance }
+                        { props.fiatOnTop ? props.formatBalance : props.formatFiatBalance }
                     </Text>
                     }
                 </View>

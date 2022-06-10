@@ -8,7 +8,7 @@ import { SendTransactionViewModel } from "./SendTransactionViewModel";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { renderShortAddress } from "../../../utils/address";
 import { Header } from "../../../components/header/Header";
-import { getEVMProvider } from "../../../App";
+import { getEVMProvider, getWalletStore } from "../../../App";
 
 export const ConfirmTransactionScreen = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -27,6 +27,7 @@ export const ConfirmTransactionScreen = observer(() => {
                            index={ view.token.symbol }
                            short={ true }
                            single={ true }
+                           fiatOnTop={ getWalletStore().fiatOnTop }
                 />
             </Card>
         </View>
@@ -39,6 +40,7 @@ export const ConfirmTransactionScreen = observer(() => {
                            index={ view.token.symbol }
                            short={ true }
                            single={ true }
+                           fiatOnTop={ getWalletStore().fiatOnTop }
                 />
             </Card>
         </View>
@@ -76,7 +78,8 @@ export const ConfirmTransactionScreen = observer(() => {
                     </View>
                     <View right>
                         <Text robotoM text16>{ view.txHumanReadable.feeFiat }</Text>
-                        <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
+                        <Text marginT-5
+                              textGrey>{ `${ view.txHumanReadable.fee } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                     </View>
                 </View>
                 <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
