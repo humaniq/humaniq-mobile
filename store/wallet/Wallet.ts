@@ -297,7 +297,7 @@ export class Wallet extends Model({
     get graph() {
         const arr = this.history.map((p, i) => ({ y: p.price, x: i }))
         arr.length && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
-        return this.history.map((p, i) => ({ y: p.price, x: i }))
+        return arr
     }
 
     @modelFlow
