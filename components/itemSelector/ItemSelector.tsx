@@ -4,7 +4,8 @@ import { Header, ICON_HEADER } from "../header/Header";
 import Ripple from "react-native-material-ripple";
 
 export interface ItemType {
-    name: string
+    name: string,
+    value?: any,
 }
 
 export interface ItemsGroup<ItemType> {
@@ -20,6 +21,7 @@ export interface ISelectNetworkProps<ItemType> {
     selected: string,
     headerTittle: string,
     labelTransform?: (i: ItemType) => string
+    backEnabled?: boolean
 }
 
 export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
@@ -29,10 +31,11 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                                                                           backIcon,
                                                                           selected,
                                                                           headerTittle,
-                                                                          labelTransform= (i: ItemType) => i.name
+                                                                          labelTransform = (i: ItemType) => i.name,
+                                                                          backEnabled = true
                                                                       }) => {
-    return <View flex bg-bg>
-        <Header title={ headerTittle } onBackPress={ onBackPress } icon={ backIcon }/>
+    return <View bg-bg>
+        <Header title={ headerTittle } onBackPress={ onBackPress } icon={ backIcon } backEnabled={ backEnabled }/>
         <View flex paddingV-20>
             { items.map((i, index) => {
                 return <View key={ index }>
@@ -51,14 +54,14 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                                                    onPress={ () => onPressItem(n) }
                                     >
                                         <View row>
-                                            <View flex-5>
-                                                <Text text16 >{ labelTransform(n) }</Text>
+                                            <View flex-8>
+                                                <Text text16>{ labelTransform(n) }</Text>
                                             </View>
-                                            <View right flex-5>
+                                            <View right flex-2>
                                                 <RadioButton
-                                                    selected={ n.name === selected }
+                                                    selected={ (n.value || n.name) === selected }
                                                     size={ 20 }
-                                                    color={ n.name === selected ? Colors.primary : Colors.textGrey }
+                                                    color={ (n.value || n.name) === selected ? Colors.primary : Colors.textGrey }
                                                 />
                                             </View>
                                         </View>

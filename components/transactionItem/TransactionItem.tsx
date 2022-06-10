@@ -28,8 +28,8 @@ export const TransactionItem = ({ item, index, onPress }) => {
                               color={ item.valueColor }>{ getWalletStore().fiatOnTop ? item.formatFiatValue : item.formatValue }</Text>
                     </View>
                     <View paddingT-5>
-                        <Text textGrey text14 robotoR color={ item.actionColor }>
-                            { item.actionName }
+                        <Text textGrey text14 robotoR >
+                            { getWalletStore().fiatOnTop ? item.formatValue : item.formatFiatValue }
                         </Text>
                     </View>
                 </View>

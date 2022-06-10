@@ -1,4 +1,4 @@
-import { Model, model, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import { getSnapshot, Model, model, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
@@ -28,6 +28,8 @@ export class Token extends Model({
 
     @computed
     get graph() {
+        const arr = this.history.map((p, i) => ({ y: p.price, x: i }))
+        arr.length && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x+ 1 })
         return this.history.map((p, i) => ({ y: p.price, x: i }))
     }
 
@@ -70,7 +72,7 @@ export class Token extends Model({
 
     @computed
     get formatBalance() {
-        return this.valBalance ? beautifyNumber(this.valBalance) : `--/--`
+        return this.valBalance ? `${ beautifyNumber(this.valBalance) } ${ this.symbol }` : `--/--`
     }
 
     @computed

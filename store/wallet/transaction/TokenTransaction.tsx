@@ -262,12 +262,20 @@ export class TokenTransaction extends Model({
 
     @computed
     get formatValue() {
-        return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) }`
+        switch (this.action) {
+            case 1:
+                return `-${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) } ${ this.symbol }`
+            case 2:
+                return `+${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) } ${ this.symbol }`
+            default:
+                return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) } ${ this.symbol }`
+        }
+
     }
 
     @computed
     get formatDate() {
-        return dayjs(this.blockTimestamp).format("lll")
+        return dayjs(this.blockTimestamp).format("MMM DD, hh:mm")
     }
 
     @computed
@@ -371,9 +379,15 @@ export class TokenTransaction extends Model({
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
                     <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/>
                 </Avatar>
-            default:
+            case this.action === 1:
+                return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
+                    <HIcon name={ "arrow-to-top" } size={ 20 } color={ Colors.textGrey }/></Avatar>
+            case this.action === 2:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
-                    <HIcon name={ "done" } size={ 20 } color={ Colors.success }/></Avatar>
+                    <HIcon name={ "arrow-to-bottom" } size={ 20 } color={ Colors.success }/></Avatar>
+            default:
+                return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
+                    <HIcon name={ "document" } size={ 20 } color={ Colors.textGrey }/></Avatar>
         }
     }
 

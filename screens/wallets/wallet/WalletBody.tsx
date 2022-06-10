@@ -17,6 +17,7 @@ export const WalletBody = observer<any>(({ address }) => {
             {
                 !!wallet.initialized && <>
                     <TokenItem
+                        showGraph={ getWalletStore().showGraphBool }
                         onPress={ () => RootNavigation.navigate("walletTransactions", {
                             wallet: wallet.address,
                             symbol: getEVMProvider().currentNetwork.nativeSymbol.toUpperCase(),
@@ -27,26 +28,28 @@ export const WalletBody = observer<any>(({ address }) => {
                         tokenAddress={ wallet.address }
                         logo={ getEVMProvider().currentNetwork.nativeCoin }
                         name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
-                        formatBalance={ beautifyNumber(+wallet.formatBalance) }
+                        formatBalance={ `${ beautifyNumber(+wallet.formatBalance) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }
                         formatFiatBalance={ wallet.formatFiatBalance }
                         index={ 0 }
                         fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     {
                         wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
-                            return <TokenItem key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
-                                              graphData={ p.graph }
-                                              formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
-                                              logo={ p.logo } name={ p.name } index={ i + 1 }
-                                              onPress={
-                                                  () => RootNavigation.navigate("walletTransactions", {
-                                                      wallet: wallet.address,
-                                                      symbol: p.symbol,
-                                                      tokenAddress: p.tokenAddress,
-                                                      animate: true
-                                                  })
-                                              }
-                                              fiatOnTop={ getWalletStore().fiatOnTop }
+                            return <TokenItem
+                                showGraph={ getWalletStore().showGraphBool }
+                                key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
+                                graphData={ p.graph }
+                                formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
+                                logo={ p.logo } name={ p.name } index={ i + 1 }
+                                onPress={
+                                    () => RootNavigation.navigate("walletTransactions", {
+                                        wallet: wallet.address,
+                                        symbol: p.symbol,
+                                        tokenAddress: p.tokenAddress,
+                                        animate: true
+                                    })
+                                }
+                                fiatOnTop={ getWalletStore().fiatOnTop }
                             />
                         })
                     }

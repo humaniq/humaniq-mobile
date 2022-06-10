@@ -90,15 +90,6 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                                         textGrey> { getEVMProvider().currentNetworkName === "bsc" ? "BSC" : getEVMProvider().currentNetworkName === "mainnet" ? "Ethereum" : capitalize(getEVMProvider().currentNetworkName) } </Text> }
                                           onPress={ () => nav.navigate("selectNetwork") }
                                 />
-                                <MenuSwitch label={ t("settingsScreen.menu.fiatFirst") }
-                                            value={ getWalletStore().fiatOnTop }
-                                            onValueChange={ (val?: boolean) => {
-                                                runUnprotected(() => {
-                                                    getWalletStore().fiatOnTop =  !!val
-                                                })
-                                                localStorage.save("hm-wallet-settings-fiat-on-top", getWalletStore().fiatOnTop)
-                                            } }
-                                            icon={ "circle-star" }/>
                                 <View
                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "wallet-connect" }

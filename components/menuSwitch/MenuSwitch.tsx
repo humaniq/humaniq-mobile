@@ -6,7 +6,8 @@ export interface MenuSwitchProps {
     label: string
     value: boolean,
     onValueChange: (val: any) => void
-    icon?: string
+    icon?: string,
+    withSeparator?: boolean
 }
 
 export const MenuSwitch: React.FC<MenuSwitchProps> = (
@@ -14,15 +15,15 @@ export const MenuSwitch: React.FC<MenuSwitchProps> = (
         label,
         value,
         icon,
-        onValueChange
-
+        onValueChange,
+        withSeparator = true
     }) => {
     return <>
-        <View style={ {
+        <View style={ withSeparator ? {
             borderBottomWidth: 1,
             borderBottomColor: Colors.grey,
             marginLeft: 50
-        } }/>
+        }: {} }/>
         <View padding-9 row spread>
             { icon && <View bg-greyLight padding-9 br100>
                 <HIcon
@@ -48,7 +49,7 @@ export const MenuSwitch: React.FC<MenuSwitchProps> = (
                         thumbSize={ 24 }
                         onColor={ Colors.rgba(Colors.primary, 0.38) }
                         offColor={ Colors.rgba(Colors.black, 0.2) }
-                        key={ value.toString() }
+                        key={ String(value) }
                         onValueChange={ onValueChange }
                         value={ value }/>
             </View>
