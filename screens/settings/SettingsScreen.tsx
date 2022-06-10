@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import { Button, Card, Colors, Dialog, LoaderScreen, Switch, Text, View } from "react-native-ui-lib"
+import { Button, Card, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { SettingsScreenModel } from "./SettingsScreenModel"
@@ -127,8 +127,8 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                                     })
                                                     localStorage.save("hm-wallet-settings", getAppStore().storedPin)
                                                 } }
-                                                />
-                                    }
+                                    />
+                                }
                             </Card>
                         </View>
                     </>

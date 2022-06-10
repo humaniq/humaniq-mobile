@@ -145,6 +145,9 @@
       "walletConnect": "Wallet connect"
     }
   },
+  "visibilityScreen": {
+    "name": "Видимость"
+  },
   "selectTransactionFeeDialog": {
     "name": "Выбор скорости транзакции",
     "description": "Выберите время в соответствии со стоимостью"

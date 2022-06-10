@@ -306,7 +306,7 @@ export class Wallet extends Model({
     * getTokenBalances() {
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
-            address: this.address
+            address: this.address //"0xE2f42F813cb5DE755a9A9214B5C5076380Cc676a"
         })
         const erc20 = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
         if (erc20.ok) {
@@ -318,7 +318,6 @@ export class Wallet extends Model({
             }))
             if (result.ok) {
                 this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
-
                 erc20.data.forEach(t => {
                     const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
                         new Token({
