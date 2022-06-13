@@ -18,6 +18,17 @@ import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS, MARKETING_EVENTS } from "../../config/events";
 import { events } from "../../utils/events";
 
+
+export enum ON_TOP_ITEM {
+    FIAT = 'FIAT',
+    TOKEN = 'TOKEN'
+}
+
+export enum SHOW_GRAPHS {
+    GRAPH = 'GRAPH',
+    TOKEN = 'TOKEN'
+}
+
 @model("WalletStore")
 export class WalletStore extends Model({
     pending: p(t.boolean, false),
@@ -25,8 +36,18 @@ export class WalletStore extends Model({
     allWallets: p(t.array(t.model<Wallet>(Wallet)), () => []),
     hiddenWallets: p(t.array(t.string), []),
     selectedWalletIndex: p(t.number, 0).withSetter(),
-    currentFiatCurrency: p(t.enum(CURRENCIES), CURRENCIES.USD).withSetter()
+    currentFiatCurrency: p(t.enum(CURRENCIES), CURRENCIES.USD).withSetter(),
+    onTopCurrency: p(t.enum(ON_TOP_ITEM), ON_TOP_ITEM.FIAT).withSetter(),
+    showGraphs: p(t.enum(SHOW_GRAPHS), SHOW_GRAPHS.TOKEN).withSetter(),
 }) {
+
+    get fiatOnTop() {
+        return this.onTopCurrency === ON_TOP_ITEM.FIAT
+    }
+
+    get showGraphBool() {
+        return this.showGraphs === SHOW_GRAPHS.GRAPH
+    }
 
     @modelAction
     changeCurrentFiatCurrency = () => {
@@ -73,18 +94,41 @@ export class WalletStore extends Model({
     }
 
     @modelFlow
+    * register() {
+        reaction(() => getEVMProvider().initialized, () => {
+            this.init(true)
+        })
+        reaction(() => getAppStore().savedPin, async (pin) => {
+            if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
+                await runUnprotected(async () => {
+                    const cryptr = new Cryptr(pin)
+                    const encrypted = await localStorage.load("hm-wallet")
+                    if (encrypted) {
+                        const result = cryptr.decrypt(encrypted)
+                        this.storedWallets = JSON.parse(result)
+                        await this.init()
+                    }
+                })
+            }
+        })
+        reaction(() => getAppStore().isLocked, (value) => {
+            if (value) {
+                this.storedWallets = null
+            }
+        })
+    }
+
+    @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
+            this.pending = true
             const id = profiler.start(EVENTS.INIT_WALLET_STORE)
-            const currentFiatCurrency = (yield* _await(storage.load("currentFiatCurrency"))) || CURRENCIES.USD
-            // @ts-ignore
-            getWalletStore().setCurrentFiatCurrency(currentFiatCurrency)
 
             if (this.storedWallets) {
                 if (!this.keyring.mnemonic) {
                     this.keyring = new HDKeyring(this.storedWallets.mnemonic)
                 }
-                this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
+                // this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
                 this.allWallets = this.storedWallets.allWallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -93,33 +137,22 @@ export class WalletStore extends Model({
                         publicKey: normalize(Buffer.from(w.publicKey.data).toString("hex")),
                         address: ethers.utils.computeAddress(normalize(Buffer.from(w.privateKey.data).toString("hex")))
                     })
-                    wallet.init()
+                    wallet.initWallet()
                     return wallet
                 }) || []
+
+                const currentFiatCurrency = (yield* _await(storage.load("currentFiatCurrency"))) || CURRENCIES.USD
+                // @ts-ignore
+                getWalletStore().setCurrentFiatCurrency(currentFiatCurrency)
+
+                const onTop = (yield* _await(localStorage.load("hm-wallet-settings-fiat-on-top")))
+                this.onTopCurrency = onTop === null ? ON_TOP_ITEM.FIAT : onTop
+
+                const showGraphs = (yield* _await(localStorage.load("hm-wallet-settings-show-graphs")))
+                this.showGraphs = showGraphs === null ? SHOW_GRAPHS.TOKEN : showGraphs
+
                 this.initialized = uuidv4()
-            }
-            if (!this.initialized) {
-                reaction(() => getEVMProvider().initialized, () => {
-                    this.init(true)
-                })
-                reaction(() => getAppStore().savedPin, async (pin) => {
-                    if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
-                        await runUnprotected(async () => {
-                            const cryptr = new Cryptr(pin)
-                            const encrypted = await localStorage.load("hm-wallet")
-                            if(encrypted) {
-                                const result = cryptr.decrypt(encrypted)
-                                this.storedWallets = JSON.parse(result)
-                                await this.init()
-                            }
-                        })
-                    }
-                })
-                reaction(() => getAppStore().isLocked, (value) => {
-                    if (value) {
-                        this.storedWallets = null
-                    }
-                })
+                this.pending = false
             }
             profiler.end(id)
         }
@@ -132,7 +165,7 @@ export class WalletStore extends Model({
 
     @modelFlow
     * updateWalletsInfo() {
-        this.allWallets.forEach(w => w.init(true))
+        this.allWallets.forEach(w => w.initWallet(true))
     }
 
     @modelAction

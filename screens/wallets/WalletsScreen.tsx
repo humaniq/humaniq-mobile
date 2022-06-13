@@ -69,25 +69,30 @@ const Wallets = observer<{ route: any }>(function ({ route }) {
                                 label={ getWalletStore().wallets.length > 1 ? t('walletScreen.allAddresses') : t("walletScreen.menuDialog.createWallet.name") }
                                 onPress={ () => getWalletStore().wallets.length > 1 ? nav.navigate("walletsList", { animate: true }) : view.createWalletDialog(TOAST_POSITION.UNDER_TAB_BAR) }
                         />
-                        <HIcon size={ 22 } color={ Colors.primary } name="camera" onPress={ () => {
-                            nav.navigate("QRScanner", {
-                                // @ts-ignore
-                                onScanSuccess: meta => {
-                                    if (meta.action === "send-eth" && meta.target_address) {
-                                        RootNavigation.navigate("sendTransaction", {
-                                            screen: "selectAddress",
-                                            params: {
-                                                walletAddress: view.currentWallet.address,
-                                                to: meta.target_address
-                                            }
-                                        })
-                                    } else if (meta.action === "wallet-connect") {
-                                        console.log({ meta })
-                                        getWalletConnectStore().newSession(meta.walletConnectURI)
-                                    }
-                                }
-                            }, undefined, undefined)
-                        } }/>
+                        <View row right centerV>
+                            <HIcon size={ 22 } color={ Colors.textBlack } name={ "preferences" }
+                                   style={ { marginRight: 30 } } onPress={ () => nav.navigate("visibility") }/>
+                            <HIcon size={ 22 } color={ Colors.textBlack } name="camera" style={ { marginRight: 10 } }
+                                   onPress={ () => {
+                                       nav.navigate("QRScanner", {
+                                           // @ts-ignore
+                                           onScanSuccess: meta => {
+                                               if (meta.action === "send-eth" && meta.target_address) {
+                                                   RootNavigation.navigate("sendTransaction", {
+                                                       screen: "selectAddress",
+                                                       params: {
+                                                           walletAddress: view.currentWallet.address,
+                                                           to: meta.target_address
+                                                       }
+                                                   })
+                                               } else if (meta.action === "wallet-connect") {
+                                                   console.log({ meta })
+                                                   getWalletConnectStore().newSession(meta.walletConnectURI)
+                                               }
+                                           }
+                                       }, undefined, undefined)
+                                   } }/>
+                        </View>
                     </View>
                     <View paddingB-10>
                         <View testID={ 'titleWalletBlock' }>

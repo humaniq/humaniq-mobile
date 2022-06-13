@@ -129,7 +129,7 @@ export class AppStore extends Model({
                 this.isLocked = false
             }
             const enabled = (yield* _await(localStorage.load("hm-wallet-settings-bio")))
-            this.bioEnabled = enabled === undefined ? true : enabled
+            this.bioEnabled = enabled === null ? true : enabled
 
 
             this.messageManager.hub.on('unapprovedMessage', messageParams =>

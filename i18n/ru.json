@@ -114,6 +114,14 @@
       "currentCurrency": "Текущая валюта",
       "changePin": "Сменить ПИН код",
       "ethNetwork": "Сеть эфира",
+      "fiatFirst": "Показывать фиат сверху",
+      "currencyPreference": "Настройки валют",
+      "fiatPrimary": "Фиатный баланс вверху",
+      "tokenPrimary": "Крипто баланс вверху",
+      "native": "Нативный",
+      "graphPreferences": "Настройки графиков",
+      "showGraph": "Показывать графики",
+      "showToken": "Показывать токен",
       "exportMnemonic": "Экспорт фразы восстановления",
       "recoveryPhrase": "Фраза восстановления",
       "changePinCode": "Сменить ПИН код",
@@ -136,6 +144,12 @@
       "disableBio": "Вход по биометрии",
       "walletConnect": "Wallet connect"
     }
+  },
+  "visibilityScreen": {
+    "name": "Видимость",
+    "totalTokens": "Всего токенов",
+    "visibleTokens": "Видимые токены",
+    "invisibleTokens": "Скрытые токены"
   },
   "selectTransactionFeeDialog": {
     "name": "Выбор скорости транзакции",

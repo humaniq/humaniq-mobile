@@ -1,10 +1,8 @@
-import { Model, model, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import { Model, model, modelAction, modelFlow, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
-import { getDictionary, getMoralisRequest, getWalletStore } from "../../../App";
-import { MORALIS_ROUTES } from "../../../config/api";
-import { formatRoute } from "../../../navigators";
+import { getDictionary, getWalletStore } from "../../../App";
 import { TokenTransaction } from "../transaction/TokenTransaction";
 import { ethers } from "ethers";
 import { CURRENCIES } from "../../../config/common";
@@ -24,8 +22,25 @@ export class Token extends Model({
     balance: p(t.string, ""),
     priceUSD: p(t.string, ""),
     priceEther: p(t.string, ""),
-    transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>())
+    transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
+    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
+    hidden: p(t.boolean, false).withSetter()
 }) {
+
+    @modelAction
+    toggleHide = () => {
+        this.hidden = !this.hidden
+        getDictionary().toggleHideSymbol(this.symbol.toLowerCase(), this.hidden)
+    }
+
+    @computed
+    get graph() {
+        const arr = this.history.map((p, i) => ({ y: p.price, x: i }))
+        if ((arr.length <= 1) || (arr.length > 1 && arr[arr.length - 1] === arr[arr.length - 2])) {
+            arr.lenght && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
+        }
+        return arr
+    }
 
     @computed
     get prices() {
@@ -66,7 +81,7 @@ export class Token extends Model({
 
     @computed
     get formatBalance() {
-        return this.valBalance ? beautifyNumber(this.valBalance) : `--/--`
+        return this.valBalance ? `${ beautifyNumber(this.valBalance) } ${ this.symbol }` : `--/--`
     }
 
     @computed

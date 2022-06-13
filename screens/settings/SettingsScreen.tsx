@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { provider, useInstance } from "react-ioc"
-import { Button, Card, Colors, Dialog, LoaderScreen, Switch, Text, View } from "react-native-ui-lib"
+import { Button, Card, Colors, Dialog, LoaderScreen, Text, View } from "react-native-ui-lib"
 import { observer } from "mobx-react-lite"
 import { Screen } from "../../components"
 import { SettingsScreenModel } from "./SettingsScreenModel"
@@ -15,6 +15,7 @@ import { localStorage } from "../../utils/localStorage";
 import { LOCKER_MODE } from "../../store/app/AppStore";
 import { capitalize, toUpperCase } from "../../utils/general";
 import { HumqniqIDCard } from "../../components/humaniqid/HumqniqIDCard";
+import { MenuSwitch } from "../../components/menuSwitch/MenuSwitch";
 
 const Settings = observer<{ route: any }>(function ({ route }) {
     const view = useInstance(SettingsScreenModel)
@@ -101,77 +102,33 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                           name={ t("settingsScreen.menu.aboutApplication") }
                                           onPress={ () => nav.navigate("aboutPage") }
                                 />
-                                <>
-                                    <View style={ {
-                                        borderBottomWidth: 1,
-                                        borderBottomColor: Colors.grey,
-                                        marginLeft: 50
-                                    } }/>
-                                    <View padding-9 row spread>
-                                        <View bg-greyLight padding-9 br100>
-                                            <HIcon
-                                                name={ "fingerprint" }
-                                                size={ 14 }
-                                                color={ Colors.primary }/>
-                                        </View>
-                                        <View row flex spread centerV marginR-8>
-                                            <Text marginL-10>{ t("settingsScreen.menu.disableBio") }</Text>
-                                            <Switch height={ 12 }
-                                                    thumbStyle={ {
-                                                        shadowColor: "#000",
-                                                        shadowOffset: {
-                                                            width: 0,
-                                                            height: 1,
-                                                        },
-                                                        shadowOpacity: 0.20,
-                                                        shadowRadius: 1.41,
-                                                        elevation: 2,
-                                                    } }
-                                                    thumbColor={getAppStore().bioEnabled ? Colors.primary : Colors.white }
-                                                    thumbSize={ 24 }
-                                                    onColor={ Colors.rgba(Colors.primary, 0.38) }
-                                                    offColor={ Colors.rgba(Colors.black, 0.2) }
-                                                    key={ getAppStore().bioEnabled }
-                                                    onValueChange={ (val?: boolean) => {
-                                                        runUnprotected(() => {
-                                                            getAppStore().bioEnabled = !!val
-                                                        })
-                                                        localStorage.save("hm-wallet-settings-bio", getAppStore().bioEnabled)
-                                                    } }
-                                                    value={ getAppStore().bioEnabled }/>
-                                        </View>
-                                    </View>
-                                </>
+                                <MenuSwitch label={ t("settingsScreen.menu.disableBio") }
+                                            value={ getAppStore().bioEnabled }
+                                            onValueChange={ (val?: boolean) => {
+                                                runUnprotected(() => {
+                                                    getAppStore().bioEnabled = !!val
+                                                })
+                                                localStorage.save("hm-wallet-settings-bio", getAppStore().bioEnabled)
+                                            } }
+                                            icon={ "fingerprint" }/>
                             </Card>
-                            <Card marginT-16 marginH-16>
+                            <Card marginV-16 marginH-16>
                                 <MenuItem icon={ "logout" }
                                           name={ t("settingsScreen.menu.signOut") }
                                           showArrow={ false }
                                           onPress={ () => view.exitDialogVisible = !view.exitDialogVisible }
                                 />
-                                { __DEV__ && <>
-                                    <View style={ {
-                                        borderBottomWidth: 1,
-                                        borderBottomColor: Colors.grey,
-                                        marginLeft: 50
-                                    } }/>
-                                    <View row padding-16 spread>
-                                        <Text>Отключить пин код?</Text>
-                                        <Switch
-                                            height={ 12 }
-                                            thumbColor={ Colors.primary }
-                                            thumbSize={ 24 }
-                                            onColor={ Colors.rgba(Colors.primary, 0.38) }
-                                            offColor={ Colors.rgba(Colors.black, 0.2) }
-                                            onValueChange={ (val?: boolean) => {
-                                                runUnprotected(() => {
-                                                    getAppStore().storedPin = val ? getAppStore().savedPin : false
-                                                })
-                                                localStorage.save("hm-wallet-settings", getAppStore().storedPin)
-                                            } }
-                                            value={ !!getAppStore().storedPin }/>
-                                    </View>
-                                </> }
+                                { __DEV__ &&
+                                    <MenuSwitch label={ "Отключить пин код?" }
+                                                value={ !!getAppStore().storedPin }
+                                                onValueChange={ (val?: boolean) => {
+                                                    runUnprotected(() => {
+                                                        getAppStore().storedPin = val ? getAppStore().savedPin : false
+                                                    })
+                                                    localStorage.save("hm-wallet-settings", getAppStore().storedPin)
+                                                } }
+                                    />
+                                }
                             </Card>
                         </View>
                     </>

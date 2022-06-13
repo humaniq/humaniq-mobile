@@ -149,7 +149,7 @@ const AppScreen = observer(() => {
             await store.moralisRequestStore.init()
             await store.requestStore.init()
             await store.providerStore.init()
-            await store.walletStore.init()
+            await store.walletStore.register()
             await store.appStore.init()
             await store.profileStore.init()
             await store.browserStore.init()

@@ -34,8 +34,8 @@ export const CreateWalletToast = observer(() => {
                         t("walletScreen.menuDialog.createWallet.createWalletMessageDone")
                     } </Text>
                     <View flex right>
-                        <Button link label={ t("common.view") }
-                                onPress={ () => nav.navigate("walletsList", { animate: true }) }/>
+                        { view.walletDialogs.pendingDialog.walletCreated && <Button link label={ t("common.view") }
+                                onPress={ () => nav.navigate("walletsList", { animate: true }) }/> }
                     </View>
                 </View>
             </Card>

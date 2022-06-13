@@ -18,6 +18,7 @@ import { MONTH } from "../../config/common";
 import { getWalletStore } from "../../App";
 import { profiler } from "../../utils/profiler/profiler";
 import { EVENTS } from "../../config/events";
+import { toJS } from "mobx";
 
 
 @model("Coin")
@@ -43,6 +44,7 @@ export class DictionaryStore extends Model({
     }))), () => objectMap()),
     ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap()),
     recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet()),
+    hiddenSymbols: p(t.arraySet(t.string), () => arraySet())
 }) {
 
     @modelFlow
@@ -50,8 +52,23 @@ export class DictionaryStore extends Model({
         const id = profiler.start(EVENTS.INIT_DICTIONARY_STORE)
         this.loadRecentlyUsedAddresses()
         yield this.loadTokensData()
+        yield this.loadHiddenSymbols()
         this.initialized = uuidv4()
         profiler.end(id)
+    }
+
+    @modelFlow
+    * loadHiddenSymbols() {
+        const hidden = (yield* _await(localStorage.load("hm-wallet-hidden-symbols")))
+        if (hidden !== null) {
+            hidden.forEach(h => this.hiddenSymbols.add(h))
+        }
+    }
+
+    @modelFlow
+    * toggleHideSymbol(symbol, hidden) {
+        hidden ? this.hiddenSymbols.add(symbol) : this.hiddenSymbols.delete(symbol)
+        yield* _await(localStorage.save("hm-wallet-hidden-symbols", toJS(this.hiddenSymbols.items)))
     }
 
     @modelFlow

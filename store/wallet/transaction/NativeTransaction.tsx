@@ -130,7 +130,7 @@ export class NativeTransaction extends Model({
                     this.transactionIndex = confirmedTx.transactionIndex
                     this.receiptContractAddress = confirmedTx.contractAddress
                     this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
-                    if(this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
+                    if (this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
                         events.send(MARKETING_EVENTS.SENT_TRANSACTION_SUCCESSFUL)
                     }
                     // TODO: обработать обгон транзакции над перезаписываемой
@@ -260,12 +260,19 @@ export class NativeTransaction extends Model({
 
     @computed
     get formatValue() {
-        return `${ beautifyNumber(preciseRound(+formatEther(this.value))) }`
+        switch (this.action) {
+            case 1:
+                return `-${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
+            case 2:
+                return `+${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
+            default:
+                return `${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
+        }
     }
 
     @computed
     get formatDate() {
-        return dayjs(this.blockTimestamp).format("lll")
+        return dayjs(this.blockTimestamp).format("MMM DD, hh:mm")
     }
 
     @computed
@@ -379,9 +386,15 @@ export class NativeTransaction extends Model({
             case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
                     <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/></Avatar>
-            default:
+            case this.action === 1:
+                return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
+                    <HIcon name={ "arrow-to-top" } size={ 20 } color={ Colors.textGrey }/></Avatar>
+            case this.action === 2:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
-                    <HIcon name={ "done" } size={ 20 } color={ Colors.success }/></Avatar>
+                    <HIcon name={ "arrow-to-bottom" } size={ 20 } color={ Colors.success }/></Avatar>
+            default:
+                return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
+                    <HIcon name={ "document" } size={ 20 } color={ Colors.textGrey }/></Avatar>
         }
     }
 

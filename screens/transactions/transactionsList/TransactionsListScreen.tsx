@@ -74,11 +74,11 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                 view.wallet.loadTransactions();
                                 // @ts-ignore
                                 scrollRef?.current.scrollToEnd()
+                                // scrollRef.current.scrollTo({y: scrollRef.current.height - 20 })
                             }
                         }
-
                     } }
-                    scrollEventThrottle={ 400 }
+                    scrollEventThrottle={ 50 }
                 >
                     <CryptoCard>
                         <View marginV-16 marginH-16>

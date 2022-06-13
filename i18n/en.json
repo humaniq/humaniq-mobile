@@ -113,6 +113,14 @@
       "currentCurrency": "Current currency",
       "changePin": "Change PIN code",
       "ethNetwork": "Ethereum network",
+      "fiatFirst": "Display fiat on top",
+      "currencyPreference": "Currency Preference",
+      "fiatPrimary": "Fiat balances on top",
+      "tokenPrimary": "Crypto balances on top",
+      "native": "Native",
+      "graphPreferences": "Graph preferences",
+      "showGraph": "Show graph",
+      "showToken": "Show token",
       "exportMnemonic": "Export recovery phrase",
       "recoveryPhrase": "Recovery phrase",
       "changePinCode": "Change PIN code",
@@ -135,6 +143,12 @@
       "disableBio": "Biometrics access",
       "walletConnect": "Wallet connect"
     }
+  },
+  "visibilityScreen": {
+    "name": "Visibility",
+    "totalTokens": "Total tokens",
+    "visibleTokens": "Visible tokens",
+    "invisibleTokens": "Hidden tokens"
   },
   "selectTransactionFeeDialog": {
     "name": "Speed up transaction by adjusting miner fee",
@@ -219,7 +233,7 @@
       "process": "process"
     },
     "action": {
-      "outgoing": "Outgoing",
+      "outgoing": "Sent",
       "incoming": "Incoming",
       "undefined": "Undefined",
       "smartContract": "Contract",
