@@ -94,8 +94,34 @@ export class WalletStore extends Model({
     }
 
     @modelFlow
+    * register() {
+        reaction(() => getEVMProvider().initialized, () => {
+            this.init(true)
+        })
+        reaction(() => getAppStore().savedPin, async (pin) => {
+            if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
+                await runUnprotected(async () => {
+                    const cryptr = new Cryptr(pin)
+                    const encrypted = await localStorage.load("hm-wallet")
+                    if (encrypted) {
+                        const result = cryptr.decrypt(encrypted)
+                        this.storedWallets = JSON.parse(result)
+                        await this.init()
+                    }
+                })
+            }
+        })
+        reaction(() => getAppStore().isLocked, (value) => {
+            if (value) {
+                this.storedWallets = null
+            }
+        })
+    }
+
+    @modelFlow
     * init(forse = false) {
         if (!this.initialized || forse) {
+            this.pending = true
             const id = profiler.start(EVENTS.INIT_WALLET_STORE)
 
             if (this.storedWallets) {
@@ -111,7 +137,7 @@ export class WalletStore extends Model({
                         publicKey: normalize(Buffer.from(w.publicKey.data).toString("hex")),
                         address: ethers.utils.computeAddress(normalize(Buffer.from(w.privateKey.data).toString("hex")))
                     })
-                    wallet.init()
+                    wallet.initWallet()
                     return wallet
                 }) || []
 
@@ -126,29 +152,7 @@ export class WalletStore extends Model({
                 this.showGraphs = showGraphs === null ? SHOW_GRAPHS.TOKEN : showGraphs
 
                 this.initialized = uuidv4()
-            }
-            if (!this.initialized) {
-                reaction(() => getEVMProvider().initialized, () => {
-                    this.init(true)
-                })
-                reaction(() => getAppStore().savedPin, async (pin) => {
-                    if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
-                        await runUnprotected(async () => {
-                            const cryptr = new Cryptr(pin)
-                            const encrypted = await localStorage.load("hm-wallet")
-                            if (encrypted) {
-                                const result = cryptr.decrypt(encrypted)
-                                this.storedWallets = JSON.parse(result)
-                                await this.init()
-                            }
-                        })
-                    }
-                })
-                reaction(() => getAppStore().isLocked, (value) => {
-                    if (value) {
-                        this.storedWallets = null
-                    }
-                })
+                this.pending = false
             }
             profiler.end(id)
         }
@@ -161,7 +165,7 @@ export class WalletStore extends Model({
 
     @modelFlow
     * updateWalletsInfo() {
-        this.allWallets.forEach(w => w.init(true))
+        this.allWallets.forEach(w => w.initWallet(true))
     }
 
     @modelAction

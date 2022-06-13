@@ -145,6 +145,12 @@
       "walletConnect": "Wallet connect"
     }
   },
+  "visibilityScreen": {
+    "name": "Видимость",
+    "totalTokens": "Всего токенов",
+    "visibleTokens": "Видимые токены",
+    "invisibleTokens": "Скрытые токены"
+  },
   "selectTransactionFeeDialog": {
     "name": "Выбор скорости транзакции",
     "description": "Выберите время в соответствии со стоимостью"

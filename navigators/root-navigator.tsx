@@ -27,6 +27,7 @@ import { SendTransactionDialog } from "../components/dialogs/sendTransactionDial
 import {
     ApprovalWalletConnectDialog
 } from "../components/dialogs/approvalWalletConnectDialog/ApprovalWalletConnectDialog";
+import { VisibilityScreen } from "../screens/visibility/VisibilityScreen";
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -55,7 +56,8 @@ export type RootParamList = {
     aboutPage,
     selectCurrency,
     humaniqID,
-    walletConnectSessions
+    walletConnectSessions,
+    visibility
 }
 
 const Stack = createStackNavigator<RootParamList>()
@@ -89,6 +91,7 @@ const RootStack = () => {
             <Stack.Screen name="privacyPolicyPage" component={ PrivacyPolicyPage }/>
             <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
             <Stack.Screen name="humaniqID" component={ HumaniqIDNavScreen }/>
+            <Stack.Screen name="visibility" component={ VisibilityScreen }/>
 
         </Stack.Navigator>
     )

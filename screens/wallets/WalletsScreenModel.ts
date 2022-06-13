@@ -55,7 +55,7 @@ export class WalletsScreenModel {
   async init(force = false) {
     try {
       if (!this.initialized || force || !getAppStore().walletPageInitialized) {
-        await getWalletStore().updateWalletsInfo();
+        // await getWalletStore().updateWalletsInfo();
       }
       this.initialized = true;
       runUnprotected(() => {

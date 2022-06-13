@@ -18,7 +18,7 @@ import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../.
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
-import { getEVMProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
+import { getDictionary, getEVMProvider, getMoralisRequest, getRequest, getWalletStore } from "../../App"
 import { NativeTransaction, TRANSACTION_STATUS } from "./transaction/NativeTransaction"
 import { changeCaseObj } from "../../utils/general"
 import { Token } from "./token/Token"
@@ -47,6 +47,7 @@ export class Wallet extends Model({
     address: prop<string>(""),
     name: prop<string>(""),
     balance: prop<string>(""),
+    hidden: p(t.boolean, false).withSetter(),
     mnemonic: prop<string>(""),
     path: prop<string>(""),
     hdPath: prop<string>(""),
@@ -76,7 +77,17 @@ export class Wallet extends Model({
 
     apiFinance: RequestStore
 
-    async init(force = false) {
+    @modelFlow
+    toggleHide = async () => {
+        this.hidden = !this.hidden
+        if (this.hidden) {
+            getDictionary().hiddenSymbols.add(getEVMProvider().currentNetwork.nativeSymbol)
+        } else {
+            getDictionary().hiddenSymbols.delete(getEVMProvider().currentNetwork.nativeSymbol)
+        }
+    }
+
+    async initWallet(force = false) {
         InteractionManager.runAfterInteractions(async () => {
             if (!this.initialized || force) {
                 this.apiFinance = new RequestStore({})
@@ -318,19 +329,23 @@ export class Wallet extends Model({
             }))
             if (result.ok) {
                 this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
-
                 erc20.data.forEach(t => {
-                    const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
-                        new Token({
-                            ...changeCaseObj(t),
-                            walletAddress: this.address,
-                            priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
-                            priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
-                            history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : []
-                        }) :
-                        new Token({ ...changeCaseObj(t), walletAddress: this.address })
-                    this.token.set(t.token_address, erc20Token)
-                    erc20Token.init()
+                    try {
+                        const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
+                            new Token({
+                                ...changeCaseObj(t),
+                                walletAddress: this.address,
+                                priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
+                                priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
+                                history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
+                                hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                            }) :
+                            new Token({ ...changeCaseObj(t), walletAddress: this.address, hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()) })
+                        this.token.set(t.token_address, erc20Token)
+                        erc20Token.init()
+                    } catch (e) {
+                        console.log("ERROR", e)
+                    }
                 })
             }
         } else {
