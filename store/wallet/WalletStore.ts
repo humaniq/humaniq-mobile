@@ -137,7 +137,7 @@ export class WalletStore extends Model({
                         publicKey: normalize(Buffer.from(w.publicKey.data).toString("hex")),
                         address: ethers.utils.computeAddress(normalize(Buffer.from(w.privateKey.data).toString("hex")))
                     })
-                    wallet.init()
+                    wallet.initWallet()
                     return wallet
                 }) || []
 
@@ -165,7 +165,7 @@ export class WalletStore extends Model({
 
     @modelFlow
     * updateWalletsInfo() {
-        this.allWallets.forEach(w => w.init(true))
+        this.allWallets.forEach(w => w.initWallet(true))
     }
 
     @modelAction

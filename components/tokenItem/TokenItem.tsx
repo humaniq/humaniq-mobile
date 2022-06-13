@@ -5,6 +5,7 @@ import React from "react";
 import Ripple from "react-native-material-ripple";
 import { NATIVE_COIN } from "../../config/network";
 import { Area, Chart, Line } from "react-native-responsive-linechart";
+import { CheckBtn } from "../checkBtn/CheckBtn";
 
 export interface TokenItemProps {
     symbol: string
@@ -18,68 +19,145 @@ export interface TokenItemProps {
     short?: boolean
     single?: boolean,
     graphData?: Array<any>
-    fiatOnTop: boolean,
-    showGraph: boolean
+    fiatOnTop?: boolean,
+    showGraph?: boolean,
+    showRadioBtn?: boolean
+    onPressRadioBtn?: any,
+    hidden?: boolean
 }
 
-export const TokenItem = (props: TokenItemProps) => {
-    return <Ripple testID={ `tokenItem` } onPress={ props.onPress } rippleColor={ Colors.primary }>
-        <View padding-10 paddingH-16 paddingL-0
-              key={ props.symbol }>
-            <View row centerV>
-                <View flex-2 center>
-                    {
-                        props.logo === NATIVE_COIN.ETHEREUM &&
-                        <Av size={ 44 } containerStyle={ { position: 'relative' } }
-                            imageStyle={ { width: 36, height: 36, position: 'absolute', left: 4, top: 3 } }
-                            source={ require(`../../assets/images/ethereum-logo.png`) }/>
-                    }
-                    {
-                        props.logo === NATIVE_COIN.BINANCECOIN &&
-                        <Av size={ 44 } source={ require(`../../assets/images/binancecoin-logo.png`) }/>
-                    }
-                    {
-                        (props.logo !== NATIVE_COIN.ETHEREUM && props.logo !== NATIVE_COIN.BINANCECOIN) &&
-                        <Avatar address={ props.tokenAddress } size={ 44 }
-                                source={ { uri: props.logo || getDictionary().ethToken.get(props.symbol)?.logoURI } }/>
-                    }
-                </View>
-                <View flex-4>
-                    <View>
-                        <Text numberOfLines={ 1 } robotoM black text16>{ props.name }</Text>
-                    </View>
-                    { !props.short && <View paddingT-4>
-                        { !!(props.graphData && props.graphData?.length && props.showGraph) ?
-                            <Chart data={ props.graphData } style={ { width: 100, height: 20 } }
-                                   padding={ { left: 10, bottom: 0, right: 0, top: 0 } }
-                            >
-                                <Area theme={ {
-                                    gradient: {
-                                        from: { color: Colors.primary, opacity: 0.2 },
-                                        to: { color: Colors.primary, opacity: 0.1 }
-                                    }
-                                } }/>
-                                <Line theme={ { stroke: { color: Colors.primary, width: 2 } } }/>
-                            </Chart>
-                            : <Text numberOfLines={ 1 } robotoR textGrey text14>{ props.symbol }</Text> }
-                    </View>
-                    }
-                </View>
-                <View flex-3 right>
-                    <Text numberOfLines={ 1 } text16 robotoM black>
-                        { props.fiatOnTop ? props.formatFiatBalance : props.formatBalance }
-                    </Text>
-                    { !props.short && <Text numberOfLines={ 1 } robotoR textGrey text14 marginT-5>
-                        { props.fiatOnTop ? props.formatBalance : props.formatFiatBalance }
-                    </Text>
-                    }
-                </View>
+function renderToken(
+    symbol: string,
+    tokenAddress: string,
+    logo: any,
+    name: string,
+    formatBalance: string,
+    formatFiatBalance: string,
+    index: number,
+    short: boolean,
+    single: boolean,
+    graphData: Array<any>,
+    fiatOnTop: boolean,
+    showGraph: boolean,
+    showRadioBtn: boolean,
+    onPressRadioBtn: any,
+    hidden: boolean
+) {
+    return <View padding-10 paddingH-16 paddingL-0
+                 key={ symbol }>
+        <View row centerV>
+            {
+                showRadioBtn && <View flex-1 right><CheckBtn checked={ !hidden } onPress={ onPressRadioBtn }/></View>
+            }
+            <View flex-2 center>
+                {
+                    logo === NATIVE_COIN.ETHEREUM &&
+                    <Av size={ 44 } containerStyle={ { position: 'relative' } }
+                        imageStyle={ { width: 36, height: 36, position: 'absolute', left: 4, top: 3 } }
+                        source={ require(`../../assets/images/ethereum-logo.png`) }/>
+                }
+                {
+                    logo === NATIVE_COIN.BINANCECOIN &&
+                    <Av size={ 44 } source={ require(`../../assets/images/binancecoin-logo.png`) }/>
+                }
+                {
+                    (logo !== NATIVE_COIN.ETHEREUM && logo !== NATIVE_COIN.BINANCECOIN) &&
+                    <Avatar address={ tokenAddress } size={ 44 }
+                            source={ { uri: logo || getDictionary().ethToken.get(symbol)?.logoURI } }/>
+                }
             </View>
-            { props.index !== 0 && !props.single && <View absR style={ {
-                borderWidth: 1,
-                borderColor: Colors.grey,
-                width: "85%",
-                borderBottomColor: "transparent"
-            } }/> }
-        </View></Ripple>
+            <View flex-4>
+                <View>
+                    <Text numberOfLines={ 1 } robotoM black text16>{ name }</Text>
+                </View>
+                { !short && <View paddingT-4>
+                    { !!(graphData && graphData?.length && showGraph) ?
+                        <Chart data={ graphData } style={ { width: 100, height: 20 } }
+                               padding={ { left: 10, bottom: 0, right: 0, top: 0 } }
+                        >
+                            <Area theme={ {
+                                gradient: {
+                                    from: { color: Colors.primary, opacity: 0.2 },
+                                    to: { color: Colors.primary, opacity: 0.1 }
+                                }
+                            } }/>
+                            <Line theme={ { stroke: { color: Colors.primary, width: 2 } } }/>
+                        </Chart>
+                        : <Text numberOfLines={ 1 } robotoR textGrey text14>{ symbol }</Text> }
+                </View>
+                }
+            </View>
+            <View flex-3 right>
+                <Text numberOfLines={ 1 } text16 robotoM black>
+                    { fiatOnTop ? formatFiatBalance : formatBalance }
+                </Text>
+                { !short && <Text numberOfLines={ 1 } robotoR textGrey text14 marginT-5>
+                    { fiatOnTop ? formatBalance : formatFiatBalance }
+                </Text>
+                }
+            </View>
+        </View>
+        { index !== 0 && !single && <View absR style={ {
+            borderWidth: 1,
+            borderColor: Colors.grey,
+            width: "85%",
+            borderBottomColor: "transparent"
+        } }/> }
+    </View>
+
+}
+
+export const TokenItem: React.FC<TokenItemProps> = (
+    {
+        onPress,
+        formatBalance,
+        formatFiatBalance,
+        symbol,
+        tokenAddress,
+        logo,
+        name,
+        index,
+        fiatOnTop = true,
+        single = false,
+        graphData,
+        short = false,
+        showGraph = false,
+        showRadioBtn = false,
+        onPressRadioBtn,
+        hidden = true
+    }) => {
+    if (onPressRadioBtn) return renderToken(symbol,
+        tokenAddress,
+        logo,
+        name,
+        formatBalance,
+        formatFiatBalance,
+        index,
+        short,
+        single,
+        graphData,
+        fiatOnTop,
+        showGraph,
+        showRadioBtn,
+        onPressRadioBtn,
+        hidden)
+    return <Ripple testID={ `tokenItem` } onPress={ onPress } rippleColor={ Colors.primary }>
+        { renderToken(
+            symbol,
+            tokenAddress,
+            logo,
+            name,
+            formatBalance,
+            formatFiatBalance,
+            index,
+            short,
+            single,
+            graphData,
+            fiatOnTop,
+            showGraph,
+            showRadioBtn,
+            onPressRadioBtn,
+            hidden
+        ) }
+    </Ripple>
 }

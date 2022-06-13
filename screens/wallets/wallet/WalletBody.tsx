@@ -1,7 +1,7 @@
 import { Card, LoaderScreen } from "react-native-ui-lib";
 import React from "react";
 import { observer } from "mobx-react-lite";
-import { getEVMProvider, getWalletStore } from "../../../App";
+import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { beautifyNumber } from "../../../utils/number";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
@@ -34,7 +34,7 @@ export const WalletBody = observer<any>(({ address }) => {
                         fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     {
-                        wallet.tokenList.length > 0 && wallet.tokenList.map((p, i) => {
+                        wallet.tokenList.length > 0 && wallet.tokenList.filter(t => !getDictionary().hiddenSymbols.has(t.symbol.toLowerCase())).map((p, i) => {
                             return <TokenItem
                                 showGraph={ getWalletStore().showGraphBool }
                                 key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }

@@ -145,7 +145,10 @@
     }
   },
   "visibilityScreen": {
-    "name": "Visibility"
+    "name": "Visibility",
+    "totalTokens": "Total tokens",
+    "visibleTokens": "Visible tokens",
+    "invisibleTokens": "Hidden tokens"
   },
   "selectTransactionFeeDialog": {
     "name": "Speed up transaction by adjusting miner fee",

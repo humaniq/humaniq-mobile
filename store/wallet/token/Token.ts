@@ -1,4 +1,4 @@
-import { getSnapshot, Model, model, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import { Model, model, modelAction, modelFlow, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
@@ -23,8 +23,15 @@ export class Token extends Model({
     priceUSD: p(t.string, ""),
     priceEther: p(t.string, ""),
     transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
-    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => [])
+    history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
+    hidden: p(t.boolean, false).withSetter()
 }) {
+
+    @modelAction
+    toggleHide = () => {
+        this.hidden = !this.hidden
+        getDictionary().toggleHideSymbol(this.symbol.toLowerCase(), this.hidden)
+    }
 
     @computed
     get graph() {

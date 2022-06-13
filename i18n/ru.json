@@ -146,7 +146,10 @@
     }
   },
   "visibilityScreen": {
-    "name": "Видимость"
+    "name": "Видимость",
+    "totalTokens": "Всего токенов",
+    "visibleTokens": "Видимые токены",
+    "invisibleTokens": "Скрытые токены"
   },
   "selectTransactionFeeDialog": {
     "name": "Выбор скорости транзакции",
