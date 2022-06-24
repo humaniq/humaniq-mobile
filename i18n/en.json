@@ -141,7 +141,17 @@
       "termsOfServiceName": "Terms of service",
       "termsOfServiceDescription": "",
       "disableBio": "Biometrics access",
-      "walletConnect": "Wallet connect"
+      "walletConnect": {
+        "title": "Wallet connect",
+        "info": "WalletConnect feature allows to use this Humaniq wallet with an app on another device. To connect:\n",
+        "hint": "1. Visit application or website that supports WalletConnect (for example: Uniswap);\n2. Click on \"Connect wallet\" button and choose \"WalletConnect\";\n3. Scan QR code with Humaniq wallet\n",
+      },
+      "displayOptions": "Display options",
+      "balanceDisplay": "Balance Display",
+      "fiatCurrency": "Fiat Currency",
+      "infoDisplay": "Info Display",
+      "charts": "Charts",
+      "tokenPrice": "Token price"
     }
   },
   "visibilityScreen": {
@@ -270,7 +280,8 @@
     },
     "scanning": "Point the camera of your phone to the QR code ",
     "chooseFromGallery": "Choose from gallery",
-    "qrCodeDetectionError": "Failed to detect QR code in image"
+    "qrCodeDetectionError": "Failed to detect QR code in image",
+    "scanQrCode": "Scan QR code"
   },
   "humaniqID": {
     "presentation": {

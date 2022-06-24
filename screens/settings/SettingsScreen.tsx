@@ -77,9 +77,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                             </Card>
                             <Card marginT-16 marginH-16>
                                 <MenuItem icon={ "double-arrows" }
-                                          name={ t("settingsScreen.menu.currency") }
-                                          value={ <Text text16
-                                                        textGrey> { toUpperCase(getWalletStore().currentFiatCurrency) } </Text> }
+                                          name={ t("settingsScreen.menu.displayOptions") }
                                           onPress={ () => nav.navigate("selectCurrency") }
                                 />
                                 <View
@@ -93,7 +91,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <View
                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "wallet-connect" }
-                                          name={ t("settingsScreen.menu.walletConnect") }
+                                          name={ t("settingsScreen.menu.walletConnect.title") }
                                           onPress={ () => nav.navigate("walletConnectSessions") }
                                 />
                                 <View

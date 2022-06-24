@@ -142,7 +142,17 @@
       "termsOfServiceName": "Условия использования",
       "termsOfServiceDescription": "",
       "disableBio": "Вход по биометрии",
-      "walletConnect": "Wallet connect"
+      "walletConnect": {
+        "title": "Wallet connect",
+        "info": "Функция WalletConnect позволяет использовать этот кошелек Humaniq с приложением на другом устройстве. Для подключения:\n",
+        "hint": "1. Посетите приложение или веб-сайт, поддерживающий WalletConnect (например, Uniswap);\n2. Нажмите кнопку «Подключить кошелек» и выберите \"WalletConnect\";\n3. Отсканируйте QR-код с помощью кошелька Humaniq\n"
+      },
+      "displayOptions": "Параметры отображения",
+      "balanceDisplay": "Отображение баланса",
+      "fiatCurrency": "Фиатная валюта",
+      "infoDisplay": "Информационный дисплей",
+      "charts": "Графики",
+      "tokenPrice": "Цена токена"
     }
   },
   "visibilityScreen": {
