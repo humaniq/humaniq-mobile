@@ -281,7 +281,8 @@
     },
     "scanning": "Направьте вашу камеру на QR код",
     "chooseFromGallery": "Выбрать из галереи",
-    "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении"
+    "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении",
+    "scanQrCode": "Сканировать QR-код"
   },
   "humaniqID": {
     "presentation": {
