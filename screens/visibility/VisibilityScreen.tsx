@@ -60,9 +60,10 @@ const Visibility = observer(function () {
                                 <Text marginL-4 text12>{ t("visibilityScreen.invisibleTokens") }</Text>
                             </View>
                         </View>
-                        <View paddingT-10 paddingB-16>
+                        <View marginT-8 paddingT-10 paddingB-16>
                             <Card>
                                 { view.tokensList.map((t, i) => <TokenItem showRadioBtn={ true } hidden={ t.hidden }
+                                                                           uncheckedRadioColor={ Colors.textGrey }
                                                                            key={ t.symbol }
                                                                            onPressRadioBtn={ (v) => {
                                                                                console.log(v)

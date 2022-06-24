@@ -19,37 +19,52 @@ export const SelectWalletTokenDialog = observer(() => {
         height={ 350 }
         visible={ view.display }
         containerStyle={ {
-            backgroundColor: Colors.white,
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
-            paddingBottom: 16
+            backgroundColor: Colors.transparent,
+            paddingTop: 16,
         } }
         onDismiss={ () => runInAction(() => {
             view.display = false
         }) }
         bottom
     >
-
-        <DialogHeader onPressIn={ () => {
-            view.display = false
-        } }/>
-        <View padding-16>
-            <Text textM>{ t("selectWalletTokenDialog.title") }</Text>
+        <View flex style={{
+            backgroundColor: Colors.bg,
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            paddingBottom: 16,
+        }}>
+            <DialogHeader buttonStyle={{
+                marginTop: -18,
+                padding: 2,
+                paddingHorizontal: 22,
+                backgroundColor: Colors.white
+            }} onPressIn={ () => {
+                view.display = false
+            } }/>
+            <View padding-16>
+                <Text textM>{ t("selectWalletTokenDialog.title") }</Text>
+            </View>
+            <FlatList
+                contentContainerStyle={{
+                    backgroundColor: Colors.white,
+                    borderRadius: 12,
+                    marginLeft: 16,
+                    marginRight: 16,
+                }}
+                data={ view.options }
+                keyExtractor={ (item, index) => `token_${ item.symbol }_${ index }` }
+                renderItem={ ({ item, index }) => {
+                    return <TokenItem key={ index } symbol={ item.symbol } tokenAddress={ item.tokenAddress }
+                                      logo={ item.logo }
+                                      name={ item.name }
+                                      formatBalance={ item.formatBalance } formatFiatBalance={ item.formatFiatBalance }
+                                      index={ index }
+                                      onPress={ item.onPress }
+                                      fiatOnTop={ getWalletStore().fiatOnTop }
+                    />
+                }
+                }
+            />
         </View>
-        <FlatList
-            data={ view.options }
-            keyExtractor={ (item) => item.symbol }
-            renderItem={ ({ item, index }) => {
-                return <TokenItem key={ index } symbol={ item.symbol } tokenAddress={ item.tokenAddress }
-                                  logo={ item.logo }
-                                  name={ item.name }
-                                  formatBalance={ item.formatBalance } formatFiatBalance={ item.formatFiatBalance }
-                                  index={ index }
-                                  onPress={ item.onPress }
-                                  fiatOnTop={ getWalletStore().fiatOnTop }
-                />
-            }
-            }
-        />
     </Dialog>
 })
