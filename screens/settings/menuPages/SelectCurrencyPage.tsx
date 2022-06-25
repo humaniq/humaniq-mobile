@@ -11,6 +11,8 @@ import { ItemSelector } from "../../../components/itemSelector/ItemSelector";
 import { t } from "../../../i18n";
 import { CURRENCIES_ARR } from "../../../config/common";
 import { ON_TOP_ITEM, SHOW_GRAPHS } from "../../../store/wallet/WalletStore";
+import { Header } from "../../../components/header/Header";
+import { toUpperCase } from "../../../utils/general";
 
 
 export class SelectCurrencyPageViewModel {
@@ -36,8 +38,8 @@ export class SelectCurrencyPageViewModel {
     get showGraphItems() {
         return [ {
             items: [
-                { name: t('settingsScreen.menu.showGraph'), value: SHOW_GRAPHS.GRAPH },
-                { name: t('settingsScreen.menu.showToken'), value: SHOW_GRAPHS.TOKEN }
+                { name: t('settingsScreen.menu.charts'), value: SHOW_GRAPHS.GRAPH },
+                { name: t('settingsScreen.menu.tokenPrice'), value: SHOW_GRAPHS.TOKEN }
             ]
         } ]
     }
@@ -49,15 +51,19 @@ export const SelectCurrency = observer(() => {
     const nav = useNavigation()
     return <Screen style={ { minHeight: "100%" } } preset={ "scroll" } backgroundColor={ Colors.bg }
                    statusBarBg={ Colors.bg }>
-        <ItemSelector headerTittle={ t("settingsScreen.menu.currency") }
+        <Header backEnabled={ true } title={ t("settingsScreen.menu.displayOptions") }/>
+        <ItemSelector headerTittle={ t("settingsScreen.menu.fiatCurrency") }
                       selected={ getWalletStore().currentFiatCurrency } items={ view.currencies }
                       onPressItem={ async (n) => {
                           // @ts-ignore
                           getWalletStore().setCurrentFiatCurrency(n.name)
                           storage.save("currentFiatCurrency", n.name)
                           nav.goBack()
-                      } }/>
-        <ItemSelector headerTittle={ t("settingsScreen.menu.currencyPreference") }
+                      } }
+                      labelTransform={(item) => toUpperCase(item.name)}
+                      backEnabled={ false }
+        />
+        <ItemSelector headerTittle={ t("settingsScreen.menu.balanceDisplay") }
                       selected={ getWalletStore().onTopCurrency } items={ view.fiatOnTopItems }
                       onPressItem={ async (n) => {
                           // @ts-ignore
@@ -67,7 +73,7 @@ export const SelectCurrency = observer(() => {
                       } }
                       backEnabled={ false }
         />
-        <ItemSelector headerTittle={ t("settingsScreen.menu.graphPreferences") }
+        <ItemSelector headerTittle={ t("settingsScreen.menu.infoDisplay") }
                       selected={ getWalletStore().showGraphs } items={ view.showGraphItems }
                       onPressItem={ async (n) => {
                           // @ts-ignore

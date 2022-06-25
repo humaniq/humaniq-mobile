@@ -20,7 +20,6 @@ export class WalletConnect extends Model({
 
     @modelFlow
     * init(options: any) {
-
         if (options.redirect) {
             this.redirectUrl = options.redirect
         }
@@ -54,6 +53,7 @@ export class WalletConnect extends Model({
                         chainId: getEVMProvider().currentNetwork.chainID,
                         accounts: [ getWalletStore().selectedWallet?.address ],
                     });
+                    getWalletConnectStore().addSessionToList(this)
                     getWalletConnectStore().persistSessions()
                 }
             } catch (e) {

@@ -22,6 +22,7 @@ export interface TokenItemProps {
     fiatOnTop?: boolean,
     showGraph?: boolean,
     showRadioBtn?: boolean
+    uncheckedRadioColor?: string
     onPressRadioBtn?: any,
     hidden?: boolean
 }
@@ -40,6 +41,7 @@ function renderToken(
     fiatOnTop: boolean,
     showGraph: boolean,
     showRadioBtn: boolean,
+    uncheckedRadioColor: string,
     onPressRadioBtn: any,
     hidden: boolean
 ) {
@@ -47,7 +49,7 @@ function renderToken(
                  key={ symbol }>
         <View row centerV>
             {
-                showRadioBtn && <View flex-1 right><CheckBtn checked={ !hidden } onPress={ onPressRadioBtn }/></View>
+                showRadioBtn && <View flex-1 right><CheckBtn uncheckedColor={uncheckedRadioColor} checked={ !hidden } onPress={ onPressRadioBtn }/></View>
             }
             <View flex-2 center>
                 {
@@ -123,6 +125,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
         short = false,
         showGraph = false,
         showRadioBtn = false,
+        uncheckedRadioColor,
         onPressRadioBtn,
         hidden = true
     }) => {
@@ -139,6 +142,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
         fiatOnTop,
         showGraph,
         showRadioBtn,
+        uncheckedRadioColor,
         onPressRadioBtn,
         hidden)
     return <Ripple testID={ `tokenItem` } onPress={ onPress } rippleColor={ Colors.primary }>
@@ -156,6 +160,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
             fiatOnTop,
             showGraph,
             showRadioBtn,
+            uncheckedRadioColor,
             onPressRadioBtn,
             hidden
         ) }
