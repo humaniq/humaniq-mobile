@@ -60,7 +60,11 @@ export class WalletConnectStore extends Model({
         }
         const wc = new WalletConnect({})
         yield wc.init(data)
-        this.sessions.push(wc);
+    }
+
+    @modelFlow
+    * addSessionToList(walletConnect: WalletConnect) {
+        this.sessions.push(walletConnect);
     }
 
     @modelFlow

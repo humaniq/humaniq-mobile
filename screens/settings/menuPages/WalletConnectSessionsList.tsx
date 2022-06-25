@@ -11,12 +11,12 @@ import { useNavigation } from "@react-navigation/native";
 const renderItem = ({ item, index }) => {
     return <View row paddingH-10 key={ index }>
         <View flex-2>
-            <Avatar size={ 44 } source={ { uri: item.walletConnector.session.peerMeta.icons[0] } }/>
+            <Avatar size={ 44 } source={ { uri: item.walletConnector.session.peerMeta?.icons[0] } }/>
         </View>
         <View flex-7 centerV>
-            <Text text16 robotoM>{ item.walletConnector.session.peerMeta.name }</Text>
-            { !!item.walletConnector.session.peerMeta.description &&
-                <Text text14 textGrey>{ item.walletConnector.session.peerMeta.description }</Text> }
+            <Text text16 robotoM>{ item.walletConnector.session.peerMeta?.name }</Text>
+            { !!item.walletConnector.session.peerMeta?.description &&
+                <Text text14 textGrey>{ item.walletConnector.session.peerMeta?.description }</Text> }
         </View>
         <View flex-3 center>
             <Button onPress={ () => getWalletConnectStore().killSession(item.walletConnector.session.peerId) } text14
@@ -24,7 +24,6 @@ const renderItem = ({ item, index }) => {
         </View>
     </View>
 }
-
 
 export const WalletConnectSessionsList = observer(() => {
     const nav = useNavigation()
@@ -58,7 +57,6 @@ export const WalletConnectSessionsList = observer(() => {
                                         // @ts-ignore
                                         onScanSuccess: meta => {
                                             if (meta.action === "wallet-connect") {
-                                                console.log({ meta })
                                                 getWalletConnectStore().newSession(meta.walletConnectURI)
                                             }
                                         }
