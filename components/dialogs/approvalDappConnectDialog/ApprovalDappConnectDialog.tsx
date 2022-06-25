@@ -39,7 +39,7 @@ export const ApprovalDappConnectDialog = observer(() => {
           <View padding-20>
               <View row>
                   <Text
-                        text16 robotoM> { `${ t("approvalDappConnectDialog.wontToConnect") }${ view.hostName }` } </Text>
+                        text16 robotoM>{ `${ t("approvalDappConnectDialog.wontToConnect") }${ view.hostName }` }</Text>
               </View>
               <View row paddingV-20>
                   <Text grey30 text80>{ t('approvalDappConnectDialog.attention') }</Text>
