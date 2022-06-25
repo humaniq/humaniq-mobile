@@ -14,12 +14,27 @@ export const ApprovalDappConnectDialog = observer(() => {
   return <Dialog
       ignoreBackgroundPress
       width={ "100%" }
-      containerStyle={ { backgroundColor: Colors.grey80, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
+      containerStyle={ {
+        backgroundColor: Colors.transparent,
+        paddingTop: 16,
+      } }
       visible={ view.display }
       bottom
   >
-    <View bg-bg testID={'approvalDappConnectDialog'} >
-      <DialogHeader onPressIn={ () => { view.display = false } }/>
+    <View
+        style={{
+          backgroundColor: Colors.bg,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}
+        testID={'approvalDappConnectDialog'} >
+      <DialogHeader onPressIn={ () => { view.display = false } }
+                    buttonStyle={{
+                      marginTop: -18,
+                      padding: 2,
+                      paddingHorizontal: 22,
+                      backgroundColor: Colors.white }}
+      />
       { !view.pending &&
           <View padding-20>
               <View row>

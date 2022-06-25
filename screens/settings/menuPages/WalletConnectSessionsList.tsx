@@ -43,7 +43,7 @@ export const WalletConnectSessionsList = observer(() => {
                 !getWalletConnectStore().sessions.length && <View centerH paddingV-20 flex>
                     <SearchPicture width={ 200 } height={ 200 }/>
                     <View flex>
-                        <Text text16 robotoR style={ {
+                        <Text marginT-20 text16 robotoR style={ {
                             lineHeight: 22
                         } }>
                             { t("settingsScreen.menu.walletConnect.info") }
