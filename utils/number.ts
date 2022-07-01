@@ -69,6 +69,9 @@ export function beautifyNumber(n, symbol?: string) {
 
     const imgSymbol = getCurrencySymbol(symbol)
 
+    // in case if amount is lower than 10 000, do not show suffix 'K'
+    if (floor(log(abs(n)) / log(10000)) === 0) return symbol ? currencyFormat(n, imgSymbol || symbol) : n
+
     return symbol
         ? suffix
             ? currencyFormat(rounded, imgSymbol || symbol) + suffix
