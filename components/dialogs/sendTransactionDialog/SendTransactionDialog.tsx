@@ -21,9 +21,8 @@ export const SendTransactionDialog = observer(() => {
         ignoreBackgroundPress={ !view.txHash }
         width={ "100%" }
         containerStyle={ {
-            backgroundColor: Colors.bg,
-            borderTopLeftRadius: 30,
-            borderTopRightRadius: 30,
+            backgroundColor: Colors.transparent,
+            paddingTop: 16,
         } }
         visible={ view.display }
         bottom
@@ -34,8 +33,18 @@ export const SendTransactionDialog = observer(() => {
             }
         } }
     >
-        <ScrollView>
-            <DialogHeader onPressIn={ () => view.display = false }/>
+        <ScrollView
+            contentContainerStyle={{
+                backgroundColor: Colors.bg,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+        }}>
+            <DialogHeader onPressIn={ () => view.display = false }
+                          buttonStyle={{
+                              marginTop: 2,
+                              padding: 2,
+                              paddingHorizontal: 22 }}
+            />
             { view.initialized && !!view.txHash &&
                 <View center padding-20>
                     <View row>
@@ -73,7 +82,7 @@ export const SendTransactionDialog = observer(() => {
                                 </View>
                                 <View right>
                                     <Text robotoM text16>{ view.txHumanReadable.feeFiat }</Text>
-                                    <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ "ETH" }` }</Text>
+                                    <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ view.token.symbol }` }</Text>
                                 </View>
                             </View>
                             <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
@@ -84,7 +93,7 @@ export const SendTransactionDialog = observer(() => {
                                 <View right>
                                     <Text robotoM text16>{ view.txHumanReadable.totalFiat }</Text>
                                     <Text marginT-5 numberOfLines={ 1 }
-                                          textGrey>{ `${ view.txHumanReadable.total }` }</Text>
+                                          textGrey>{ `${ view.txHumanReadable.total } ${ view.token.symbol }` }</Text>
                                 </View>
                             </View>
                         </Card>

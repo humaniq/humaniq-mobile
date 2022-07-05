@@ -75,15 +75,15 @@ function renderToken(
                 { !short && <View paddingT-4>
                     { !!(graphData && graphData?.length && showGraph) ?
                         <Chart data={ graphData } style={ { width: 100, height: 20 } }
-                               padding={ { left: 10, bottom: 0, right: 0, top: 0 } }
+                               padding={ { left: 0, bottom: 2, right: 0, top: 2 } }
                         >
                             <Area theme={ {
                                 gradient: {
-                                    from: { color: Colors.primary, opacity: 0.2 },
+                                    from: { color: Colors.primary, opacity: 0.1 },
                                     to: { color: Colors.primary, opacity: 0.1 }
                                 }
                             } }/>
-                            <Line theme={ { stroke: { color: Colors.primary, width: 2 } } }/>
+                            <Line theme={ { stroke: { color: Colors.primary, width: 1 } } }/>
                         </Chart>
                         : <Text numberOfLines={ 1 } robotoR textGrey text14>{ symbol }</Text> }
                 </View>
