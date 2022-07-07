@@ -43,7 +43,6 @@ export class SelectCurrencyPageViewModel {
             ]
         } ]
     }
-
 }
 
 export const SelectCurrency = observer(() => {
@@ -62,6 +61,8 @@ export const SelectCurrency = observer(() => {
                       } }
                       labelTransform={(item) => toUpperCase(item.name)}
                       backEnabled={ false }
+                      backPressEnabled={ false }
+                      headerLabelSize={ 17 }
         />
         <ItemSelector headerTittle={ t("settingsScreen.menu.balanceDisplay") }
                       selected={ getWalletStore().onTopCurrency } items={ view.fiatOnTopItems }
@@ -72,6 +73,8 @@ export const SelectCurrency = observer(() => {
                           nav.goBack()
                       } }
                       backEnabled={ false }
+                      backPressEnabled={ false }
+                      headerLabelSize={ 17 }
         />
         <ItemSelector headerTittle={ t("settingsScreen.menu.infoDisplay") }
                       selected={ getWalletStore().showGraphs } items={ view.showGraphItems }
@@ -82,6 +85,8 @@ export const SelectCurrency = observer(() => {
                           nav.goBack()
                       } }
                       backEnabled={ false }
+                      backPressEnabled={ false }
+                      headerLabelSize={ 17 }
         />
     </Screen>
 })
