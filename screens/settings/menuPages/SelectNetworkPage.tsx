@@ -4,10 +4,8 @@ import { provider, useInstance } from "react-ioc";
 import { Colors } from "react-native-ui-lib";
 import { Screen } from "../../../components"
 import React from "react";
-import { EVM_NETWORKS, NATIVE_COIN, NETWORK_TYPE } from "../../../config/network";
+import { EVM_NETWORKS, EVM_NETWORKS_NAMES, NATIVE_COIN, NETWORK_TYPE } from "../../../config/network";
 import { getEVMProvider } from "../../../App";
-import * as storage from "../../../utils/localStorage"
-import { runUnprotected } from "mobx-keystone";
 import { useNavigation } from "@react-navigation/native";
 import { ItemSelector } from "../../../components/itemSelector/ItemSelector";
 import { t } from "../../../i18n";
@@ -44,10 +42,7 @@ export const SelectNetwork = observer(() => {
                       selected={ getEVMProvider().currentNetworkName } items={ view.networks }
                       headerTittle={ t("settingsScreen.menu.network") }
                       onPressItem={ async (n) => {
-                          runUnprotected(() => {
-                              getEVMProvider().currentNetworkName = n.name
-                          })
-                          storage.save("currentNetworkName", n.name)
+                          getEVMProvider().setCurrentNetwork(n.name as EVM_NETWORKS_NAMES)
                           nav.goBack()
                       } }/>
     </Screen>
