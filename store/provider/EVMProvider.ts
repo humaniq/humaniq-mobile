@@ -1,5 +1,5 @@
-import { _await, getSnapshot, Model, model, modelFlow, tProp as p, types as t } from "mobx-keystone"
-import { EVM_NETWORKS_NAMES, EVM_NETWORKS } from "../../config/network"
+import { _await, Model, model, modelAction, modelFlow, tProp as p, types as t } from "mobx-keystone"
+import { EVM_NETWORKS, EVM_NETWORKS_NAMES } from "../../config/network"
 import { computed, reaction } from "mobx"
 import * as storage from "../../utils/localStorage"
 import { ethers } from "ethers"
@@ -13,7 +13,8 @@ import { getEVMProvider } from "../../App";
 export class EVMProvider extends Model({
     initialized: p(t.string, ""),
     pending: p(t.boolean, false),
-    currentNetworkName: p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.BSC).withSetter(),
+    currentNetworkName: p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.BSC),
+    lastCurrentNetworkName:  p(t.enum(EVM_NETWORKS_NAMES), EVM_NETWORKS_NAMES.BSC),
     gasStation: p(t.model<GasStation>(GasStation), () => {
         const gs = new GasStation({});
         gs.init();
@@ -33,13 +34,30 @@ export class EVMProvider extends Model({
         return this.networks[this.currentNetworkName]
     }
 
+    @computed
+    get firstNetworkName() {
+        return this.lastCurrentNetworkName === EVM_NETWORKS_NAMES.BSC ? EVM_NETWORKS_NAMES.BSC.toUpperCase() : this.lastCurrentNetworkName
+    }
+
+    @modelAction
+    setCurrentNetwork = (net: EVM_NETWORKS_NAMES) => {
+        if(net !== EVM_NETWORKS_NAMES.MAINNET) {
+            this.lastCurrentNetworkName = net
+            storage.save("lastNetworkName", net)
+        }
+        this.currentNetworkName = net
+        storage.save("currentNetworkName", net)
+    }
+
     @modelFlow
     * init() {
         try {
             console.log("init-provider")
             this.pending = true
             const network = yield* _await(storage.load("currentNetworkName"))
+            const lastNetwork = yield* _await(storage.load("lastNetworkName"))
             this.currentNetworkName = network || this.currentNetworkName
+            this.lastCurrentNetworkName = lastNetwork || EVM_NETWORKS_NAMES.BSC
             switch (this.currentNetworkName) {
                 case EVM_NETWORKS_NAMES.BSC:
                     this.jsonRPCProvider = new ethers.providers.JsonRpcProvider({ url: "https://bsc-dataseed.binance.org" })
