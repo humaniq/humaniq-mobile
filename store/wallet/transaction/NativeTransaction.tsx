@@ -380,21 +380,21 @@ export class NativeTransaction extends Model({
             case this.receiptStatus === TRANSACTION_STATUS.CANCELLING:
                 return <CircularProgress indeterminate strokeWidth={ 1 } radius={ 18 }>
                     <Avatar backgroundColor={ Colors.rgba(Colors.warning, 0.07) } size={ 36 }>
-                        <HIcon name={ "clock-arrows" } size={ 20 } color={ Colors.warning }/></Avatar>
+                        <HIcon name={ "clock-arrows" } size={ 16 } color={ Colors.warning }/></Avatar>
                 </CircularProgress>
             case this.action === 5:
             case this.receiptStatus === TRANSACTION_STATUS.ERROR:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.error, 0.07) } size={ 36 }>
-                    <HIcon name={ "warning" } size={ 20 } color={ Colors.error }/></Avatar>
+                    <HIcon name={ "warning" } size={ 16 } color={ Colors.error }/></Avatar>
             case this.action === 1:
                 return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
-                    <HIcon name={ "arrow-to-top" } size={ 20 } color={ Colors.textGrey }/></Avatar>
+                    <HIcon name={ "arrow-to-top" } size={ 16 } color={ Colors.textGrey }/></Avatar>
             case this.action === 2:
                 return <Avatar backgroundColor={ Colors.rgba(Colors.success, 0.07) } size={ 36 }>
-                    <HIcon name={ "arrow-to-bottom" } size={ 20 } color={ Colors.success }/></Avatar>
+                    <HIcon name={ "arrow-to-bottom" } size={ 16 } color={ Colors.success }/></Avatar>
             default:
                 return <Avatar backgroundColor={ Colors.greyLight } size={ 36 }>
-                    <HIcon name={ "document" } size={ 20 } color={ Colors.textGrey }/></Avatar>
+                    <HIcon name={ "document" } size={ 16 } color={ Colors.textGrey }/></Avatar>
         }
     }
 

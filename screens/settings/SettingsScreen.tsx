@@ -8,12 +8,12 @@ import { t } from "../../i18n"
 import { Header } from "../../components/header/Header"
 import { HIcon } from "../../components/icon";
 import { MenuItem } from "../../components/menuItem/MenuItem";
-import { getAppStore, getEVMProvider, getProfileStore, getWalletStore } from "../../App";
+import { getAppStore, getEVMProvider, getProfileStore } from "../../App";
 import { useNavigation } from "@react-navigation/native";
 import { runUnprotected } from "mobx-keystone";
 import { localStorage } from "../../utils/localStorage";
 import { LOCKER_MODE } from "../../store/app/AppStore";
-import { capitalize, toUpperCase } from "../../utils/general";
+import { capitalize } from "../../utils/general";
 import { HumqniqIDCard } from "../../components/humaniqid/HumqniqIDCard";
 import { MenuSwitch } from "../../components/menuSwitch/MenuSwitch";
 
@@ -26,7 +26,6 @@ const Settings = observer<{ route: any }>(function ({ route }) {
             view.init()
         })
     }, [])
-
 
     return (
         <>
@@ -77,9 +76,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                             </Card>
                             <Card marginT-16 marginH-16>
                                 <MenuItem icon={ "double-arrows" }
-                                          name={ t("settingsScreen.menu.currency") }
-                                          value={ <Text text16
-                                                        textGrey> { toUpperCase(getWalletStore().currentFiatCurrency) } </Text> }
+                                          name={ t("settingsScreen.menu.displayOptions") }
                                           onPress={ () => nav.navigate("selectCurrency") }
                                 />
                                 <View
@@ -93,7 +90,7 @@ const Settings = observer<{ route: any }>(function ({ route }) {
                                 <View
                                     style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 50 } }/>
                                 <MenuItem icon={ "wallet-connect" }
-                                          name={ t("settingsScreen.menu.walletConnect") }
+                                          name={ t("settingsScreen.menu.walletConnect.title") }
                                           onPress={ () => nav.navigate("walletConnectSessions") }
                                 />
                                 <View

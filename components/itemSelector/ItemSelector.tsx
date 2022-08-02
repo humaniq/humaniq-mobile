@@ -22,6 +22,8 @@ export interface ISelectNetworkProps<ItemType> {
     headerTittle: string,
     labelTransform?: (i: ItemType) => string
     backEnabled?: boolean
+    backPressEnabled?: boolean
+    headerLabelSize?: number
 }
 
 export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
@@ -32,11 +34,13 @@ export const ItemSelector: React.FC<ISelectNetworkProps<ItemType>> = ({
                                                                           selected,
                                                                           headerTittle,
                                                                           labelTransform = (i: ItemType) => i.name,
-                                                                          backEnabled = true
+                                                                          backEnabled = true,
+                                                                          backPressEnabled = true,
+                                                                          headerLabelSize
                                                                       }) => {
     return <View bg-bg>
-        <Header title={ headerTittle } onBackPress={ onBackPress } icon={ backIcon } backEnabled={ backEnabled }/>
-        <View flex paddingV-20>
+        <Header backPressEnabled={ backPressEnabled } labelSize={ headerLabelSize } title={ headerTittle } onBackPress={ onBackPress } icon={ backIcon } backEnabled={ backEnabled }/>
+        <View flex paddingT-20 paddingB-8>
             { items.map((i, index) => {
                 return <View key={ index }>
                     {

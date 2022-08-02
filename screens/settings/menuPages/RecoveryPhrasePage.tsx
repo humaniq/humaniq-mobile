@@ -94,14 +94,23 @@ export const RecoveryPhrase = observer(() => {
                                                                      fontSize: 14,
                                                                      lineHeight: 22,
                                                                      fontFamily: "Roboto-Medium",
-                                                                     color: Colors.primary
+                                                                     color: Colors.blueOcean
                                                                  } }
                                                                  containerStyle={ {
                                                                      borderColor: Colors.transparent,
-                                                                     backgroundColor: Colors.rgba(Colors.primary, 0.1)
+                                                                     backgroundColor: Colors.greyLight,
+                                                                     borderRadius: 14,
                                                                  } }
+                                                                 leftElement={
+                                                                    <Text marginL-10 style={{
+                                                                        fontSize: 14,
+                                                                        lineHeight: 22,
+                                                                        fontFamily: "Roboto-Medium",
+                                                                        color: Colors.textGrey
+                                                                    }}>{ id + 1 }</Text>
+                                                                 }
                                                                  key={ `${ i }` }
-                                                                 label={ ` ${ id + 1 } ${ i }` }/>
+                                                                 label={ ` ${ i }` }/>
                         )
                     }
                 </View>

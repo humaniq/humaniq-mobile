@@ -14,20 +14,35 @@ export const ApprovalWalletConnectDialog = observer(() => {
   return <Dialog
       ignoreBackgroundPress
       width={ "100%" }
-      containerStyle={ { backgroundColor: Colors.grey80, borderTopLeftRadius: 30, borderTopRightRadius: 30 } }
+      containerStyle={ {
+        backgroundColor: Colors.transparent,
+        paddingTop: 16,
+      } }
       visible={ view.display }
       bottom
   >
-    <View bg-bg testID={'approvalDappConnectDialog'} >
-      <DialogHeader onPressIn={ () => { view.display = false } }/>
+    <View
+        style={{
+          backgroundColor: Colors.bg,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+        }}
+        testID={'approvalDappConnectDialog'} >
+      <DialogHeader onPressIn={ () => { view.display = false } }
+                    buttonStyle={{
+                      marginTop: -18,
+                      padding: 2,
+                      paddingHorizontal: 22,
+                      backgroundColor: Colors.white }}
+      />
       { !view.pending &&
           <View padding-20>
               <View row>
                   <Text
-                        text16 robotoM> { `${ t("approvalDappConnectDialog.wontToConnect") }${ "" }` } </Text>
+                        text16 robotoM>{ `${ t("approvalDappConnectDialog.wontToConnect") }${ "" }` }</Text>
               </View>
               <View row paddingV-20>
-                  <Text grey30 text80>{ t('approvalDappConnectDialog.attention') }</Text>
+                  <Text color={ Colors.blueOcean } text80>{ t('approvalDappConnectDialog.attention') }</Text>
               </View>
               <View row>
                   <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>

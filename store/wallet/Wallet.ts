@@ -307,8 +307,8 @@ export class Wallet extends Model({
     @computed
     get graph() {
         const arr = this.history.map((p, i) => ({ y: p.price, x: i }))
-        if ((arr.length <= 1) || (arr.length > 1 && arr[arr.length - 1] === arr[arr.length - 2])) {
-            arr.lenght && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
+        if (arr.length === 1 || (arr.length > 1 && arr[arr.length - 1].y === arr[arr.length - 2].y)) {
+            arr.length && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
         }
         return arr
     }
