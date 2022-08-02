@@ -111,11 +111,6 @@ export class WalletStore extends Model({
                 })
             }
         })
-        reaction(() => getAppStore().isLocked, (value) => {
-            if (value) {
-                this.storedWallets = null
-            }
-        })
     }
 
     @modelFlow
