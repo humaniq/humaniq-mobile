@@ -1,11 +1,9 @@
-import { Model, model, modelAction, modelFlow, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
+import { Model, model, modelAction, objectMap, runUnprotected, tProp as p, types as t } from "mobx-keystone"
 import { formatUnits } from "ethers/lib/utils"
 import { beautifyNumber, preciseRound } from "../../../utils/number"
 import { action, computed } from "mobx"
 import { getDictionary, getWalletStore } from "../../../App";
 import { TokenTransaction } from "../transaction/TokenTransaction";
-import { ethers } from "ethers";
-import { CURRENCIES } from "../../../config/common";
 
 
 @model("Token")
@@ -24,7 +22,15 @@ export class Token extends Model({
     priceEther: p(t.string, ""),
     transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
     history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
-    hidden: p(t.boolean, false).withSetter()
+    hidden: p(t.boolean, false).withSetter(),
+    prices: p(t.maybeNull(t.object(() => ({
+        eur: t.number,
+        usd: t.number,
+        rub: t.number,
+        cny: t.number,
+        jpy: t.number,
+        eth: t.number
+    }))))
 }) {
 
     @modelAction
@@ -40,18 +46,6 @@ export class Token extends Model({
             arr.length && arr.push({ y: arr[arr.length - 1].y + 0.0001, x: arr[arr.length - 1].x + 1 })
         }
         return arr
-    }
-
-    @computed
-    get prices() {
-        return this.priceEther ? {
-            eur: getWalletStore().allWallets[0].prices[CURRENCIES.EUR] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
-            usd: getWalletStore().allWallets[0].prices[CURRENCIES.USD] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
-            rub: getWalletStore().allWallets[0].prices[CURRENCIES.RUB] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
-            cny: getWalletStore().allWallets[0].prices[CURRENCIES.CNY] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
-            jpy: getWalletStore().allWallets[0].prices[CURRENCIES.JPY] * Number(ethers.utils.formatEther(this.priceEther)) / getWalletStore().allWallets[0].prices.eth,
-            eth: getWalletStore().allWallets[0].prices.eth
-        } : { eur: 0, usd: 0, rub: 0, cny: 0, jpy: 0, eth: 0 }
     }
 
     @action
@@ -87,7 +81,7 @@ export class Token extends Model({
     @computed
     get currentFiatPrice() {
         try {
-            return this.priceEther ? getWalletStore().allWallets[0].prices[getWalletStore().currentFiatCurrency] / getWalletStore().allWallets[0].prices.eth * Number(ethers.utils.formatEther(this.priceEther)) : null
+            return this.prices[getWalletStore().currentFiatCurrency] ? this.prices[getWalletStore().currentFiatCurrency] : null
         } catch (e) {
             return 0
         }
