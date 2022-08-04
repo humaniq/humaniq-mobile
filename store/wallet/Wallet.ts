@@ -323,7 +323,7 @@ export class Wallet extends Model({
         if (erc20.ok) {
             const result = yield* _await(this.apiFinance.get(FINANCE_ROUTES.GET_PRICES, {
                 symbol: `${ erc20.data.map(t => t.symbol).join(",") },eth,bnb,hmq`,
-                currency: "usd,eth",
+                currency: "usd,eur,rub,cny,jpy,eth",
                 history: "week",
                 historyPrecision: 7
             }))
@@ -339,8 +339,23 @@ export class Wallet extends Model({
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
                                 hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                                prices: {
+                                    eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
+                                    usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
+                                    rub: result.data.payload[t.symbol.toLowerCase()].rub.price,
+                                    cny: result.data.payload[t.symbol.toLowerCase()].cny.price,
+                                    jpy: result.data.payload[t.symbol.toLowerCase()].jpy.price,
+                                    eth: result.data.payload[t.symbol.toLowerCase()].eth.price
+                                }
                             }) :
-                            new Token({ ...changeCaseObj(t), walletAddress: this.address, hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()) })
+                            new Token({ ...changeCaseObj(t), walletAddress: this.address, hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()), prices: {
+                                    eur: 0,
+                                    usd: 0,
+                                    rub: 0,
+                                    cny: 0,
+                                    jpy: 0,
+                                    eth: 0
+                                } })
                         this.token.set(t.token_address, erc20Token)
                         erc20Token.init()
                     } catch (e) {
