@@ -102,7 +102,7 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                                 { view.token.formatFiatBalance }
                             </Text>
                             <Text white robotoM text14 center marginT-4 marginB-16>
-                                { `${ view.token.formatBalance } ${ view.token.symbol }` }
+                                { `${ view.token.formatBalance }` }
                             </Text>
                             <WalletTransactionControls tokenAddress={ view.tokenAddress }/>
                         </View>
