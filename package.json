@@ -64,7 +64,7 @@
     "ethereumjs-util": "^7.1.0",
     "ethers": "^5.6.4",
     "https-browserify": "0.0.1",
-    "humaniq-ethereum-provider": "git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.2.0",
+    "humaniq-ethereum-provider": "git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.4.0",
     "humaniq-icon-set": "git+https://github.com/humaniq/humaniq-icon-set.git#0.8.7",
     "i18n-js": "3.8.0",
     "is-url": "^1.2.4",

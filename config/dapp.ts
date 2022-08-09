@@ -1,5 +1,5 @@
 export const DAPPS_CONFIG = {
-  HOMEPAGE_HOST: "https://humaniq.github.io/humaniq-dapps-home",
+  HOMEPAGE_HOST: "https://home.humaniq.com",
   DEFAULT_SEARCH_ENGINE: 'DuckDuckGo',
   IPFS_OVERRIDE_PARAM: 'mm_override',
   IPFS_DEFAULT_GATEWAY_URL: 'https://cloudflare-ipfs.com/ipfs/',

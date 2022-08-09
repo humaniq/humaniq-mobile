@@ -6543,9 +6543,9 @@ human-signals@^2.1.0:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-2.1.0.tgz#dc91fcba42e4d06e4abaed33b3e7a3c02f514ea0"
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
-"humaniq-ethereum-provider@git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.2.0":
-  version "0.1.1"
-  resolved "git+https://github.com/humaniq/humaniq-ethereum-provider.git#caed9ecadb47aaa61082fae82b9978968f6578a3"
+"humaniq-ethereum-provider@git+https://github.com/humaniq/humaniq-ethereum-provider.git#0.4.0":
+  version "0.1.3"
+  resolved "git+https://github.com/humaniq/humaniq-ethereum-provider.git#92812e2d2fc37a1f8637a2589779309d0f8e1b72"
   dependencies:
     "@types/events" "^3.0.0"
     events "^3.3.0"
