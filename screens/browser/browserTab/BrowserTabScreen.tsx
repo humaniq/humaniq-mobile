@@ -33,6 +33,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
     const selectAddress = useInstance(SelectWalletDialogViewModel)
     const selectNetwork = useInstance(SelectNetworkDialogViewModel)
     const webViewRef = useRef()
+    const screenRef = useRef()
 
     useEffect(() => {
         view.init(nav, props)
@@ -73,7 +74,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
             minHeight: "100%",
             display: "flex"
         } : { display: 'none' } }>
-            <View flex testID={ 'browserTabScreen' }>
+            <View ref={ screenRef } flex testID={ 'browserTabScreen' }>
                 <BrowserHeader isSearchMode={ view.isSearchMode }
                                onPressSearch={ view.onPressSearch }
                                title={ view.title }
@@ -83,7 +84,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                                onSearchSubmit={ view.onSearchSubmit }
                                goHomePage={ view.goHomePage }
                                numOfTabs={ getBrowserStore().tabs.length }
-                               openTabs={ () => props.showTabs(webViewRef) }
+                               openTabs={ () => props.showTabs(screenRef) }
                                changeAddress={ () => selectAddress.display = true }
                                changeNetwork={ () => selectNetwork.display = true }
                                openNewTab={ props.newTab }
@@ -130,7 +131,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                         injectedJavaScriptBeforeContentLoaded={ view.entryScriptWeb3 }
                         source={ { uri: view.initialUrl } }
                         onError={ console.log }
-                        renderError={ () => <CustomFallback /> }
+                        renderError={ () => <CustomFallback/> }
                     />
                 </View>
                 { view.forwardEnabled &&
