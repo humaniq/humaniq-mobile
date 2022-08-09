@@ -98,21 +98,20 @@ export class BrowserTabScreenViewModel {
 
 
         this.disposerChangeNetwork = reaction(() => getEVMProvider().currentNetworkName, () => {
-            // this.entryScriptWeb3 = SET_NETWORK_ID(getEthereumProvider().currentNetwork.networkID) + entryScriptWeb3
+            this.entryScriptWeb3 = SET_NETWORK_ID(getEVMProvider().currentNetwork.networkID) + entryScriptWeb3
             this.reloadWebView()
 
-            // this.postMessage({
-            //   type: "networkChanged",
-            //   data: getEthereumProvider().currentNetwork.networkID,
-            // })
+            this.postMessage({
+                type: "chainChanged",
+                data: getEVMProvider().currentNetwork.networkID,
+            })
         })
 
         this.disposerChangeAddress = reaction(() => getWalletStore().selectedWallet?.address, () => {
-            this.reloadWebView()
-            // this.postMessage({
-            //   type: "accountsChanged",
-            //   data: [ getWalletStore().selectedWallet.address ],
-            // })
+            this.postMessage({
+                type: "accountsChanged",
+                data: [ getWalletStore().selectedWallet.address ],
+            })
         })
     }
 
@@ -134,7 +133,7 @@ export class BrowserTabScreenViewModel {
             this.webviewRef?.reload()
 
             this.postMessage({
-                type: "networkChanged",
+                type: "chainChanged",
                 data: getEVMProvider().currentNetwork.networkID,
             })
             this.postMessage({
