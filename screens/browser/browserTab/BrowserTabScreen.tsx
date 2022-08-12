@@ -130,7 +130,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                         onShouldStartLoadWithRequest={ view.onShouldStartLoadWithRequest }
                         injectedJavaScriptBeforeContentLoaded={ view.entryScriptWeb3 }
                         source={ { uri: view.initialUrl } }
-                        onError={ console.log }
+                        onError={ view.onError }
                         renderError={ () => <CustomFallback/> }
                     />
                 </View>

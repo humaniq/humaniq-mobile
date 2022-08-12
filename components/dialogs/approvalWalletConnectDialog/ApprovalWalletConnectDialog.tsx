@@ -39,7 +39,7 @@ export const ApprovalWalletConnectDialog = observer(() => {
           <View padding-20>
               <View row>
                   <Text
-                        text16 robotoM>{ `${ t("approvalDappConnectDialog.wontToConnect") }${ "" }` }</Text>
+                        text16 robotoM>{ `${ t("approvalDappConnectDialog.wontToConnect") } ${ view.url }` }</Text>
               </View>
               <View row paddingV-20>
                   <Text color={ Colors.blueOcean } text80>{ t('approvalDappConnectDialog.attention') }</Text>

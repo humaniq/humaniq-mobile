@@ -147,6 +147,9 @@ export class BrowserTabScreenViewModel {
     }
 
     onPressSearch() {
+        // if(this.url !== "chrome-error://chromewebdata/") {
+        //     this.searchValue = this.url
+        // }
         this.isSearchMode = !this.isSearchMode
     }
 
@@ -610,6 +613,10 @@ export class BrowserTabScreenViewModel {
         //     url: getMaskedUrl(siteInfo.url)
         // })
     };
+
+    onError() {
+        this.searchValue = this.url
+    }
 
     onLoadEnd({ nativeEvent }) {
         if (nativeEvent.loading) return
