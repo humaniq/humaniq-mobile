@@ -6,7 +6,6 @@ import {
     model,
     modelFlow,
     objectMap,
-    prop,
     runUnprotected,
     tProp as p,
     types as t
@@ -41,18 +40,18 @@ export interface TransactionsRequestResult {
 
 @model("Wallet")
 export class Wallet extends Model({
-    isError: prop<boolean>(false),
-    pending: prop<boolean>(false).withSetter(),
-    initialized: prop<string>("").withSetter(),
-    address: prop<string>(""),
-    name: prop<string>(""),
-    balance: prop<string>(""),
+    isError: p(t.boolean, false),
+    pending: p(t.boolean, false).withSetter(),
+    initialized: p(t.string, "").withSetter(),
+    address: p(t.string, ""),
+    name: p(t.string, ""),
+    balance: p(t.string, ""),
     hidden: p(t.boolean, false).withSetter(),
-    mnemonic: prop<string>(""),
-    path: prop<string>(""),
-    hdPath: prop<string>(""),
-    privateKey: prop<string>(""),
-    publicKey: prop<string>(""),
+    mnemonic: p(t.string, ""),
+    path: p(t.string, ""),
+    hdPath: p(t.string, ""),
+    privateKey: p(t.string, ""),
+    publicKey: p(t.string, ""),
     balances: p(t.maybeNull(t.object(() => ({
         amount: t.number,
         amountUnconfirmed: t.number,
@@ -348,14 +347,19 @@ export class Wallet extends Model({
                                     eth: result.data.payload[t.symbol.toLowerCase()].eth.price
                                 }
                             }) :
-                            new Token({ ...changeCaseObj(t), walletAddress: this.address, hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()), prices: {
+                            new Token({
+                                ...changeCaseObj(t),
+                                walletAddress: this.address,
+                                hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                                prices: {
                                     eur: 0,
                                     usd: 0,
                                     rub: 0,
                                     cny: 0,
                                     jpy: 0,
                                     eth: 0
-                                } })
+                                }
+                            })
                         this.token.set(t.token_address, erc20Token)
                         erc20Token.init()
                     } catch (e) {

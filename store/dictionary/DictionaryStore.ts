@@ -87,6 +87,14 @@ export class DictionaryStore extends Model({
         } else {
             tokens = (yield* _await(localStorage.load("hm-wallet-tokens")))
         }
+        this.ethToken.set("BUSD", {
+            logoURI: "https://assets-cdn.trustwallet.com/blockchains/binance/assets/BUSD-BD1/logo.png",
+            address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+            decimals: 8,
+            type: "ERC20",
+            symbol: "BUSD"
+        })
+
         tokens.forEach(t => this.ethToken.set(t.symbol, {
             logoURI: t.logoURI,
             address: t.address,
