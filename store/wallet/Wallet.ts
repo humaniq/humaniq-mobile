@@ -12,7 +12,7 @@ import {
 } from "mobx-keystone"
 import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
-import { computed, observable, reaction } from "mobx"
+import { computed, observable, reaction, toJS } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
@@ -238,7 +238,7 @@ export class Wallet extends Model({
     }
 
     @modelFlow
-    * getTokenTransactions(init = false) {
+    * getTokenTransactions(init = false, cursor?: string) {
         const id = profiler.start(EVENTS.LOAD_ERC20_TRANSACTIONS)
         try {
             if (init) {
@@ -249,32 +249,43 @@ export class Wallet extends Model({
             })
 
             const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-token-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || {}
-            const result = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
+            const result = yield getMoralisRequest().get(route, {
+                chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }`,
+                cursor
+            })
 
             if (result.ok && (result.data as TransactionsRequestResult).total) {
                 (result.data as TransactionsRequestResult).result.forEach(r => {
 
                     const currentToken = this.token.get(r.address)
+                    let tr
 
-                    const tr = new TokenTransaction({
-                        ...changeCaseObj(r),
-                        symbol: currentToken.symbol,
-                        decimals: currentToken.decimals,
-                        chainId: getEVMProvider().currentNetwork.chainID,
-                        walletAddress: this.address.toLowerCase(),
-                        blockTimestamp: new Date(r.block_timestamp),
-                        prices: currentToken.prices
-                    })
+                    try {
+                        tr = new TokenTransaction({
+                            ...changeCaseObj(r),
+                            symbol: currentToken.symbol,
+                            decimals: currentToken.decimals,
+                            chainId: getEVMProvider().currentNetwork.chainID,
+                            walletAddress: this.address.toLowerCase(),
+                            blockTimestamp: new Date(r.block_timestamp),
+                            prices: toJS(currentToken.prices)
+                        })
+                    } catch (e) {
+                        console.log("ERROR", e)
+                    }
 
                     if (currentToken) {
                         runUnprotected(() => {
-                            currentToken.transactions.set(tr.transactionHash, tr)
+                            if (!currentToken.transactions.has(tr.transactionHash)) {
 
-                            const storedTx = storedTransactions[tr.transactionHash]
-                            if (storedTx) {
-                                const pTx = fromSnapshot<TokenTransaction>(storedTx)
-                                pTx.removeFromStore()
-                                delete storedTransactions[tr.transactionHash]
+                                currentToken.transactions.set(tr.transactionHash, tr)
+
+                                const storedTx = storedTransactions[tr.transactionHash]
+                                if (storedTx) {
+                                    const pTx = fromSnapshot<TokenTransaction>(storedTx)
+                                    pTx.removeFromStore()
+                                    delete storedTransactions[tr.transactionHash]
+                                }
                             }
                         })
                     }
@@ -292,6 +303,10 @@ export class Wallet extends Model({
                         pTx.removeFromStore()
                     }
                 })
+
+                if (result.data.cursor) {
+                    yield this.getTokenTransactions(false, result.data.cursor)
+                }
                 this.tokenTransactionsInitialized = true
             } else {
                 // Sentry.captureException(result?.problem?.origianalError)
