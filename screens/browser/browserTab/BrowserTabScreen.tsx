@@ -77,16 +77,18 @@ const BrowserTab = observer<IBrowserTab>((props) => {
             <View ref={ screenRef } flex testID={ 'browserTabScreen' }>
                 <BrowserHeader isSearchMode={ view.isSearchMode }
                                onPressSearch={ view.onPressSearch }
-                               title={ view.title }
                                url={ view.storedTab.url }
-                               icon={ view.icon }
                                reloadPage={ view.reloadWebView }
                                onSearchSubmit={ view.onSearchSubmit }
                                goHomePage={ view.goHomePage }
                                numOfTabs={ getBrowserStore().tabs.length }
                                openTabs={ () => props.showTabs(screenRef) }
-                               changeAddress={ () => selectAddress.display = true }
-                               changeNetwork={ () => selectNetwork.display = true }
+                               changeAddress={ () => {
+                                   selectAddress.display = true
+                               }}
+                               changeNetwork={ () => {
+                                   selectNetwork.display = true
+                               }}
                                openNewTab={ props.newTab }
                                searchValue={ view.searchValue }
                                onValueChange={ view.onSearchChange }

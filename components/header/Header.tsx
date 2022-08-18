@@ -38,7 +38,12 @@ export const Header = observer<HeaderProps>((
 
     const goBack = () => {
         if (!backPressEnabled) return
-        if (onBackPress || canGoBack) nav.goBack()
+
+        if (typeof onBackPress === 'function') {
+            onBackPress()
+        } else {
+            if (canGoBack) nav.goBack()
+        }
     }
 
     useEffect(() => {
@@ -48,7 +53,8 @@ export const Header = observer<HeaderProps>((
 
     const props = rightText ? { spread: true } : {}
 
-    return <TouchableOpacity activeOpacity={ backPressEnabled ? 0.2 : 1 } testID={ 'backBtn' } padding-20 paddingB-0 left row centerV
+    return <TouchableOpacity activeOpacity={ backPressEnabled ? 0.2 : 1 } testID={ 'backBtn' } padding-20 paddingB-0
+                             left row centerV
                              onPress={ goBack } { ...props }>
         { backEnabled && canGoBack && icon === ICON_HEADER.ARROW ?
             <HIcon name={ "arrow-left" } size={ 16 } color={ { color: isDark ? Colors.grey50 : Colors.black } }/> :
