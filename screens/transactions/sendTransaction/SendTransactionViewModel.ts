@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable, reaction, toJS } from "mobx";
 import { Wallet } from "../../../store/wallet/Wallet";
 import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
 import { Token } from "../../../store/wallet/token/Token";
@@ -23,6 +23,7 @@ import { capitalize, throttle } from "../../../utils/general";
 import { NATIVE_COIN_SYMBOL } from "../../../config/network";
 import { profiler } from "../../../utils/profiler/profiler";
 import { EVENTS } from "../../../config/events";
+import * as Sentry from "@sentry/react-native";
 
 export class SendTransactionViewModel {
 
@@ -276,9 +277,10 @@ export class SendTransactionViewModel {
             fromAddress: this.wallet?.address,
             input: "0x",
             blockTimestamp: new Date(),
-            prices: this.token.prices,
+            prices: toJS(this.token.prices),
             type: 0
         }
+
         return !this.tokenAddress ? baseBody : {
             ...baseBody,
             decimals: this.token.decimals,
@@ -326,10 +328,11 @@ export class SendTransactionViewModel {
                 })
             )
 
-            this.pendingTransaction = false
         } catch (e) {
             this.txError = true
             console.log("ERROR-send-tx", e)
+            Sentry.captureException(e)
+        } finally {
             this.pendingTransaction = false
         }
     }
