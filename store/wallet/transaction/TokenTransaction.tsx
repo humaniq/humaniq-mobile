@@ -39,7 +39,7 @@ export class TokenTransaction extends Model({
     transactionHash: p(t.string, ""),
     address: p(t.string, ""),
     blockTimestamp: p(t.string).withTransform(timestampToDateTransform()),
-    blockNumber: p(t.number, 0),
+    blockNumber: p(t.string, ""),
     blockHash: p(t.string, ""),
     toAddress: p(t.string, ""),
     fromAddress: p(t.string, ""),
