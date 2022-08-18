@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, toJS } from "mobx"
 import { getEVMProvider, getWalletStore } from "../../../App"
 import { BigNumber, ethers } from "ethers"
 import { currencyFormat } from "../../../utils/number"
@@ -152,7 +152,7 @@ export class SendTransactionViewModel {
                 value: this.txData.value.toString(),
                 input: this.txData.data,
                 blockTimestamp: new Date(),
-                prices: this.token.prices,
+                prices: toJS(this.token.prices),
                 type: 0
             }
         } catch (e) {
