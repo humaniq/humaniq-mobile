@@ -116,16 +116,15 @@ export class WalletConnect extends Model({
                                 setToast("Error send transaction", TOASTER_TYPE.ERROR, null, true)
                                 this.walletConnector.rejectRequest({
                                     id: payload.id,
-                                    error: "Error send transaction",
+                                    error: { message: "Error send transaction" },
                                 });
                             }
                         })
 
-
                     } catch (error) {
                         this.walletConnector.rejectRequest({
                             id: payload.id,
-                            error: "user reject request",
+                            error: { message: "user reject request" },
                         });
                     }
                 } else if (payload.method === 'eth_sign') {
