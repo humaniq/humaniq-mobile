@@ -7,7 +7,7 @@ import { AUTH_STATE, AuthViewModel } from "./AuthViewModel"
 import { t } from "../../i18n"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
-import { getAppStore, getProfileStore } from "../../App"
+import { getAppStore } from "../../App"
 import LogoBrandFull from "../../assets/images/logo-brand-full.svg"
 import { HIcon } from "../../components/icon";
 import XMarkIcon from "../../assets/images/circle-xmark-solid.svg"
@@ -25,7 +25,8 @@ const Auth = observer(function () {
     return (
         <View testID={ "AuthScreen" } flex>
             { view.initialized && <Screen
-                preset={ "fixed" }
+                preset={ "scroll" }
+                style={ { minHeight: "100%" } }
                 backgroundColor={ Colors.white }
                 statusBarBg={ Colors.white }>
                 { view.state === AUTH_STATE.MAIN &&
@@ -83,7 +84,7 @@ const Auth = observer(function () {
                                     <Text text60BO white>{ view.message }</Text>
                                 </Animatable.View>
                             </View>
-                            <View flex bottom paddingB-20>
+                            <View flex bottom paddingV-16>
                                 <Button
                                     testID={ 'backBtn' }
                                     onPress={ () => {
@@ -92,87 +93,84 @@ const Auth = observer(function () {
                             </View>
                         </View>
                     </Animatable.View> }
-                { view.state === AUTH_STATE.RECOVER &&
-                    <Animatable.View animation={ "fadeIn" } style={ { height: "100%" } }>
-                        { !view.pending && <View flex>
-                            <TouchableOpacity testID={ 'backBtn' } row padding-16 paddingT-25 onPress={ () => {
-                                view.state = AUTH_STATE.MAIN;
-                                // @ts-ignore
-                                getAppStore().setRecoverPhrase("")
-                            } }>
-                                <HIcon name={ "arrow-left" } size={ 18 }/>
-                            </TouchableOpacity>
-                            <View padding-16>
-                                <Text robotoM text16>{ view.message }</Text>
-                            </View>
-                            <View flex-3 marginH-16>
-                                <TextField
-                                    testID={ 'enterMnemonicField' }
-                                    autoCapitalize="none"
-                                    selectionColor={ Colors.primary }
-                                    autoFocus
-                                    multiline={ true }
-                                    enableErrors={ false }
-                                    onChangeText={ view.onChangeRecoverPhrase }
-                                    value={ getAppStore().recoverPhrase }
-                                    hideUnderline
-                                    floatingPlaceholder
-                                    rightButtonProps={ getAppStore().recoverPhrase.length ? {
-                                        iconSource: XMarkIcon,
-                                        style: {
-                                            alignSelf: "center",
-                                            marginRight: 15,
-                                        },
-                                        onPress: () => {
-                                            view.clearWordsCount()
-                                        }
-                                    } : {} }
-                                    floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
-                                        left: 15,
-                                        top: 13,
-                                        fontFamily: "Roboto-Medium"
-                                    } : {
-                                        left: 12,
-                                        top: 12,
-                                        backgroundColor: Colors.white,
-                                        zIndex: 10,
-                                        paddingLeft: 4,
-                                        paddingRight: 4,
-                                    } }
-                                    floatingPlaceholderColor={ {
-                                        focus: view.isInvalidRecover ? Colors.error : Colors.primary,
-                                        default: Colors.primary,
-                                        disabled: Colors.primary
-                                    } }
-                                    placeholderTextColor={ Colors.textGrey }
-                                    placeholder={ t("registerScreen.recoverPhrase") }
-                                    style={ {
-                                        paddingRight: 50,
-                                        padding: 10,
-                                        borderRadius: 5,
-                                        borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
-                                    } }
-                                />
-                                <View row paddingL-10 paddingT-4
-                                      style={ { alignItems: "center", justifyContent: "space-between" } }>
-                                    <Text robotoR style={ {
-                                        fontSize: 13,
-                                        color: view.isInvalidRecover ? Colors.error : Colors.textGrey
-                                    } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
-                                    <Text text14 robotoM style={ {
-                                        color: Colors.textGrey,
-                                    } }>{ `${ t("common.words") }:${ view.wordsCount }` }</Text>
-                                </View>
-                            </View>
-                            <View flex-5 bottom paddingB-20 paddingH-16>
-                                <Button
-                                    testID={ 'runRecoveryWalletBtn' }
-                                    disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
-                                    label={ t("common.next") }/>
-                            </View>
-                        </View> }
-                        { view.pending && <Splash showLoader={ view.needLoader }/> }
-                    </Animatable.View> }
+                { view.state === AUTH_STATE.RECOVER && !view.pending && <View flex>
+                    <TouchableOpacity testID={ 'backBtn' } row padding-16 paddingT-25 onPress={ () => {
+                        view.state = AUTH_STATE.MAIN;
+                        // @ts-ignore
+                        getAppStore().setRecoverPhrase("")
+                    } }>
+                        <HIcon name={ "arrow-left" } size={ 18 }/>
+                    </TouchableOpacity>
+                    <View padding-16>
+                        <Text robotoM text16>{ view.message }</Text>
+                    </View>
+                    <View flex-3 marginH-16>
+                        <TextField
+                            testID={ 'enterMnemonicField' }
+                            autoCapitalize="none"
+                            selectionColor={ Colors.primary }
+                            autoFocus
+                            multiline={ true }
+                            enableErrors={ false }
+                            onChangeText={ view.onChangeRecoverPhrase }
+                            value={ getAppStore().recoverPhrase }
+                            hideUnderline
+                            floatingPlaceholder
+                            rightButtonProps={ getAppStore().recoverPhrase.length ? {
+                                iconSource: XMarkIcon,
+                                style: {
+                                    alignSelf: "center",
+                                    marginRight: 15,
+                                },
+                                onPress: () => {
+                                    view.clearWordsCount()
+                                }
+                            } : {} }
+                            floatingPlaceholderStyle={ !getAppStore().recoverPhrase ? {
+                                left: 15,
+                                top: 13,
+                                fontFamily: "Roboto-Medium"
+                            } : {
+                                left: 12,
+                                top: 12,
+                                backgroundColor: Colors.white,
+                                zIndex: 10,
+                                paddingLeft: 4,
+                                paddingRight: 4,
+                            } }
+                            floatingPlaceholderColor={ {
+                                focus: view.isInvalidRecover ? Colors.error : Colors.primary,
+                                default: Colors.primary,
+                                disabled: Colors.primary
+                            } }
+                            placeholderTextColor={ Colors.textGrey }
+                            placeholder={ t("registerScreen.recoverPhrase") }
+                            style={ {
+                                paddingRight: 50,
+                                padding: 10,
+                                borderRadius: 5,
+                                borderColor: view.isInvalidRecover ? Colors.error : Colors.primary
+                            } }
+                        />
+                        <View row paddingL-10 paddingT-4 paddingB-10
+                              style={ { alignItems: "center", justifyContent: "space-between" } }>
+                            <Text robotoR style={ {
+                                fontSize: 13,
+                                color: view.isInvalidRecover ? Colors.error : Colors.textGrey
+                            } }>{ view.isInvalidRecover ? t("registerScreen.recoveryError") : t("registerScreen.recoveryDescription") }</Text>
+                            <Text text14 robotoM style={ {
+                                color: Colors.textGrey,
+                            } }>{ `${ t("common.words") }:${ view.wordsCount }` }</Text>
+                        </View>
+                    </View>
+                    <View flex-5 bottom paddingH-16 paddingB-16>
+                        <Button
+                            testID={ 'runRecoveryWalletBtn' }
+                            disabled={ !view.isValidRecover } br50 onPress={ view.recoveryWallet }
+                            label={ t("common.next") }/>
+                    </View>
+                </View> }
+                { view.pending && <Splash showLoader={ view.needLoader }/> }
             </Screen>
             }
             {

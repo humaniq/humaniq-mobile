@@ -61,7 +61,7 @@ const SelectValue = observer(() => {
 
 
     return <BlurWrapper before={
-        <Screen>
+        <Screen preset={ "scroll" } style={ { minHeight: "100%" } }>
             <Header rightText={ t('selectValueScreen.step2') }/>
             <View padding-16 testID={ 'selectValueScreen' }>
                 <Card>
@@ -152,7 +152,7 @@ const SelectValue = observer(() => {
                     </Button>
                 </View>
             </View>
-            <View center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
+            <View flex bottom centerH row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                 <Button testID={ 'nextStep' }
                         disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
                         style={ { width: "100%", borderRadius: 12 } }
