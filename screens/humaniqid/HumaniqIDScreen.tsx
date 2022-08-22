@@ -9,7 +9,6 @@ import { SUGGESTION_STEP } from "../../store/profile/ProfileStore";
 import { events } from "../../utils/events";
 import { MARKETING_EVENTS } from "../../config/events";
 
-
 export interface HumaniqIDScreenProps {
     useNavigation?: boolean
     verified?: boolean
@@ -19,7 +18,6 @@ export const HumaniqIDScreen = observer<HumaniqIDScreenProps>(({
                                                                    useNavigation = false,
                                                                    verified = false
                                                                }) => {
-
     return <View testID={ "HumaniqIDScreen" } flex bg>
         <Screen
             preset={ "fixed" }
@@ -29,17 +27,18 @@ export const HumaniqIDScreen = observer<HumaniqIDScreenProps>(({
             { getProfileStore().formStep === SUGGESTION_STEP.ENTER_ID &&
                 <EnterIDScreen useNavigation={ useNavigation }/> }
             { getProfileStore().formStep === SUGGESTION_STEP.SUGGESTION &&
-                <InvitationScreen verified={ verified }
-                                  useNavigation={ useNavigation }
-                                  onSkip={ () => {
-                                      events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SKIP)
-                                      getProfileStore().setIsSuggested(true)
-                                  } }
-                                  onSingUp={ () => {
-                                      events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SIGN_UP)
-                                      // @ts-ignore
-                                      getProfileStore().setFormStep(SUGGESTION_STEP.ENTER_ID)
-                                  } }/> }
+                <InvitationScreen
+                    verified={ verified }
+                    useNavigation={ useNavigation }
+                    onSkip={ () => {
+                        events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SKIP)
+                        getProfileStore().setIsSuggested(true)
+                    } }
+                    onSingUp={ () => {
+                        events.send(MARKETING_EVENTS.HUMANIQ_ID_BOT_SIGN_UP)
+                        // @ts-ignore
+                        getProfileStore().setFormStep(SUGGESTION_STEP.ENTER_ID)
+                    } }/> }
         </Screen>
     </View>
 })
