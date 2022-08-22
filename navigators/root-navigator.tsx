@@ -92,7 +92,6 @@ const RootStack = () => {
             <Stack.Screen name="termsOfServicePage" component={ TermsOfServicePage }/>
             <Stack.Screen name="humaniqID" component={ HumaniqIDNavScreen }/>
             <Stack.Screen name="visibility" component={ VisibilityScreen }/>
-
         </Stack.Navigator>
     )
 }
