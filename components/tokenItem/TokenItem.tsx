@@ -24,7 +24,7 @@ export interface TokenItemProps {
     showRadioBtn?: boolean
     uncheckedRadioColor?: string
     onPressRadioBtn?: any,
-    hidden?: boolean
+    show?: boolean
 }
 
 function renderToken(
@@ -43,13 +43,13 @@ function renderToken(
     showRadioBtn: boolean,
     uncheckedRadioColor: string,
     onPressRadioBtn: any,
-    hidden: boolean
+    show: boolean
 ) {
     return <View padding-10 paddingH-16 paddingL-0
                  key={ symbol }>
         <View row centerV>
             {
-                showRadioBtn && <View flex-1 right><CheckBtn uncheckedColor={uncheckedRadioColor} checked={ !hidden } onPress={ onPressRadioBtn }/></View>
+                showRadioBtn && <View flex-1 right><CheckBtn uncheckedColor={uncheckedRadioColor} checked={ show } onPress={ onPressRadioBtn }/></View>
             }
             <View flex-2 center>
                 {
@@ -127,7 +127,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
         showRadioBtn = false,
         uncheckedRadioColor,
         onPressRadioBtn,
-        hidden = true
+        show = true
     }) => {
     if (onPressRadioBtn) return renderToken(symbol,
         tokenAddress,
@@ -144,7 +144,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
         showRadioBtn,
         uncheckedRadioColor,
         onPressRadioBtn,
-        hidden)
+        show)
     return <Ripple testID={ `tokenItem` } onPress={ onPress } rippleColor={ Colors.primary }>
         { renderToken(
             symbol,
@@ -162,7 +162,7 @@ export const TokenItem: React.FC<TokenItemProps> = (
             showRadioBtn,
             uncheckedRadioColor,
             onPressRadioBtn,
-            hidden
+            show
         ) }
     </Ripple>
 }

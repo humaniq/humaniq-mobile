@@ -34,24 +34,26 @@ export const WalletBody = observer<any>(({ address }) => {
                         fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     {
-                        wallet.tokenList.length > 0 && wallet.tokenList.filter(t => !getDictionary().hiddenSymbols.has(t.symbol.toLowerCase())).map((p, i) => {
-                            return <TokenItem
-                                showGraph={ getWalletStore().showGraphBool }
-                                key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
-                                graphData={ p.graph }
-                                formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
-                                logo={ p.logo } name={ p.name } index={ i + 1 }
-                                onPress={
-                                    () => RootNavigation.navigate("walletTransactions", {
-                                        wallet: wallet.address,
-                                        symbol: p.symbol,
-                                        tokenAddress: p.tokenAddress,
-                                        animate: true
-                                    })
-                                }
-                                fiatOnTop={ getWalletStore().fiatOnTop }
-                            />
-                        })
+                        wallet.tokenList.length > 0 && wallet.tokenList
+                            .filter(t => getDictionary().symbolsVisibility.has(t.symbol.toLowerCase()) ? getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) : !!t.priceUSD)
+                            .map((p, i) => {
+                                return <TokenItem
+                                    showGraph={ getWalletStore().showGraphBool }
+                                    key={ p.tokenAddress } tokenAddress={ p.tokenAddress } symbol={ p.symbol }
+                                    graphData={ p.graph }
+                                    formatBalance={ p.formatBalance } formatFiatBalance={ p.formatFiatBalance }
+                                    logo={ p.logo } name={ p.name } index={ i + 1 }
+                                    onPress={
+                                        () => RootNavigation.navigate("walletTransactions", {
+                                            wallet: wallet.address,
+                                            symbol: p.symbol,
+                                            tokenAddress: p.tokenAddress,
+                                            animate: true
+                                        })
+                                    }
+                                    fiatOnTop={ getWalletStore().fiatOnTop }
+                                />
+                            })
                     }
                 </>
             }
