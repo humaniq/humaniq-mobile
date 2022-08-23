@@ -24,7 +24,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
     return <Screen
         backgroundColor={ Colors.bg }
         statusBarBg={ Colors.bg }
-        preset="fixed"
+        preset="scroll"
     >
         <Header icon={ ICON_HEADER.CROSS }/>
         {
@@ -94,7 +94,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                 <Text black text16 marginB-3 robotoM>{ view.transaction.formatFiatValue }</Text>
                                 <Text text-grey marginT-3
                                       robotoR
-                                      text14>{ `${ view.transaction.formatValue } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
+                                      text14>{ `${ view.transaction.formatValue }` }</Text>
                             </View>
                         </View>
                         { !!view.transaction?.fiatFee && <View>
@@ -104,9 +104,9 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                     { t("transactionScreen.suggestedFee") }
                                 </Text>
                                 <View right marginV-8>
-                                    <Text black text16 marginB-3
+                                    <Text black text16 marginB-3 numberOfLines={1}
                                           robotoM>{ currencyFormat(view.transaction.fiatFee, getWalletStore().currentFiatCurrency) }</Text>
-                                    <Text text-grey marginT-3
+                                    <Text text-grey marginT-3 numberOfLines={1}
                                           robotoR
                                           text14>{ `${ view.transaction.formatFee } ${ view.transaction.symbol || getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }</Text>
                                 </View>

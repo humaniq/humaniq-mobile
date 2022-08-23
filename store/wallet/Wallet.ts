@@ -12,7 +12,7 @@ import {
 } from "mobx-keystone"
 import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
-import { computed, observable, reaction, toJS } from "mobx"
+import { computed, observable, reaction } from "mobx"
 import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
@@ -256,7 +256,6 @@ export class Wallet extends Model({
 
             if (result.ok && (result.data as TransactionsRequestResult).total) {
                 (result.data as TransactionsRequestResult).result.forEach(r => {
-
                     const currentToken = this.token.get(r.address)
                     let tr
 
@@ -268,7 +267,7 @@ export class Wallet extends Model({
                             chainId: getEVMProvider().currentNetwork.chainID,
                             walletAddress: this.address.toLowerCase(),
                             blockTimestamp: new Date(r.block_timestamp),
-                            prices: toJS(currentToken.prices)
+                            prices: getSnapshot(currentToken.prices)
                         })
                     } catch (e) {
                         console.log("ERROR", e)
