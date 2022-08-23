@@ -16,7 +16,6 @@ export class VisibilityScreenViewModel {
             w.tokenList.forEach(t => this.tokens.set(t.symbol, t))
         })
 
-
         this.initialized = true
     }
 
@@ -25,7 +24,7 @@ export class VisibilityScreenViewModel {
     }
 
     get visibleTokensCount() {
-        return this.tokensList.filter(t => !t.hidden).length
+        return this.tokensList.filter(t => t.show).length
     }
 
     get invisibleTokensCount() {

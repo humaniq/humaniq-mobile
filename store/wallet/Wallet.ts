@@ -76,16 +76,6 @@ export class Wallet extends Model({
 
     apiFinance: RequestStore
 
-    @modelFlow
-    toggleHide = async () => {
-        this.hidden = !this.hidden
-        if (this.hidden) {
-            getDictionary().hiddenSymbols.add(getEVMProvider().currentNetwork.nativeSymbol)
-        } else {
-            getDictionary().hiddenSymbols.delete(getEVMProvider().currentNetwork.nativeSymbol)
-        }
-    }
-
     async initWallet(force = false) {
         InteractionManager.runAfterInteractions(async () => {
             if (!this.initialized || force) {
@@ -328,6 +318,7 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
+
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
@@ -351,7 +342,7 @@ export class Wallet extends Model({
                                 priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
-                                hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || true,
                                 prices: {
                                     eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
                                     usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
@@ -364,7 +355,7 @@ export class Wallet extends Model({
                             new Token({
                                 ...changeCaseObj(t),
                                 walletAddress: this.address,
-                                hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || false,
                                 prices: {
                                     eur: 0,
                                     usd: 0,
