@@ -187,7 +187,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                             </View>
                         </ExpandableSection>
                     </View> }
-                    <ExpandableSection
+                    { getWalletStore().allWallets.length > 1 && <ExpandableSection
                         expanded={ view.betweenMyAddress }
                         onPress={ () => {
                             view.betweenMyAddress = !view.betweenMyAddress
@@ -214,7 +214,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                 backgroundColor: Colors.white
                             } }>
                             {
-                                getWalletStore().allWallets.map(w => {
+                                getWalletStore().allWallets.slice(1).map(w => {
                                     return <View key={ w.address }>
                                         <View
                                             style={ {
@@ -240,9 +240,11 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                             }
                         </View>
                     </ExpandableSection>
+                    }
                 </View>
 
-                <View flex bottom centerH row padding-20 bg-bg style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
+                <View flex bottom centerH row padding-20 bg-bg
+                      style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                     <Button testID={ 'nextStep' } disabled={ view.inputAddressError || !view.txData.to }
                             style={ { width: "100%", borderRadius: 12 } }
                             label={ t("selectValueScreen.nextBtn") }
