@@ -108,8 +108,7 @@ const SelectValue = observer(() => {
                             autoFocus
                             style={ {
                                 fontSize: 32,
-                                fontFamily: "Roboto-Bold",
-                                minWidth: 20
+                                fontFamily: "Roboto-Bold"
                             } }
                             selectionColor={ Colors.primary }
                             keyboardType={ "numeric" }
