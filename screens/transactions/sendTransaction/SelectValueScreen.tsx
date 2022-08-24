@@ -108,12 +108,13 @@ const SelectValue = observer(() => {
                             autoFocus
                             style={ {
                                 fontSize: 32,
-                                fontFamily: "Roboto-Bold"
+                                fontFamily: "Roboto-Bold",
+                                minWidth: 20
                             } }
                             selectionColor={ Colors.primary }
                             keyboardType={ "numeric" }
                             floatingPlaceholder={ false }
-                            centered={ true }
+                            centered={ false }
                             hideUnderline
                             placeholder={ "0" }
                             placeholderTextColor={ Colors.textGrey }
