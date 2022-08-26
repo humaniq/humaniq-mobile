@@ -163,7 +163,7 @@ export class SendTransactionViewModel {
 
     get enoughBalance() {
         return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
-            .gt(BigNumber.from((+this.txData.value).toString()).add(
+            .gte(BigNumber.from((+this.txData.value).toString()).add(
                     BigNumber.from((+this.selectedGasPrice * this.txData.gas).toString())
                 )
             ) : false
