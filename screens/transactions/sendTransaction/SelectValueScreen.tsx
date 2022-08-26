@@ -113,7 +113,6 @@ const SelectValue = observer(() => {
                             selectionColor={ Colors.primary }
                             keyboardType={ "numeric" }
                             floatingPlaceholder={ false }
-                            centered={ true }
                             hideUnderline
                             placeholder={ "0" }
                             placeholderTextColor={ Colors.textGrey }

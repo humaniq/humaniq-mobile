@@ -230,13 +230,13 @@ export class SendTransactionViewModel {
         try {
             if (Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase())) {
                 return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
-                    .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
+                    .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                             BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
                         )
                     ) : false
             } else {
                 return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
-                        .gt(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
+                        .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
                     BigNumber.from(this.wallet.balances?.amount)
                         .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)) : false
             }
