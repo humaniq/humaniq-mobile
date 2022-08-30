@@ -222,7 +222,7 @@ export class SendTransactionViewModel {
             totalFiat: currencyFormat(+this.parsedValue * this.price + this.transactionFee * this.wallet?.prices[getWalletStore().currentFiatCurrency], getWalletStore().currentFiatCurrency),
             maxAmount: this.parsedValue ? (+this.parsedValue) + this.transactionMaxFee : 0,
             total: Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase()) ? `${ (+this.transactionFee + (+this.parsedValue)) } ${ this.token.symbol.toUpperCase() }` :
-                `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ${ this.token.symbol.toUpperCase() }`
+                `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
         }
     }
 
@@ -283,9 +283,9 @@ export class SendTransactionViewModel {
 
         return !this.tokenAddress ? baseBody : {
             ...baseBody,
-            decimals: this.token.decimals,
+            decimals: this.token?.decimals,
             address: this.tokenAddress,
-            symbol: this.token.symbol,
+            symbol: this.token?.symbol,
             receiptStatus: TRANSACTION_STATUS.PENDING
         }
     }
