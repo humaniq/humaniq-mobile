@@ -59,6 +59,7 @@ export class TokenTransaction extends Model({
 }) {
 
     wait = null
+    contract
 
     @computed
     get txBody() {
@@ -80,8 +81,8 @@ export class TokenTransaction extends Model({
         const id = profiler.start(EVENTS.SEND_TRANSACTION)
         try {
             events.send(MARKETING_EVENTS.SENT_TRANSACTION)
-            const contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
-            const tx = (yield* _await(contract.transfer(this.txBody.to, this.value, {
+            this.contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
+            const tx = (yield* _await(this.contract.transfer(this.txBody.to, this.value, {
                 gasPrice: this.txBody.gasPrice,
                 gasLimit: this.txBody.gasLimit,
                 nonce: this.txBody.nonce,
@@ -103,15 +104,25 @@ export class TokenTransaction extends Model({
         try {
             getEVMProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
+                this.contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
                 await runUnprotected(async () => {
                     this.blockTimestamp = new Date()
                     this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
                     // TODO: обработать обгон транзакции над перезаписываемой
-                    if(this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
+                    if (this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
                         events.send(MARKETING_EVENTS.SENT_TRANSACTION_SUCCESSFUL)
                     }
                     getAppStore().toast.display = false
                     await this.applyToWallet()
+                    await getWalletStore().walletsMap.get(confirmedTx.from)?.updateBalanceFromProvider()
+                    const fromBalance = getWalletStore().walletsMap.get(confirmedTx.from) && await this.contract?.balanceOf(confirmedTx.from)
+                    if (fromBalance) {
+                        const fromToken = getWalletStore().walletsMap.get(confirmedTx.from).token.get(confirmedTx.to.toLowerCase())
+                        runUnprotected(() => {
+                            fromToken.balance = ethers.BigNumber.from(fromBalance).toString()
+                        })
+                    }
+
                     getEVMProvider().jsonRPCProvider.off(hash)
                 })
             })

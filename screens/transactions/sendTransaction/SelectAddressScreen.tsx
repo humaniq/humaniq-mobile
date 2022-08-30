@@ -214,7 +214,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
                                 backgroundColor: Colors.white
                             } }>
                             {
-                                getWalletStore().allWallets.slice(1).map(w => {
+                                getWalletStore().allWallets.filter(f => getWalletStore().selectedWallet.address !== f.address).map(w => {
                                     return <View key={ w.address }>
                                         <View
                                             style={ {
