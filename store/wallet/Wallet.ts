@@ -271,8 +271,6 @@ export class Wallet extends Model({
 
                                 const storedTx = storedTransactions[tr.transactionHash]
                                 if (storedTx) {
-                                    const pTx = fromSnapshot<TokenTransaction>(storedTx)
-                                    pTx.removeFromStore()
                                     delete storedTransactions[tr.transactionHash]
                                 }
                             }
@@ -289,9 +287,10 @@ export class Wallet extends Model({
                             pTx.waitTransaction()
                         }
                     } else {
-                        pTx.removeFromStore()
+                        delete storedTransactions[pTx.hash]
                     }
                 })
+                yield* _await(localStorage.save(`humaniq-pending-transactions-token-${ getEVMProvider().currentNetwork.chainID }-${ getWalletStore().selectedWallet.address }`, storedTransactions))
 
                 if (result.data.cursor) {
                     yield this.getTokenTransactions(false, result.data.cursor)

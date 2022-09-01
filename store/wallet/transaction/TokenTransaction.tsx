@@ -104,7 +104,7 @@ export class TokenTransaction extends Model({
             getEVMProvider().jsonRPCProvider.once(this.hash, async (confirmedTx) => {
                 const hash = this.hash
                 await runUnprotected(async () => {
-                    this.blockTimestamp = new Date()
+                    this.blockTimestamp = this.blockTimestamp || new Date()
                     this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
                     // TODO: обработать обгон транзакции над перезаписываемой
                     if(this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
