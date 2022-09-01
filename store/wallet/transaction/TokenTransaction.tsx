@@ -106,7 +106,7 @@ export class TokenTransaction extends Model({
                 const hash = this.hash
                 this.contract = new ethers.Contract(this.address, contractAbiErc20, this.wallet.ether);
                 await runUnprotected(async () => {
-                    this.blockTimestamp = new Date()
+                    this.blockTimestamp = this.blockTimestamp || new Date()
                     this.receiptStatus = confirmedTx.status !== 0 ? TRANSACTION_STATUS.SUCCESS : TRANSACTION_STATUS.ERROR
                     // TODO: обработать обгон транзакции над перезаписываемой
                     if (this.receiptStatus === TRANSACTION_STATUS.SUCCESS) {
