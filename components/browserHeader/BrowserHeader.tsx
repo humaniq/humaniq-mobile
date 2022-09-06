@@ -7,9 +7,7 @@ import { t } from "../../i18n";
 import { CSSShadows } from "../../utils/ui";
 
 export interface HeaderProps {
-    title: string;
     url: string;
-    icon: string
     reloadPage?: (props?: any) => void
     onPressSearch?: (any) => any | Promise<any>
     isSearchMode: boolean,
@@ -26,9 +24,7 @@ export interface HeaderProps {
 
 export const BrowserHeader = observer<HeaderProps>((
     {
-        title,
         url,
-        icon,
         reloadPage,
         onPressSearch,
         isSearchMode,

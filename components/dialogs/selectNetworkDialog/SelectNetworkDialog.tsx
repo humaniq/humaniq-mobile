@@ -26,6 +26,9 @@ export const SelectNetworkDialog = observer(() => {
                           labelTransform={ (i) => i.name === "mainnet" ? "ETHEREUM" : i.name.toUpperCase() }
                           selected={ getEVMProvider().currentNetworkName } items={ view.networks }
                           headerTittle={ t("settingsScreen.menu.network") }
+                          onBackPress={() => {
+                              view.display = false
+                          }}
                           onPressItem={ async (n) => {
                               runUnprotected(() => {
                                   getEVMProvider().currentNetworkName = n.name

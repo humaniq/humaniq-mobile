@@ -33,18 +33,20 @@ export const SendTransactionDialog = observer(() => {
             }
         } }
     >
+        <DialogHeader onPressIn={ () => view.display = false }
+                      buttonStyle={ {
+                          marginTop: 2,
+                          padding: 2,
+                          paddingHorizontal: 22,
+                          backgroundColor: Colors.white
+                      } }
+        />
         <ScrollView
-            contentContainerStyle={{
+            contentContainerStyle={ {
                 backgroundColor: Colors.bg,
                 borderTopLeftRadius: 20,
                 borderTopRightRadius: 20,
-        }}>
-            <DialogHeader onPressIn={ () => view.display = false }
-                          buttonStyle={{
-                              marginTop: 2,
-                              padding: 2,
-                              paddingHorizontal: 22 }}
-            />
+            } }>
             { view.initialized && !!view.txHash &&
                 <View center padding-20>
                     <View row>
@@ -63,6 +65,9 @@ export const SendTransactionDialog = observer(() => {
                     <View row paddingV-16>
                         <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>
                     </View>
+                    <Text style={ {
+                        alignSelf: 'flex-start'
+                    } } text16 robotoM>{ t("transactionScreen.howMany") }</Text>
                     <View row paddingV-16>
                         <Card width={ "100%" }>
                             <View row spread padding-12 centerV>
@@ -104,12 +109,11 @@ export const SendTransactionDialog = observer(() => {
                                 onPress={ () => setExpanded(!expanded) }
                                 expanded={ expanded }
                                 sectionHeader={ <><View row padding-8 spread centerV>
-                                    <Text text16 robotoM>{ t("transactionScreen.adjustFee") }</Text>
+                                    <Text text16 robotoM>{ t("transactionScreen.changeFee") }</Text>
                                     <Button link style={ { height: 30, width: 30 } }
                                             onPress={ () => {
                                                 setExpanded(!expanded)
                                             } }
-
                                     >
                                         { !expanded &&
                                             <HIcon name={ "down" } width={ 14 } style={ { color: Colors.black } }/> }
@@ -173,15 +177,15 @@ export const SendTransactionDialog = observer(() => {
                             view.pending ? view.display = false : view.onAccountsRejected()
                         } }
                                 link br50 bg-primary marginB-20 robotoM
-                                label={ view.pending ? t("common.cancel") : t('common.deny') }/>
+                                label={ view.pending ? t("common.cancel") : t('sendTransactionDialog.deny') }/>
                     </View>
-                    <View width={ "100%" }>
+                    <View width={ "100%" } paddingB-60>
                         <Button disabled={ !view.enoughBalance || view.pending }
                                 onPress={ view.onAccountsConfirm }
                                 marginH-10
                                 fullWidth
                                 style={ { borderRadius: 12 } }
-                                label={ t('common.allow') }/>
+                                label={ t('sendTransactionDialog.allow') }/>
                     </View>
                 </View>
             }

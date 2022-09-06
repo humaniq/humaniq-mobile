@@ -42,7 +42,7 @@ export class ProfileStore extends Model({
 
     @computed
     get show() {
-        return !this.isSuggested && this.firstInit
+        return this.initialized && !this.isSuggested && this.firstInit
     }
 
     @modelFlow

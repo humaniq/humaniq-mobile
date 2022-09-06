@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
 import { BrowserTabScreenViewModel } from "./BrowserTabScreenViewModel"
 import React, { useEffect, useRef } from "react"
-import { Colors, Image, Text, TouchableOpacity, View } from "react-native-ui-lib"
+import { Colors, TouchableOpacity, View } from "react-native-ui-lib"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
 import WebView from "react-native-webview"
@@ -18,6 +18,7 @@ import { BackHandler } from "react-native";
 import { HIcon } from "../../../components/icon";
 import { CSSShadows } from "../../../utils/ui";
 import { CustomFallback } from "../../../components/customFallback/CustomFallback";
+import { SearchResults } from "../search/SearchResults";
 
 export interface IBrowserTab {
     initialUrl: string
@@ -33,6 +34,7 @@ const BrowserTab = observer<IBrowserTab>((props) => {
     const selectAddress = useInstance(SelectWalletDialogViewModel)
     const selectNetwork = useInstance(SelectNetworkDialogViewModel)
     const webViewRef = useRef()
+    const screenRef = useRef()
 
     useEffect(() => {
         view.init(nav, props)
@@ -73,45 +75,28 @@ const BrowserTab = observer<IBrowserTab>((props) => {
             minHeight: "100%",
             display: "flex"
         } : { display: 'none' } }>
-            <View flex testID={ 'browserTabScreen' }>
+            <View ref={ screenRef } flex testID={ 'browserTabScreen' }>
                 <BrowserHeader isSearchMode={ view.isSearchMode }
                                onPressSearch={ view.onPressSearch }
-                               title={ view.title }
                                url={ view.storedTab.url }
-                               icon={ view.icon }
                                reloadPage={ view.reloadWebView }
                                onSearchSubmit={ view.onSearchSubmit }
                                goHomePage={ view.goHomePage }
                                numOfTabs={ getBrowserStore().tabs.length }
-                               openTabs={ () => props.showTabs(webViewRef) }
-                               changeAddress={ () => selectAddress.display = true }
-                               changeNetwork={ () => selectNetwork.display = true }
+                               openTabs={ () => props.showTabs(screenRef) }
+                               changeAddress={ () => {
+                                   selectAddress.display = true
+                               } }
+                               changeNetwork={ () => {
+                                   selectNetwork.display = true
+                               } }
                                openNewTab={ props.newTab }
                                searchValue={ view.searchValue }
                                onValueChange={ view.onSearchChange }
                 />
-                <View backgroundColor={ Colors.bg } flex-10 flexG-10
-                      style={ !view.isSearchMode ? { display: 'none' } : {} }>
-                    {
-                        view.searchResults.map((h, i) => {
-                            return <TouchableOpacity testID={ `searchResults-${ i }` } row key={ h[1].url } paddingH-16
-                                                     paddingV-5
-                                                     onPress={ () => view.onSearchSubmit(h[1].url) }>
-                                <View flex-1 centerV>
-                                    <Image source={ { uri: h[1].icon } } style={ { width: 32, height: 32 } }/>
-                                </View>
-                                <View flex-9 paddingL-10>
-                                    <View row flex>
-                                        <Text text16 numberOfLines={ 1 }>{ h[1].tittle }</Text>
-                                    </View>
-                                    <View row flex>
-                                        <Text primary numberOfLines={ 1 }>{ h[1].url }</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        })
-                    }
-                </View>
+                <SearchResults results={ view.searchResults }
+                               onSearchSubmit={ view.onSearchSubmit }
+                               isSearchMode={ view.isSearchMode }/>
                 <View flex-10 flexG-10 style={ view.isSearchMode ? { display: 'none' } : {} }>
                     <WebView
                         testID={ 'browserWebView' }
@@ -129,8 +114,8 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                         onShouldStartLoadWithRequest={ view.onShouldStartLoadWithRequest }
                         injectedJavaScriptBeforeContentLoaded={ view.entryScriptWeb3 }
                         source={ { uri: view.initialUrl } }
-                        onError={ console.log }
-                        renderError={ () => <CustomFallback /> }
+                        onError={ view.onError }
+                        renderError={ () => <CustomFallback/> }
                     />
                 </View>
                 { view.forwardEnabled &&

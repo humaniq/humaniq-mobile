@@ -61,7 +61,7 @@ const SelectValue = observer(() => {
 
 
     return <BlurWrapper before={
-        <Screen>
+        <Screen preset={ "scroll" } style={ { minHeight: "100%" } }>
             <Header rightText={ t('selectValueScreen.step2') }/>
             <View padding-16 testID={ 'selectValueScreen' }>
                 <Card>
@@ -75,7 +75,7 @@ const SelectValue = observer(() => {
                                } }
                                fiatOnTop={ getWalletStore().fiatOnTop }
                     />
-                    { !view.isTransferAllow && <View center>
+                    { !view.isTransferAllow && view.enoughFee && <View center>
                         <View paddingB-30 absR style={ {
                             borderWidth: 1,
                             borderColor: Colors.transparent,
@@ -84,6 +84,17 @@ const SelectValue = observer(() => {
                             borderBottomColor: "transparent"
                         } }/>
                         <Text error margin-10> { t("sendTransactionDialog.insufficientBalance") }</Text>
+                    </View>
+                    }
+                    { !view.enoughFee && <View center>
+                        <View paddingB-30 absR style={ {
+                            borderWidth: 1,
+                            borderColor: Colors.transparent,
+                            borderTopColor: Colors.grey,
+                            width: "80%",
+                            borderBottomColor: "transparent"
+                        } }/>
+                        <Text error margin-10> { t("sendTransactionDialog.notEnoughFee") }</Text>
                     </View>
                     }
                 </Card>
@@ -113,13 +124,13 @@ const SelectValue = observer(() => {
                             selectionColor={ Colors.primary }
                             keyboardType={ "numeric" }
                             floatingPlaceholder={ false }
-                            centered={ true }
                             hideUnderline
                             placeholder={ "0" }
                             placeholderTextColor={ Colors.textGrey }
                             enableErrors={ false }
                             value={ view.txData.value }
                             onChangeText={ (val) => {
+                                view.isMaxSettled = false
                                 view.txData.value = val
                             } }
                         />
@@ -152,9 +163,9 @@ const SelectValue = observer(() => {
                     </Button>
                 </View>
             </View>
-            <View center absB row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
+            <View flex bottom centerH row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                 <Button testID={ 'nextStep' }
-                        disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
+                        disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to || !view.enoughFee }
                         style={ { width: "100%", borderRadius: 12 } }
                         label={ !view.pendingTransaction ? `${ t("common.sendTo") } ${ view.txHumanReadable.totalFiat }` : "" }
                         onPress={ () => {

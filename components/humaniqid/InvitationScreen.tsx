@@ -1,14 +1,15 @@
 import React from "react";
 import { Button, Text, View } from "react-native-ui-lib";
 
-import HumqnidIDImage from '../../assets/images/humaniq-id-1.svg'
+import HumanIDImage from '../../assets/images/humaniq-id-1.svg'
 import { t } from "../../i18n";
-import { Linking } from "react-native";
+import { Linking, ScrollView } from "react-native";
 import { observer } from "mobx-react-lite";
 import { Header } from "../header/Header";
 import { getProfileStore } from "../../App";
 import { events } from "../../utils/events";
 import { MARKETING_EVENTS } from "../../config/events";
+import { toDp } from "../../utils/screenUtils";
 
 export interface InvitationScreenProps {
     onSkip?: () => any
@@ -28,11 +29,11 @@ export const InvitationScreen = observer<InvitationScreenProps>(
             {
                 useNavigation && <Header title={ t("humaniqID.settings.tittle") }/>
             }
-            <View flex padding-16>
-                <View flex-1 top centerH>
-                    <HumqnidIDImage/>
-                </View>
-                <View flex paddingT-24>
+            <View flex paddingH-16 marginT-16={useNavigation}>
+                <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+                    <View centerH marginB-16>
+                        <HumanIDImage height={toDp(150)}/>
+                    </View>
                     { !verified && <>
                         <Text text16 RobotoR>
                             { t("humaniqID.presentation.tittle") }
@@ -70,12 +71,11 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                             <Text text16 marginT-10>{ t("humaniqID.verified.secondLine") }</Text>
                         </>
                     }
-                </View>
-                <View flex-2 bottom>
+                </ScrollView>
+                <View marginB-16>
                     { !verified && !getProfileStore().isSuggested && <Button testID={ "skipBtn" }
                                                                              onPress={ onSkip }
                                                                              label={ t("humaniqID.skip") }
-                                                                             marginB-16
                                                                              outline
                                                                              br50
                                                                              robotoM/>
@@ -84,10 +84,10 @@ export const InvitationScreen = observer<InvitationScreenProps>(
                                            label={ t("humaniqID.settings.pasteID") }
                                            br50
                                            bg-primary
+                                           marginT-16
                                            robotoM/>
                     }
                 </View>
-
             </View>
         </>
     })

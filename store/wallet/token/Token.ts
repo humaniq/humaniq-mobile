@@ -22,7 +22,7 @@ export class Token extends Model({
     priceEther: p(t.string, ""),
     transactions: p(t.objectMap(t.model<TokenTransaction>(TokenTransaction)), () => objectMap<TokenTransaction>()),
     history: p(t.array(t.object(() => ({ time: t.string, price: t.number }))), () => []),
-    hidden: p(t.boolean, false).withSetter(),
+    show: p(t.boolean, true).withSetter(),
     prices: p(t.maybeNull(t.object(() => ({
         eur: t.number,
         usd: t.number,
@@ -35,8 +35,8 @@ export class Token extends Model({
 
     @modelAction
     toggleHide = () => {
-        this.hidden = !this.hidden
-        getDictionary().toggleHideSymbol(this.symbol.toLowerCase(), this.hidden)
+        this.show = !this.show
+        getDictionary().toggleHideSymbol(this.symbol.toLowerCase(), this.show)
     }
 
     @computed

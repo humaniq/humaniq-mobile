@@ -136,6 +136,10 @@ export class NativeTransaction extends Model({
                     // TODO: обработать обгон транзакции над перезаписываемой
                     getAppStore().toast.display = false
                     this.applyToWallet()
+
+                    await getWalletStore().walletsMap.get(confirmedTx.from)?.updateBalanceFromProvider()
+                    await getWalletStore().walletsMap.get(confirmedTx.to)?.updateBalanceFromProvider()
+
                     getEVMProvider().jsonRPCProvider.off(hash)
                 })
             })

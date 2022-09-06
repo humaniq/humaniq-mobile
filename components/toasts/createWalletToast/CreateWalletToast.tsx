@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Avatar, Button, Card, Colors, Text, Toast, View } from "react-native-ui-lib";
 import { useInstance } from "react-ioc";
@@ -8,10 +8,17 @@ import { HIcon } from "../../icon";
 import { TOAST_POSITION } from "../appToast/AppToast";
 import { CircularProgress } from "../../progress/CircularProgress";
 import { useNavigation } from "@react-navigation/native";
+import { RootNavigation } from "../../../navigators";
 
 export const CreateWalletToast = observer(() => {
     const view = useInstance(WalletsScreenModel)
     const nav = useNavigation()
+    const [ isWalletsList, setIsWalletsList ] = useState(false)
+
+    useEffect(() => {
+        setIsWalletsList(!!(RootNavigation.getRootState().routes.find(r => r.name === "walletsList")))
+    }, [ view.walletDialogs.pendingDialog.display ])
+
     return <Toast
         // zIndex={ 2147483647 }
         position={ "bottom" }
@@ -34,8 +41,9 @@ export const CreateWalletToast = observer(() => {
                         t("walletScreen.menuDialog.createWallet.createWalletMessageDone")
                     } </Text>
                     <View flex right>
-                        { view.walletDialogs.pendingDialog.walletCreated && <Button link label={ t("common.view") }
-                                onPress={ () => nav.navigate("walletsList", { animate: true }) }/> }
+                        { view.walletDialogs.pendingDialog.walletCreated && !isWalletsList &&
+                            <Button link label={ t("common.view") }
+                                    onPress={ () => nav.navigate("walletsList", { animate: true }) }/> }
                     </View>
                 </View>
             </Card>

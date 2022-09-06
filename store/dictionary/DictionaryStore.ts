@@ -44,7 +44,7 @@ export class DictionaryStore extends Model({
     }))), () => objectMap()),
     ethTokenCurrentAddress: p(t.objectMap(t.string), () => objectMap()),
     recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet()),
-    hiddenSymbols: p(t.arraySet(t.string), () => arraySet())
+    symbolsVisibility: p(t.objectMap(t.boolean), () => objectMap())
 }) {
 
     @modelFlow
@@ -52,23 +52,23 @@ export class DictionaryStore extends Model({
         const id = profiler.start(EVENTS.INIT_DICTIONARY_STORE)
         this.loadRecentlyUsedAddresses()
         yield this.loadTokensData()
-        yield this.loadHiddenSymbols()
+        yield this.loadSymbolsVisibility()
         this.initialized = uuidv4()
         profiler.end(id)
     }
 
     @modelFlow
-    * loadHiddenSymbols() {
-        const hidden = (yield* _await(localStorage.load("hm-wallet-hidden-symbols")))
-        if (hidden !== null) {
-            hidden.forEach(h => this.hiddenSymbols.add(h))
+    * loadSymbolsVisibility() {
+        const visibility = (yield* _await(localStorage.load("hm-wallet-symbols-visibility")))
+        if (visibility !== null) {
+            Object.entries(visibility).forEach(h => this.symbolsVisibility.set(h[0].toLowerCase(),h[1]))
         }
     }
 
     @modelFlow
-    * toggleHideSymbol(symbol, hidden) {
-        hidden ? this.hiddenSymbols.add(symbol) : this.hiddenSymbols.delete(symbol)
-        yield* _await(localStorage.save("hm-wallet-hidden-symbols", toJS(this.hiddenSymbols.items)))
+    * toggleHideSymbol(symbol, show) {
+        this.symbolsVisibility.set(symbol.toLowerCase(),show)
+        yield* _await(localStorage.save("hm-wallet-symbols-visibility", toJS(this.symbolsVisibility.items)))
     }
 
     @modelFlow
@@ -87,6 +87,14 @@ export class DictionaryStore extends Model({
         } else {
             tokens = (yield* _await(localStorage.load("hm-wallet-tokens")))
         }
+        this.ethToken.set("BUSD", {
+            logoURI: "https://assets-cdn.trustwallet.com/blockchains/binance/assets/BUSD-BD1/logo.png",
+            address: "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56",
+            decimals: 8,
+            type: "ERC20",
+            symbol: "BUSD"
+        })
+
         tokens.forEach(t => this.ethToken.set(t.symbol, {
             logoURI: t.logoURI,
             address: t.address,

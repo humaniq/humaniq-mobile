@@ -144,7 +144,7 @@
       "walletConnect": {
         "title": "Wallet connect",
         "info": "WalletConnect feature allows to use this Humaniq wallet with an app on another device. To connect:\n",
-        "hint": "1. Visit application or website that supports WalletConnect (for example: Uniswap);\n2. Click on \"Connect wallet\" button and choose \"WalletConnect\";\n3. Scan QR code with Humaniq wallet\n",
+        "hint": "1. Visit application or website that supports WalletConnect (for example: Uniswap);\n2. Click on \"Connect wallet\" button and choose \"WalletConnect\";\n3. Scan QR code with Humaniq wallet\n"
       },
       "displayOptions": "Display options",
       "balanceDisplay": "Balance Display",
@@ -171,15 +171,18 @@
   "sendTransactionDialog": {
     "successTx": "Funds sent successfully",
     "errorTx": "Error submitting transaction",
-    "suggestedFee": "Suggested fee",
+    "suggestedFee": "Fee",
     "maxFee": "Max fee",
     "maxAmount": "Max amount",
     "insufficientBalance": "Insufficient balance",
+    "notEnoughFee": "Not enough native coin to fee",
     "outerSuggestion": "TX data",
     "transactionSending": "Sending...",
     "successSendTx": "Transaction successfully send",
     "sendTransaction": "Send",
-    "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction"
+    "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction",
+    "allow": "Yes, allow this transaction",
+    "deny": "Deny this transaction"
   },
   "selectValueScreen": {
     "step": "Step 1 of 3",
@@ -228,7 +231,7 @@
     "from": "From",
     "to": "To",
     "amount": "Amount",
-    "suggestedFee": "Suggested fee",
+    "suggestedFee": "Fee",
     "total": "Total",
     "cancelTransaction": "Cancel transaction",
     "speedUpTransaction": "Speed up transaction",

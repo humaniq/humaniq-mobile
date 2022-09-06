@@ -11,6 +11,14 @@ export class ApprovalWalletConnectDialogViewModel {
         makeAutoObservable(this)
     }
 
+    get url() {
+        try {
+            return new URL(this.sessionData?.peerMeta?.url).host
+        } catch {
+            return ""
+        }
+    }
+
     /**
      * When user clicks on approve to connect with a dapp
      */

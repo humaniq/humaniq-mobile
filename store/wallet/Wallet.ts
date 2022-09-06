@@ -6,7 +6,6 @@ import {
     model,
     modelFlow,
     objectMap,
-    prop,
     runUnprotected,
     tProp as p,
     types as t
@@ -41,18 +40,18 @@ export interface TransactionsRequestResult {
 
 @model("Wallet")
 export class Wallet extends Model({
-    isError: prop<boolean>(false),
-    pending: prop<boolean>(false).withSetter(),
-    initialized: prop<string>("").withSetter(),
-    address: prop<string>(""),
-    name: prop<string>(""),
-    balance: prop<string>(""),
+    isError: p(t.boolean, false),
+    pending: p(t.boolean, false).withSetter(),
+    initialized: p(t.string, "").withSetter(),
+    address: p(t.string, ""),
+    name: p(t.string, ""),
+    balance: p(t.string, ""),
     hidden: p(t.boolean, false).withSetter(),
-    mnemonic: prop<string>(""),
-    path: prop<string>(""),
-    hdPath: prop<string>(""),
-    privateKey: prop<string>(""),
-    publicKey: prop<string>(""),
+    mnemonic: p(t.string, ""),
+    path: p(t.string, ""),
+    hdPath: p(t.string, ""),
+    privateKey: p(t.string, ""),
+    publicKey: p(t.string, ""),
     balances: p(t.maybeNull(t.object(() => ({
         amount: t.number,
         amountUnconfirmed: t.number,
@@ -76,16 +75,6 @@ export class Wallet extends Model({
     ether: Signer
 
     apiFinance: RequestStore
-
-    @modelFlow
-    toggleHide = async () => {
-        this.hidden = !this.hidden
-        if (this.hidden) {
-            getDictionary().hiddenSymbols.add(getEVMProvider().currentNetwork.nativeSymbol)
-        } else {
-            getDictionary().hiddenSymbols.delete(getEVMProvider().currentNetwork.nativeSymbol)
-        }
-    }
 
     async initWallet(force = false) {
         InteractionManager.runAfterInteractions(async () => {
@@ -239,7 +228,7 @@ export class Wallet extends Model({
     }
 
     @modelFlow
-    * getTokenTransactions(init = false) {
+    * getTokenTransactions(init = false, cursor?: string) {
         const id = profiler.start(EVENTS.LOAD_ERC20_TRANSACTIONS)
         try {
             if (init) {
@@ -250,32 +239,40 @@ export class Wallet extends Model({
             })
 
             const storedTransactions = (yield* _await(localStorage.load(`humaniq-pending-transactions-token-${ getEVMProvider().currentNetwork.chainID }-${ this.address }`))) || {}
-            const result = yield getMoralisRequest().get(route, { chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }` })
+            const result = yield getMoralisRequest().get(route, {
+                chain: `0x${ getEVMProvider().currentNetwork.networkID.toString(16) }`,
+                cursor
+            })
 
             if (result.ok && (result.data as TransactionsRequestResult).total) {
                 (result.data as TransactionsRequestResult).result.forEach(r => {
-
                     const currentToken = this.token.get(r.address)
+                    let tr
 
-                    const tr = new TokenTransaction({
-                        ...changeCaseObj(r),
-                        symbol: currentToken.symbol,
-                        decimals: currentToken.decimals,
-                        chainId: getEVMProvider().currentNetwork.chainID,
-                        walletAddress: this.address.toLowerCase(),
-                        blockTimestamp: new Date(r.block_timestamp),
-                        prices: currentToken.prices
-                    })
+                    try {
+                        tr = new TokenTransaction({
+                            ...changeCaseObj(r),
+                            symbol: currentToken.symbol,
+                            decimals: currentToken.decimals,
+                            chainId: getEVMProvider().currentNetwork.chainID,
+                            walletAddress: this.address.toLowerCase(),
+                            blockTimestamp: new Date(r.block_timestamp),
+                            prices: getSnapshot(currentToken.prices)
+                        })
+                    } catch (e) {
+                        console.log("ERROR", e)
+                    }
 
                     if (currentToken) {
                         runUnprotected(() => {
-                            currentToken.transactions.set(tr.transactionHash, tr)
+                            if (!currentToken.transactions.has(tr.transactionHash)) {
 
-                            const storedTx = storedTransactions[tr.transactionHash]
-                            if (storedTx) {
-                                const pTx = fromSnapshot<TokenTransaction>(storedTx)
-                                pTx.removeFromStore()
-                                delete storedTransactions[tr.transactionHash]
+                                currentToken.transactions.set(tr.transactionHash, tr)
+
+                                const storedTx = storedTransactions[tr.transactionHash]
+                                if (storedTx) {
+                                    delete storedTransactions[tr.transactionHash]
+                                }
                             }
                         })
                     }
@@ -290,9 +287,14 @@ export class Wallet extends Model({
                             pTx.waitTransaction()
                         }
                     } else {
-                        pTx.removeFromStore()
+                        delete storedTransactions[pTx.hash]
                     }
                 })
+                yield* _await(localStorage.save(`humaniq-pending-transactions-token-${ getEVMProvider().currentNetwork.chainID }-${ getWalletStore().selectedWallet.address }`, storedTransactions))
+
+                if (result.data.cursor) {
+                    yield this.getTokenTransactions(false, result.data.cursor)
+                }
                 this.tokenTransactionsInitialized = true
             } else {
                 // Sentry.captureException(result?.problem?.origianalError)
@@ -315,6 +317,7 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
+
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
@@ -338,7 +341,7 @@ export class Wallet extends Model({
                                 priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
-                                hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()),
+                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || true,
                                 prices: {
                                     eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
                                     usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
@@ -348,14 +351,19 @@ export class Wallet extends Model({
                                     eth: result.data.payload[t.symbol.toLowerCase()].eth.price
                                 }
                             }) :
-                            new Token({ ...changeCaseObj(t), walletAddress: this.address, hidden: getDictionary().hiddenSymbols.has(t.symbol.toLowerCase()), prices: {
+                            new Token({
+                                ...changeCaseObj(t),
+                                walletAddress: this.address,
+                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || false,
+                                prices: {
                                     eur: 0,
                                     usd: 0,
                                     rub: 0,
                                     cny: 0,
                                     jpy: 0,
                                     eth: 0
-                                } })
+                                }
+                            })
                         this.token.set(t.token_address, erc20Token)
                         erc20Token.init()
                     } catch (e) {
