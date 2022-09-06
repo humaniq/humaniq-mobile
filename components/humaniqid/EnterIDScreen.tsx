@@ -27,7 +27,6 @@ class EnterIDViewModel {
     invalidCode = false
 
     obst = reaction(() => this.value, async (val) => {
-        console.log(val, val.length)
         if (val.length === 6) {
             this.invalidCode = !await getProfileStore().checkCode(val)
         } else {
