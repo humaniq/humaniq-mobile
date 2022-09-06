@@ -5,9 +5,6 @@ import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import cl.json.RNSharePackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfs.RNFSPackage;
@@ -19,6 +16,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.reactnativeultimateconfig.UltimateConfigModule;
+import android.webkit.WebView;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -55,6 +53,9 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
     UltimateConfigModule.setBuildConfig(BuildConfig.class);
+    if (BuildConfig.DEBUG) {
+        WebView.setWebContentsDebuggingEnabled(true);
+    }
   }
 
   /**
