@@ -179,7 +179,7 @@ export const SendTransactionDialog = observer(() => {
                                 link br50 bg-primary marginB-20 robotoM
                                 label={ view.pending ? t("common.cancel") : t('sendTransactionDialog.deny') }/>
                     </View>
-                    <View width={ "100%" }>
+                    <View width={ "100%" } paddingB-60>
                         <Button disabled={ !view.enoughBalance || view.pending }
                                 onPress={ view.onAccountsConfirm }
                                 marginH-10

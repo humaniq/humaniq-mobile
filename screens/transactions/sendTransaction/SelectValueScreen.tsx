@@ -75,7 +75,7 @@ const SelectValue = observer(() => {
                                } }
                                fiatOnTop={ getWalletStore().fiatOnTop }
                     />
-                    { !view.isTransferAllow && <View center>
+                    { !view.isTransferAllow && view.enoughFee && <View center>
                         <View paddingB-30 absR style={ {
                             borderWidth: 1,
                             borderColor: Colors.transparent,
@@ -84,6 +84,17 @@ const SelectValue = observer(() => {
                             borderBottomColor: "transparent"
                         } }/>
                         <Text error margin-10> { t("sendTransactionDialog.insufficientBalance") }</Text>
+                    </View>
+                    }
+                    { !view.enoughFee && <View center>
+                        <View paddingB-30 absR style={ {
+                            borderWidth: 1,
+                            borderColor: Colors.transparent,
+                            borderTopColor: Colors.grey,
+                            width: "80%",
+                            borderBottomColor: "transparent"
+                        } }/>
+                        <Text error margin-10> { t("sendTransactionDialog.notEnoughFee") }</Text>
                     </View>
                     }
                 </Card>
@@ -119,6 +130,7 @@ const SelectValue = observer(() => {
                             enableErrors={ false }
                             value={ view.txData.value }
                             onChangeText={ (val) => {
+                                view.isMaxSettled = false
                                 view.txData.value = val
                             } }
                         />
@@ -153,7 +165,7 @@ const SelectValue = observer(() => {
             </View>
             <View flex bottom centerH row padding-20 style={ { width: "100%", paddingBottom: visible ? 8 : 20 } }>
                 <Button testID={ 'nextStep' }
-                        disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to }
+                        disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to || !view.enoughFee }
                         style={ { width: "100%", borderRadius: 12 } }
                         label={ !view.pendingTransaction ? `${ t("common.sendTo") } ${ view.txHumanReadable.totalFiat }` : "" }
                         onPress={ () => {

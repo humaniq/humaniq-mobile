@@ -123,7 +123,6 @@ export class WalletStore extends Model({
                 if (!this.keyring.mnemonic) {
                     this.keyring = new HDKeyring(this.storedWallets.mnemonic)
                 }
-                // this.hiddenWallets = (yield* _await(localStorage.load("hw-wallet-hidden"))) || []
                 this.allWallets = this.storedWallets.allWallets.map(w => {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
@@ -172,13 +171,22 @@ export class WalletStore extends Model({
     * addWallet() {
         try {
             events.send(MARKETING_EVENTS.CREATE_NEW_ADDRESS)
-            const wallet = yield this.createWallet()
+            const wallets = yield this.createWallet()
             const cryptr = new Cryptr(getAppStore().savedPin)
-            const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallet)))
+            const encoded = yield* _await(cryptr.encrypt(JSON.stringify(wallets)))
             yield* _await(localStorage.save("hm-wallet", encoded))
-            this.storedWallets = JSON.parse(JSON.stringify(wallet))
+            this.storedWallets = JSON.parse(JSON.stringify(wallets))
             events.send(MARKETING_EVENTS.CREATE_NEW_ADDRESS_SUCCESSFUL)
-            this.init(true)
+
+            const wallet = new Wallet({
+                privateKey: normalize(Buffer.from(this.storedWallets.allWallets[this.storedWallets.allWallets.length - 1].privateKey.data).toString("hex")),
+                publicKey: normalize(Buffer.from(this.storedWallets.allWallets[this.storedWallets.allWallets.length - 1].publicKey.data).toString("hex")),
+                address: ethers.utils.computeAddress(normalize(Buffer.from(this.storedWallets.allWallets[this.storedWallets.allWallets.length - 1].privateKey.data).toString("hex")))
+            })
+
+            wallet.initWallet()
+            this.allWallets = [ ...this.allWallets, wallet]
+
         } catch (e) {
             console.log("ERROR", e)
         }

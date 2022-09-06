@@ -35,7 +35,7 @@ export class SendTransactionViewModel {
     walletAddress = ""
     tokenAddress = ""
     symbol = getEVMProvider().currentNetwork.nativeSymbol.toUpperCase()
-    commissionSelectExpanded = false
+    isMaxSettled = false
     inputFiat = false
     contract
 
@@ -109,6 +109,7 @@ export class SendTransactionViewModel {
     }
 
     async init(route) {
+        this.isMaxSettled = false
         this.tokenAddress = route?.tokenAddress
         this.walletAddress = route?.walletAddress
         this.txData.to = route?.to
@@ -157,8 +158,9 @@ export class SendTransactionViewModel {
             } else {
                 this.txData.value = this.inputFiat ? (this.token.valBalance * this.price).toFixed(2).toString() : this.token.valBalance.toFixed(6).toString()
             }
+            this.isMaxSettled = true
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-set-max-value", e)
         }
     }
 
@@ -170,7 +172,7 @@ export class SendTransactionViewModel {
         try {
             return +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-fee", e)
             return 0
         }
     }
@@ -200,7 +202,7 @@ export class SendTransactionViewModel {
         try {
             return Number(this.txData.value) ? this.inputFiat ? (Number(this.txData.value) / this.price).toFixed(6).toString() : (Number(this.txData.value) * this.price).toFixed(2).toString() : "0"
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-parsed-price", e)
             return "0"
         }
     }
@@ -221,14 +223,36 @@ export class SendTransactionViewModel {
             feeFiat: currencyFormat(this.transactionFee * this.wallet?.prices[getWalletStore().currentFiatCurrency], getWalletStore().currentFiatCurrency),
             totalFiat: currencyFormat(+this.parsedValue * this.price + this.transactionFee * this.wallet?.prices[getWalletStore().currentFiatCurrency], getWalletStore().currentFiatCurrency),
             maxAmount: this.parsedValue ? (+this.parsedValue) + this.transactionMaxFee : 0,
-            total: Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase()) ? `${ (+this.transactionFee + (+this.parsedValue)) } ${ this.token.symbol.toUpperCase() }` :
+            total: this.isNativeSelected ? `${ (+this.transactionFee + (+this.parsedValue)) } ${ this.token.symbol.toUpperCase() }` :
                 `${ this.parsedValue } ${ this.token.symbol } + ${ this.transactionFee } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
         }
     }
 
-    get enoughBalance() {
+    get enoughFee() {
         try {
-            if (Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase())) {
+            if (this.isNativeSelected) {
+                return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
+                    .gte(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
+                    ) : false
+            } else {
+                return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
+                    .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) : false
+            }
+        } catch (e) {
+            console.log("ERROR-enough-balance", e)
+            return false
+        }
+    }
+
+    get isNativeSelected() {
+        return Object.values(NATIVE_COIN_SYMBOL).includes(this.token.symbol.toLowerCase())
+    }
+
+    get enoughBalance() {
+        if (!this.enoughFee) return false
+        if (this.isMaxSettled) return true
+        try {
+            if (this.isNativeSelected) {
                 return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
                     .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
                             BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
@@ -260,7 +284,7 @@ export class SendTransactionViewModel {
         try {
             return !(!this.wallet?.balances?.amount || !this.parsedValue || !this.enoughBalance);
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-transfer-allow", e)
             return false
         }
     }
@@ -271,7 +295,11 @@ export class SendTransactionViewModel {
             nonce: this.txData.nonce.toString(),
             gasPrice: this.selectedGasPrice.toString(),
             gas: this.txData.gasLimit.toString(),
-            value: ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
+            value: this.isMaxSettled ?
+                this.isNativeSelected ?
+                    (BigNumber.from(this.wallet?.balances.amount).sub(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))).toString() :
+                    this.token.balance :
+                ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
             walletAddress: this.wallet.address,
             toAddress: this.txData.to,
             fromAddress: this.wallet?.address,
@@ -306,6 +334,7 @@ export class SendTransactionViewModel {
             setTimeout(() => {
                 tx.waitTransaction()
                 getDictionary().saveAddress(tx.toAddress)
+                this.isMaxSettled = false
                 this.closeDialog()
             }, 10)
 
