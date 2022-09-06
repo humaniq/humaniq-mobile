@@ -27,6 +27,7 @@ class EnterIDViewModel {
     invalidCode = false
 
     obst = reaction(() => this.value, async (val) => {
+        console.log(val, val.length)
         if (val.length === 6) {
             this.invalidCode = !await getProfileStore().checkCode(val)
         } else {
@@ -160,7 +161,8 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
         </View>
         }
         <View flex bottom padding-16>
-            <Button testID={ 'nextStep' } disabled={ view.inputValueError || !view.value || view.value.length !== 6 }
+            <Button testID={ 'nextStep' }
+                    disabled={ view.inputValueError || !view.value || view.value.length !== 6 || !getProfileStore().checked }
                     style={ { width: "100%", borderRadius: 12 } }
                     label={ t("selectValueScreen.nextBtn") }
                     onPress={ async () => {
