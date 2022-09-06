@@ -175,6 +175,7 @@
     "maxFee": "Max fee",
     "maxAmount": "Max amount",
     "insufficientBalance": "Insufficient balance",
+    "notEnoughFee": "Not enough native coin to fee",
     "outerSuggestion": "TX data",
     "transactionSending": "Sending...",
     "successSendTx": "Transaction successfully send",
