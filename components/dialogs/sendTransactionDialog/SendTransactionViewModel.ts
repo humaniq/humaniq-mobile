@@ -175,6 +175,10 @@ export class SendTransactionViewModel {
     onAccountsConfirm = async () => {
         this.pending = true
         this.approvalRequest.resolve({ tx: this.txBody, meta: this.meta })
+        await Promise.all([
+            getWalletStore().selectedWallet.updateBalanceFromProvider(),
+            getWalletStore().selectedWallet.getTokenBalances()
+        ])
     }
 
     /**
