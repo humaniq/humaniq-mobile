@@ -173,6 +173,7 @@ export class SendTransactionViewModel {
      * When user clicks on approve to connect with a dapp
      */
     onAccountsConfirm = async () => {
+        console.log("confirm")
         this.pending = true
         this.approvalRequest.resolve({ tx: this.txBody, meta: this.meta })
         await Promise.all([
