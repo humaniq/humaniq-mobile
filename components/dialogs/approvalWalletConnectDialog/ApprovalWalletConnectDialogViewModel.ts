@@ -22,9 +22,13 @@ export class ApprovalWalletConnectDialogViewModel {
     /**
      * When user clicks on approve to connect with a dapp
      */
-    onAccountsConfirm = () => {
+    onAccountsConfirm = async () => {
         this.display = false
         this.approvalRequest.resolve(getWalletStore().selectedWallet?.address)
+        await Promise.all([
+            getWalletStore().selectedWallet.updateBalanceFromProvider(),
+            getWalletStore().selectedWallet.getTokenBalances()
+        ])
     }
 
     /**
