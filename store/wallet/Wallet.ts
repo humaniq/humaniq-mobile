@@ -13,7 +13,7 @@ import {
 import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
 import { computed, observable, reaction } from "mobx"
-import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
+import { beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
@@ -332,6 +332,7 @@ export class Wallet extends Model({
             }))
             if (result.ok) {
                 this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
+                this.token.clear()
                 erc20.data.forEach(t => {
                     try {
                         const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
@@ -410,7 +411,7 @@ export class Wallet extends Model({
 
     @computed
     get formatBalance() {
-        return amountFormat(this.valBalance, 8)
+        return this.valBalance ? this.valBalance.toString().includes("e") ? "0" : `${ beautifyNumber(this.valBalance) }` : `--/--`
     }
 
     @computed

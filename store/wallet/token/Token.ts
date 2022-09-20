@@ -75,7 +75,7 @@ export class Token extends Model({
 
     @computed
     get formatBalance() {
-        return this.valBalance ? `${ beautifyNumber(this.valBalance) } ${ this.symbol }` : `--/--`
+        return this.valBalance ? this.valBalance.toString().includes("e") ? `0 ${ this.symbol }` : `${ beautifyNumber(this.valBalance) } ${ this.symbol }` : `--/--`
     }
 
     @computed
