@@ -9,8 +9,7 @@ import { RootNavigation } from "../../../navigators";
 import { capitalize } from "../../../utils/general";
 
 export const WalletBody = observer<any>(({ address }) => {
-    // const store = useInstance(RootStore)
-    // const wallet = store.walletStore.allWallets.find(w => w.address === address)
+
     const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
     return (
         <Card marginH-16 marginB-10>
