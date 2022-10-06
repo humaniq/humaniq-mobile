@@ -11,29 +11,32 @@ import { HIcon } from "../../../components/icon"
 import { RippleWrapper } from "../../../components/ripple/RippleWrapper";
 import { events } from "../../../utils/events";
 import { MARKETING_EVENTS } from "../../../config/events";
+import { getAppStore } from "../../../App";
+import { observer } from "mobx-react-lite";
 
 export interface IWalletTransactionControlsProps {
     tokenAddress?: string
 }
 
-export const WalletTransactionControls = (props: IWalletTransactionControlsProps) => {
+export const WalletTransactionControls = observer<IWalletTransactionControlsProps>(({ tokenAddress }) => {
     const view = useInstance(WalletsScreenModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
     return <View>
         <View row center flex>
-            <RippleWrapper testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
+            <RippleWrapper testID={ `sendTransaction-${ tokenAddress || 'eth' }` }
                            style={ { flex: 0.5, marginRight: 8 } }
                            onClick={ () => {
                                RootNavigation.navigate("sendTransaction", {
                                    screen: "selectAddress",
                                    params: {
                                        walletAddress: view.currentWallet.address,
-                                       tokenAddress: props.tokenAddress
+                                       tokenAddress
                                    }
                                })
                            } }>
-                <Button paddingT-7 paddingB-7 outlineColor={ Colors.white } color={ Colors.white } borderRadius={ 14 }
+                <Button disabled={ !getAppStore().isConnected } paddingT-7 paddingB-7 outlineColor={ Colors.white }
+                        color={ Colors.white } borderRadius={ 14 }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
                         primary outline label={ t("common.send") }
                 >
@@ -46,7 +49,8 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
                                selfAddressQrCodeDialogViewModel.display = true
                            } }>
-                <Button paddingT-7 paddingB-7 outlineColor={ Colors.white } color={ Colors.white } borderRadius={ 14 }
+                <Button disabled={ !getAppStore().isConnected } paddingT-7 paddingB-7 outlineColor={ Colors.white }
+                        color={ Colors.white } borderRadius={ 14 }
                         labelStyle={ { fontFamily: "Roboto-Medium", paddingLeft: 10, fontSize: 15 } }
                         primary outline
                         label={ t("common.receive") }
@@ -55,4 +59,4 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                 </Button>
             </RippleWrapper>
         </View></View>
-}
+})
