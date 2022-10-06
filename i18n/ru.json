@@ -238,7 +238,8 @@
     "speedUpTransaction": "Ускорить транзакцию",
     "howMany": "Как много",
     "adjustFee": "Настроить комиссию",
-    "changeFee": "Изменить комиссию"
+    "changeFee": "Изменить комиссию",
+    "smartContract": "Смарт контракт"
   },
   "transactionModel": {
     "status": {

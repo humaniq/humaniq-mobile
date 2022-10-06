@@ -1,6 +1,7 @@
 import { Colors, Text, View } from "react-native-ui-lib";
 import React from "react";
 import Ripple from "react-native-material-ripple";
+import { t as tr } from "../../i18n";
 
 export const TransactionItem = ({ item, index, onPress }) => {
     return <Ripple testID={ 'transactionItem' } rippleColor={ Colors.primary }
@@ -26,6 +27,13 @@ export const TransactionItem = ({ item, index, onPress }) => {
                         <Text numberOfLines={ 1 } black text16 robotoR
                               color={ item.valueColor }>{ item.formatValue }</Text>
                     </View>
+                    { item.action === 3 &&
+                        <View paddingT-5>
+                            <Text textGrey text14 robotoR>
+                                { tr("transactionScreen.smartContract") }
+                            </Text>
+                        </View>
+                    }
                 </View>
             </View>
             {/* eslint-disable-next-line react-native/no-color-literals */ }

@@ -86,7 +86,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                 </View>
                 <View padding-16>
                     <Card>
-                        <View row spread marginH-16 centerV>
+                        { view.transaction.value !== "0" && <View row spread marginH-16 centerV>
                             <Text black text16 robotoM>
                                 { t("transactionScreen.amount") }
                             </Text>
@@ -97,8 +97,9 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                                       text14>{ `${ view.transaction.formatValue }` }</Text>
                             </View>
                         </View>
+                        }
                         { !!view.transaction?.fiatFee && <View>
-                            <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
+                            { view.transaction.value !== "0" && <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/> }
                             <View row spread marginH-16 centerV>
                                 <Text black text16 robotoM>
                                     { t("transactionScreen.suggestedFee") }
@@ -113,7 +114,7 @@ const Transaction = observer<{ route: any }>(({ route }) => {
                             </View>
                         </View>
                         }
-                        { !!view.transaction?.fiatTotal && <View>
+                        { !!view.transaction?.fiatTotal && view.transaction.value !== "0" && <View>
                             <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
                             <View row spread marginH-16 centerV>
                                 <Text black text16 robotoM>
