@@ -237,7 +237,8 @@
     "speedUpTransaction": "Speed up transaction",
     "howMany": "How many",
     "adjustFee": "Adjust miner fee",
-    "changeFee": "Change fee"
+    "changeFee": "Change fee",
+    "smartContract": "Smart contract"
   },
   "transactionModel": {
     "status": {
