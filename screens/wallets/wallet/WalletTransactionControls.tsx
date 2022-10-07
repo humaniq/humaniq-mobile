@@ -24,7 +24,8 @@ export const WalletTransactionControls = observer((props: IWalletTransactionCont
 
     return <View>
         <View row center flex>
-            <RippleWrapper disabled={ !getAppStore().isConnected } testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
+            <RippleWrapper disabled={ !getAppStore().isConnected }
+                           testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
                            style={ { flex: 0.5, marginRight: 8 } }
                            onClick={ () => {
                                RootNavigation.navigate("sendTransaction", {

@@ -38,7 +38,8 @@ export const RippleWrapper = ({
                                   backgroundColor = Colors.transparent,
                                   testID
                               }: RippleWrapperProps) => {
-    return <Ripple disabled={disabled} testID={ testID } style={ { borderRadius, overflow: "hidden", backgroundColor, ...style,  } }
+    return <Ripple disabled={ disabled } testID={ testID }
+                   style={ { borderRadius, overflow: "hidden", backgroundColor, ...style, } }
                    rippleColor={ rippleColor }
                    onPress={ onClick }>
         { children }
