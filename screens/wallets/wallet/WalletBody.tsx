@@ -27,7 +27,7 @@ export const WalletBody = observer<any>(({ address }) => {
                         tokenAddress={ wallet.address }
                         logo={ getEVMProvider().currentNetwork.nativeCoin }
                         name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
-                        formatBalance={ `${ beautifyNumber(+wallet.formatBalance) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }
+                        formatBalance={ `${ wallet.formatBalance } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }
                         formatFiatBalance={ wallet.formatFiatBalance }
                         index={ 0 }
                         fiatOnTop={ getWalletStore().fiatOnTop }

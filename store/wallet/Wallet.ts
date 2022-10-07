@@ -411,7 +411,7 @@ export class Wallet extends Model({
 
     @computed
     get formatBalance() {
-        return this.valBalance ? this.valBalance.toString().includes("e") ? "0" : `${ beautifyNumber(this.valBalance) }` : `--/--`
+        return this.valBalance ? this.valBalance.toString().includes("e") ? "0" : `${ beautifyNumber(this.valBalance) }` : `0`
     }
 
     @computed
