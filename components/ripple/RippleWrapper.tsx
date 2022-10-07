@@ -7,6 +7,7 @@ export interface RippleWrapperProps {
     children: ReactNode
     onClick: () => void
     style?: ViewStyle
+    disabled?: boolean
     borderRadius?: number
     rippleColor?: string
     backgroundColor?: string
@@ -20,6 +21,7 @@ export interface RippleWrapperProps {
  * @param children - React Node
  * @param onClick - Callback function
  * @param style - Additional style for wrapper component
+ * @param disabled - Ignore touches
  * @param borderRadius - Wrapper border radius
  * @param rippleColor - Ripple animation color
  * @param backgroundColor - Background color
@@ -32,10 +34,11 @@ export const RippleWrapper = ({
                                   style = {},
                                   borderRadius = 14,
                                   rippleColor = Colors.white,
+                                  disabled = false,
                                   backgroundColor = Colors.transparent,
                                   testID
                               }: RippleWrapperProps) => {
-    return <Ripple testID={ testID } style={ { borderRadius, overflow: "hidden", backgroundColor, ...style,  } }
+    return <Ripple disabled={disabled} testID={ testID } style={ { borderRadius, overflow: "hidden", backgroundColor, ...style,  } }
                    rippleColor={ rippleColor }
                    onPress={ onClick }>
         { children }
