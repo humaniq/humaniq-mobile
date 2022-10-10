@@ -83,9 +83,9 @@ export class SendTransactionViewModel {
     changeTokenValue = reaction(() => this.txData.value, throttle(async () => {
         this.updating = true
         try {
-            const lastVal = this.parsedValue.toString()
-            const result = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))).toString()) : 21000
-            if (lastVal === this.parsedValue.toString()) {
+            const lastVal = this.parsedValue
+            const result = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, this.fullValue))) : 21000 // ethers.utils.parseUnits(this.parsedValue, this.token.decimals))).toString()) : 21000
+            if (lastVal === this.parsedValue) {
                 this.txData.gasLimit = result
             }
         } catch (e) {
@@ -140,7 +140,7 @@ export class SendTransactionViewModel {
 
             const [ nonce, gasLimit ] = await Promise.all([
                 getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
-                this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
+                this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, this.fullValue) // ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
             ])
             this.txData.nonce = nonce
             this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
@@ -230,14 +230,9 @@ export class SendTransactionViewModel {
 
     get enoughFee() {
         try {
-            if (this.isNativeSelected) {
-                return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
-                    .gte(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
-                    ) : false
-            } else {
-                return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
-                    .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) : false
-            }
+            return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
+                .gte(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
+                ) : false
         } catch (e) {
             console.log("ERROR-enough-balance", e)
             return false
@@ -254,13 +249,13 @@ export class SendTransactionViewModel {
         try {
             if (this.isNativeSelected) {
                 return this.wallet.balances?.amount ? BigNumber.from(this.wallet.balances?.amount)
-                    .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).add(
+                    .gte(BigNumber.from(this.fullValue).add(
                             BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)
                         )
                     ) : false
             } else {
                 return this.wallet.balances?.amount ? BigNumber.from(this.token.balance)
-                        .gte(ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals)) &&
+                        .gte(BigNumber.from(this.fullValue)) &&
                     BigNumber.from(this.wallet.balances?.amount)
                         .gt(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice)) : false
             }
@@ -289,33 +284,37 @@ export class SendTransactionViewModel {
         }
     }
 
-    get txBody() {
-        const baseBody = {
-            chainId: this.txData.chainId.toString(),
-            nonce: this.txData.nonce.toString(),
-            gasPrice: this.selectedGasPrice.toString(),
-            gas: this.txData.gasLimit.toString(),
-            value: this.isMaxSettled ?
-                this.isNativeSelected ?
-                    (BigNumber.from(this.wallet?.balances.amount).sub(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))).toString() :
-                    this.token.balance :
-                ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals).toString(),
-            walletAddress: this.wallet.address,
-            toAddress: this.txData.to,
-            fromAddress: this.wallet?.address,
-            input: "0x",
-            blockTimestamp: new Date(),
-            prices: toJS(this.token.prices),
-            type: 0
-        }
+    get fullValue() {
+        return this.isMaxSettled ?
+            this.isNativeSelected ?
+                (BigNumber.from(this.wallet?.balances.amount).sub(BigNumber.from(this.txData.gasLimit * +this.selectedGasPrice))).toString() :
+                this.token.balance :
+            ethers.utils.parseUnits(this.parsedValue, this.token.decimals).toString()
+    }
 
-        return !this.tokenAddress ? baseBody : {
-            ...baseBody,
-            decimals: this.token?.decimals,
-            address: this.tokenAddress,
-            symbol: this.token?.symbol,
-            receiptStatus: TRANSACTION_STATUS.PENDING
-        }
+    get txBody() {
+            const baseBody = {
+                chainId: this.txData.chainId.toString(),
+                nonce: this.txData.nonce.toString(),
+                gasPrice: this.selectedGasPrice.toString(),
+                gas: this.txData.gasLimit.toString(),
+                value: this.fullValue,
+                walletAddress: this.wallet.address,
+                toAddress: this.txData.to,
+                fromAddress: this.wallet?.address,
+                input: "0x",
+                blockTimestamp: new Date(),
+                prices: toJS(this.token.prices),
+                type: 0
+            }
+
+            return !this.tokenAddress ? baseBody : {
+                ...baseBody,
+                decimals: this.token?.decimals,
+                address: this.tokenAddress,
+                symbol: this.token?.symbol,
+                receiptStatus: TRANSACTION_STATUS.PENDING
+            }
     }
 
     sendTx = async () => {
