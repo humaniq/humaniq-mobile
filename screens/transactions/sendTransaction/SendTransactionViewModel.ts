@@ -84,7 +84,7 @@ export class SendTransactionViewModel {
         this.updating = true
         try {
             const lastVal = this.parsedValue
-            const result = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, this.fullValue))) : 21000 // ethers.utils.parseUnits(this.parsedValue, this.token.decimals))).toString()) : 21000
+            const result = this.tokenAddress && this.txData.to ? +((await this.contract.estimateGas.transfer(this.txData.to, this.fullValue))) : 21000
             if (lastVal === this.parsedValue) {
                 this.txData.gasLimit = result
             }
@@ -140,7 +140,7 @@ export class SendTransactionViewModel {
 
             const [ nonce, gasLimit ] = await Promise.all([
                 getEVMProvider().jsonRPCProvider.getTransactionCount(this.wallet.address, "pending"),
-                this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, this.fullValue) // ethers.utils.parseUnits(this.parsedValue.toString(), this.token.decimals))
+                this.tokenAddress && this.txData.to && this.contract.estimateGas.transfer(this.txData.to, this.fullValue)
             ])
             this.txData.nonce = nonce
             this.txData.gasLimit = gasLimit && +(gasLimit.toString()) || 21000
