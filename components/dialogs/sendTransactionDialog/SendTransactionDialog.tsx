@@ -5,11 +5,12 @@ import { observer } from "mobx-react-lite"
 import { DialogHeader } from "../dialogHeader/DalogHeader"
 import { SendTransactionViewModel } from "./SendTransactionViewModel"
 import { t } from "../../../i18n"
-import { getWalletStore } from "../../../App"
+import { getEVMProvider, getWalletStore } from "../../../App"
 import { HIcon } from "../../icon";
 import { WalletItem } from "../../walletItem/WalletItem";
 import Ripple from "react-native-material-ripple"
 import { ScrollView } from "react-native";
+import { NATIVE_COIN_SYMBOL } from "../../../config/network";
 
 export const SendTransactionDialog = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -33,7 +34,7 @@ export const SendTransactionDialog = observer(() => {
             }
         } }
     >
-        <DialogHeader onPressIn={ () => view.display = false }
+        <DialogHeader onPressIn={ () => { view.display = false } }
                       buttonStyle={ {
                           marginTop: 2,
                           padding: 2,
@@ -72,98 +73,84 @@ export const SendTransactionDialog = observer(() => {
                         <Card width={ "100%" }>
                             <View row spread padding-12 centerV>
                                 <View flex>
-                                    <Text robotoM text16>{ t("transactionScreen.amount") }</Text>
-                                </View>
-                                <View right>
-                                    <Text robotoM text16>{ view.txHumanReadable.valueFiat }</Text>
-                                    <Text marginT-5
-                                          textGrey>{ `${ view.txHumanReadable.value } ${ view.token.symbol }` }</Text>
-                                </View>
-                            </View>
-                            <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
-                            <View row spread padding-12 centerV>
-                                <View flex>
                                     <Text robotoM text16>{ t("transactionScreen.suggestedFee") }</Text>
                                 </View>
                                 <View right>
                                     <Text robotoM text16>{ view.txHumanReadable.feeFiat }</Text>
-                                    <Text marginT-5 textGrey>{ `${ view.txHumanReadable.fee } ${ view.token.symbol }` }</Text>
-                                </View>
-                            </View>
-                            <View style={ { borderBottomWidth: 1, borderBottomColor: Colors.grey, marginLeft: 15 } }/>
-                            <View row spread padding-12 centerV>
-                                <View flex>
-                                    <Text numberOfLines={ 1 } robotoM text16>{ t("common.total") }</Text>
-                                </View>
-                                <View right>
-                                    <Text robotoM text16>{ view.txHumanReadable.totalFiat }</Text>
-                                    <Text marginT-5 numberOfLines={ 1 }
-                                          textGrey>{ `${ view.txHumanReadable.total } ${ view.token.symbol }` }</Text>
+                                    <Text marginT-5
+                                          textGrey>{ `${ Number(view.txHumanReadable.fee).toFixed(4) } ${ view.token.symbol }` }</Text>
                                 </View>
                             </View>
                         </Card>
                     </View>
-                    <View row paddingV-8>
-                        <Card width={ "100%" }>
-                            <ExpandableSection
-                                onPress={ () => setExpanded(!expanded) }
-                                expanded={ expanded }
-                                sectionHeader={ <><View row padding-8 spread centerV>
-                                    <Text text16 robotoM>{ t("transactionScreen.changeFee") }</Text>
-                                    <Button link style={ { height: 30, width: 30 } }
-                                            onPress={ () => {
-                                                setExpanded(!expanded)
-                                            } }
-                                    >
-                                        { !expanded &&
-                                            <HIcon name={ "down" } width={ 14 } style={ { color: Colors.black } }/> }
-                                        { expanded &&
-                                            <HIcon name={ "up" } width={ 14 } style={ { color: Colors.black } }/> }
-                                    </Button>
-                                </View>
-                                    { expanded && <View style={ {
-                                        borderBottomWidth: 1,
-                                        borderBottomColor: Colors.grey,
-                                        marginLeft: 8
-                                    } }/> }
-                                </> }
-                            >
-                                <View row spread padding-16>
-                                    {
-                                        view.transactionFeeView.options.map((option, index) => {
-                                            return <Ripple onPress={ () => option.onOptionPress() } key={ index }
-                                                           style={ {
-                                                               borderWidth: 1,
-                                                               borderRadius: 12,
-                                                               borderColor: Colors.grey,
-                                                               width: '30%',
-                                                               overflow: 'hidden'
-                                                           } }
-                                            >
-                                                <View paddingH-16 paddingV-10 width={ '100%' }>
-                                                    <View centerH>
-                                                        <Avatar imageStyle={ {
-                                                            height: 24,
-                                                            width: 24,
-                                                            position: "absolute",
-                                                            left: 10,
-                                                            top: 10
-                                                        } }
-                                                                backgroundColor={ Colors.greyLight } size={ 44 }
-                                                            // source={ (option.label as any).icon }
-                                                        >
-                                                            { (option.label as any).icon }
-                                                        </Avatar>
-                                                        <Text black text16 center
-                                                              robotoM>{ (option.label as any).name }</Text>
+                    { getEVMProvider().currentNetwork.nativeSymbol !== NATIVE_COIN_SYMBOL.BNB &&
+                        <View row paddingV-8>
+                            <Card width={ "100%" }>
+                                <ExpandableSection
+                                    onPress={ () => setExpanded(!expanded) }
+                                    expanded={ expanded }
+                                    sectionHeader={ <><View row padding-8 spread centerV>
+                                        <Text text16 robotoM>{ t("transactionScreen.changeFee") }</Text>
+                                        <Button link style={ { height: 30, width: 30 } }
+                                                onPress={ () => {
+                                                    setExpanded(!expanded)
+                                                } }
+                                        >
+                                            { !expanded &&
+                                                <HIcon name={ "down" } width={ 14 }
+                                                       style={ { color: Colors.black } }/> }
+                                            { expanded &&
+                                                <HIcon name={ "up" } width={ 14 } style={ { color: Colors.black } }/> }
+                                        </Button>
+                                    </View>
+                                        { expanded && <View style={ {
+                                            borderBottomWidth: 1,
+                                            borderBottomColor: Colors.grey,
+                                            marginLeft: 8
+                                        } }/> }
+                                    </> }
+                                >
+                                    <View row spread padding-16>
+                                        {
+                                            view.transactionFeeView.options.map((option, index) => {
+                                                return <Ripple onPress={ () => option.onOptionPress() } key={ index }
+                                                               style={ {
+                                                                   borderWidth: 1,
+                                                                   borderRadius: 12,
+                                                                   borderColor: Colors.grey,
+                                                                   width: '30%',
+                                                                   overflow: 'hidden'
+                                                               } }
+                                                >
+                                                    <View paddingH-16 paddingV-10 width={ '100%' }>
+                                                        <View centerH>
+                                                            <Avatar imageStyle={ {
+                                                                height: 24,
+                                                                width: 24,
+                                                                position: "absolute",
+                                                                left: 10,
+                                                                top: 10
+                                                            } }
+                                                                    backgroundColor={ Colors.greyLight } size={ 44 }
+                                                                // source={ (option.label as any).icon }
+                                                            >
+                                                                { (option.label as any).icon }
+                                                            </Avatar>
+                                                            <Text black text16 center
+                                                                  robotoM>{ (option.label as any).name }</Text>
+                                                        </View>
                                                     </View>
-                                                </View>
-                                            </Ripple>
-                                        })
-                                    }
-                                </View>
-                            </ExpandableSection>
-                        </Card>
+                                                </Ripple>
+                                            })
+                                        }
+                                    </View>
+                                </ExpandableSection>
+                            </Card>
+                        </View> }
+                    <View row paddingV-8>
+                        <Text center grey30 text80>{
+                            t('sendTransactionDialog.smartContractInteraction') }
+                        </Text>
                     </View>
                     { !view.enoughBalance && !view.pending &&
                         <View row center>
@@ -179,7 +166,7 @@ export const SendTransactionDialog = observer(() => {
                                 link br50 bg-primary marginB-20 robotoM
                                 label={ view.pending ? t("common.cancel") : t('sendTransactionDialog.deny') }/>
                     </View>
-                    <View width={ "100%" } paddingB-60>
+                    <View width={ "100%" } paddingB-8>
                         <Button disabled={ !view.enoughBalance || view.pending }
                                 onPress={ view.onAccountsConfirm }
                                 marginH-10

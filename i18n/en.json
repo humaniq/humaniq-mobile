@@ -182,7 +182,8 @@
     "sendTransaction": "Send",
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction",
     "allow": "Yes, allow this transaction",
-    "deny": "Deny this transaction"
+    "deny": "Deny this transaction",
+    "smartContractInteraction": "This is an interaction with smart contract"
   },
   "selectValueScreen": {
     "step": "Step 1 of 3",
