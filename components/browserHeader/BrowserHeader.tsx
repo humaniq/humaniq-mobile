@@ -56,7 +56,8 @@ export const BrowserHeader = observer<HeaderProps>((
     return <View row center bg-bg paddingV-10>
         { !isSearchMode &&
             <View left paddingH-8>
-                <Ripple testID={ 'goHome' } center onPress={ goHomePage } style={ { padding: 10 } }>
+                <Ripple rippleContainerBorderRadius={ 50 } testID={ 'goHome' } center onPress={ goHomePage }
+                        style={ { padding: 10 } }>
                     <HIcon name={ "home" } size={ 20 }/>
                 </Ripple>
             </View>
@@ -115,7 +116,7 @@ export const BrowserHeader = observer<HeaderProps>((
                 <Ripple
                     testID={ 'openTabs' }
                     style={ { padding: 10 } }
-                    rippleColor={ Colors.primary }
+                    rippleContainerBorderRadius={ 50 }
                     onPress={ openTabs }
                 >
                     <View center paddingH-6 paddingV-2
@@ -176,9 +177,9 @@ export const BrowserHeader = observer<HeaderProps>((
                     onBackgroundPress={ () => setVisible(!visible) }
                 >
                     <View>
-                            <Ripple testID={ 'browserMenu' } onPress={ () => setVisible(!visible) }
-                                rippleContainerBorderRadius={ 20 }
-                                rippleColor={ Colors.primary }
+                        <Ripple testID={ 'browserMenu' }
+                                onPress={ () => setVisible(!visible) }
+                                rippleContainerBorderRadius={ 50 }
                                 style={ { padding: 10 } }
                         >
                             <HIcon name={ "circles" } size={ 18 }/>

@@ -2,7 +2,7 @@ import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
 import { BrowserTabScreenViewModel } from "./BrowserTabScreenViewModel"
 import React, { useEffect, useRef } from "react"
-import { Colors, TouchableOpacity, View } from "react-native-ui-lib"
+import { Colors, LoaderScreen, TouchableOpacity, View } from "react-native-ui-lib"
 import * as Animatable from "react-native-animatable"
 import { useNavigation } from "@react-navigation/native"
 import WebView from "react-native-webview"
@@ -103,6 +103,11 @@ const BrowserTab = observer<IBrowserTab>((props) => {
                         ref={ webViewRef }
                         javaScriptEnabled
                         bounces={ false }
+                        renderLoading={ () => (
+                            <View absF backgroundColor={Colors.white}>
+                                <LoaderScreen/>
+                            </View>
+                        ) }
                         localStorageEnabled
                         setSupportMultipleWindows={ false }
                         onNavigationStateChange={ view.navChanged }

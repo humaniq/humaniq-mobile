@@ -175,7 +175,7 @@ export const QrScannerRoundedBoundary = ({
         </View>
         { !isEmpty(helperText) ? <View paddingH-70 center style={ {
             position: 'absolute',
-            top: (deviceHeight / yOffset) - (squareSize / yOffset) + squareSize + 20 ,
+            top: (deviceHeight / yOffset) - (squareSize / yOffset) + squareSize + 20,
             left: 0,
             right: 0
         } }>

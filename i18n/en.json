@@ -286,7 +286,8 @@
     "scanning": "Point the camera of your phone to the QR code ",
     "chooseFromGallery": "Choose from gallery",
     "qrCodeDetectionError": "Failed to detect QR code in image",
-    "scanQrCode": "Scan QR code"
+    "scanQrCode": "Scan QR code",
+    "openSettings": "Open Settings"
   },
   "humaniqID": {
     "presentation": {
