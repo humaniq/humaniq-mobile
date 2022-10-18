@@ -22,7 +22,6 @@ import {
 } from "../../components/dialogs/approvalDappConnectDialog/ApprovalDappConnectDialog";
 
 const Browser = observer(() => {
-
     const { setActiveTab, closeTab, closeAllTabs, removeActiveTab } = getBrowserStore()
     const view = useInstance(BrowserScreenViewModel)
 
