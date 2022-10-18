@@ -8,6 +8,7 @@ import { Wallet } from "../../../store/wallet/Wallet";
 import { inject } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "../selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { capitalize } from "../../../utils/general";
+import { parseStandardTokenTransactionData } from "../../../utils/transaction";
 
 export class SendTransactionViewModel {
     display = false
@@ -16,6 +17,7 @@ export class SendTransactionViewModel {
     sending = false
     symbol = "ETH"
     txHash = ""
+    txDescription: ethers.utils.TransactionDescription
 
     approvalRequest
 
@@ -48,6 +50,9 @@ export class SendTransactionViewModel {
                 ...txData
             }
 
+            this.txDescription = parseStandardTokenTransactionData("0xa9059cbb000000000000000000000000168473253233949d9ca951db9603de0f340f3c54000000000000000000000000000000000000000000000000000000000bebc200") // this.txData.data)
+            console.log(this.txDescription)
+
             this.display = true
             this.initialized = true
             this.txData.chainId = getEVMProvider().currentNetwork.chainID
@@ -66,6 +71,14 @@ export class SendTransactionViewModel {
         } catch (e) {
             console.log("ERROR", e)
         }
+    }
+
+    get isKnownTxFunction() {
+        return !!this.txDescription?.name
+    }
+
+    get functionName() {
+        return `${ this.txDescription?.name.toUpperCase() }`
     }
 
     get selectedGasPrice() {

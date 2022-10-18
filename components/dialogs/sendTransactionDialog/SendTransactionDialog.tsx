@@ -11,6 +11,7 @@ import { WalletItem } from "../../walletItem/WalletItem";
 import Ripple from "react-native-material-ripple"
 import { ScrollView } from "react-native";
 import { NATIVE_COIN_SYMBOL } from "../../../config/network";
+import { renderShortAddress } from "../../../utils/address";
 
 export const SendTransactionDialog = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -34,7 +35,9 @@ export const SendTransactionDialog = observer(() => {
             }
         } }
     >
-        <DialogHeader onPressIn={ () => { view.display = false } }
+        <DialogHeader onPressIn={ () => {
+            view.display = false
+        } }
                       buttonStyle={ {
                           marginTop: 2,
                           padding: 2,
@@ -61,8 +64,36 @@ export const SendTransactionDialog = observer(() => {
             { view.initialized && !view.txHash &&
                 <View center padding-20>
                     <View row center>
-                        <Text text16 robotoM> { view.hostname } </Text>
+                        <Text text16 robotoM> { view.isKnownTxFunction ? view.functionName : view.hostname } </Text>
                     </View>
+                    { view.isKnownTxFunction && view.functionName === "APPROVE" && <>
+                        <View row center paddingT-20>
+                            <Text text14 robotoM> { t("sendTransactionDialog.approve.title") } </Text>
+
+                        </View>
+                        <View row center>
+                            <Text text14 grey30> { t("sendTransactionDialog.approve.description") } </Text>
+                        </View>
+                        <View row center paddingV-16>
+                            <Text text16 robotoB>{renderShortAddress(view.txDescription.args[0])}</Text>
+                        </View>
+                        <View row center paddingV-16>
+                            <Text text16>{view.txDescription.args[1].toString()}</Text>
+                        </View>
+                        </>
+                    }
+                    { view.isKnownTxFunction && view.functionName === "TRANSFER" && <>
+                        <View row center paddingT-20>
+                            <Text text14 robotoM> { t("sendTransactionDialog.transfer.title") } </Text>
+                        </View>
+                        <View row center paddingV-16>
+                            <Text text16 robotoB>{renderShortAddress(view.txDescription.args[0])}</Text>
+                        </View>
+                        <View row center paddingV-16>
+                            <Text text16>{view.txDescription.args[1].toString()}</Text>
+                        </View>
+                    </>
+                    }
                     <View row paddingV-16>
                         <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>
                     </View>
