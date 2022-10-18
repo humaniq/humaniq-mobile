@@ -9,7 +9,7 @@ import { DialogHeader } from "../dialogHeader/DalogHeader"
 import { t } from "../../../i18n";
 import Clipboard from "@react-native-clipboard/clipboard";
 import { runUnprotected } from "mobx-keystone";
-import { getAppStore } from "../../../App";
+import { getAppStore, getWalletStore } from "../../../App";
 import { TOASTER_TYPE } from "../../../store/app/AppStore";
 import Share from "react-native-share"
 
@@ -32,6 +32,11 @@ export const SelfAddressQrCodeDialog = observer(() => {
                         size={ 203 }
                         value={ `ethereum:${ view.wallet?.address }` }
                     />
+                    <View row center paddingT-20>
+                        <Text center robotoR textGrey>
+                            { getWalletStore().selectedWallet?.address }
+                        </Text>
+                    </View>
                     <View row center padding-20>
                         <Text center robotoR>
                             { t("selfAddressQRCodeDialog.description") }
