@@ -38,7 +38,7 @@ export class SelectWalletTokenViewModel {
       name: i.name,
       symbol: i.symbol,
       tokenAddress: i.tokenAddress,
-      logo: i.logo,
+      logo: i?.logo,
       formatBalance: i.formatBalance,
       formatFiatBalance: i.formatFiatBalance,
       onPress: () => {

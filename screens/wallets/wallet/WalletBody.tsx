@@ -1,12 +1,12 @@
-import { Card, LoaderScreen } from "react-native-ui-lib";
+import { Card } from "react-native-ui-lib";
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
 import { Wallet } from "../../../store/wallet/Wallet";
-import { beautifyNumber } from "../../../utils/number";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { RootNavigation } from "../../../navigators";
 import { capitalize } from "../../../utils/general";
+import { ListSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
 
 export const WalletBody = observer<any>(({ address }) => {
 
@@ -14,7 +14,7 @@ export const WalletBody = observer<any>(({ address }) => {
     return (
         <Card marginH-16 marginB-10>
             {
-                !!wallet.initialized && <>
+                !!wallet.initialized && getDictionary().networkTokensInitialized && <>
                     <TokenItem
                         showGraph={ getWalletStore().showGraphBool }
                         onPress={ () => RootNavigation.navigate("walletTransactions", {
@@ -34,7 +34,7 @@ export const WalletBody = observer<any>(({ address }) => {
                     />
                     {
                         wallet.tokenList.length > 0 && wallet.tokenList
-                            .filter(t => getDictionary().symbolsVisibility.has(t.symbol.toLowerCase()) ? getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) : !!t.priceUSD)
+                            .filter(t => getDictionary().currentTokenDictionary[t.tokenAddress] ? !getDictionary().currentTokenDictionary[t.tokenAddress]?.hidden : false)
                             .map((p, i) => {
                                 return <TokenItem
                                     showGraph={ getWalletStore().showGraphBool }
@@ -57,7 +57,7 @@ export const WalletBody = observer<any>(({ address }) => {
                 </>
             }
             {
-                !wallet.initialized && <LoaderScreen/>
+                !getDictionary().networkTokensInitialized && <ListSkeleton/>
             }
         </Card>
     )

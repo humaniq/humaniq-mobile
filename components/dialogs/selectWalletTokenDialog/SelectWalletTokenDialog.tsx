@@ -55,7 +55,7 @@ export const SelectWalletTokenDialog = observer(() => {
                 keyExtractor={ (item, index) => `token_${ item.symbol }_${ index }` }
                 renderItem={ ({ item, index }) => {
                     return <TokenItem key={ index } symbol={ item.symbol } tokenAddress={ item.tokenAddress }
-                                      logo={ item.logo }
+                                      logo={ item?.logo }
                                       name={ item.name }
                                       formatBalance={ item.formatBalance } formatFiatBalance={ item.formatFiatBalance }
                                       index={ index }

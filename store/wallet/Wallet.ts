@@ -90,8 +90,12 @@ export class Wallet extends Model({
                     await Promise.all([
                         this.updateBalanceFromProvider(),
                         this.getCoinCost(),
-                        this.getTokenBalances()
+                        getDictionary().networkTokensInitialized && this.getTokenBalances()
                     ])
+
+                    reaction(() => getDictionary().networkTokensInitialized, () => {
+                        this.getTokenBalances()
+                    })
 
                     reaction(() => getWalletStore().showGraphBool, (val) => {
                         if (val) {
@@ -318,6 +322,8 @@ export class Wallet extends Model({
     @modelFlow
     * getTokenBalances() {
 
+        console.log("getTokenBalances")
+
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
@@ -342,7 +348,7 @@ export class Wallet extends Model({
                                 priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || true,
+                                show: getDictionary().currentTokenDictionary[t.token_address] ? !getDictionary().currentTokenDictionary[t.token_address]?.hidden : false,
                                 prices: {
                                     eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
                                     usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
@@ -355,7 +361,7 @@ export class Wallet extends Model({
                             new Token({
                                 ...changeCaseObj(t),
                                 walletAddress: this.address,
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || false,
+                                show: getDictionary().currentTokenDictionary[t.token_address] ? !getDictionary().currentTokenDictionary[t.token_address]?.hidden : false,
                                 prices: {
                                     eur: 0,
                                     usd: 0,

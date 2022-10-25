@@ -63,21 +63,21 @@ export function MainNavigator<PrimaryParamList>() {
                         case "browser":
                             return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 }
                                          height={ 30 }
-                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.2) : Colors.white }
                             >
                                 <HIcon name={ "globe" } size={ 20 }
                                        style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
                         case "settings":
                             return <View padding-5 paddingL-20 marginB-5 br50 width={ 60 }
                                          height={ 30 }
-                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.2) : Colors.white }
                             >
                                 <HIcon
                                     name={ "cog" } size={ 20 }
                                     style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/></View>
                         default:
                             return <View padding-5 paddingL-20 marginB-5 br50
-                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.1) : Colors.white }
+                                         backgroundColor={ options.focused ? Colors.rgba(Colors.primary, 0.2) : Colors.white }
                                          width={ 60 } height={ 30 }>
                                 <HIcon name={ "wallet" } size={ 20 }
                                        style={ { color: options.focused ? Colors.primary : Colors.textGrey } }/>

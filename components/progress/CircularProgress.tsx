@@ -100,7 +100,7 @@ export const CircularProgress = ({
             spinAnimation = Animated.loop(
                 Animated.timing(animatedSpinValue, {
                     toValue: 1,
-                    duration: 800,
+                    duration: 900,
                     easing: Easing.linear,
                     useNativeDriver: true,
                     isInteraction: false
@@ -165,7 +165,7 @@ export const CircularProgress = ({
                             cx="50%"
                             cy="50%"
                             stroke={ color }
-                            strokeWidth={ strokeWidth }
+                            strokeWidth={ strokeWidth + 0.5 }
                             r={ radius }
                             fill="transparent"
                             strokeDasharray={ circumference }

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { InteractionManager } from "react-native";
+import { InteractionManager, Linking, Alert } from "react-native";
 import { failedSeedPhraseRequirements } from "../../utils/validators";
 import { ethers } from "ethers";
 import { parse } from 'eth-url-parser';
@@ -129,9 +129,28 @@ export class QRScannerView {
     return true
   }
 
-  onStatusChange = (event) => {
+  onStatusChange = async (event) => {
     if (event.cameraStatus === 'NOT_AUTHORIZED') {
-      this.navigation.goBack();
+      Alert.alert(
+          t("qRScanner.allowDialog.title"),
+          t('qRScanner.allowDialog.message'),
+          [
+            {
+              text: t("common.cancel"),
+              onPress: () => {
+                this.navigation.goBack();
+              },
+              style: "cancel"
+            },
+            {
+              text: t("qRScanner.openSettings"),
+              onPress: async () => {
+                this.navigation.goBack();
+                await Linking.openSettings()
+              }
+            }
+          ]
+      )
     }
   }
 

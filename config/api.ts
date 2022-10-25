@@ -77,7 +77,9 @@ export const HUMANIQ_ROUTES = {
 }
 
 export const FINANCE_ROUTES = {
-    GET_PRICES: "/prices/list"
+    GET_PRICES: "/prices/list",
+    GET_WALLET_LIST: "/wallet/tokens/:chainId/:walletAddress",
+    UPSERT_TOKENS: "/wallet/tokens/:chainId/:walletAddress"
 }
 
 export const EVENTS_ROUTES = {
