@@ -184,7 +184,7 @@
     "notEnoughFee": "Нехватает средств на оплату комиссии",
     "allow": "Да, разрешить эту транзакцию",
     "deny": "Отклонить эту транзакцию",
-    "smartContractInteraction": "Взаимодействие со смарт контрактом",
+    "smartContractInteraction": "Взаимодействие со смарт контрактом, в котором могут использоваться другие токены.",
     "approve": {
       "title": "Allow permission for use your wallet token",
       "description": "By giving permission, you grant the next contract access to your funds."

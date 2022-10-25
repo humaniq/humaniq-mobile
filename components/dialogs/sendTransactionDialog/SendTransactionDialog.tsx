@@ -12,6 +12,7 @@ import Ripple from "react-native-material-ripple"
 import { ScrollView } from "react-native";
 import { NATIVE_COIN_SYMBOL } from "../../../config/network";
 import { renderShortAddress } from "../../../utils/address";
+import { ExpandableView } from "../../expandable/ExpandableView";
 
 export const SendTransactionDialog = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -64,36 +65,55 @@ export const SendTransactionDialog = observer(() => {
             { view.initialized && !view.txHash &&
                 <View center padding-20>
                     <View row center>
-                        <Text text16 robotoM> { view.isKnownTxFunction ? view.functionName : view.hostname } </Text>
+                        <Text text16 robotoM color={ Colors.textGrey }> { view.hostname } </Text>
                     </View>
                     { view.isKnownTxFunction && view.functionName === "APPROVE" && <>
-                        <View row center paddingT-20>
-                            <Text text14 robotoM> { t("sendTransactionDialog.approve.title") } </Text>
-
-                        </View>
-                        <View row center>
-                            <Text text14 grey30> { t("sendTransactionDialog.approve.description") } </Text>
-                        </View>
-                        <View row center paddingV-16>
-                            <Text text16 robotoB>{renderShortAddress(view.txDescription.args[0])}</Text>
-                        </View>
-                        <View row center paddingV-16>
-                            <Text text16>{view.txDescription.args[1].toString()}</Text>
-                        </View>
-                        </>
-                    }
-                    { view.isKnownTxFunction && view.functionName === "TRANSFER" && <>
-                        <View row center paddingT-20>
-                            <Text text14 robotoM> { t("sendTransactionDialog.transfer.title") } </Text>
-                        </View>
-                        <View row center paddingV-16>
-                            <Text text16 robotoB>{renderShortAddress(view.txDescription.args[0])}</Text>
-                        </View>
-                        <View row center paddingV-16>
-                            <Text text16>{view.txDescription.args[1].toString()}</Text>
+                        <Text marginT-20 marginB-20 text16 robotoM style={ {
+                            alignSelf: 'flex-start'
+                        } }>{ t("sendTransactionDialog.approve.title") }</Text>
+                        <Text color={ Colors.textBlack } text16 grey30 style={ {
+                            alignSelf: 'flex-start'
+                        } }>{ t("sendTransactionDialog.approve.description") }</Text>
+                        <View marginV-16 style={ {
+                            alignSelf: "stretch"
+                        } }>
+                            <ExpandableView title={ renderShortAddress(view.txDescription.args[0]) }
+                                            description={ view.txDescription.args[1].toString() }/>
                         </View>
                     </>
                     }
+                    { view.isKnownTxFunction && view.functionName === "TRANSFER" && <>
+                        <Text marginT-20 text16 robotoM style={ {
+                            alignSelf: 'flex-start'
+                        } }>{ t("sendTransactionDialog.transfer.title") }</Text>
+                        <Card marginV-16 width={ "100%" }>
+                            <View padding-10 paddingH-15 paddingR-20>
+                                <View row centerV>
+                                    <View>
+                                        {
+                                            <Avatar size={ 44 } backgroundColor={ Colors.greyLight }>
+                                                <HIcon name={ "wallet" } size={ 20 }
+                                                       style={ { color: Colors.primary } }/>
+                                            </Avatar>
+                                        }
+                                    </View>
+                                    <View marginL-16 flex-1>
+                                        <Text numberOfLines={ 1 } textM text16
+                                              black>{ renderShortAddress(view.txDescription.args[0]) }</Text>
+                                    </View>
+                                    <View right>
+                                        <Text numberOfLines={ 1 } text16 robotoM>
+                                            { view.txDescription.args[1].toString() }
+                                        </Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </Card>
+                    </>
+                    }
+                    <Text text16 robotoM style={ {
+                        alignSelf: 'flex-start'
+                    } }>{ t("transactionScreen.from") }</Text>
                     <View row paddingV-16>
                         <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>
                     </View>

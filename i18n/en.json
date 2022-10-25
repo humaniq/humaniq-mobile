@@ -183,7 +183,7 @@
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction",
     "allow": "Yes, allow this transaction",
     "deny": "Deny this transaction",
-    "smartContractInteraction": "This is an interaction with smart contract",
+    "smartContractInteraction": "This is smart contract interaction and may use other tokens",
     "approve": {
       "title": "Allow permission for use your wallet token",
       "description": "By giving permission, you grant the next contract access to your funds."
