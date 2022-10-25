@@ -1,4 +1,4 @@
-import { Card, LoaderScreen } from "react-native-ui-lib";
+import { Card } from "react-native-ui-lib";
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
@@ -6,11 +6,11 @@ import { Wallet } from "../../../store/wallet/Wallet";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { RootNavigation } from "../../../navigators";
 import { capitalize } from "../../../utils/general";
+import { ListSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
 
 export const WalletBody = observer<any>(({ address }) => {
 
     const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
-    // console.log(getDictionary().currentTokenDictionary)
     return (
         <Card marginH-16 marginB-10>
             {
@@ -57,7 +57,7 @@ export const WalletBody = observer<any>(({ address }) => {
                 </>
             }
             {
-                !wallet.initialized && <LoaderScreen/>
+                !getDictionary().networkTokensInitialized && <ListSkeleton/>
             }
         </Card>
     )

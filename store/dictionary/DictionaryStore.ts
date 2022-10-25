@@ -6,12 +6,11 @@ import {
     Model,
     model,
     modelFlow,
-    objectMap,
     tProp as p,
     types as t
 } from "mobx-keystone"
 import { v4 as uuidv4 } from 'uuid';
-import { create } from "apisauce";
+import { ApisauceInstance, create } from "apisauce";
 import { API_FINANCE, FINANCE_ROUTES } from "../../config/api";
 import { localStorage } from "../../utils/localStorage";
 import { MONTH } from "../../config/common";
@@ -42,20 +41,18 @@ export class DictionaryStore extends Model({
     initialized: p(t.string, ""),
     token: p(t.unchecked<NetworkTokens>(), {}),
     recentlyUsedAddresses: p(t.arraySet(t.string), () => arraySet()),
-    symbolsVisibility: p(t.objectMap(t.boolean), () => objectMap())
 }) {
+
+    apiFinance: ApisauceInstance
 
     @modelFlow
     * init() {
+        this.apiFinance = create({ baseURL: API_FINANCE })
         const id = profiler.start(EVENTS.INIT_DICTIONARY_STORE)
         this.loadRecentlyUsedAddresses()
-        yield this.loadSymbolsVisibility()
 
-        reaction(() => getWalletStore().initialized, (val, prev) => {
-            if (prev.length === 0) {
-                console.log("load")
+        reaction(() => getWalletStore().allWalletsInitialized, () => {
                 this.loadTokenDictionary()
-            }
         })
         reaction(() => getEVMProvider().initialized, (val, prev) => {
             if (prev !== "") {
@@ -64,23 +61,6 @@ export class DictionaryStore extends Model({
             }
         })
         profiler.end(id)
-    }
-
-    @modelFlow
-    * loadSymbolsVisibility() {
-        const visibility = (yield* _await(localStorage.load("hm-wallet-symbols-visibility")))
-        if (visibility !== null) {
-            Object.entries(visibility).forEach(h => this.symbolsVisibility.set(h[0].toLowerCase(), h[1]))
-        }
-    }
-
-    @modelFlow
-    * toggleHideSymbol(token, show) {
-        console.log({ token, show })
-        console.log(this.currentTokenDictionary)
-        // this.currentTokenDictionary[address].hide =
-        // this.symbolsVisibility.set(symbol.toLowerCase(), show)
-        yield* _await(localStorage.save("hm-wallet-symbols-visibility", toJS(this.symbolsVisibility.items)))
     }
 
     get networkTokensInitialized() {
@@ -92,18 +72,42 @@ export class DictionaryStore extends Model({
     }
 
     @modelFlow
-    * loadTokenDictionary() {
-        console.log("getTokenDictionary")
-        if(this.networkTokensInitialized) return
+    * toggleHideSymbol(token, show) {
 
-        // yield* _await(localStorage.remove(`hm-wallet-tokens-update-${ getEVMProvider().currentNetwork.chainID }`))
+        const formatToken = this.currentTokenDictionary[token.tokenAddress] ?
+
+            { ...this.currentTokenDictionary[token.tokenAddress], hidden: !show } : {
+                addressHex: token.tokenAddress,
+                symbol: token.symbol,
+                name: token.name,
+                decimals: token.decimals,
+                status: "custom",
+                hidden: !show,
+                logo: token.logo
+            }
+
+        this.token[getEVMProvider().currentNetwork.chainID][formatToken.addressHex] = toJS(formatToken)
+
+        const res = yield* _await(this.apiFinance.post<any>(formatRoute(FINANCE_ROUTES.UPSERT_TOKENS, {
+            chainId: getEVMProvider().currentNetwork.chainID,
+            walletAddress: getWalletStore().allWallets[0].address
+        }), [ formatToken ]))
+        if (res.ok) {
+            console.log("ok")
+            yield* _await(localStorage.save(`hm-wallet-tokens-dictionary`, toJS(this.token)))
+        }
+    }
+
+    @modelFlow
+    * loadTokenDictionary() {
+
+        if (this.networkTokensInitialized) return
 
         const last = (yield* _await(localStorage.load(`hm-wallet-tokens-update-${ getEVMProvider().currentNetwork.chainID }`)))
         const lastTokenUpdate = +last || Date.now() - (MONTH + 1)
 
         if (Date.now() - MONTH > lastTokenUpdate) {
-            const axios = create({ baseURL: API_FINANCE })
-            const res = yield* _await(axios.get<any>(formatRoute(FINANCE_ROUTES.GET_WALLET_LIST, {
+            const res = yield* _await(this.apiFinance.get<any>(formatRoute(FINANCE_ROUTES.GET_WALLET_LIST, {
                 chainId: getEVMProvider().currentNetwork.chainID,
                 walletAddress: getWalletStore().allWallets[0].address
             })))
@@ -116,7 +120,6 @@ export class DictionaryStore extends Model({
                 yield* _await(localStorage.save(`hm-wallet-tokens-dictionary`, toJS(tokensDic)))
             }
         } else {
-            console.log("HERE")
             this.token = yield* _await(localStorage.load(`hm-wallet-tokens-dictionary`))
         }
         this.initialized = uuidv4()
