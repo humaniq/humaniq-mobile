@@ -65,7 +65,7 @@ const SelectValue = observer(() => {
             <Header rightText={ t('selectValueScreen.step2') }/>
             <View padding-16 testID={ 'selectValueScreen' }>
                 <Card>
-                    <TokenItem symbol={ view.token.symbol } tokenAddress={ view.tokenAddress } logo={ view.token.logo }
+                    <TokenItem symbol={ view.token.symbol } tokenAddress={ view.tokenAddress } logo={ view.token?.logo }
                                name={ view.token.name }
                                formatBalance={ view.token.formatBalance }
                                formatFiatBalance={ view.token.formatFiatBalance }

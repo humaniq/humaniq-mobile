@@ -20,9 +20,8 @@ export enum PROVIDER_TYPE {
 
 export enum EVM_NETWORKS_NAMES {
   MAINNET = "mainnet",
-  ROPSTEN = "ropsten",
-  RINKEBY = "rinkeby",
   GOERLI = "goerli",
+  SEPOLIA = "sepolia",
   BSC = 'bsc',
   BSC_TESTNET = 'bcs testnet'
 }
@@ -75,33 +74,22 @@ export const EVM_NETWORKS: {[key: string]: EVM_NETWORK} = {
     nativeCoin: NATIVE_COIN.ETHEREUM,
     nativeSymbol: NATIVE_COIN_SYMBOL.ETH
   },
-  [EVM_NETWORKS_NAMES.ROPSTEN]: {
-    name: EVM_NETWORKS_NAMES.ROPSTEN,
-    chainID: 3,
-    networkID: 3,
-    type: EVM_NETWORKS_NAMES.ROPSTEN,
-    providerID: "14cb84fb0dbb47f8b5bfb44183e39319",
-    providerSecret: "f07c7f08f27a4ce5aacbc92390b72301",
-    env: NETWORK_TYPE.TEST,
-    nativeCoin: NATIVE_COIN.ETHEREUM,
-    nativeSymbol: NATIVE_COIN_SYMBOL.ETH
-  },
-  [EVM_NETWORKS_NAMES.RINKEBY]: {
-    name: EVM_NETWORKS_NAMES.RINKEBY,
-    chainID: 4,
-    networkID: 4,
-    type: EVM_NETWORKS_NAMES.RINKEBY,
-    providerID: "14cb84fb0dbb47f8b5bfb44183e39319",
-    providerSecret: "f07c7f08f27a4ce5aacbc92390b72301",
-    env: NETWORK_TYPE.TEST,
-    nativeCoin: NATIVE_COIN.ETHEREUM,
-    nativeSymbol: NATIVE_COIN_SYMBOL.ETH
-  },
   [EVM_NETWORKS_NAMES.GOERLI]: {
     name: EVM_NETWORKS_NAMES.GOERLI,
     chainID: 5,
     networkID: 5,
     type: EVM_NETWORKS_NAMES.GOERLI,
+    providerID: "14cb84fb0dbb47f8b5bfb44183e39319",
+    providerSecret: "f07c7f08f27a4ce5aacbc92390b72301",
+    env: NETWORK_TYPE.TEST,
+    nativeCoin: NATIVE_COIN.ETHEREUM,
+    nativeSymbol: NATIVE_COIN_SYMBOL.ETH
+  },
+  [EVM_NETWORKS_NAMES.SEPOLIA]: {
+    name: EVM_NETWORKS_NAMES.SEPOLIA,
+    chainID: 11155111,
+    networkID: 11155111,
+    type: EVM_NETWORKS_NAMES.SEPOLIA,
     providerID: "14cb84fb0dbb47f8b5bfb44183e39319",
     providerSecret: "f07c7f08f27a4ce5aacbc92390b72301",
     env: NETWORK_TYPE.TEST,

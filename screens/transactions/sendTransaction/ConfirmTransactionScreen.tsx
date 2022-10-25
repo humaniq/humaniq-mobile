@@ -21,7 +21,7 @@ export const ConfirmTransactionScreen = observer(() => {
             <Text text16 marginB-16 robotoM>{ t("transactionScreen.from") }</Text>
             <Card>
                 <TokenItem symbol={ view.token.symbol }
-                           logo={ view.token.logo }
+                           logo={ view.token?.logo }
                            name={ view.wallet.formatAddress }
                            formatFiatBalance={ view.token.formatFiatBalance }
                            index={ view.token.symbol }
@@ -35,7 +35,7 @@ export const ConfirmTransactionScreen = observer(() => {
             <Text marginB-16 text16 robotoM>{ t("transactionScreen.to") }</Text>
             <Card>
                 <TokenItem symbol={ view.token.symbol }
-                           logo={ view.token.logo }
+                           logo={ view.token?.logo }
                            name={ renderShortAddress(view.txData.to) }
                            index={ view.token.symbol }
                            short={ true }
