@@ -321,9 +321,6 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
-
-        console.log("getTokenBalances")
-
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address

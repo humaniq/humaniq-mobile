@@ -1,5 +1,5 @@
 import { makeAutoObservable, toJS } from "mobx"
-import { getEVMProvider, getWalletStore } from "../../../App"
+import { getDictionary, getEVMProvider, getWalletStore } from "../../../App"
 import { BigNumber, ethers } from "ethers"
 import { currencyFormat } from "../../../utils/number"
 import { Token } from "../../../store/wallet/token/Token";
@@ -50,8 +50,7 @@ export class SendTransactionViewModel {
                 ...txData
             }
 
-            this.txDescription = parseStandardTokenTransactionData("0xa9059cbb000000000000000000000000168473253233949d9ca951db9603de0f340f3c54000000000000000000000000000000000000000000000000000000000bebc200") // this.txData.data)
-            console.log(this.txDescription)
+            this.txDescription = parseStandardTokenTransactionData(this.txData.data)
 
             this.display = true
             this.initialized = true
@@ -64,8 +63,6 @@ export class SendTransactionViewModel {
             this.transactionFeeView.wallet = this.wallet.address
             this.transactionFeeView.gasLimit = this.txData.gas
             getEVMProvider().gasStation.setEnableAutoUpdate(true)
-
-            console.log({ txData: this.txData })
 
             this.pending = false
         } catch (e) {
@@ -90,8 +87,18 @@ export class SendTransactionViewModel {
     }
 
     get hostname() {
-        return this.meta?.url ? new URL(this.meta.url).hostname : ""
+        try {
+            // @ts-ignore
+            return this.meta.includes("wc:") ? new URL(this.meta.substring(4)).hostname : this.meta.url ? new URL(this.meta.url).hostname : ""
+        } catch (e) {
+            return ""
+        }
     }
+
+    get knownTokenAddress() {
+        return getDictionary().currentTokenDictionary[this.txData.to.toLowerCase()]
+    }
+
 
     get wallet(): Wallet {
         return getWalletStore().selectedWallet

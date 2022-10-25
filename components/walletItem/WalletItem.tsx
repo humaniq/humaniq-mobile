@@ -7,6 +7,7 @@ import Ripple from "react-native-material-ripple";
 
 export interface IWalletItemProps {
   wallet: Wallet
+  token?: string
   index?: number
   onPressWallet?: (w: Wallet, i?: number) => void | Promise<void>
 }
@@ -33,7 +34,7 @@ export const WalletItem: React.FC<IWalletItemProps> = (props) => {
           <Text numberOfLines={ 1 } textM text16 black>{ props.wallet.formatAddress }</Text>
           { showRadio &&
               <Text numberOfLines={ 1 } text14 robotoR textGrey>
-                { props.wallet.formatTotalWalletFiatBalance }
+                { props.token ? props.wallet.token.get(props.token).formatFiatBalance || 0 : props.wallet.formatTotalWalletFiatBalance }
               </Text>
           }
         </View>
@@ -44,7 +45,7 @@ export const WalletItem: React.FC<IWalletItemProps> = (props) => {
           }
           { !showRadio &&
               <Text numberOfLines={ 1 } text16 robotoM>
-                { props.wallet.formatTotalWalletFiatBalance }
+                { props.token ? props.wallet.token.get(props.token)?.formatFiatBalance || 0 : props.wallet.formatTotalWalletFiatBalance }
               </Text>
           }
         </View>

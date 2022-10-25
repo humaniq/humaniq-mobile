@@ -19,8 +19,10 @@ export const ExpandableView = ({ backgroundColor = Colors.white, title, descript
                 sectionHeader={
                     <View padding-8>
                         <Text text16 robotoM color={ Colors.textBlack }>{ title }</Text>
-                        <Text numberOfLines={ 1 } ellipsizeMode={ "tail" } text14 robotoR marginT-8 marginR-30
-                              color={ Colors.textGrey }>{ description }</Text>
+                        { !expanded &&
+                            <Text numberOfLines={ 1 } ellipsizeMode={ "tail" } text14 robotoR marginT-8 marginR-30
+                                  color={ Colors.textGrey }>{ description }</Text>
+                        }
                         <View absF centerV right marginR-14>
                             <HIcon
                                 name={ expanded ? "up" : "down" }

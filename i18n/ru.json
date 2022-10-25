@@ -186,8 +186,11 @@
     "deny": "Отклонить эту транзакцию",
     "smartContractInteraction": "Взаимодействие со смарт контрактом, в котором могут использоваться другие токены.",
     "approve": {
-      "title": "Allow permission for use your wallet token",
+      "title": "Разрешить сайту использовать {{0}} токены с вашего кошелька",
       "description": "By giving permission, you grant the next contract access to your funds."
+    },
+    "transfer": {
+      "title": "Отправить {{0}} токен"
     }
   },
   "selectValueScreen": {

@@ -13,6 +13,8 @@ import { ScrollView } from "react-native";
 import { NATIVE_COIN_SYMBOL } from "../../../config/network";
 import { renderShortAddress } from "../../../utils/address";
 import { ExpandableView } from "../../expandable/ExpandableView";
+import { preciseRound } from "../../../utils/number";
+import { formatUnits } from "ethers/lib/utils";
 
 export const SendTransactionDialog = observer(() => {
     const view = useInstance(SendTransactionViewModel)
@@ -70,8 +72,8 @@ export const SendTransactionDialog = observer(() => {
                     { view.isKnownTxFunction && view.functionName === "APPROVE" && <>
                         <Text marginT-20 marginB-20 text16 robotoM style={ {
                             alignSelf: 'flex-start'
-                        } }>{ t("sendTransactionDialog.approve.title") }</Text>
-                        <Text color={ Colors.textBlack } text16 grey30 style={ {
+                        } }>{ t("sendTransactionDialog.approve.title", { 0: view.knownTokenAddress.symbol }) }</Text>
+                        <Text color={ Colors.textBlack } text14 grey30 style={ {
                             alignSelf: 'flex-start'
                         } }>{ t("sendTransactionDialog.approve.description") }</Text>
                         <View marginV-16 style={ {
@@ -85,7 +87,7 @@ export const SendTransactionDialog = observer(() => {
                     { view.isKnownTxFunction && view.functionName === "TRANSFER" && <>
                         <Text marginT-20 text16 robotoM style={ {
                             alignSelf: 'flex-start'
-                        } }>{ t("sendTransactionDialog.transfer.title") }</Text>
+                        } }>{ t("sendTransactionDialog.transfer.title", { 0: view.knownTokenAddress.symbol }) }</Text>
                         <Card marginV-16 width={ "100%" }>
                             <View padding-10 paddingH-15 paddingR-20>
                                 <View row centerV>
@@ -103,7 +105,9 @@ export const SendTransactionDialog = observer(() => {
                                     </View>
                                     <View right>
                                         <Text numberOfLines={ 1 } text16 robotoM>
-                                            { view.txDescription.args[1].toString() }
+                                            { view.knownTokenAddress ?
+                                                preciseRound(+formatUnits(view.txDescription.args[1].toString(), view.knownTokenAddress.decimals).toString()).toString() :
+                                                view.txDescription.args[1].toString() }
                                         </Text>
                                     </View>
                                 </View>
@@ -115,7 +119,8 @@ export const SendTransactionDialog = observer(() => {
                         alignSelf: 'flex-start'
                     } }>{ t("transactionScreen.from") }</Text>
                     <View row paddingV-16>
-                        <Card width={ "100%" }><WalletItem wallet={ getWalletStore().selectedWallet }/></Card>
+                        <Card width={ "100%" }><WalletItem token={ view.knownTokenAddress.addressHex.toLowerCase() }
+                                                           wallet={ getWalletStore().selectedWallet }/></Card>
                     </View>
                     <Text style={ {
                         alignSelf: 'flex-start'
@@ -198,11 +203,14 @@ export const SendTransactionDialog = observer(() => {
                                 </ExpandableSection>
                             </Card>
                         </View> }
-                    <View row paddingV-8>
-                        <Text center grey30 text80>{
-                            t('sendTransactionDialog.smartContractInteraction') }
-                        </Text>
-                    </View>
+
+                    { !view.isKnownTxFunction &&
+                        <View row paddingV-8>
+                            <Text center grey30 text80>{
+                                t('sendTransactionDialog.smartContractInteraction') }
+                            </Text>
+                        </View>
+                    }
                     { !view.enoughBalance && !view.pending &&
                         <View row center>
                             <Text center grey30 text80>{
