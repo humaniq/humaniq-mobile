@@ -342,7 +342,7 @@ export class Wallet extends Model({
                                 priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || true,
+                                show: getDictionary().currentTokenDictionary[t.tokenAddress] ? !getDictionary().currentTokenDictionary[t.tokenAddress]?.hidden : false,
                                 prices: {
                                     eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
                                     usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
@@ -355,7 +355,7 @@ export class Wallet extends Model({
                             new Token({
                                 ...changeCaseObj(t),
                                 walletAddress: this.address,
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || false,
+                                show: getDictionary().currentTokenDictionary[t.tokenAddress] ? !getDictionary().currentTokenDictionary[t.tokenAddress]?.hidden : false,
                                 prices: {
                                     eur: 0,
                                     usd: 0,

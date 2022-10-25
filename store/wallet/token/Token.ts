@@ -36,7 +36,7 @@ export class Token extends Model({
     @modelAction
     toggleHide = () => {
         this.show = !this.show
-        getDictionary().toggleHideSymbol(this.symbol.toLowerCase(), this.show)
+        getDictionary().toggleHideSymbol(this, this.show)
     }
 
     @computed
@@ -50,17 +50,9 @@ export class Token extends Model({
 
     @action
     async init() {
-        try {
-            runUnprotected(() => {
-                getDictionary().ethTokenCurrentAddress.set(this.tokenAddress, this.symbol)
-            })
-        } catch (e) {
-            console.log("ERROR", e)
-        } finally {
-            runUnprotected(() => {
-                this.initialized = true
-            })
-        }
+        runUnprotected(() => {
+            this.initialized = true
+        })
     }
 
     @computed
