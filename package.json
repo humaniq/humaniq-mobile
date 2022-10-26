@@ -1,6 +1,6 @@
 {
   "name": "humaniqmobile",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": false,
   "scripts": {
     "android": "yarn rnuc:prod && react-native run-android",
@@ -30,6 +30,7 @@
   "dependencies": {
     "@ethersproject/shims": "^5.5.0",
     "@metamask/controllers": "^25.0.0",
+    "@metamask/metamask-eth-abis": "^3.0.0",
     "@react-native-async-storage/async-storage": "^1.15.15",
     "@react-native-clipboard/clipboard": "^1.9.0",
     "@react-native-community/blur": "^3.6.0",
@@ -148,6 +149,7 @@
     "@types/i18n-js": "^3.8.2",
     "@types/jest": "^26.0.23",
     "@types/react-native": "^0.64.5",
+    "@types/react-native-material-ripple": "^0.9.2",
     "@types/react-test-renderer": "^16.9.2",
     "@typescript-eslint/eslint-plugin": "4.10.0",
     "@typescript-eslint/parser": "4.10.0",

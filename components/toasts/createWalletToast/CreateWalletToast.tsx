@@ -27,7 +27,7 @@ export const CreateWalletToast = observer(() => {
     >
         <View
             style={ { marginBottom: view.walletDialogs.pendingDialog.position === TOAST_POSITION.UNDER_TAB_BAR ? 65 : 10 } }>
-            <Card padding-15 marginH-16>
+            <Card padding-12 marginH-16>
                 <View row centerV>
                     { !view.walletDialogs.pendingDialog.walletCreated ?
                         <CircularProgress indeterminate strokeWidth={ 2 } radius={ 18 }>

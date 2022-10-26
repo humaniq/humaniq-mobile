@@ -12,6 +12,7 @@ import { CryptoCard } from "../../../components/card/CryptoCard";
 import { HIcon } from "../../../components/icon";
 import { EVM_NETWORKS_NAMES } from "../../../config/network";
 import { useNavigation } from "@react-navigation/native";
+import { Skeleton } from "../../../components/skeleton/Skeleton";
 
 export const WalletTittle = observer<any>(({ address }) => {
     const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
@@ -61,7 +62,10 @@ export const WalletTittle = observer<any>(({ address }) => {
                         } }
                     >
                         <Text robotoM
-                            style={ { color: provider.currentNetworkName === EVM_NETWORKS_NAMES.MAINNET ? Colors.white : Colors.rgba(Colors.white, 0.1), fontSize: 12 } }>Ethereum</Text>
+                              style={ {
+                                  color: provider.currentNetworkName === EVM_NETWORKS_NAMES.MAINNET ? Colors.white : Colors.rgba(Colors.white, 0.1),
+                                  fontSize: 12
+                              } }>Ethereum</Text>
                     </TouchableOpacity>
                 </View>
                 <Button outline outlineColor={ Colors.white } testID={ `copyWalletAddress-${ address }` }
@@ -97,7 +101,16 @@ export const WalletTittle = observer<any>(({ address }) => {
             <TouchableOpacity activeOpacity={ 0.8 } marginT-16 marginB-14
                               testID={ `changeCurrentFiatCurrency-${ address }` }
                               onPress={ getWalletStore().changeCurrentFiatCurrency }>
-                <Text white text32 robotoB>{ wallet.formatTotalWalletFiatBalance }</Text>
+
+                { !wallet.pending && <Text white text32 robotoB>{ wallet.formatTotalWalletFiatBalance }</Text> }
+                { wallet.pending &&
+                    <Skeleton
+                        colors={ [ Colors.rgba(Colors.primary, 0.1), Colors.rgba(Colors.primary, 0.5), Colors.rgba(Colors.primary, 0.8) ] }
+                        width={ 132 }
+                        height={ 34 }
+                        borderRadius={ 12 }
+                        wrapperStyle={ { marginTop: 16 } }/>
+                }
                 <Text white text14 robotoM>{ t("walletScreen.totalBalanceTittle") }</Text>
             </TouchableOpacity>
             <WalletTransactionControls/>

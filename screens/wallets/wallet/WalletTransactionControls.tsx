@@ -11,18 +11,21 @@ import { HIcon } from "../../../components/icon"
 import { RippleWrapper } from "../../../components/ripple/RippleWrapper";
 import { events } from "../../../utils/events";
 import { MARKETING_EVENTS } from "../../../config/events";
+import { getAppStore } from "../../../App";
+import { observer } from "mobx-react-lite";
 
 export interface IWalletTransactionControlsProps {
     tokenAddress?: string
 }
 
-export const WalletTransactionControls = (props: IWalletTransactionControlsProps) => {
+export const WalletTransactionControls = observer((props: IWalletTransactionControlsProps) => {
     const view = useInstance(WalletsScreenModel)
     const selfAddressQrCodeDialogViewModel = useInstance(SelfAddressQrCodeDialogViewModel)
 
     return <View>
         <View row center flex>
-            <RippleWrapper testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
+            <RippleWrapper disabled={ !getAppStore().isConnected }
+                           testID={ `sendTransaction-${ props.tokenAddress || 'eth' }` }
                            style={ { flex: 0.5, marginRight: 8 } }
                            onClick={ () => {
                                RootNavigation.navigate("sendTransaction", {
@@ -40,7 +43,7 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                     <HIcon name="arrow-to-top" size={ 14 } color={ Colors.white }/>
                 </Button>
             </RippleWrapper>
-            <RippleWrapper style={ { flex: 0.5, marginLeft: 8 } }
+            <RippleWrapper disabled={ !getAppStore().isConnected } style={ { flex: 0.5, marginLeft: 8 } }
                            onClick={ async () => {
                                events.send(MARKETING_EVENTS.RECEIVE_TRANSACTION)
                                selfAddressQrCodeDialogViewModel.wallet = view.currentWallet
@@ -55,4 +58,4 @@ export const WalletTransactionControls = (props: IWalletTransactionControlsProps
                 </Button>
             </RippleWrapper>
         </View></View>
-}
+})

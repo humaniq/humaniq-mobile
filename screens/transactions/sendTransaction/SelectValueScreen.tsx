@@ -65,7 +65,7 @@ const SelectValue = observer(() => {
             <Header rightText={ t('selectValueScreen.step2') }/>
             <View padding-16 testID={ 'selectValueScreen' }>
                 <Card>
-                    <TokenItem symbol={ view.token.symbol } tokenAddress={ view.tokenAddress } logo={ view.token.logo }
+                    <TokenItem symbol={ view.token.symbol } tokenAddress={ view.tokenAddress } logo={ view.token?.logo }
                                name={ view.token.name }
                                formatBalance={ view.token.formatBalance }
                                formatFiatBalance={ view.token.formatFiatBalance }
@@ -105,8 +105,12 @@ const SelectValue = observer(() => {
                 </View>
                 <View row center>
                     <View center>
-                        <Ripple testID={ 'max' } rippleColor={ Colors.primary } rippleContainerBorderRadius={ 22 }
-                                onPress={ view.setMaxValue }>
+                        <Ripple
+                            disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to || !view.enoughFee }
+                            testID={ 'max' }
+                            rippleColor={ Colors.primary }
+                            rippleContainerBorderRadius={ 22 }
+                            onPress={ view.setMaxValue }>
                             <Button round backgroundColor={ Colors.white } style={ { height: 44, width: 44 } }>
                                 <HIcon name={ "max" } size={ 24 } style={ { color: Colors.primary } }/>
                             </Button>
@@ -136,8 +140,12 @@ const SelectValue = observer(() => {
                         />
                     </View>
                     <View center>
-                        <Ripple testID={ 'swap' } rippleColor={ Colors.primary } rippleContainerBorderRadius={ 22 }
-                                onPress={ view.swapInputType }
+                        <Ripple
+                            disabled={ !view.isTransferAllow || view.inputAddressError || !view.txData.to || !view.enoughFee }
+                            testID={ 'swap' }
+                            rippleColor={ Colors.primary }
+                            rippleContainerBorderRadius={ 22 }
+                            onPress={ view.swapInputType }
                         >
                             <Button round backgroundColor={ Colors.white } style={ { height: 44, width: 44 } }>
                                 <HIcon name="double-arrows" size={ 20 } style={ { color: Colors.primary } }/>

@@ -6,6 +6,7 @@ import { getWalletStore } from "../../App";
 import { HIcon } from "../icon";
 import React from "react";
 import Ripple from "react-native-material-ripple";
+import { Dimensions } from "react-native";
 
 export interface IWalletsListProps {
     totalBalance: string | number
@@ -14,6 +15,8 @@ export interface IWalletsListProps {
     onBackPress?: () => void
     backIcon?: ICON_HEADER
 }
+
+const windowWidth = Dimensions.get('window').width;
 
 export const SelectWallet: React.FC<IWalletsListProps> = ({
                                                               wallets,
@@ -65,7 +68,7 @@ export const SelectWallet: React.FC<IWalletsListProps> = ({
                                 { i !== 0 && <View absR style={ {
                                     borderWidth: 1,
                                     borderColor: Colors.grey,
-                                    width: "90%",
+                                    width: windowWidth-106,
                                     borderBottomColor: "transparent"
                                 } }/> }
                             </View></Ripple>

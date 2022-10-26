@@ -1,5 +1,5 @@
 import { makeAutoObservable, toJS } from "mobx"
-import { getEVMProvider, getWalletStore } from "../../../App"
+import { getDictionary, getEVMProvider, getWalletStore } from "../../../App"
 import { BigNumber, ethers } from "ethers"
 import { currencyFormat } from "../../../utils/number"
 import { Token } from "../../../store/wallet/token/Token";
@@ -8,6 +8,7 @@ import { Wallet } from "../../../store/wallet/Wallet";
 import { inject } from "react-ioc";
 import { SelectTransactionFeeDialogViewModel } from "../selectTransactionFeeDialog/SelectTransactionFeeDialogViewModel";
 import { capitalize } from "../../../utils/general";
+import { parseStandardTokenTransactionData } from "../../../utils/transaction";
 
 export class SendTransactionViewModel {
     display = false
@@ -16,6 +17,7 @@ export class SendTransactionViewModel {
     sending = false
     symbol = "ETH"
     txHash = ""
+    txDescription: ethers.utils.TransactionDescription
 
     approvalRequest
 
@@ -48,6 +50,8 @@ export class SendTransactionViewModel {
                 ...txData
             }
 
+            this.txDescription = parseStandardTokenTransactionData(this.txData.data)
+
             this.display = true
             this.initialized = true
             this.txData.chainId = getEVMProvider().currentNetwork.chainID
@@ -60,12 +64,18 @@ export class SendTransactionViewModel {
             this.transactionFeeView.gasLimit = this.txData.gas
             getEVMProvider().gasStation.setEnableAutoUpdate(true)
 
-            console.log({ txData: this.txData })
-
             this.pending = false
         } catch (e) {
             console.log("ERROR", e)
         }
+    }
+
+    get isKnownTxFunction() {
+        return !!this.txDescription?.name
+    }
+
+    get functionName() {
+        return `${ this.txDescription?.name.toUpperCase() }`
     }
 
     get selectedGasPrice() {
@@ -77,8 +87,18 @@ export class SendTransactionViewModel {
     }
 
     get hostname() {
-        return this.meta?.url ? new URL(this.meta.url).hostname : ""
+        try {
+            // @ts-ignore
+            return this.meta.includes("wc:") ? new URL(this.meta.substring(4)).hostname : this.meta.url ? new URL(this.meta.url).hostname : ""
+        } catch (e) {
+            return ""
+        }
     }
+
+    get knownTokenAddress() {
+        return getDictionary().currentTokenDictionary[this.txData.to.toLowerCase()]
+    }
+
 
     get wallet(): Wallet {
         return getWalletStore().selectedWallet
@@ -173,8 +193,13 @@ export class SendTransactionViewModel {
      * When user clicks on approve to connect with a dapp
      */
     onAccountsConfirm = async () => {
+        console.log("confirm")
         this.pending = true
         this.approvalRequest.resolve({ tx: this.txBody, meta: this.meta })
+        await Promise.all([
+            getWalletStore().selectedWallet.updateBalanceFromProvider(),
+            getWalletStore().selectedWallet.getTokenBalances()
+        ])
     }
 
     /**

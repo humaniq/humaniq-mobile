@@ -678,38 +678,50 @@ export class BrowserTabScreenViewModel {
     }
 
     go(url, initialCall = false) {
-        if (url === this.initialUrl) {
-            this.forwardEnabled = false
-            this.backEnabled = false
-        }
-        const hasProtocol = url.match(/^[a-z]*:\/\//)
-        const sanitizedURL = hasProtocol ? url : `${ "https://" }${ url }`
-        const { hostname } = new URL(sanitizedURL.toLowerCase())
-        const urlToGo = sanitizedURL[sanitizedURL.length - 1] === "/" ? sanitizedURL : `${ sanitizedURL }/`
-        // const isEnsUrl = this.isENSUrl(url);
-
-        // if (isEnsUrl) {
-        //    this.webviewRef && this.webviewRef.stopLoading();
-        //     const { url: ensUrl, type, hash, reload } = await this.handleIpfsContent(url, { hostname, search, pathname });
-        //     if (reload) return this.go(ensUrl);
-        //     urlToGo = ensUrl;
-        //     this.sessionENSNames[urlToGo] = { hostname, hash, type };
-        // }
-
-        if (this.isAllowedUrl(hostname)) {
-            if (initialCall) {
-                this.initialUrl = urlToGo
-                this.firstUrlLoaded = true
-            } else {
-                this.webviewRef && this.webviewRef.injectJavaScript(`(function(){window.location.href = '${ urlToGo }' })()`)
+        try {
+            if (url === this.initialUrl) {
+                this.forwardEnabled = false
+                this.backEnabled = false
             }
+            const hasProtocol = url.match(/^[a-z]*:\/\//)
+            const sanitizedURL = hasProtocol ? url : `${ "https://" }${ url }`
+            let hostname
 
-            this.progress = 0
-            this.storedTab.setUrl(urlToGo)
-            getBrowserStore().saveTabs()
-            return urlToGo
+            try {
+                hostname = (new URL(sanitizedURL.toLowerCase())).hostname
+            } catch (e) {
+                this.webviewRef && this.webviewRef.injectJavaScript(`(function(){window.location.href = 'https://www.google.ru/search?q=${ encodeURIComponent(url) }' })()`)
+                return
+            }
+            const urlToGo = sanitizedURL[sanitizedURL.length - 1] === "/" ? sanitizedURL : `${ sanitizedURL }/`
+            // const isEnsUrl = this.isENSUrl(url);
+
+            // if (isEnsUrl) {
+            //    this.webviewRef && this.webviewRef.stopLoading();
+            //     const { url: ensUrl, type, hash, reload } = await this.handleIpfsContent(url, { hostname, search, pathname });
+            //     if (reload) return this.go(ensUrl);
+            //     urlToGo = ensUrl;
+            //     this.sessionENSNames[urlToGo] = { hostname, hash, type };
+            // }
+
+            if (this.isAllowedUrl(hostname)) {
+                if (initialCall) {
+                    this.initialUrl = urlToGo
+                    this.firstUrlLoaded = true
+                } else {
+                    this.webviewRef && this.webviewRef.injectJavaScript(`(function(){window.location.href = '${ urlToGo }' })()`)
+                }
+
+                this.progress = 0
+                this.storedTab.setUrl(urlToGo)
+                getBrowserStore().saveTabs()
+                return urlToGo
+            }
+            this.handleNotAllowedUrl(urlToGo)
+            return null
+        } catch (e) {
+            console.log("ERROR", e)
+            return null
         }
-        this.handleNotAllowedUrl(urlToGo)
-        return null
     }
 }

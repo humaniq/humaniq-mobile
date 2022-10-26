@@ -269,6 +269,8 @@ export class NativeTransaction extends Model({
                 return `-${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
             case 2:
                 return `+${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
+            case 3:
+                return `${ (+formatEther(this.value)).toFixed(4) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
             default:
                 return `${ beautifyNumber(preciseRound(+formatEther(this.value))) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }`
         }
@@ -318,7 +320,7 @@ export class NativeTransaction extends Model({
 
     @computed
     get fiatTotal() {
-        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * this.formatTotal) : 0
+        return this.prices[getWalletStore().currentFiatCurrency] ? preciseRound(this?.prices[getWalletStore().currentFiatCurrency] * (+formatEther(this.value) + (+formatEther((this.gasPrice * this.gas).toString())))) : 0
     }
 
     @computed

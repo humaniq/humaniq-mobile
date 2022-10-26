@@ -1,21 +1,20 @@
-import { Card, LoaderScreen } from "react-native-ui-lib";
+import { Card } from "react-native-ui-lib";
 import React from "react";
 import { observer } from "mobx-react-lite";
 import { getDictionary, getEVMProvider, getWalletStore } from "../../../App";
 import { Wallet } from "../../../store/wallet/Wallet";
-import { beautifyNumber } from "../../../utils/number";
 import { TokenItem } from "../../../components/tokenItem/TokenItem";
 import { RootNavigation } from "../../../navigators";
 import { capitalize } from "../../../utils/general";
+import { ListSkeleton } from "../../../components/skeleton/templates/SkeletonTemplates";
 
 export const WalletBody = observer<any>(({ address }) => {
-    // const store = useInstance(RootStore)
-    // const wallet = store.walletStore.allWallets.find(w => w.address === address)
+
     const wallet: Wallet = getWalletStore().allWallets.find((w: Wallet) => w.address === address)
     return (
         <Card marginH-16 marginB-10>
             {
-                !!wallet.initialized && <>
+                !!wallet.initialized && getDictionary().networkTokensInitialized && !wallet.pendingGetTokenBalances && !wallet.pending && <>
                     <TokenItem
                         showGraph={ getWalletStore().showGraphBool }
                         onPress={ () => RootNavigation.navigate("walletTransactions", {
@@ -28,14 +27,14 @@ export const WalletBody = observer<any>(({ address }) => {
                         tokenAddress={ wallet.address }
                         logo={ getEVMProvider().currentNetwork.nativeCoin }
                         name={ capitalize(getEVMProvider().currentNetwork.nativeCoin) }
-                        formatBalance={ `${ beautifyNumber(+wallet.formatBalance) } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }
+                        formatBalance={ `${ wallet.formatBalance } ${ getEVMProvider().currentNetwork.nativeSymbol.toUpperCase() }` }
                         formatFiatBalance={ wallet.formatFiatBalance }
                         index={ 0 }
                         fiatOnTop={ getWalletStore().fiatOnTop }
                     />
                     {
                         wallet.tokenList.length > 0 && wallet.tokenList
-                            .filter(t => getDictionary().symbolsVisibility.has(t.symbol.toLowerCase()) ? getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) : !!t.priceUSD)
+                            .filter(t => getDictionary().currentTokenDictionary[t.tokenAddress] ? !getDictionary().currentTokenDictionary[t.tokenAddress]?.hidden : false)
                             .map((p, i) => {
                                 return <TokenItem
                                     showGraph={ getWalletStore().showGraphBool }
@@ -58,7 +57,7 @@ export const WalletBody = observer<any>(({ address }) => {
                 </>
             }
             {
-                !wallet.initialized && <LoaderScreen/>
+                (!getDictionary().networkTokensInitialized || wallet.pendingGetTokenBalances || wallet.pending) && <ListSkeleton/>
             }
         </Card>
     )

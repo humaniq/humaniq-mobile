@@ -84,18 +84,18 @@ const TransactionsList = observer<{ route: any }>(({ route }) => {
                         <View marginV-16 marginH-16>
                             <View row center>
                                 {
-                                    view.token.logo === NATIVE_COIN.ETHEREUM &&
+                                    view.token?.logo === NATIVE_COIN.ETHEREUM &&
                                     <Av size={ 44 } containerStyle={ { position: 'relative' } }
                                         imageStyle={ { width: 36, height: 36, position: 'absolute', left: 4, top: 3 } }
                                         source={ require("../../../assets/images/ethereum-logo.png") }/>
                                 }
                                 {
-                                    view.token.logo === NATIVE_COIN.BINANCECOIN &&
+                                    view.token?.logo === NATIVE_COIN.BINANCECOIN &&
                                     <Av size={ 44 } source={ require("../../../assets/images/binancecoin-logo.png") }/>
                                 }
-                                { view.token.logo !== NATIVE_COIN.ETHEREUM && view.token.logo !== NATIVE_COIN.BINANCECOIN &&
+                                { view.token?.logo !== NATIVE_COIN.ETHEREUM && view.token.logo !== NATIVE_COIN.BINANCECOIN &&
                                     <Avatar address={ view.token.tokenAddress } size={ 44 }
-                                            source={ { uri: view.token.logo || getDictionary().ethToken.get(view.token.symbol)?.logoURI } }/>
+                                            source={ { uri: getDictionary().token[getEVMProvider().currentNetwork.chainID][view.token.tokenAddress]?.logo } }/>
                                 }
                             </View>
                             <Text white robotoM text24 center marginT-8>

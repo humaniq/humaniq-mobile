@@ -183,7 +183,15 @@
     "insufficientBalance": "Недостаточно средств",
     "notEnoughFee": "Нехватает средств на оплату комиссии",
     "allow": "Да, разрешить эту транзакцию",
-    "deny": "Отклонить эту транзакцию"
+    "deny": "Отклонить эту транзакцию",
+    "smartContractInteraction": "Взаимодействие со смарт контрактом, в котором могут использоваться другие токены.",
+    "approve": {
+      "title": "Разрешить сайту использовать {{0}} токены с вашего кошелька",
+      "description": "By giving permission, you grant the next contract access to your funds."
+    },
+    "transfer": {
+      "title": "Отправить {{0}} токен"
+    }
   },
   "selectValueScreen": {
     "step": "Шаг 1 из 3",
@@ -238,7 +246,8 @@
     "speedUpTransaction": "Ускорить транзакцию",
     "howMany": "Как много",
     "adjustFee": "Настроить комиссию",
-    "changeFee": "Изменить комиссию"
+    "changeFee": "Изменить комиссию",
+    "smartContract": "Смарт контракт"
   },
   "transactionModel": {
     "status": {
@@ -285,7 +294,8 @@
     "scanning": "Направьте вашу камеру на QR код",
     "chooseFromGallery": "Выбрать из галереи",
     "qrCodeDetectionError": "Не удалось обнаружить QR-код на изображении",
-    "scanQrCode": "Сканировать QR-код"
+    "scanQrCode": "Сканировать QR-код",
+    "openSettings": "Открыть Настройки"
   },
   "humaniqID": {
     "presentation": {

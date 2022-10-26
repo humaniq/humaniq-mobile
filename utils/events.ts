@@ -42,10 +42,10 @@ class Events {
     }
 
     send = async (event: MARKETING_EVENTS) => {
-        await this.api.post(formatRoute(EVENTS_ROUTES.POST_EVENT, { event: getGroup(event) }), {
-            event: event,
-            path: getAppStore().currentRoute
-        })
+        // await this.api.post(formatRoute(EVENTS_ROUTES.POST_EVENT, { event: getGroup(event) }), {
+        //     event: event,
+        //     path: getAppStore().currentRoute
+        // })
     }
 }
 

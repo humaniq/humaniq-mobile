@@ -273,6 +273,7 @@ export class TokenTransaction extends Model({
 
     @computed
     get formatValue() {
+        if(beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))).toString().includes("e")) return `0 ${ this.symbol }`
         switch (this.action) {
             case 1:
                 return `-${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) } ${ this.symbol }`
@@ -281,7 +282,6 @@ export class TokenTransaction extends Model({
             default:
                 return `${ beautifyNumber(preciseRound(+formatUnits(this.value, this.decimals))) } ${ this.symbol }`
         }
-
     }
 
     @computed

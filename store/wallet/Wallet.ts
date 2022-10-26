@@ -13,7 +13,7 @@ import {
 import * as Sentry from "@sentry/react-native";
 import { ethers, Signer } from "ethers"
 import { computed, observable, reaction } from "mobx"
-import { amountFormat, beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
+import { beautifyNumber, currencyFormat, preciseRound } from "../../utils/number"
 import { v4 as uuidv4 } from 'uuid';
 import { API_FINANCE, COINGECKO_ROUTES, FINANCE_ROUTES, MORALIS_ROUTES, ROUTES } from "../../config/api"
 import { formatRoute } from "../../navigators"
@@ -42,6 +42,7 @@ export interface TransactionsRequestResult {
 export class Wallet extends Model({
     isError: p(t.boolean, false),
     pending: p(t.boolean, false).withSetter(),
+    pendingGetTokenBalances: p(t.boolean, false).withSetter(),
     initialized: p(t.string, "").withSetter(),
     address: p(t.string, ""),
     name: p(t.string, ""),
@@ -90,8 +91,12 @@ export class Wallet extends Model({
                     await Promise.all([
                         this.updateBalanceFromProvider(),
                         this.getCoinCost(),
-                        this.getTokenBalances()
+                        getDictionary().networkTokensInitialized && this.getTokenBalances()
                     ])
+
+                    reaction(() => getDictionary().networkTokensInitialized, () => {
+                        this.getTokenBalances()
+                    })
 
                     reaction(() => getWalletStore().showGraphBool, (val) => {
                         if (val) {
@@ -317,7 +322,7 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
-
+        this.pendingGetTokenBalances = true
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
@@ -332,6 +337,7 @@ export class Wallet extends Model({
             }))
             if (result.ok) {
                 this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
+                this.token.clear()
                 erc20.data.forEach(t => {
                     try {
                         const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
@@ -341,7 +347,7 @@ export class Wallet extends Model({
                                 priceUSD: result.data.payload[t.symbol.toLowerCase()].usd.price,
                                 priceEther: ethers.utils.parseEther(result.data.payload[t.symbol.toLowerCase()].eth.price.toString()).toString(),
                                 history: getWalletStore().showGraphBool ? result.data.payload[t.symbol.toLowerCase()].usd.history : [],
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || true,
+                                show: getDictionary().currentTokenDictionary[t.token_address] ? !getDictionary().currentTokenDictionary[t.token_address]?.hidden : false,
                                 prices: {
                                     eur: result.data.payload[t.symbol.toLowerCase()].eur.price,
                                     usd: result.data.payload[t.symbol.toLowerCase()].usd.price,
@@ -354,7 +360,7 @@ export class Wallet extends Model({
                             new Token({
                                 ...changeCaseObj(t),
                                 walletAddress: this.address,
-                                show: getDictionary().symbolsVisibility.get(t.symbol.toLowerCase()) || false,
+                                show: getDictionary().currentTokenDictionary[t.token_address] ? !getDictionary().currentTokenDictionary[t.token_address]?.hidden : false,
                                 prices: {
                                     eur: 0,
                                     usd: 0,
@@ -376,6 +382,7 @@ export class Wallet extends Model({
             // Sentry.captureException(erc20?.problem?.origianalError)
         }
         profiler.end(id)
+        this.pendingGetTokenBalances = false
     }
 
     @computed
@@ -410,7 +417,7 @@ export class Wallet extends Model({
 
     @computed
     get formatBalance() {
-        return amountFormat(this.valBalance, 8)
+        return this.valBalance ? this.valBalance.toString().includes("e") ? "0" : `${ beautifyNumber(this.valBalance) }` : `0`
     }
 
     @computed

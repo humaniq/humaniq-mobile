@@ -182,7 +182,15 @@
     "sendTransaction": "Send",
     "cantRewriteTransaction": "You balance is not enough, for cancel or increase speed of transaction",
     "allow": "Yes, allow this transaction",
-    "deny": "Deny this transaction"
+    "deny": "Deny this transaction",
+    "smartContractInteraction": "This is smart contract interaction and may use other tokens",
+    "approve": {
+      "title": "Allow permission for use your wallet {{0}} token",
+      "description": "By giving permission, you grant the next contract access to your funds."
+    },
+    "transfer": {
+      "title": "Send {{0}} tokens to"
+    }
   },
   "selectValueScreen": {
     "step": "Step 1 of 3",
@@ -237,7 +245,8 @@
     "speedUpTransaction": "Speed up transaction",
     "howMany": "How many",
     "adjustFee": "Adjust miner fee",
-    "changeFee": "Change fee"
+    "changeFee": "Change fee",
+    "smartContract": "Smart contract"
   },
   "transactionModel": {
     "status": {
@@ -284,7 +293,8 @@
     "scanning": "Point the camera of your phone to the QR code ",
     "chooseFromGallery": "Choose from gallery",
     "qrCodeDetectionError": "Failed to detect QR code in image",
-    "scanQrCode": "Scan QR code"
+    "scanQrCode": "Scan QR code",
+    "openSettings": "Open Settings"
   },
   "humaniqID": {
     "presentation": {

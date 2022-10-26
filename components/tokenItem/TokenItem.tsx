@@ -1,6 +1,6 @@
 import { Avatar as Av, Colors, Text, View } from "react-native-ui-lib";
 import { Avatar } from "../avatar/Avatar";
-import { getDictionary } from "../../App";
+import { getDictionary, getEVMProvider } from "../../App";
 import React from "react";
 import Ripple from "react-native-material-ripple";
 import { NATIVE_COIN } from "../../config/network";
@@ -65,7 +65,8 @@ function renderToken(
                 {
                     (logo !== NATIVE_COIN.ETHEREUM && logo !== NATIVE_COIN.BINANCECOIN) &&
                     <Avatar address={ tokenAddress } size={ 44 }
-                            source={ { uri: logo || getDictionary().ethToken.get(symbol)?.logoURI } }/>
+                            source={ { uri: getDictionary().token[getEVMProvider().currentNetwork.chainID][tokenAddress]?.logo
+                    } }/>
                 }
             </View>
             <View flex-4>

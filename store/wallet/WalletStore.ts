@@ -95,8 +95,10 @@ export class WalletStore extends Model({
 
     @modelFlow
     * register() {
-        reaction(() => getEVMProvider().initialized, () => {
-            this.init(true)
+        reaction(() => getEVMProvider().initialized, (val, prev) => {
+            !prev ?
+                this.init(true)
+                : this.updateWalletsInfo()
         })
         reaction(() => getAppStore().savedPin, async (pin) => {
             if (pin && getAppStore().lockerPreviousScreen !== AUTH_STATE.REGISTER) {
@@ -185,7 +187,7 @@ export class WalletStore extends Model({
             })
 
             wallet.initWallet()
-            this.allWallets = [ ...this.allWallets, wallet]
+            this.allWallets = [ ...this.allWallets, wallet ]
 
         } catch (e) {
             console.log("ERROR", e)
