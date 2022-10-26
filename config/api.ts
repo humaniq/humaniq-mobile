@@ -5,9 +5,9 @@ const API_MORALIS_URL = "https://deep-index.moralis.io/api/v2"
 export const TOKEN_LOGO_URL = "https://raw.githubusercontent.com/trustwallet/assets/9af1b653778b5ee8f9207dc4440c7ee22e8ce5b7/blockchains/ethereum/tokenlist.json"
 const timeout = 10000
 export const GAS_STATION_URL = "https://ethgasstation.info/api"
-export const API_HUMANIQ_URL = "https://signupbot.humaniq.com/api/v1"
-export const API_FINANCE = "https://apifinance.humaniq.com/api/v1"
-export const API_EVENTS = 'https://appevents.humaniq.com/api/v1'
+export const API_HUMANIQ_URL = "https://walletapi.humaniq.com/api/v1"
+export const API_FINANCE = "https://walletapi.humaniq.com/api/v1"
+export const API_EVENTS = "https://walletapi.humaniq.com/api/v1" // 'https://appevents.humaniq.com/api/v1'
 
 export interface ApiConfig {
     url: string;
