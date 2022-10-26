@@ -102,7 +102,6 @@ export class DictionaryStore extends Model({
 
         if (this.networkTokensInitialized) return
 
-        // yield* _await(localStorage.remove(`hm-wallet-tokens-update-${ getEVMProvider().currentNetwork.chainID }`))
         const last = (yield* _await(localStorage.load(`hm-wallet-tokens-update-${ getEVMProvider().currentNetwork.chainID }`)))
         const lastTokenUpdate = +last || Date.now() - (MONTH + 1)
 

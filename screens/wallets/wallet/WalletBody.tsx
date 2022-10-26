@@ -14,7 +14,7 @@ export const WalletBody = observer<any>(({ address }) => {
     return (
         <Card marginH-16 marginB-10>
             {
-                !!wallet.initialized && getDictionary().networkTokensInitialized && <>
+                !!wallet.initialized && getDictionary().networkTokensInitialized && !wallet.pendingGetTokenBalances && !wallet.pending && <>
                     <TokenItem
                         showGraph={ getWalletStore().showGraphBool }
                         onPress={ () => RootNavigation.navigate("walletTransactions", {
@@ -57,7 +57,7 @@ export const WalletBody = observer<any>(({ address }) => {
                 </>
             }
             {
-                !getDictionary().networkTokensInitialized && <ListSkeleton/>
+                (!getDictionary().networkTokensInitialized || wallet.pendingGetTokenBalances || wallet.pending) && <ListSkeleton/>
             }
         </Card>
     )
