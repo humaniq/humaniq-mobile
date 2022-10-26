@@ -42,6 +42,7 @@ export interface TransactionsRequestResult {
 export class Wallet extends Model({
     isError: p(t.boolean, false),
     pending: p(t.boolean, false).withSetter(),
+    pendingGetTokenBalances: p(t.boolean, false).withSetter(),
     initialized: p(t.string, "").withSetter(),
     address: p(t.string, ""),
     name: p(t.string, ""),
@@ -321,6 +322,7 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
+        this.pendingGetTokenBalances = true
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
             address: this.address
@@ -380,6 +382,7 @@ export class Wallet extends Model({
             // Sentry.captureException(erc20?.problem?.origianalError)
         }
         profiler.end(id)
+        this.pendingGetTokenBalances = false
     }
 
     @computed
