@@ -33,7 +33,7 @@ export class WalletConnectStore extends Model({
                     this.newSession(e.url)
                 }
             } catch (e) {
-                console.log("ERROR", e)
+                console.log("ERROR-INIT-WALLET-CONNECT", e)
             }
         });
         this.initialized = true;

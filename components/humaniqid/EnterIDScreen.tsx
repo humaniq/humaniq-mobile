@@ -71,7 +71,7 @@ const EnterID = observer<EnterIDProps>(({ useNavigation = false }) => {
             // @ts-ignore
             inputRef?.current && thr()
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-HUMAN-ID", e)
         }
     }, [ inputRef?.current ])
 

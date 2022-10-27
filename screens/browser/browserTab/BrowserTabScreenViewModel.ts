@@ -142,7 +142,7 @@ export class BrowserTabScreenViewModel {
             })
 
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-RELOAD-WEBVIEW", e)
         }
     }
 
@@ -720,7 +720,7 @@ export class BrowserTabScreenViewModel {
             this.handleNotAllowedUrl(urlToGo)
             return null
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-GO", e)
             return null
         }
     }

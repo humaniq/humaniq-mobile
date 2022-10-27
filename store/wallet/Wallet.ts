@@ -105,7 +105,7 @@ export class Wallet extends Model({
                     })
 
                 } catch (e) {
-                    console.log("ERROR", e)
+                    console.log("ERROR-INIT-WALLET", e)
                     Sentry.captureException(e)
                     runUnprotected(() => {
                         this.isError = true
@@ -133,7 +133,7 @@ export class Wallet extends Model({
                 recomendedFee: 0
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-UPDATE-BALANCE-FROM-PROVIDER", e)
             Sentry.captureException(e)
             this.isError = true
         }
@@ -226,7 +226,7 @@ export class Wallet extends Model({
                 this.transactions.initialized = true
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-LOAD-TRANSACTIONS", e)
             Sentry.captureException(e)
         }
         profiler.end(id)
@@ -265,7 +265,7 @@ export class Wallet extends Model({
                             prices: getSnapshot(currentToken.prices)
                         })
                     } catch (e) {
-                        console.log("ERROR", e)
+                        console.log("ERROR-GET-TOKEN-TRANSACTIONS", e)
                     }
 
                     if (currentToken) {
@@ -305,7 +305,7 @@ export class Wallet extends Model({
                 // Sentry.captureException(result?.problem?.origianalError)
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-GET-TOKEN-TRANSACTIONS", e)
             Sentry.captureException(e)
         }
         profiler.end(id)
@@ -322,6 +322,9 @@ export class Wallet extends Model({
 
     @modelFlow
     * getTokenBalances() {
+
+        if(!getDictionary().currentTokenDictionary) return
+
         this.pendingGetTokenBalances = true
         const id = profiler.start(EVENTS.GET_TOKEN_BALANCES)
         const route = formatRoute(MORALIS_ROUTES.ACCOUNT.GET_ERC20_BALANCES, {
@@ -339,6 +342,9 @@ export class Wallet extends Model({
                 this.history = getWalletStore().showGraphBool ? result.data.payload[getEVMProvider().currentNetwork.nativeCoin === NATIVE_COIN.ETHEREUM ? 'eth' : 'bnb'].usd.history : []
                 this.token.clear()
                 erc20.data.forEach(t => {
+
+                    if(!getDictionary().currentTokenDictionary) return
+
                     try {
                         const erc20Token = Object.keys(result.data.payload[t.symbol.toLowerCase()]).length ?
                             new Token({
@@ -373,7 +379,7 @@ export class Wallet extends Model({
                         this.token.set(t.token_address, erc20Token)
                         erc20Token.init()
                     } catch (e) {
-                        console.log("ERROR", e)
+                        console.log("ERROR-GET-TOKEN-BALANCES", e)
                     }
                 })
             }

@@ -31,7 +31,7 @@ export const TypedSign = observer(() => {
                 })
             })
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-SING-MESSAGE", e)
             rejectMessage()
         }
     }
@@ -45,7 +45,7 @@ export const TypedSign = observer(() => {
                 appStore.signMessageDialogDisplay = false
             })
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-REJECT-MESSAGE", e)
             runUnprotected(() => {
                 appStore.signMessageDialogDisplay = false
             })

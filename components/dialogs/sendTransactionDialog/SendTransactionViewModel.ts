@@ -66,7 +66,7 @@ export class SendTransactionViewModel {
 
             this.pending = false
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-INIT-SEND-TRANSACTION-DIALOG", e)
         }
     }
 
@@ -108,7 +108,7 @@ export class SendTransactionViewModel {
         try {
             return this.txData.gas ? +ethers.utils.formatEther((+this.selectedGasPrice * this.txData.gas).toString()) : 0
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-SET-TRANSACTION-MAX-FEE", e)
             return 0
         }
     }
@@ -154,7 +154,7 @@ export class SendTransactionViewModel {
                 total: this.transactionTotalAmount
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-TX-HUMAN-READABLE", e)
             return {}
         }
     }
@@ -176,7 +176,7 @@ export class SendTransactionViewModel {
                 type: 0
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-TX-BODY", e)
             return {}
         }
     }

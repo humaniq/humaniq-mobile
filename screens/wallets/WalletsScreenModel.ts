@@ -89,7 +89,7 @@ export class WalletsScreenModel {
                 }, 10)
             }, 10)
         } catch (e) {
-            console.log("ERROR", e);
+            console.log("ERROR-CREATE-WALLET-DIALOG", e);
             this.walletDialogs.pendingDialog.position = TOAST_POSITION.BOTTOM
             this.walletDialogs.pendingDialog.display = false;
             this.walletDialogs.pendingDialog.walletCreated = false

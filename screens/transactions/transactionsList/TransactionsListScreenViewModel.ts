@@ -51,7 +51,7 @@ export class TransactionsListScreenViewModel {
         this.initialized = true
       }
     } catch (e) {
-      console.log("ERROR", e)
+      console.log("ERROR-INIT-WALLET", e)
     }
   }
 
