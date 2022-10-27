@@ -317,7 +317,7 @@ export class TokenTransaction extends Model({
             }
         } catch (e) {
             console.log(this.prices)
-            console.log("ERROR", e)
+            console.log("ERROR-FORMAT-FIAT-VALUE", e)
             return "--/--"
         }
     }

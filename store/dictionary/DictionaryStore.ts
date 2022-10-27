@@ -132,7 +132,7 @@ export class DictionaryStore extends Model({
                 this.recentlyUsedAddresses = fromSnapshot(addresses)
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-LOAD-RECENTLY-USED-ADDRESSES", e)
             yield* _await(localStorage.save("hm-wallet-recently-addresses", {}))
             yield this.loadRecentlyUsedAddresses()
         }
@@ -146,7 +146,7 @@ export class DictionaryStore extends Model({
             const snap = getSnapshot(this.recentlyUsedAddresses)
             yield* _await(localStorage.save("hm-wallet-recently-addresses", snap))
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-SAVE-ADDRESS", e)
         }
     }
 }

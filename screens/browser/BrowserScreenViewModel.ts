@@ -32,7 +32,7 @@ export class BrowserScreenViewModel {
         getBrowserStore().tabs.length > 0 && getBrowserStore().setActiveTab(getBrowserStore().tabs[0].id)
       }
     } catch (e) {
-      console.log("ERROR", e)
+      console.log("ERROR-INIT-SCREEN-BROWSER", e)
     } finally {
       this.initialized = true
     }

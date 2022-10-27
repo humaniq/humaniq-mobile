@@ -18,7 +18,7 @@ export const amountFormat = memoize((amount = 0, number) => {
     try {
         return currency(amount, { precision: number, symbol: "" }).format();
     } catch (e) {
-        console.log("ERROR", e)
+        console.log("ERROR-AMOUNT-FORMAT", e)
         return "0"
     }
 })
@@ -44,7 +44,7 @@ export const currencyFormat = memoize((amount = 0, symbol?: string) => {
     try {
         return symbol ? currency(amount, { symbol: getCurrencySymbol(symbol) || symbol }).format() : currency(amount).format();
     } catch (e) {
-        console.log("ERROR", e)
+        console.log("ERROR-CURRENCY-FORMAT", e)
         return "0"
     }
 })
