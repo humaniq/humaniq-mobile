@@ -72,7 +72,7 @@ export const SendTransactionDialog = observer(() => {
                     { view.isKnownTxFunction && view.functionName === "APPROVE" && <>
                         <Text marginT-20 marginB-20 text16 robotoM style={ {
                             alignSelf: 'flex-start'
-                        } }>{ t("sendTransactionDialog.approve.title", { 0: view.knownTokenAddress.symbol }) }</Text>
+                        } }>{ t("sendTransactionDialog.approve.title", { 0: view.knownTokenAddress?.symbol }) }</Text>
                         <Text color={ Colors.textBlack } text14 grey30 style={ {
                             alignSelf: 'flex-start'
                         } }>{ t("sendTransactionDialog.approve.description") }</Text>
@@ -87,7 +87,7 @@ export const SendTransactionDialog = observer(() => {
                     { view.isKnownTxFunction && view.functionName === "TRANSFER" && <>
                         <Text marginT-20 text16 robotoM style={ {
                             alignSelf: 'flex-start'
-                        } }>{ t("sendTransactionDialog.transfer.title", { 0: view.knownTokenAddress.symbol }) }</Text>
+                        } }>{ t("sendTransactionDialog.transfer.title", { 0: view.knownTokenAddress?.symbol }) }</Text>
                         <Card marginV-16 width={ "100%" }>
                             <View padding-10 paddingH-15 paddingR-20>
                                 <View row centerV>
@@ -106,7 +106,7 @@ export const SendTransactionDialog = observer(() => {
                                     <View right>
                                         <Text numberOfLines={ 1 } text16 robotoM>
                                             { view.knownTokenAddress ?
-                                                preciseRound(+formatUnits(view.txDescription.args[1].toString(), view.knownTokenAddress.decimals).toString()).toString() :
+                                                preciseRound(+formatUnits(view.txDescription.args[1].toString(), view.knownTokenAddress?.decimals).toString()).toString() :
                                                 view.txDescription.args[1].toString() }
                                         </Text>
                                     </View>
@@ -119,7 +119,7 @@ export const SendTransactionDialog = observer(() => {
                         alignSelf: 'flex-start'
                     } }>{ t("transactionScreen.from") }</Text>
                     <View row paddingV-16>
-                        <Card width={ "100%" }><WalletItem token={ view.knownTokenAddress.addressHex.toLowerCase() }
+                        <Card width={ "100%" }><WalletItem token={ view.knownTokenAddress?.addressHex?.toLowerCase() }
                                                            wallet={ getWalletStore().selectedWallet }/></Card>
                     </View>
                     <Text style={ {

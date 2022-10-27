@@ -190,7 +190,7 @@ export class WalletStore extends Model({
             this.allWallets = [ ...this.allWallets, wallet ]
 
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-ADD-WALLET", e)
         }
     }
 

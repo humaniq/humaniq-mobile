@@ -184,7 +184,7 @@ export class AuthViewModel {
                 this.initialized = true
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-INIT-AUTH-VIEW", e)
         }
     }
 

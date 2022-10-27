@@ -181,7 +181,7 @@ export class SendTransactionViewModel {
         try {
             return +ethers.utils.formatUnits(+this.selectedGasPrice * this.txData.gasLimit, 18)
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-TRANSACTIONS-FEE", e)
             return 0
         }
     }

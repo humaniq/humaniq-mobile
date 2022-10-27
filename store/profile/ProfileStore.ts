@@ -68,7 +68,7 @@ export class ProfileStore extends Model({
                 return false
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-CHECK-CODE", e)
         }
     }
 

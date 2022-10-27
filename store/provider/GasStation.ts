@@ -108,7 +108,7 @@ export class GasStation extends Model({
             }
         } catch (e) {
             this.isError = true
-            console.log("ERROR", e)
+            console.log("ERROR-UPDATE-GAS-STATION", e)
         } finally {
             setTimeout(() => {
                 runUnprotected(() => {

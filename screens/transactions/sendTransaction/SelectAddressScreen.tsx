@@ -61,7 +61,7 @@ export const SelectAddressScreen = observer<{ route: any }>(({ route }) => {
             // @ts-ignore
             inputRef?.current && thr()
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-INPUT-REF-SEND-TRANSACTIONS", e)
         }
     }, [ inputRef?.current ])
 

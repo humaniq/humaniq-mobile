@@ -273,7 +273,7 @@ export class WalletConnect extends Model({
                 accounts: [ getWalletStore().selectedWallet?.address ],
             });
         } catch (e) {
-            console.log('ERROR', e);
+            console.log("ERROR-UPDATE-SESSION", e);
         }
     }
 

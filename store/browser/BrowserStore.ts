@@ -82,7 +82,7 @@ export class BrowserStore extends Model({
                 this.history = fromSnapshot(storedHistory)
             }
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-INIT-BROWSER", e)
             yield* _await(localStorage.save("hm-wallet-browser-tabs", {}))
             yield* _await(localStorage.save("hm-wallet-browser-history", false))
             this.init()

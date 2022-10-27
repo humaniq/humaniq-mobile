@@ -55,7 +55,7 @@ const SelectValue = observer(() => {
             // @ts-ignore
             inputRef?.current && thr()
         } catch (e) {
-            console.log("ERROR", e)
+            console.log("ERROR-REGISTER-INPUT", e)
         }
     }, [ inputRef?.current ])
 
