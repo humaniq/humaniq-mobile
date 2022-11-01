@@ -1,11 +1,11 @@
 import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
-import { AppService } from "./services/AppService"
 import React, { useEffect } from "react"
 import { Colors, Text, View } from "react-native-ui-lib"
 import { Button } from "react-native"
-import "./app/theme/color"
-import "./app/theme/typography"
+import "app/theme/color"
+import "app/theme/typography"
+import { AppService } from "app/services/AppService"
 import { applyTheme } from "app/theme/componentTheme"
 
 applyTheme()
