@@ -1,27 +1,37 @@
-import { observer } from "mobx-react-lite";
-import { provider, useInstance } from "react-ioc";
-import { AppService } from "./services/AppService";
-import React, { useEffect } from "react";
-import { Text, View } from "react-native-ui-lib";
-import { Button } from "react-native";
+import { observer } from "mobx-react-lite"
+import { provider, useInstance } from "react-ioc"
+import { AppService } from "./services/AppService"
+import React, { useEffect } from "react"
+import { Colors, Text, View } from "react-native-ui-lib"
+import { Button } from "react-native"
+import "./app/theme/color"
+import "./app/theme/typography"
+import { applyTheme } from "app/theme/componentTheme"
+
+applyTheme()
+
+require('react-native-ui-lib/config').setConfig({ appScheme: 'default' })
 
 const AppScreen = observer(() => {
 
-  const app = useInstance(AppService);
+  const app = useInstance(AppService)
 
   useEffect(() => {
-    app.init();
-  }, []);
+    app.init()
+  }, [])
 
-  return <View flex style={ { minHeight: "100%" } }>
+  return <View flex style={{ minHeight: "100%", backgroundColor: Colors.success }}>
     <View flex center>
-      <Text>{ app.counter }</Text>
-      <Button  onPress={() => { console.log("RRERE"); app.increment() } } title={ "Increment" }></Button>
+      <Text>{app.counter}</Text>
+      <Button onPress={() => {
+        console.log("RRERE")
+        app.increment()
+      }} title={"Increment"}></Button>
     </View>
-  </View>;
-});
+  </View>
+})
 
-export const App = provider()(AppScreen);
+export const App = provider()(AppScreen)
 App.register(
-  AppService,
-);
+  AppService
+)
