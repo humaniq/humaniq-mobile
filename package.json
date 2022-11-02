@@ -10,12 +10,13 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "@ethersproject/shims": "^5.7.0",
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-community/eslint-config": "^2.0.0",
     "@react-native-community/netinfo": "^9.3.6",
+    "@walletconnect/react-native-dapp": "^1.8.0",
+    "@walletconnect/web3-provider": "^1.8.0",
     "apisauce": "^2.1.6",
-    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
     "dayjs": "^1.11.6",
     "ethers": "^5.7.2",
     "i18n-js": "4.1.1",
@@ -25,11 +26,16 @@
     "react-ioc": "^1.0.0",
     "react-native": "0.70.4",
     "react-native-gesture-handler": "^2.8.0",
+    "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "^2.12.0",
-    "react-native-ui-lib": "^6.22.3"
+    "react-native-svg": "^12.4.4",
+    "react-native-ui-lib": "^6.22.3",
+    "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/plugin-proposal-decorators": "^7.20.0",
     "@babel/runtime": "^7.12.5",
     "@tsconfig/react-native": "^2.0.2",
     "@types/jest": "^26.0.23",
@@ -40,11 +46,17 @@
     "@typescript-eslint/parser": "^5.37.0",
     "babel-jest": "^26.6.3",
     "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "eslint": "^7.32.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
+    "node-libs-react-native": "^1.2.1",
     "react-test-renderer": "18.1.0",
     "typescript": "^4.8.3"
+  },
+  "resolutions": {
+    "react-native-svg": "^12.4.4"
   },
   "jest": {
     "preset": "react-native",

@@ -1,20 +1,25 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx"
+import { StorageService } from "./StorageService"
+import { inject } from "react-ioc"
 
 export class AppService {
 
-  counter = 0;
+  storage = inject(this, StorageService)
 
   constructor() {
-    console.log("Construct service");
-    makeAutoObservable(this, null, { autoBind: true });
+    makeAutoObservable(this, null, { autoBind: true })
   }
 
   increment = () => {
-    console.log("increment");
-    this.counter++;
-  };
+    console.log("increment")
+    this.storage.counter++
+  }
+
+  get counter() {
+    return this.storage.counter
+  }
 
   init = () => {
-    console.log("init");
-  };
+    console.log("init")
+  }
 }

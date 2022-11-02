@@ -6,6 +6,13 @@
  */
 
 module.exports = {
+  resolver: {
+    extraNodeModules: {
+      ...require("node-libs-react-native"),
+      // crypto: require.resolve('crypto-browserify'),
+      // stream: require.resolve('stream-browserify'),
+    }
+  },
   transformer: {
     getTransformOptions: async () => ({
       transform: {
