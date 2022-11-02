@@ -14,16 +14,6 @@ module.exports = {
         "loose": true,
       },
     ],
-    'react-native-reanimated/plugin'
-  ],
-  env: {
-    "production": {
-      "plugins": [
-        "transform-remove-console",
-      ],
-    },
-  },
-  plugins: [
     [
       'module-resolver',
       {
@@ -45,5 +35,13 @@ module.exports = {
         },
       },
     ],
-  ]
+    'react-native-reanimated/plugin',
+  ],
+  env: {
+    "production": {
+      "plugins": [
+        "transform-remove-console",
+      ],
+    },
+  },
 };
