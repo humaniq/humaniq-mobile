@@ -53,9 +53,10 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Roboto-Bold.ttf</string>
-		<string>Roboto-Medium.ttf</string>
-		<string>Roboto-Regular.ttf</string>
+		<string>Inter-Bold.ttf</string>
+		<string>Inter-Medium.ttf</string>
+		<string>Inter-Regular.ttf</string>
+		<string>Inter-SemiBold.ttf</string>
 	</array>
 </dict>
 </plist>

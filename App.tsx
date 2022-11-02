@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 applyTheme()
 
-require("react-native-ui-lib/config").setConfig({ appScheme: "light" })
+require("react-native-ui-lib/config").setConfig({ appScheme: "default" })
 
 const AppScreen = observer(() => {
 
@@ -31,7 +31,7 @@ const AppScreen = observer(() => {
 
   return <View flex style={{ minHeight: "100%", backgroundColor: "#fff" }}>
     <View flex center>
-      <Text>{app.counter}</Text>
+      <Text interB>{app.counter}</Text>
       <Button onPress={() => {
         console.log("RRERE")
         app.increment()
