@@ -1,20 +1,19 @@
-import { makeAutoObservable, reaction, runInAction } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 import { networks } from "../references/networks"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import { getAPIKey } from "../references/keys"
 import { ethers } from "ethers"
 import { inject } from "react-ioc"
 import { WalletConnectService } from "./WalletConnectService"
+import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider"
 
 export class ProviderService {
 
-  provider
-  account
+  provider: Web3Provider
+  address: string
   signer
-  chainId
-  initialized = false
-  hasProvider = false
-  isConnecting = false
+  chainId: number = -1
+  balance: string = ""
 
   wc = inject(this, WalletConnectService)
 
@@ -23,105 +22,86 @@ export class ProviderService {
     makeAutoObservable(this)
   }
 
+  init = async () => {
+    reaction(() => this.wc?.connected, async (val) => {
+      console.log("provider-connected", val)
+      val ? await this.setProvider() : this.handleDisconnect()
+    })
+  }
+
   setProvider = async () => {
-    const rpc: Record<number, string> = []
-    Object.entries(networks).forEach(([ , networkInfo ]) => {
-      rpc[networkInfo.chainId] = networkInfo.rpcUrl[0]
-    })
+    try {
+      const rpc: Record<number, string> = []
 
-    const provider = new WalletConnectProvider({
-      rpc,
-      infuraId: getAPIKey("INFURA_PROJECT_ID"),
-      connector: this.wc.connector,
-      qrcode: false,
-    })
+      Object.entries(networks).forEach(([ , networkInfo ]) => {
+        rpc[networkInfo.chainId] = networkInfo.rpcUrl[0]
+      })
 
-    const result = await provider.enable()
-    this.account = result[0]
-    console.log(this.account)
-    this.provider = new ethers.providers.Web3Provider(provider)
-    this.initProvider()
-    await this.connectWC()
-    console.log(this.wc.connector)
-    console.log(this.provider)
+      const provider = new WalletConnectProvider({
+        rpc,
+        infuraId: getAPIKey("INFURA_PROJECT_ID"),
+        connector: this.wc.connector,
+        qrcode: false,
+      })
+
+      const result = await provider.enable()
+      this.provider = new ethers.providers.Web3Provider(provider)
+      this.signer = this.provider.getSigner()
+
+      this.setAddress(result[0])
+      this.setBalance((await this.provider.getBalance(this.address)).toString())
+      this.setChainId(await this.provider.send("eth_chainId", []))
+
+      this.provider.on("accountsChanged", this.handleAccountsChange)
+      this.provider.on("disconnect", this.handleDisconnect)
+      this.provider.on("chainChanged", this.handleChainChange)
+
+
+      // Check if chain supported
+      const chain = Object.values(networks).find(item => item.chainId === this.chainId)
+
+      if (!chain) {
+        this.setChainId((chain.chainId))
+        // need request change chain
+        await this.provider.send("wallet_switchEthereumChain", [ networks.ethereum.chainId ])
+      }
+    } catch (e) {
+      console.log("Error-set-provider", e)
+    }
   }
 
-  initProvider = () => {
-    if (!this.provider) return
-
-    const { provider } = this.provider
-
-    provider.on("accountsChanged", this.handleAccountsChange)
-    provider.on("disconnect", this.handleDisconnect)
-    provider.on("chainChanged", this.handleChainChange)
-
-    this.signer = this.provider.getSigner()
-
-  }
-
-  unmountProvider = () => {
-    this.account = null
-    this.provider = null
+  get isNetworkSupported() {
+    return !this.chainId || Object.values(networks).find(item => item.chainId === this.chainId)
   }
 
   handleAccountsChange = async (accounts: string[]) => {
-    if (this.account === accounts[0]) return
-    this.account = accounts[0]
+    if (this.address === accounts[0]) return
+    this.address = accounts[0]
   }
 
   handleDisconnect = () => {
-    this.account = null
+    this.address = null
   }
 
   handleChainChange = async (info: any) => {
     this.chainId = typeof info === "object" ? +info.chainId : +info
   }
 
-  connectWC = async () => {
-    if (!this.provider || this.provider?.provider.currentAccount)
-      return
-
-    if (this.isConnecting) return
-
-    this.isConnecting = true
-
-    try {
-      let chainId = this.chainId
-
-      if (!chainId) {
-        chainId = await this.provider.provider.request({
-          method: "eth_chainId",
-        })
-      }
-
-      const chain = Object.values(networks).find(item => item.chainId === chainId)
-
-      runInAction(() => {
-        if (chain) {
-          this.chainId = chain.chainId
-        } else {
-          // not supported
-          this.chainId = chainId
-          this.initialized = false
-          this.provider.provider.onDisconnect()
-          this.provider = null
-        }
-      })
-    } catch (e) {
-      console.log("ERROR", e)
-    } finally {
-      runInAction(() => {
-        this.isConnecting = false
-      })
-    }
+  setAddress = (address) => {
+    this.address = address
+    console.log("Set-address", this.address)
   }
 
-  init = async () => {
-    reaction(() => this.wc?.connected, async (val) => {
-      console.log("provider-connected", val)
-      val ? await this.setProvider() : this.unmountProvider()
-    })
+  setBalance = (balance) => {
+    this.balance = balance
+    console.log("Set-balance", this.balance)
   }
+
+  setChainId = (chainId) => {
+    this.chainId = chainId
+    console.log("Set-chainId", this.chainId)
+  }
+
 }
 
 

@@ -16,6 +16,12 @@ import { Button } from "react-native"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { ProviderService } from "./app/services/ProviderService"
 
+// import { configure } from "mobx"
+
+// configure({
+//   enforceActions: "never",
+// })
+
 applyTheme()
 
 require("react-native-ui-lib/config").setConfig({ appScheme: "default" })
@@ -42,7 +48,8 @@ const AppScreen = observer(() => {
       {
         connector.connected && <View center paddingV-10>
           <View row><Text>{ provider.chainId }</Text></View>
-          <View row><Text>{ provider.account }</Text></View>
+          <View row><Text>{ provider.address }</Text></View>
+          <View row><Text>{ provider.balance }</Text></View>
         </View>
       }
       { !connector.connected ? <Button title={ "Connect" } onPress={ () => connector.connect() } /> :
