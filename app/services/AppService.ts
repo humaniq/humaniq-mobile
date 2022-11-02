@@ -1,8 +1,12 @@
 import { makeAutoObservable } from "mobx";
+import { StorageService } from "./StorageService";
+import { inject } from "react-ioc";
 
 export class AppService {
 
-  counter = 0;
+  storage = inject(this, StorageService)
+
+  // counter = 0;
 
   constructor() {
     console.log("Construct service");
@@ -11,8 +15,12 @@ export class AppService {
 
   increment = () => {
     console.log("increment");
-    this.counter++;
+    this.storage.counter++;
   };
+
+  get counter() {
+    return this.storage.counter
+  }
 
   init = () => {
     console.log("init");

@@ -15,14 +15,14 @@ export const applyTheme = () => {
     }
   })
 
-  ThemeManager.setComponentForcedTheme('Button', (props, context) => {
-    return {
-      backgroundColor: props.backgroundColor || Colors.primary,
-      color: props.outlineColor ? props.outlineColor : props.link || props.outline ? Colors.primary : Colors.white,
-      outlineColor: props.outlineColor ? props.outlineColor : props.outline ? Colors.primary : Colors.transparent,
-      ...props
-    }
-  })
+  // ThemeManager.setComponentForcedTheme('Button', (props, context) => {
+  //   return {
+  //     backgroundColor: props.backgroundColor || Colors.primary,
+  //     color: props.outlineColor ? props.outlineColor : props.link || props.outline ? Colors.primary : Colors.white,
+  //     outlineColor: props.outlineColor ? props.outlineColor : props.outline ? Colors.primary : Colors.transparent,
+  //     ...props
+  //   }
+  // })
 
   ThemeManager.setComponentForcedTheme('Switch', (props, context) => {
     return {
