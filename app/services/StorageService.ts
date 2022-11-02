@@ -1,9 +1,9 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx"
 
 export class StorageService {
-  counter = 0;
+  counter = 0
 
   constructor() {
-    makeAutoObservable(this);
+    makeAutoObservable(this)
   }
 }

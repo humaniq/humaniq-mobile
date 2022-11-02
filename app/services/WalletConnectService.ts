@@ -1,15 +1,17 @@
-import { makeAutoObservable } from "mobx";
-import WalletConnect from "@walletconnect/client";
+import { makeAutoObservable } from "mobx"
+import WalletConnect from "@walletconnect/client"
 
 export class WalletConnectService {
   connector: WalletConnect
+  connected = false
+  // providerService = inject(this, ProviderService);
 
-  init = (connector) => {
+  init = (connector: WalletConnect) => {
     this.connector = connector
-    console.log(connector)
+    this.connected = this.connector.connected
   }
 
   constructor() {
-    makeAutoObservable(this, null, {autoBind: true})
+    makeAutoObservable(this, null, { autoBind: true })
   }
 }
