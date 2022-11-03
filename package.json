@@ -3,11 +3,20 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
+    "android": "yarn rnuc:dev && react-native run-android --appIdSuffix dev --main-activity MainActivity",
+    "android:prod": "yarn rnuc:prod && react-native run-android",
+    "android:stage": "yarn rnuc:stage && react-native run-android --appIdSuffix stage --main-activity MainActivity",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "postinstall": "patch-package",
+    "android-release": "yarn rnuc:dev && cd ./android && ./gradlew assembleRelease",
+    "android-release:prod": "yarn rnuc:prod && cd ./android && ./gradlew assembleRelease",
+    "android-release:stage": "yarn rnuc:stage && cd ./android && ./gradlew assembleRelease",
+    "rnuc:dev": "yarn rnuc ./app/envs/dev.yml",
+    "rnuc:stage": "yarn rnuc ./app/envs/stage.yml",
+    "rnuc:prod": "yarn rnuc ./app/envs/prod.yml"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.10",
@@ -22,6 +31,9 @@
     "i18n-js": "4.1.1",
     "mobx": "^6.6.2",
     "mobx-react-lite": "^3.4.0",
+    "mover-icon-set": "git+https://github.com/viaMover/mover-icon-set.git",
+    "patch-package": "^6.4.7",
+    "postinstall-postinstall": "^2.1.0",
     "react": "18.1.0",
     "react-ioc": "^1.0.0",
     "react-native": "0.70.4",
@@ -30,6 +42,8 @@
     "react-native-reanimated": "^2.12.0",
     "react-native-svg": "^12.4.4",
     "react-native-ui-lib": "^6.22.3",
+    "react-native-ultimate-config": "^4.0.0",
+    "react-native-vector-icons": "^9.2.0",
     "stream-browserify": "^3.0.0"
   },
   "devDependencies": {

@@ -8,13 +8,14 @@ import "app/theme/color"
 import "app/theme/typography"
 import { AppService } from "app/services/AppService"
 import { applyTheme } from "app/theme/componentTheme"
-import { StorageService } from "./app/services/StorageService"
-import { WalletConnectService } from "./app/services/WalletConnectService"
+import { StorageService } from "app/services/StorageService"
+import { WalletConnectService } from "app/services/WalletConnectService"
 import { useWalletConnect, withWalletConnect } from "@walletconnect/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Button } from "react-native"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
-import { ProviderService } from "./app/services/ProviderService"
+import { ProviderService } from "app/services/ProviderService"
+import { MovIcon } from "app/components/icon"
 
 // import { configure } from "mobx"
 
@@ -44,6 +45,7 @@ const AppScreen = observer(() => {
 
 
   return <View flex style={ { minHeight: "100%" } }>
+    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" } />
     <View flex center>
       {
         connector.connected && <View center paddingV-10>
