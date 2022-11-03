@@ -3,29 +3,21 @@
 import { observer } from "mobx-react-lite"
 import { provider, useInstance } from "react-ioc"
 import React, { useEffect } from "react"
-import { Text, View } from "react-native-ui-lib"
-import "app/theme/color"
-import "app/theme/typography"
 import { AppService } from "app/services/AppService"
-import { applyTheme } from "app/theme/componentTheme"
 import { StorageService } from "app/services/StorageService"
 import { WalletConnectService } from "app/services/WalletConnectService"
 import { useWalletConnect, withWalletConnect } from "@walletconnect/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Button } from "react-native"
+import { Button, View, Text } from "react-native"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { ProviderService } from "app/services/ProviderService"
-import { MovIcon } from "app/components/icon"
+import { MovIcon } from "app/ui/components/icon"
 
 // import { configure } from "mobx"
 
 // configure({
 //   enforceActions: "never",
 // })
-
-applyTheme()
-
-require("react-native-ui-lib/config").setConfig({ appScheme: "default" })
 
 const AppScreen = observer(() => {
 
@@ -36,7 +28,7 @@ const AppScreen = observer(() => {
 
   useEffect(() => {
     wc.init(connector)
-  }, [ connector ])
+  }, [connector])
 
   useEffect(() => {
     app.init()
@@ -44,18 +36,18 @@ const AppScreen = observer(() => {
   }, [])
 
 
-  return <View flex style={ { minHeight: "100%" } }>
-    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" } />
-    <View flex center>
+  return <View style={ { minHeight: "100%" } }>
+    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" }/>
+    <View>
       {
-        connector.connected && <View center paddingV-10>
-          <View row><Text>{ provider.chainId }</Text></View>
-          <View row><Text>{ provider.address }</Text></View>
-          <View row><Text>{ provider.balance }</Text></View>
+        connector.connected && <View>
+          <View><Text>{ provider.chainId }</Text></View>
+          <View><Text>{ provider.address }</Text></View>
+          <View><Text>{ provider.balance }</Text></View>
         </View>
       }
-      { !connector.connected ? <Button title={ "Connect" } onPress={ () => connector.connect() } /> :
-        <Button title={ "Kill session" } onPress={ () => connector.killSession() } /> }
+      { !connector.connected ? <Button title={ "Connect" } onPress={ () => connector.connect() }/> :
+        <Button title={ "Kill session" } onPress={ () => connector.killSession() }/> }
     </View>
   </View>
 })
@@ -66,12 +58,12 @@ AppWithProvider.register(
   AppService,
   StorageService,
   WalletConnectService,
-  ProviderService,
+  ProviderService
 )
 
 export const App = withWalletConnect(AppWithProvider, {
   redirectUrl: "mover://",
   storageOptions: {
-    asyncStorage: AsyncStorage as unknown as IAsyncStorage,
-  },
+    asyncStorage: AsyncStorage as unknown as IAsyncStorage
+  }
 })

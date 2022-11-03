@@ -10,8 +10,8 @@ import {
   ThemeProviderValue,
   Themes,
 } from './ThemeProvider.types';
-import { LightMorningTheme } from 'assets/themes/light';
-import { DarkNightTheme } from 'assets/themes/dark';
+import { LightMorningTheme } from 'assets/themes';
+import { DarkNightTheme } from 'assets/themes';
 
 export const ThemeContext = createContext<ThemeProviderValue>(
   {} as ThemeProviderValue,
