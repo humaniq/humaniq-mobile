@@ -12,7 +12,7 @@ export const colorsLight = {
 
 export const colorsDark = {
   primary: "#0066DA",
-  bg: "#F5FAFF",
+  bg: "#000000",
   statusBar: "#F9F8FF",
   roundedIconBg: "#333333",
   roundedIcon: "#FFFFFF",
