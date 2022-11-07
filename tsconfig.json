@@ -36,7 +36,7 @@
     /* Enable all strict type-checking options. */
     "noImplicitAny": false,
     /* Raise error on expressions and declarations with an implied 'any' type. */
-    "noImplicitReturns": true,
+    "noImplicitReturns": false,
     "strictNullChecks": false,
     /* Enable strict null checks. */
     // "strictFunctionTypes": true,           /* Enable strict checking of function types. */
@@ -57,12 +57,12 @@
     /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
     "baseUrl": ".",
     "paths": {
-      "assets/*": [
-        "./app/assets/*"
-      ],
-      "types/*": [
-        "./app/types/*"
-      ],
+      "assets/*": ["./app/assets/*"],
+      "types/*": ["./app/types/*"],
+      "utils/*": ["./app/utils/*"],
+      "context/*": ["./app/context/*"],
+      "hooks/*": ["./app/hooks/*"],
+      "ui/*": ["./app/ui/*"]
     },
     "allowSyntheticDefaultImports": true,
     /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */

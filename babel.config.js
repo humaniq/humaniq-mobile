@@ -32,6 +32,10 @@ module.exports = {
         alias: {
           assets: './app/assets',
           types: './app/types',
+          utils: './app/utils',
+          context: './app/context',
+          hooks: './app/hooks',
+          ui: './app/ui',
         },
       },
     ],

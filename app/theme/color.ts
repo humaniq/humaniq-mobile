@@ -1,36 +1,30 @@
-import { Colors } from "react-native-ui-lib"
-
 export const colorsLight = {
   primary: "#0066DA",
-  error: "#F44336",
-  success: "#4CAF50",
-  warning: "#FD9900",
-  textBlack: "#001833",
-  black: "#001833",
-  blueOcean: "#001833",
-  textGrey: "#9B9B9B",
   bg: "#F5FAFF",
-  grey: "#E0E0E0",
-  greyLight: "#F2F3F6",
-  greyLightSecond: "#EFF2F4"
+  statusBar: "#F9F8FF",
+  roundedIconBg: "#F1F1F1",
+  roundedIcon: "#404040",
+  menuTitle: "#000000",
+  menuSub: "#B1B1B1",
+  comingSoonBg: "#F1F1F1",
+  comingSoonText: "#333333",
 }
 
 export const colorsDark = {
   primary: "#0066DA",
-  error: "#F44336",
-  success: "#4CAF50",
-  warning: "#FD9900",
-  textBlack: "#001833",
-  black: "#001833",
-  blueOcean: "#001833",
-  textGrey: "#9B9B9B",
-  bg: "#F5FAFF",
-  grey: "#E0E0E0",
-  greyLight: "#F2F3F6",
-  greyLightSecond: "#EFF2F4"
+  bg: "#000000",
+  statusBar: "#F9F8FF",
+  roundedIconBg: "#333333",
+  roundedIcon: "#FFFFFF",
+  menuTitle: "#FFFFFF",
+  menuSub: "#999999",
+  comingSoonBg: "#333333",
+  comingSoonText: "#999999",
 }
 
-Colors.loadSchemes({
-  light: colorsLight,
-  dark: colorsDark
-})
+export const fonts = {
+  bold: 'Inter-Bold',
+  medium: 'Inter-Medium',
+  regular: 'Inter-Regular',
+  semi: 'Inter-SemiBold'
+}

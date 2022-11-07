@@ -1,17 +1,6 @@
-import React, {
-  memo,
-  createContext,
-  useState,
-  useCallback,
-  useMemo,
-} from 'react';
-import {
-  ThemeProviderProps,
-  ThemeProviderValue,
-  Themes,
-} from './ThemeProvider.types';
-import { LightMorningTheme } from 'assets/themes/light';
-import { DarkNightTheme } from 'assets/themes/dark';
+import React, { createContext, memo, useCallback, useMemo, useState } from 'react'
+import { ThemeProviderProps, ThemeProviderValue, Themes } from './types'
+import { DarkNightTheme, LightMorningTheme } from 'assets/themes'
 
 export const ThemeContext = createContext<ThemeProviderValue>(
   {} as ThemeProviderValue,
@@ -33,6 +22,7 @@ export const ThemeProvider = memo<ThemeProviderProps>(
         store: themeStore[themeId],
         themeId,
         switchTheme,
+        isDarkMode: themeId === Themes.Dark,
       }),
       [themeId, switchTheme],
     );
