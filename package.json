@@ -46,8 +46,7 @@
     "react-native-svg": "^12.4.4",
     "react-native-ultimate-config": "^4.0.0",
     "react-native-vector-icons": "^9.2.0",
-    "stream-browserify": "^3.0.0",
-    "underscore": "^1.13.6"
+    "stream-browserify": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

@@ -7,11 +7,11 @@ import { useTheme } from 'hooks/useTheme'
 
 export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   const insets = useSafeAreaInsets()
-  const theme = useTheme()
+  const { colors, isDarkMode} = useTheme()
 
   const {
-    backgroundColor = theme.colors.statusBar,
-    barStyle = 'dark-content',
+    backgroundColor = colors.bg,
+    barStyle = isDarkMode ? 'light-content' : 'dark-content',
     animated,
     ...otherProps
   } = props

@@ -10,6 +10,7 @@ export enum Themes {
 export type ThemeProviderValue = {
   readonly store: Theme;
   readonly themeId: Themes;
+  readonly isDarkMode: boolean;
   switchTheme(tid: string): void;
 };
 
