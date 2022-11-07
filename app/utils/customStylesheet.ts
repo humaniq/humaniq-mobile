@@ -1,19 +1,8 @@
-import * as _ from 'underscore';
-import { scalePx } from 'utils/screenUtils'
-import { StyleSheet } from 'react-native';
+import * as _ from 'underscore'
+import { fontScale, horizontalScale, verticalScale } from 'utils/screenUtils'
+import { StyleSheet } from 'react-native'
 
 const adjustableProperties = {
-  width: [
-    'marginLeft',
-    'marginRight',
-    'marginHorizontal',
-    'paddingRight',
-    'paddingLeft',
-    'paddingHorizontal',
-    'left',
-    'right',
-    'width',
-  ],
   height: [
     'marginTop',
     'marginBottom',
@@ -23,7 +12,18 @@ const adjustableProperties = {
     'paddingVertical',
     'top',
     'bottom',
-    'height',
+    'height'
+  ],
+  width: [
+    'marginLeft',
+    'marginRight',
+    'marginHorizontal',
+    'paddingRight',
+    'paddingLeft',
+    'paddingHorizontal',
+    'left',
+    'right',
+    'width'
   ],
   rest: [
     'borderWidth',
@@ -33,24 +33,28 @@ const adjustableProperties = {
     'margin',
     'fontSize',
     'lineHeight',
-    'opacity',
-  ],
-};
+    'opacity'
+  ]
+}
 
 export const ExtendedStyleSheet = <T>(styleSheet: any) => {
   _.each(styleSheet, selector => {
     _.each(selector, (value, property) => {
-      const style = selector;
-      const containsHeight = _.includes(adjustableProperties.height, property);
-      const containsWidth = _.includes(adjustableProperties.width, property);
-      const containsRest = _.includes(adjustableProperties.rest, property);
+      const style = selector
+      const containsVertical = _.includes(adjustableProperties.height, property)
+      const containsHorizontal = _.includes(adjustableProperties.width, property)
+      const containsRest = _.includes(adjustableProperties.rest, property)
 
-      if (containsHeight || containsWidth || containsRest) {
-        if (typeof style[property] !== 'string') {
-          style[property] = scalePx(value);
-        }
+      if (typeof style[property] === 'string') return
+
+      if (containsVertical) {
+        style[property] = verticalScale(value)
+      } else if (containsHorizontal) {
+        style[property] = horizontalScale(value)
+      } else if (containsRest) {
+        style[property] = fontScale(value)
       }
-    });
-  });
-  return StyleSheet.create<T>(styleSheet);
-};
+    })
+  })
+  return StyleSheet.create<T>(styleSheet)
+}

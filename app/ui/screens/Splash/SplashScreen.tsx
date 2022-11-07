@@ -1,12 +1,12 @@
-import { SplashScreenProps } from "./SplashScreen.types"
-import { useStyles } from "./SplashScreen.styles"
+import { SplashScreenProps } from "./types"
+import { useStyles } from "./styles"
 import { View } from "react-native"
 
 export const SplashScreen = ({}: SplashScreenProps) => {
-  const styles = useStyles();
+  const styles = useStyles()
 
   return (
-    <View style={styles.root}>
+    <View style={ styles.root }>
 
     </View>
   )

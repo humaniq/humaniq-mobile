@@ -1,33 +1,12 @@
 import { Dimensions } from 'react-native'
-import DeviceInfo from 'react-native-device-info'
 
-export const isTablet = (): boolean => DeviceInfo.isTablet()
+const { width, height } = Dimensions.get('screen')
 
-const DESIGN_WIDTH = 410
+const guidelineBaseWidth = 375
+const guidelineBaseHeight = 812
 
-export const getWindowWidth = (): number => Dimensions.get('window').width
+const horizontalScale = (size: number) => (width / guidelineBaseWidth) * size
+const verticalScale = (size: number) => (height / guidelineBaseHeight) * size
+const fontScale = (size, factor = 0.5) => size + (horizontalScale(size) - size) * factor
 
-export const getWindowHeight = (): number => Dimensions.get('window').height
-
-const getActualDeviceWidth = (): number => {
-  let actualWidth = getWindowWidth()
-
-  if (actualWidth > DESIGN_WIDTH) {
-    actualWidth = 380
-  }
-
-  return actualWidth
-}
-
-export const isLandscape = (): boolean => {
-  if (!isTablet()) {
-    return false
-  }
-  return DeviceInfo.isLandscapeSync()
-}
-
-export const scalePx = (px: number): number =>
-  px * (getActualDeviceWidth() / DESIGN_WIDTH)
-
-export const getWidthRatio = (): number =>
-  getActualDeviceWidth() / DESIGN_WIDTH
+export { horizontalScale, verticalScale, fontScale }

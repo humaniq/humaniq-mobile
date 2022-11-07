@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { StatusBar, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { AppStatusBarInterface } from './AppStatusBar.types'
+import { AppStatusBarInterface } from './types'
 import { IS_ANDROID } from 'utils/common'
 import { useTheme } from 'hooks/useTheme'
 
