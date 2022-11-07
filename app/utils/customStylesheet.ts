@@ -47,13 +47,13 @@ export const ExtendedStyleSheet = <T>(styleSheet: any) => {
 
       if (typeof style[property] === 'string') return
 
-      if (containsVertical) {
-        style[property] = verticalScale(value)
-      } else if (containsHorizontal) {
-        style[property] = horizontalScale(value)
-      } else if (containsRest) {
-        style[property] = fontScale(value)
-      }
+      // if (containsVertical) {
+      //   style[property] = verticalScale(value)
+      // } else if (containsHorizontal) {
+      //   style[property] = horizontalScale(value)
+      // } else if (containsRest) {
+      //   style[property] = fontScale(value)
+      // }
     })
   })
   return StyleSheet.create<T>(styleSheet)
