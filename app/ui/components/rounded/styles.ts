@@ -6,6 +6,6 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 6
+    padding: 6,
   }
 }))

@@ -14,4 +14,6 @@ export type FontList = {
 export type Theme = {
   colors: ColorList;
   fonts: FontList;
+  spaces: number[];
+  fontSize: number[];
 };

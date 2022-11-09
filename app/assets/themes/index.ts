@@ -7,7 +7,9 @@ export const DarkNightTheme: Theme = {
   },
   fonts: {
     ...fonts
-  }
+  },
+  spaces: [2, 4, 8, 12, 16, 20, 24],
+  fontSize: [10, 12, 14, 16, 18, 20, 22, 24],
 }
 
 export const LightMorningTheme: Theme = {
@@ -16,5 +18,7 @@ export const LightMorningTheme: Theme = {
   },
   fonts: {
     ...fonts
-  }
+  },
+  spaces: [2, 4, 8, 12, 16, 20, 24],
+  fontSize: [10, 12, 14, 16, 18, 20, 22, 24],
 }

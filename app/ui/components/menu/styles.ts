@@ -8,29 +8,32 @@ export const useStyles = withTheme(theme => ({
   },
   middle: {
     flex: 1,
-    marginLeft: 22,
+    marginLeft: 22
   },
   title: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: theme.fonts.semi,
     color: theme.colors.menuTitle,
+    includeFontPadding: false
   },
   subTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: theme.fonts.regular,
     color: theme.colors.menuSub,
+    includeFontPadding: false,
+    marginTop: 2
   },
   comingSoon: {
     borderRadius: 8,
     backgroundColor: theme.colors.comingSoonBg,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   comingSoonText: {
     fontFamily: theme.fonts.regular,
-    fontSize: 12,
+    fontSize: 11,
     marginVertical: 4,
     marginHorizontal: 7,
-    color: theme.colors.comingSoonText,
+    color: theme.colors.comingSoonText
   }
 }))
