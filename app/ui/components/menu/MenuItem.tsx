@@ -1,6 +1,6 @@
 import React from "react"
 import { MenuItemProps } from "./types"
-import { Text, TouchableOpacity, View } from "react-native"
+import { TouchableOpacity, View, Text } from "react-native"
 import { useStyles } from "./styles"
 import { RoundedIcon } from "../rounded/RoundedIcon"
 import { MovIcon } from "ui/components/icon"

@@ -62,7 +62,8 @@
       "utils/*": ["./app/utils/*"],
       "context/*": ["./app/context/*"],
       "hooks/*": ["./app/hooks/*"],
-      "ui/*": ["./app/ui/*"]
+      "ui/*": ["./app/ui/*"],
+      "navigation/*": ["./app/navigation/*"]
     },
     "allowSyntheticDefaultImports": true,
     /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
