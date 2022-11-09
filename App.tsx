@@ -8,47 +8,55 @@ import { StorageService } from "app/services/StorageService"
 import { WalletConnectService } from "app/services/WalletConnectService"
 import { useWalletConnect, withWalletConnect } from "@walletconnect/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Button, View, Text } from "react-native"
+import { Button, Text, View } from "react-native"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { ProviderService } from "app/services/ProviderService"
 import { MovIcon } from "app/ui/components/icon"
+import { ProviderType } from "./app/references/providers"
 
-// import { configure } from "mobx"
+import { configure, reaction } from "mobx"
 
-// configure({
-//   enforceActions: "never",
-// })
+configure({
+  enforceActions: "never",
+})
 
 const AppScreen = observer(() => {
 
   const app = useInstance(AppService)
   const provider = useInstance(ProviderService)
-  const wc = useInstance(WalletConnectService)
   const connector = useWalletConnect()
+  const wc = useInstance(WalletConnectService)
 
   useEffect(() => {
-    wc.init(connector)
-  }, [connector])
+    connector.protocol && wc.init(connector)
+  }, [ connector ])
 
   useEffect(() => {
-    app.init()
-    provider.init()
+   app.init()
   }, [])
 
 
   return <View style={ { minHeight: "100%" } }>
-    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" }/>
-    <View>
-      {
-        connector.connected && <View>
-          <View><Text>{ provider.chainId }</Text></View>
-          <View><Text>{ provider.address }</Text></View>
-          <View><Text>{ provider.balance }</Text></View>
-        </View>
-      }
-      { !connector.connected ? <Button title={ "Connect" } onPress={ () => connector.connect() }/> :
-        <Button title={ "Kill session" } onPress={ () => connector.killSession() }/> }
-    </View>
+    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" } />
+    { provider.initialized &&
+      <View>
+        {
+          !!provider.connected && <View>
+            <View><Text>{ provider.chainId }</Text></View>
+            <View><Text>{ provider.address }</Text></View>
+            <View><Text>{ provider.balance }</Text></View>
+          </View>
+        }
+        { !provider.connected ? <>
+            <Button title={ "Connect to WC" } onPress={ () => provider.setProvider(ProviderType.WalletConnect) } />
+            <Button title={ "Connect to MetaMask" } onPress={ () => provider.setProvider(ProviderType.Metamask) } />
+          </> :
+          <Button title={ "Kill session" } onPress={ () => provider.disconnect() } /> }
+      </View>
+    }
+    {
+      !provider.initialized && <View><Text>Initializing...</Text></View>
+    }
   </View>
 })
 
@@ -58,12 +66,12 @@ AppWithProvider.register(
   AppService,
   StorageService,
   WalletConnectService,
-  ProviderService
+  ProviderService,
 )
 
 export const App = withWalletConnect(AppWithProvider, {
   redirectUrl: "mover://",
   storageOptions: {
-    asyncStorage: AsyncStorage as unknown as IAsyncStorage
-  }
+    asyncStorage: AsyncStorage as unknown as IAsyncStorage,
+  },
 })

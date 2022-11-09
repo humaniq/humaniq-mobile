@@ -3,12 +3,15 @@ import WalletConnect from "@walletconnect/client"
 
 export class WalletConnectService {
   connector: WalletConnect
-  connected = false
-  // providerService = inject(this, ProviderService);
+  initialized = false
 
   init = (connector: WalletConnect) => {
     this.connector = connector
-    this.connected = this.connector.connected
+    this.initialized = true
+  }
+
+  get connected() {
+    return this.connector.connected
   }
 
   constructor() {
