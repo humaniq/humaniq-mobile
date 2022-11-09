@@ -1,9 +1,20 @@
-import { Platform } from 'react-native';
+import { Platform } from "react-native"
 
-export const noop = (..._: any[]) => {};
+export const noop = (..._: any[]) => {
+}
 
-export const toLowerCase = (text: string) => text.toLowerCase();
+export const toLowerCase = (text: string) => text.toLowerCase()
 
-export const IS_ANDROID = Platform.OS === 'android';
+export const IS_ANDROID = Platform.OS === "android"
 
-export const IS_IOS = !IS_ANDROID;
+export const IS_IOS = !IS_ANDROID
+
+export function debounce(func, timeout = 300) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      func.apply(this, args)
+    }, timeout)
+  }
+}
