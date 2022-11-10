@@ -47,7 +47,7 @@ export const CardScreen = ({}: CardScreenTypes) => {
         </TouchableOpacity>
         <Search/>
         <LockText text={ "Your data is securely stored by regulated Partner, not Mover." }/>
-        <PrimaryButton title={ "Exxx dorogi" }/>
+        <PrimaryButton title={ "Tests" }/>
       </SafeArea>
     </>
   )
