@@ -1,1 +1,3 @@
-export interface SearchProps {}
+export interface SearchProps {
+  hint?: string
+}

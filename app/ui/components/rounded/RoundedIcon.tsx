@@ -14,7 +14,7 @@ export const RoundedIcon = ({ icon }: RoundedIconProps) => {
       <MovIcon
         name={ icon }
         size={ scale(26) }
-        color={ theme.colors.roundedIcon }
+        color={ theme.colors.primary }
       />
     </View>
   )

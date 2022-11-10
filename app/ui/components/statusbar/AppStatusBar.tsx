@@ -1,13 +1,11 @@
 import React, { memo } from 'react'
 import { StatusBar, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { AppStatusBarInterface } from './types'
 import { IS_ANDROID } from 'utils/common'
 import { useTheme } from 'hooks/useTheme'
 
 export const AppStatusBar = memo((props: AppStatusBarInterface) => {
-  const insets = useSafeAreaInsets()
-  const { colors, isDarkMode} = useTheme()
+  const { colors, isDarkMode } = useTheme()
 
   const {
     backgroundColor = colors.bg,
@@ -30,8 +28,7 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   return (
     <View
       style={ {
-        backgroundColor,
-        height: insets.top
+        backgroundColor
       } }>
       <StatusBar
         animated={ animated }

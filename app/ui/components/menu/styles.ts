@@ -19,15 +19,15 @@ export const useStyles = withTheme(theme => ({
   subTitle: {
     fontSize: 13,
     fontFamily: theme.fonts.regular,
-    color: theme.colors.menuSub,
+    color: theme.colors.secondary,
     includeFontPadding: false,
     marginTop: 2
   },
   comingSoon: {
     borderRadius: 8,
-    backgroundColor: theme.colors.comingSoonBg,
+    backgroundColor: theme.colors.secondaryBg,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   comingSoonText: {
     fontFamily: theme.fonts.regular,

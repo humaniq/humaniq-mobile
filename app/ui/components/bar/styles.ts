@@ -2,6 +2,7 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
+    ...theme.shadows,
     position: "absolute",
     bottom: 24,
     flexDirection: "row",
@@ -12,20 +13,12 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 40,
     backgroundColor: theme.colors.tabBg,
     paddingHorizontal: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    elevation: 5,
   },
   tab: {
     alignItems: "center",
     justifyContent: "center",
     width: 60,
     height: "100%",
-    borderRadius: 40,
+    borderRadius: 40
   }
 }))

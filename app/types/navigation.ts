@@ -3,6 +3,8 @@ import * as ROUTES from 'navigation/path';
 export type MainStackParamList = {
   [ROUTES.SPLASH_SCREEN]: undefined;
   [ROUTES.MAIN_STACK]: undefined;
+  [ROUTES.CONTACT_DETAILS_SCREEN]: undefined;
+  [ROUTES.SETTINGS_SCREEN]: undefined;
 };
 
 export type BottomParamList = {
