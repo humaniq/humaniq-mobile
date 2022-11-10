@@ -20,7 +20,8 @@ export const colorsLight = {
   white: "#FFFFFF",
   settings: "#F1F1F1",
   themeIcon: "#FFFFFF",
-  sub: "#B1B1B1"
+  sub: "#B1B1B1",
+  select: "#FFFFFF",
 }
 
 export const colorsDark = {
@@ -45,7 +46,8 @@ export const colorsDark = {
   white: "#FFFFFF",
   settings: "#333333",
   themeIcon: "#1F1F1F",
-  sub: "#999999"
+  sub: "#999999",
+  select: "#404040",
 }
 
 export const fonts = {

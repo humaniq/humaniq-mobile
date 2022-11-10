@@ -8,5 +8,8 @@ export const useStyles = withTheme(theme => ({
   },
   header: {
     paddingHorizontal: 22,
+  },
+  language: {
+    marginTop: 40,
   }
 }))
