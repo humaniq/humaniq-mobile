@@ -1,8 +1,8 @@
-import { ScrollView, View } from "react-native"
+import { ScrollView, Text, View } from "react-native"
 import { ThemeSettingsProps } from "./types"
 import { useStyles } from "./styles"
 import { ThemeItem } from "ui/components/theme/item/ThemeItem"
-import { useCallback, useRef, useState } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { useTheme } from "hooks/useTheme"
 import { Themes } from "context/theme/types"
 
@@ -20,6 +20,7 @@ export const ThemeSettings = ({}: ThemeSettingsProps) => {
 
   return (
     <View style={ styles.root }>
+      <Text style={ styles.header }>Theme settings</Text>
       <ScrollView
         ref={ scrollRef }
         contentContainerStyle={ styles.container }

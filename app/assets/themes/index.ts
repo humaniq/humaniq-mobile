@@ -10,8 +10,7 @@ export const DarkNightTheme: Theme = {
   },
   spaces: [2, 4, 8, 12, 16, 20, 24],
   fontSize: [10, 12, 14, 16, 18, 20, 22, 24],
-  shadows: {
-  }
+  shadows: {}
 }
 
 export const LightMorningTheme: Theme = {

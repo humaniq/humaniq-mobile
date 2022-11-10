@@ -5,6 +5,7 @@ import React from "react"
 import { SafeArea } from "ui/components/SafeArea"
 import { Header } from "ui/components/header/Header"
 import { ThemeSettings } from "ui/components/theme/ThemeSettings"
+import { Select } from "ui/components/select/Select"
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
   const styles = useStyles()
@@ -16,8 +17,25 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
         <Header
           containerStyle={ styles.header }
           back={ false }
-          title={ "Settings" }/>
+          title={ "Settings" }
+        />
         <ThemeSettings/>
+        <Select
+          data={ [
+            { title: "USD" },
+            { title: "EUR" },
+          ] }
+          header={ "Base currency" }
+          description={ "All assets, analytics and estimations will be displayed in this currency" }
+        />
+        <Select
+          data={ [
+            { title: "English" },
+            { title: "Spanish" },
+          ] }
+          containerStyle={ styles.language }
+          header={ "Language" }
+        />
       </SafeArea>
     </>
   )
