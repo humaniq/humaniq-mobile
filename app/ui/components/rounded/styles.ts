@@ -2,7 +2,7 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.roundedIconBg,
+    backgroundColor: theme.colors.secondaryBg,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',

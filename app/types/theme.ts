@@ -16,4 +16,5 @@ export type Theme = {
   fonts: FontList;
   spaces: number[];
   fontSize: number[];
+  shadows: any
 };

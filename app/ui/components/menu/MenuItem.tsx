@@ -34,7 +34,7 @@ export const MenuItem = ({
         <MovIcon
           name={ "arrow_right" }
           size={ 26 }
-          color={ colors.roundedIcon }/>
+          color={ colors.primary }/>
       ) }
       { comingSoon && (
         <View style={ styles.comingSoon }>

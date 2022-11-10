@@ -4,10 +4,12 @@ import { useTheme } from "hooks/useTheme"
 import { TouchableOpacity, View } from "react-native"
 import { MovIcon } from "ui/components/icon"
 import { useCallback } from "react"
-import * as PATHS from "navigation/path"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
-export const BottomBar = ({ state, navigation }: BottomBarProps) => {
+export const BottomBar = ({
+                            state,
+                            navigation
+                          }: BottomBarProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
   const { bottom } = useSafeAreaInsets()
@@ -16,31 +18,31 @@ export const BottomBar = ({ state, navigation }: BottomBarProps) => {
     navigation.navigate(screen, params)
   }, [state.index])
 
+  const getIcon = useCallback((route: string) => {
+    if (route === 'Card') {
+      return "card"
+    } else if (route === 'Earn') {
+      return "dollar"
+    } else {
+      return "history"
+    }
+  }, [state.routeNames])
+
   return (
     <View style={ [
       styles.root,
       bottom && { bottom }]
     }>
-      <TouchableOpacity style={ styles.tab } onPress={ () => onTabClick(PATHS.CARD_SCREEN) }>
-        <MovIcon
-          name={ "card" }
-          size={ 26 }
-          color={ state.index === 0 ? colors.tabIconSelected : colors.tabIcon }/>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={ styles.tab } onPress={ () => onTabClick(PATHS.EARN_SCREEN) }>
-        <MovIcon
-          name={ "dollar" }
-          size={ 26 }
-          color={ state.index === 1 ? colors.tabIconSelected : colors.tabIcon }/>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={ styles.tab } onPress={ () => onTabClick(PATHS.HISTORY_SCREEN) }>
-        <MovIcon
-          name={ "history" }
-          size={ 26 }
-          color={ state.index === 2 ? colors.tabIconSelected : colors.tabIcon }/>
-      </TouchableOpacity>
+      { state.routes.map((item, index) => {
+        return (
+          <TouchableOpacity key={ item.name } style={ styles.tab } onPress={ () => onTabClick(item.name) }>
+            <MovIcon
+              name={ getIcon(item.name) }
+              size={ 26 }
+              color={ state.index === index ? colors.primary : colors.tabIcon }/>
+          </TouchableOpacity>
+        )
+      }) }
     </View>
   )
 }

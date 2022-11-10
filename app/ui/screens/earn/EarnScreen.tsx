@@ -1,10 +1,16 @@
 import React from "react"
-import { View } from "react-native"
 import { EarnScreenTypes } from "./types"
 import { useStyles } from "./styles"
+import { AppStatusBar } from "ui/components/statusbar/AppStatusBar"
+import { SafeArea } from "ui/components/SafeArea"
 
 export const EarnScreen = ({}: EarnScreenTypes) => {
   const styles = useStyles()
 
-  return <View style={ styles.root }/>
+  return (
+    <>
+      <AppStatusBar/>
+      <SafeArea style={ styles.root }></SafeArea>
+    </>
+  )
 }

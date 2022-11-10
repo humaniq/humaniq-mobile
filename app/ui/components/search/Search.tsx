@@ -4,11 +4,14 @@ import { SearchProps } from "./types"
 import { MovIcon } from "ui/components/icon"
 import { useTheme } from "hooks/useTheme"
 import { useState } from "react"
+import { usePressBack } from "hooks/usePressBack"
 
-export const Search = ({}: SearchProps) => {
+export const Search = ({ hint }: SearchProps) => {
   const [input, setInput] = useState("")
   const styles = useStyles()
   const { colors } = useTheme()
+
+  usePressBack()
 
   return (
     <View style={ styles.root }>
@@ -21,6 +24,7 @@ export const Search = ({}: SearchProps) => {
         style={ styles.input }
         value={ input }
         onChangeText={ setInput }
+        placeholder={ hint }
       />
     </View>
   )
