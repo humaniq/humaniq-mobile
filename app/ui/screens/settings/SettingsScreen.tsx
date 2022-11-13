@@ -19,7 +19,6 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
   return (
     <Screen style={ styles.root }>
       <Header
-        containerStyle={ styles.header }
         back={ false }
         title={ t("settings") }
       />

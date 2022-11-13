@@ -37,6 +37,9 @@ export const Select = ({
         } }
         anchor={
           <TouchableOpacity style={ styles.select } onPress={ () => setVisible(true) }>
+            { selectedValue?.icon ? (
+              <Text style={ styles.icon }>{ selectedValue.icon }</Text>
+            ) : null }
             <Text style={ styles.selectText }>{ selectedValue ? selectedValue.title : placeholder }</Text>
             <MovIcon
               name={ "select_arrows" }
@@ -50,7 +53,7 @@ export const Select = ({
             titleStyle={ styles.dropdownText }
             key={ item?.title }
             onPress={ () => handleSelectItemClick(item) }
-            title={ item?.title }
+            title={ `${ item?.icon ? `${ item?.icon }  ` : '' }${ item?.title }` }
           />
         )) }
       </Menu>

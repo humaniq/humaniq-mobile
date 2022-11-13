@@ -13,7 +13,7 @@ export const Languages: SelectItem[] = [
 ]
 
 export const Currencies: SelectItem[] = [
-  { title: "USD", value: "usd" },
-  { title: "EUR", value: "eur" },
-  { title: "RUB", value: "rub" }
+  { title: "USD", value: "usd", icon: '🇺🇸' },
+  { title: "GBP", value: "gbp", icon: '🇬🇧' },
+  { title: "EUR", value: "eur", icon: '🇪🇺' }
 ]

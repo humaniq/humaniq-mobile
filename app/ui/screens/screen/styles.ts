@@ -4,6 +4,5 @@ export const useStyles = withTheme(theme => ({
   root: {
     backgroundColor: theme.colors.bg,
     flex: 1,
-    paddingHorizontal: theme.spaces.horizontal
   }
 }))

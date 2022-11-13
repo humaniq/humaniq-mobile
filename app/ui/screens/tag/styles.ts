@@ -6,6 +6,10 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.bg,
     paddingHorizontal: theme.spaces.horizontal
   },
+  content: {
+    paddingLeft: theme.spaces.horizontal,
+    paddingRight: theme.spaces.horizontal
+  },
   description: {
     marginTop: 20,
     marginBottom: theme.spaces.vertical

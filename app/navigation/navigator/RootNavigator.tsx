@@ -7,6 +7,7 @@ import { ContactDetailsScreen } from "ui/screens/details/ContactDetailsScreen"
 import { SettingsScreen } from "ui/screens/settings/SettingsScreen"
 import { CreateTagScreen } from "ui/screens/tag/CreateTagScreen"
 import { PersonalInfoScreen } from "ui/screens/personal/PersonalInfoScreen"
+import { PhoneValidationScreen } from "ui/screens/phone/PhoneValidationScreen"
 
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -16,7 +17,7 @@ const screenOptions = {
 
 export const RootNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ "Settings" }>
+    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ "PhoneValidation" }>
       <Stack.Screen
         component={ BottomNavigator }
         name={ PATHS.MAIN_STACK }
@@ -36,6 +37,10 @@ export const RootNavigator = () => {
       <Stack.Screen
         component={ PersonalInfoScreen }
         name={ PATHS.PERSONAL_INFO_SCREEN }
+      />
+      <Stack.Screen
+        component={ PhoneValidationScreen }
+        name={ PATHS.PHONE_VALIDATION_SCREEN }
       />
     </Stack.Navigator>
   )

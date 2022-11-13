@@ -12,7 +12,7 @@ export const Avatar = ({ containerStyle, onPress }: AvatarProps) => {
     <TouchableOpacity style={ [styles.root, containerStyle] } onPress={ onPress }>
       <MovIcon
         name={ "camera" }
-        size={ 45 }
+        size={ 40 }
         color={ colors.avatar }
       />
     </TouchableOpacity>

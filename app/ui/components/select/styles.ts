@@ -3,13 +3,13 @@ import { withTheme } from "hooks/useTheme"
 export const useStyles = withTheme(theme => ({
   root: {
     alignItems: "flex-start",
-    marginHorizontal: 2,
+    marginHorizontal: 2
   },
   header: {
     fontFamily: theme.fonts.regular,
     color: theme.colors.sub,
     fontSize: 12,
-    marginBottom: 8,
+    marginBottom: 8
   },
   select: {
     ...theme.shadows,
@@ -22,9 +22,15 @@ export const useStyles = withTheme(theme => ({
   },
   selectText: {
     fontFamily: theme.fonts.medium,
-    fontSize: 15,
+    fontSize: 16,
     color: theme.colors.headerTitle,
     marginRight: 10
+  },
+  icon: {
+    fontSize: 16,
+    marginRight: 8,
+    includeFontPadding: false,
+    textAlign: "center"
   },
   description: {
     fontFamily: theme.fonts.regular,

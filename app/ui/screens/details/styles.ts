@@ -7,6 +7,10 @@ export const useStyles = withTheme(theme => ({
     paddingHorizontal: theme.spaces.horizontal,
     paddingBottom: 22
   },
+  content: {
+    paddingLeft: theme.spaces.horizontal,
+    paddingRight: theme.spaces.horizontal,
+  },
   title: {
     fontFamily: theme.fonts.regular,
     color: theme.colors.secondary,

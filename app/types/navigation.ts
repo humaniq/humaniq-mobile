@@ -7,6 +7,7 @@ export type MainStackParamList = {
   [ROUTES.SETTINGS_SCREEN]: undefined;
   [ROUTES.CREATE_TAG_SCREEN]: undefined;
   [ROUTES.PERSONAL_INFO_SCREEN]: undefined;
+  [ROUTES.PHONE_VALIDATION_SCREEN]: undefined;
 };
 
 export type BottomParamList = {

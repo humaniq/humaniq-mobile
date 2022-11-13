@@ -6,9 +6,6 @@ export const useStyles = withTheme(theme => ({
     flex: 1,
     paddingHorizontal: 0,
   },
-  header: {
-    paddingHorizontal: theme.spaces.horizontal,
-  },
   language: {
     marginTop: theme.spaces.vertical,
     marginLeft: theme.spaces.horizontal,

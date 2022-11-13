@@ -11,6 +11,9 @@ import { ScrollView } from "react-native"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import React from "react"
 import { IconText } from "ui/components/text/IconText"
+import { MaskedInput } from "ui/components/input/MaskedInput"
+import { DATE_MASK } from "ui/components/input/consts"
+import { Card } from "ui/components/card/Card"
 
 export const PersonalInfoScreen = ({}: PersonalInfoScreenProps) => {
   const styles = useStyles()
@@ -18,14 +21,17 @@ export const PersonalInfoScreen = ({}: PersonalInfoScreenProps) => {
   return (
     <Screen>
       <Header
-        back={true}
+        back={ true }
         title={ t("personalInfo") }
       />
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={ styles.content }
+        showsVerticalScrollIndicator={ false }>
         <PrimaryText
           text={ t("dataProcessingReminder") }
           style={ styles.title }
         />
+        <Card skin={ require("../../../assets/images/card_skin_cat.png") }/>
         <Select
           header={ t("gender.label") }
           data={ GENDER }
@@ -35,17 +41,17 @@ export const PersonalInfoScreen = ({}: PersonalInfoScreenProps) => {
         <Input
           title={ t("firstName.label") }
           placeholder={ t("firstName.placeholder") }
-          containerStyle={ styles.input }
         />
         <Input
           title={ t("lastName.label") }
           placeholder={ t("lastName.placeholder") }
           containerStyle={ styles.input }
         />
-        <Input
+        <MaskedInput
           title={ t("dateOfBirth.label") }
           containerStyle={ styles.input }
           placeholder={ "04.02.1969" }
+          mask={ DATE_MASK }
         />
         <PrimaryButton
           style={ styles.button }
