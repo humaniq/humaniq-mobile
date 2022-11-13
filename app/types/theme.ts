@@ -5,16 +5,20 @@ export type ColorList = {
 };
 
 export type FontList = {
-  bold: string;
-  medium: string;
   regular: string;
+  medium: string;
   semi: string;
+  bold: string;
 };
+
+export type Space = {
+  horizontal: number
+  vertical: number
+}
 
 export type Theme = {
   colors: ColorList;
   fonts: FontList;
-  spaces: number[];
-  fontSize: number[];
+  spaces: Space;
   shadows: any
 };

@@ -1,8 +1,8 @@
 import { View } from "react-native"
 import { LockTextProps } from "./types"
 import { useStyles } from "./styles"
-import { MovIcon } from "ui/components/icon"
 import { Text } from "react-native-paper"
+import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const LockText = ({ text }: LockTextProps) => {
   const styles = useStyles()

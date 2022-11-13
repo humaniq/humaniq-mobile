@@ -22,9 +22,11 @@ export const colorsLight = {
   themeIcon: "#FFFFFF",
   sub: "#B1B1B1",
   select: "#FFFFFF",
+  red: "#E8102C",
+  avatar: "#B1B1B1",
 }
 
-export const colorsDark = {
+export const colorsDark: typeof colorsLight = {
   primary: "#FFFFFF",
   secondary: "#999999",
   tertiary: "#404040",
@@ -48,6 +50,8 @@ export const colorsDark = {
   themeIcon: "#1F1F1F",
   sub: "#999999",
   select: "#404040",
+  red: "#E8102C",
+  avatar: "#FFFFFF",
 }
 
 export const fonts = {

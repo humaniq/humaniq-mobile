@@ -2,9 +2,9 @@ import React from "react"
 import { MenuItemProps } from "./types"
 import { TouchableOpacity, View, Text } from "react-native"
 import { useStyles } from "./styles"
-import { RoundedIcon } from "../rounded/RoundedIcon"
-import { MovIcon } from "ui/components/icon"
+import { MovIcon } from "ui/components/icon/MovIcon"
 import { useTheme } from "hooks/useTheme"
+import { RoundedIcon } from "ui/components/icon/RoundedIcon"
 
 export const MenuItem = ({
                            icon,

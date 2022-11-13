@@ -4,20 +4,20 @@ export const useStyles = withTheme(theme => ({
   root: {
     backgroundColor: theme.colors.bg,
     flex: 1,
-    paddingHorizontal: 22,
-    paddingBottom: 22,
+    paddingHorizontal: theme.spaces.horizontal,
+    paddingBottom: 22
   },
   title: {
     fontFamily: theme.fonts.regular,
     color: theme.colors.secondary,
     lineHeight: 25,
     fontSize: 16,
-    marginTop: 24,
+    marginTop: 24
   },
   input: {
-    marginTop: 40,
+    marginTop: theme.spaces.vertical
   },
   button: {
-    marginTop: 40,
+    marginTop: theme.spaces.vertical
   }
 }))

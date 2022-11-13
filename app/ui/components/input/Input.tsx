@@ -4,7 +4,7 @@ import { InputProps } from "./types"
 import { useStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
 
-export const Input = ({ title, containerStyle, style, hint }: InputProps) => {
+export const Input = ({ title, containerStyle, style, placeholder }: InputProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
 
@@ -15,7 +15,7 @@ export const Input = ({ title, containerStyle, style, hint }: InputProps) => {
       ) : null }
       <TextInput
         style={ [styles.input, style] }
-        placeholder={ hint }
+        placeholder={ placeholder }
         placeholderTextColor={ colors.placeholder }
       />
     </View>

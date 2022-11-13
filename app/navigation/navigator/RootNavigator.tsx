@@ -5,6 +5,8 @@ import * as React from "react"
 import { BottomNavigator } from "navigation/navigator/BottomNavigator"
 import { ContactDetailsScreen } from "ui/screens/details/ContactDetailsScreen"
 import { SettingsScreen } from "ui/screens/settings/SettingsScreen"
+import { CreateTagScreen } from "ui/screens/tag/CreateTagScreen"
+import { PersonalInfoScreen } from "ui/screens/personal/PersonalInfoScreen"
 
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -26,6 +28,14 @@ export const RootNavigator = () => {
       <Stack.Screen
         component={ SettingsScreen }
         name={ PATHS.SETTINGS_SCREEN }
+      />
+      <Stack.Screen
+        component={ CreateTagScreen }
+        name={ PATHS.CREATE_TAG_SCREEN }
+      />
+      <Stack.Screen
+        component={ PersonalInfoScreen }
+        name={ PATHS.PERSONAL_INFO_SCREEN }
       />
     </Stack.Navigator>
   )
