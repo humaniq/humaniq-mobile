@@ -1,0 +1,5 @@
+export enum PROVIDERS {
+  METAMASK,
+  COINBASE,
+  WALLET_CONNECT
+}

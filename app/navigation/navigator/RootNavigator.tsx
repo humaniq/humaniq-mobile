@@ -17,7 +17,7 @@ const screenOptions = {
 
 export const RootNavigator = () => {
   return (
-    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ SCREENS.PHONE_VALIDATION_SCREEN }>
+    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ SCREENS.SETTINGS_SCREEN }>
       <Stack.Screen
         component={ BottomNavigator }
         name={ MAIN_STACK }

@@ -6,10 +6,11 @@ import { AppRegistry, TouchableOpacity } from "react-native";
 import { App } from "App";
 import { expo } from "./app.json";
 import { App2 } from "App2";
+import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 
 TouchableOpacity.defaultProps = {
   ...TouchableOpacity.defaultProps,
   activeOpacity: 0.7
 }
 
-AppRegistry.registerComponent(expo.name, () => App2);
+AppRegistry.registerComponent(expo.name, () => gestureHandlerRootHOC(App2));
