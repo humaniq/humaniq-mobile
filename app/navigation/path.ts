@@ -2,12 +2,14 @@
 export const MAIN_STACK = 'MainStack'
 
 // Screens
-export const SPLASH_SCREEN = 'Splash'
-export const CARD_SCREEN = 'Card'
-export const EARN_SCREEN = 'Earn'
-export const HISTORY_SCREEN = 'History'
-export const CONTACT_DETAILS_SCREEN = 'ContactDetails'
-export const SETTINGS_SCREEN = 'Settings'
-export const CREATE_TAG_SCREEN = 'CreateTag'
-export const PERSONAL_INFO_SCREEN = 'PersonalInfo'
-export const PHONE_VALIDATION_SCREEN = 'PhoneValidation'
+export enum SCREENS {
+  SPLASH_SCREEN = 'Splash',
+  CARD_SCREEN = 'Card',
+  EARN_SCREEN = 'Earn',
+  HISTORY_SCREEN = 'History',
+  CONTACT_DETAILS_SCREEN = 'ContactDetails',
+  SETTINGS_SCREEN = 'Settings',
+  CREATE_TAG_SCREEN = 'CreateTag',
+  PERSONAL_INFO_SCREEN = 'PersonalInfo',
+  PHONE_VALIDATION_SCREEN = 'PhoneValidation'
+}
