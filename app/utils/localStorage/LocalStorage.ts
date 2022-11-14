@@ -36,11 +36,12 @@ export class LocalStorage {
    * Loads something from localStorage and runs it thru JSON.parse.
    *
    * @param key The key to fetch.
+   * @param def Default value
    */
-  async load(key: string): Promise<any | null> {
+  async load<T>(key: string, def?: any): Promise<any | null> {
     try {
       const almostThere = await AsyncStorage.getItem(key);
-      return JSON.parse(almostThere);
+      return almostThere === undefined ? JSON.parse(almostThere) as T : def;
     } catch {
       return null;
     }

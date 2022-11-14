@@ -1,27 +1,27 @@
 import React from "react"
 import { CardScreenTypes } from "./types"
 import { useStyles } from "./styles"
-import { Text, TouchableOpacity, View } from "react-native"
+import { View } from "react-native"
 import { AppStatusBar } from "ui/components/statusbar/AppStatusBar"
 import { SafeArea } from "ui/components/SafeArea"
 import { MenuItem } from "ui/components/menu/MenuItem"
-import { Themes } from "context/theme/types"
 import { Search } from "ui/components/search/Search"
-import { useTheme } from "hooks/useTheme"
 import { Header } from "ui/components/header/Header"
 import { LockText } from "ui/components/lock/LockText"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
+import { CardInfoCard } from "ui/components/cardInfoCard/CardInfoCard"
 
 export const CardScreen = ({}: CardScreenTypes) => {
   const styles = useStyles()
-  const { switchTheme } = useTheme()
+
 
   return (
     <>
-      <AppStatusBar/>
+      <AppStatusBar />
       <SafeArea style={ styles.root }>
-        <Header/>
+        <Header back={ false } isSettings />
         <View style={ styles.content }>
+          <CardInfoCard />
           <MenuItem
             icon={ "deposit" }
             title={ "Top up" }
@@ -40,14 +40,9 @@ export const CardScreen = ({}: CardScreenTypes) => {
             comingSoon
           />
         </View>
-        <TouchableOpacity onPress={ () => {
-          switchTheme(Themes.Dark)
-        } }>
-          <Text>Switch to Dark Mode</Text>
-        </TouchableOpacity>
-        <Search/>
-        <LockText text={ "Your data is securely stored by regulated Partner, not Mover." }/>
-        <PrimaryButton title={ "Tests" }/>
+        <Search />
+        <LockText text={ "Your data is securely stored by regulated Partner, not Mover." } />
+        <PrimaryButton title={ "Tests" } />
       </SafeArea>
     </>
   )

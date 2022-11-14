@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction } from "mobx"
-import { networks } from "../references/networks"
+import { AvailableNetworks, networks } from "../references/networks"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import { getAPIKey } from "../references/keys"
 import { BigNumber, ethers } from "ethers"
@@ -11,6 +11,11 @@ import { Linking } from "react-native"
 import BackgroundTimer from "react-native-background-timer"
 import MetaMaskSDK from "@metamask/sdk"
 import { localStorage } from "utils/localStorage"
+import { getNetworkByChainId } from "../references/references"
+import { Network } from "../references/network"
+import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
+import { isRejectedRequestError, isUnrecognizedChainError } from "utils/error/ProviderRPCError"
+import { EECode, ExpectedError } from "utils/error/ExpectedError"
 
 export const WALLET_TYPE_CONNECTED = "Mover-wallet-type-connected"
 
@@ -33,11 +38,17 @@ export class ProviderService {
     makeAutoObservable(this)
   }
 
-  init = async () => {
+  tryConnectCachedProvider = async () => {
     const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
     if (provider) {
-      await this.setProvider(provider as ProviderType, true)
+      await this.pureConnect(provider as ProviderType, true)
+      return true
     }
+    return false
+  }
+
+  init = async () => {
+    // await this.tryConnectCachedProvider()
     this.destructor1()
     this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
       if (prev === val || val === -1) return
@@ -53,11 +64,51 @@ export class ProviderService {
     this.initialized = true
   }
 
-  get connected() {
+  get isConnected() {
     return this.chainId >= 1
   }
 
-  setProvider = async (provider = ProviderType.WalletConnect, fromCache = false) => {
+  get shortAddress() {
+    return this.address ? `${ this.address.slice(0, 6) }...${ this.address.slice(this.address.length - 4) }` : undefined
+  }
+
+  connect = async (providerType: ProviderType = ProviderType.Metamask): Promise<void> => {
+    try {
+      await this.pureConnect(providerType);
+    } catch (e) {
+      if (typeof e === 'object' && e) {
+        const err: Record<string, unknown> = e as Record<string, unknown>;
+        if (
+          'message' in err &&
+          err.message &&
+          typeof err.message === 'string' &&
+          [
+            'user rejected the request.',
+            'user closed modal',
+            'user denied account authorization'
+          ].includes(err.message.toLowerCase())
+        ) {
+          throw new ExpectedError(EECode.userRejectAuth);
+        }
+      }
+      console.error('error when connect to provider, try clean localstorage and try again', e);
+
+      // wallet connect sometimes maybe good, sometimes maybe shit
+      // Object.entries(localStorage)
+      //   .map((x) => x[0])
+      //   .filter((x) => x.startsWith('-walletlink') || x.includes('walletconnect'))
+      //   .forEach((x) => localStorage.removeItem(x));
+
+      try {
+        await this.pureConnect(providerType);
+      } catch (err) {
+        console.error('error when retry connect to provider', err);
+        throw new UnexpectedError(UECode.ConnectProviderWeb3CleanCache);
+      }
+    }
+  };
+
+  pureConnect = async (provider = ProviderType.WalletConnect, fromCache = false) => {
     try {
       this.pending = true
       if (provider === ProviderType.Metamask) {
@@ -113,8 +164,11 @@ export class ProviderService {
       await localStorage.save(WALLET_TYPE_CONNECTED, provider)
 
       this.provider.removeAllListeners()
+      // @ts-ignore
       this.provider.provider.on("accountsChanged", this.handleAccountsChange)
+      // @ts-ignore
       this.provider.provider.on("disconnect", this.handleDisconnect)
+      // @ts-ignore
       this.provider.provider.on("chainChanged", this.handleChainChange)
 
 
@@ -215,6 +269,57 @@ export class ProviderService {
       return await this.provider.send("eth_requestAccounts", [])
     } catch (e) {
       console.log("ERROR-get-accounts", e)
+    }
+  }
+
+  get network() {
+    return getNetworkByChainId(this.chainId)?.network ?? Network.ethereum
+  }
+
+  changeNetwork = async (network: Network) => {
+    if (!AvailableNetworks.includes(network)) {
+      throw new UnexpectedError(UECode.UnsupportedNetwork)
+    }
+
+    if (!this.isConnected || this.provider === undefined) {
+      throw new UnexpectedError(UECode.notConnected)
+    }
+
+    const networkInfo = networks[network]
+
+    try {
+      await this.provider.send("wallet_switchEthereumChain", [ `0x${ networkInfo.chainId.toString(16) }` ])
+    } catch (error) {
+      if (isRejectedRequestError(error)) {
+        throw new ExpectedError(EECode.userRejectNetworkChange);
+      }
+
+      if (isUnrecognizedChainError(error)) {
+        try {
+          await (this.provider.send('wallet_addEthereumChain',[
+              {
+                chainId: `0x${networkInfo.chainId.toString(16)}`,
+                chainName: networkInfo.name,
+                rpcUrls: networkInfo.rpcUrl,
+                nativeCurrency: {
+                  name: networkInfo.baseAsset.name,
+                  symbol: networkInfo.baseAsset.symbol,
+                  decimals: networkInfo.baseAsset.decimals
+                },
+                blockExplorerUrls: [networkInfo.explorer]
+              }
+            ])
+          )
+        } catch (error) {
+          if (isRejectedRequestError(error)) {
+            throw new ExpectedError(EECode.userRejectNetworkChange);
+          }
+          console.error(`Can't add ethereum network to the provider:`, error);
+          throw new ExpectedError(EECode.addNetworkToProvider);
+        }
+      } else {
+        throw new ExpectedError(EECode.switchProviderNetwork);
+      }
     }
   }
 }

@@ -32,7 +32,11 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 21,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 16,
+    marginLeft: 10,
+  },
+  closeWithShadows: {
+    ...theme.shadows,
+    backgroundColor: theme.colors.headerCircle,
   },
   settings: {
     height: 42,

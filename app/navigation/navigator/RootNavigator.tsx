@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { RootStackParamList } from "types/navigation"
+import * as PATHS from "navigation/path"
 import * as React from "react"
 import { BottomNavigator } from "navigation/navigator/BottomNavigator"
 import { ContactDetailsScreen } from "ui/screens/details/ContactDetailsScreen"
