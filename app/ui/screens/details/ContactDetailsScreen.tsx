@@ -1,40 +1,46 @@
 import { ContactDetailsScreenProps } from "./types"
 import { useStyles } from "./styles"
-import { AppStatusBar } from "ui/components/statusbar/AppStatusBar"
-import { SafeArea } from "ui/components/SafeArea"
 import React from "react"
 import { Header } from "ui/components/header/Header"
 import { Text } from "react-native-paper"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
-import { LockText } from "ui/components/lock/LockText"
 import { Input } from "ui/components/input/Input"
+import { IconText } from "ui/components/text/IconText"
+import { t } from "app/i18n/translate"
+import { MaskedInput } from "ui/components/input/MaskedInput"
+import { PHONE_MASK } from "ui/components/input/consts"
+import { Screen } from "ui/screens/screen/Screen"
+import { ScrollView } from "react-native"
 
 export const ContactDetailsScreen = ({}: ContactDetailsScreenProps) => {
   const styles = useStyles()
 
   return (
-    <>
-      <AppStatusBar/>
-      <SafeArea style={ styles.root }>
-        <Header title={ "Contact details" }/>
-        <Text style={ styles.title }>
-          Mover doesn’t process or store your data. All your data is securely processed by our licensed and regulated
-          card partner Trastra.
-        </Text>
+    <Screen>
+      <Header title={ t("contactDetails") }/>
+      <ScrollView style={ styles.content }>
+        <Text style={ styles.title }>{ t("dataProcessingReminder") }</Text>
         <Input
           containerStyle={ styles.input }
-          hint={ "your@email.com" }
-          title={ "Your email" }/>
-        <Input
+          placeholder={ t("email.label") }
+          title={ t("email.label") }
+        />
+        <MaskedInput
           containerStyle={ styles.input }
-          title={ "Your phone number" }/>
+          title={ t("phone.label") }
+          placeholder={ "+37" }
+          mask={ PHONE_MASK }
+        />
         <PrimaryButton
           style={ styles.button }
-          title={ "Fill out contact info" }
-          disabled={ true }/>
-        <LockText
-          text={ "Your data is securely stored by regulated Partner, not Mover." }/>
-      </SafeArea>
-    </>
+          title={ t("fillOutContactDetails") }
+          disabled={ true }
+        />
+        <IconText
+          icon={ "lock" }
+          text={ t("dataStorageReminder") }
+        />
+      </ScrollView>
+    </Screen>
   )
 }

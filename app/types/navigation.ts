@@ -1,27 +1,31 @@
-import * as ROUTES from 'navigation/path';
+import { SCREENS, MAIN_STACK } from "navigation/path"
 
 export type MainStackParamList = {
-  [ROUTES.SPLASH_SCREEN]: undefined;
-  [ROUTES.MAIN_STACK]: undefined;
-  [ROUTES.CONTACT_DETAILS_SCREEN]: undefined;
-  [ROUTES.SETTINGS_SCREEN]: undefined;
+  [SCREENS.SPLASH_SCREEN]: undefined;
+  [MAIN_STACK]: undefined;
+  [SCREENS.CONTACT_DETAILS_SCREEN]: undefined;
+  [SCREENS.SETTINGS_SCREEN]: undefined;
+  [SCREENS.CREATE_TAG_SCREEN]: undefined;
+  [SCREENS.PERSONAL_INFO_SCREEN]: undefined;
+  [SCREENS.PHONE_VALIDATION_SCREEN]: undefined;
 };
 
 export type BottomParamList = {
-  [ROUTES.CARD_SCREEN]: undefined;
-  [ROUTES.EARN_SCREEN]: undefined;
-  [ROUTES.HISTORY_SCREEN]: undefined;
+  [SCREENS.CARD_SCREEN]: undefined;
+  [SCREENS.EARN_SCREEN]: undefined;
+  [SCREENS.HISTORY_SCREEN]: undefined;
 };
 
 export type RootStackParamList = MainStackParamList & BottomParamList;
 
 export type Navigate = <T extends keyof RootStackParamList>(
   name: T,
-  params?: RootStackParamList[T],
+  params?: RootStackParamList[T]
 ) => void;
 
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends RootStackParamList {
+    }
   }
 }

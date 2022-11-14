@@ -12,5 +12,6 @@ export const useStyles = withTheme(theme => ({
     color: theme.colors.white,
     fontSize: 15,
     marginVertical: 13,
+    paddingHorizontal: 20,
   },
 }))

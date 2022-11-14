@@ -1,6 +1,6 @@
+import { Text, TouchableOpacity } from "react-native"
 import { PrimaryButtonProps } from "./types"
 import { useStyles } from "./styles"
-import { Text, TouchableOpacity } from "react-native"
 import { useTheme } from "hooks/useTheme"
 
 export const PrimaryButton = ({ title, onPress, disabled, style }: PrimaryButtonProps) => {
@@ -14,9 +14,12 @@ export const PrimaryButton = ({ title, onPress, disabled, style }: PrimaryButton
         backgroundColor: disabled ? colors.disabled : colors.primaryButton
       }, style] }
       onPress={ onPress }>
-      <Text style={ [styles.text, {
-        color: disabled ? colors.disabledText : colors.white
-      }] }>
+      <Text
+        ellipsizeMode={ "tail" }
+        numberOfLines={ 1 }
+        style={ [styles.text, {
+          color: disabled ? colors.disabledText : colors.white
+        }] }>
         { title }
       </Text>
     </TouchableOpacity>

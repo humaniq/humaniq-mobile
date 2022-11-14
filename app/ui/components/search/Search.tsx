@@ -1,10 +1,10 @@
 import { TextInput, View } from "react-native"
 import { useStyles } from "./styles"
 import { SearchProps } from "./types"
-import { MovIcon } from "ui/components/icon"
 import { useTheme } from "hooks/useTheme"
 import { useState } from "react"
 import { usePressBack } from "hooks/usePressBack"
+import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const Search = ({ hint }: SearchProps) => {
   const [input, setInput] = useState("")

@@ -5,12 +5,14 @@ export const useStyles = withTheme(theme => ({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 16
+    paddingVertical: 8,
+    paddingHorizontal: theme.spaces.horizontal
   },
   title: {
     fontFamily: theme.fonts.medium,
-    fontSize: 22,
-    color: theme.colors.headerTitle
+    fontSize: 20,
+    color: theme.colors.headerTitle,
+    flex: 1,
   },
   back: {
     ...theme.shadows,
@@ -20,7 +22,7 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 21,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 10
+    marginRight: 16
   },
   close: {
     ...theme.shadows,
@@ -30,7 +32,7 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 21,
     alignItems: "center",
     justifyContent: "center",
-    marginLeft: 10
+    marginLeft: 16,
   },
   settings: {
     height: 42,
@@ -38,6 +40,7 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.settings,
     borderRadius: 21,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginLeft: 16,
   }
 }))

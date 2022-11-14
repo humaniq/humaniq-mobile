@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { KeyValuePair } from "@react-native-async-storage/async-storage/src/types"
 
 
 export class LocalStorage {
@@ -15,7 +16,7 @@ export class LocalStorage {
       return null;
     }
   }
-  
+
   /**
    * Saves a string to localStorage.
    *
@@ -30,7 +31,7 @@ export class LocalStorage {
       return false;
     }
   }
-  
+
   /**
    * Loads something from localStorage and runs it thru JSON.parse.
    *
@@ -44,7 +45,7 @@ export class LocalStorage {
       return null;
     }
   }
-  
+
   /**
    * Saves an object to localStorage.
    *
@@ -59,7 +60,7 @@ export class LocalStorage {
       return false;
     }
   }
-  
+
   /**
    * Removes something from localStorage.
    *
@@ -71,7 +72,7 @@ export class LocalStorage {
     } catch {
     }
   }
-  
+
   /**
    * Burn it all to the ground.
    */
@@ -93,6 +94,15 @@ export const localStorage = new LocalStorage();
 export async function loadString(key: string): Promise<string | null> {
   try {
     return await AsyncStorage.getItem(key);
+  } catch {
+    // not sure why this would fail... even reading the RN docs I'm unclear
+    return null;
+  }
+}
+
+export async function loadMultiString(key: string[]): Promise<readonly KeyValuePair[]> {
+  try {
+    return await AsyncStorage.multiGet(key);
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
     return null;

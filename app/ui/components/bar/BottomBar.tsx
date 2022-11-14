@@ -2,9 +2,9 @@ import { BottomBarProps } from "./types"
 import { useStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
 import { TouchableOpacity, View } from "react-native"
-import { MovIcon } from "ui/components/icon"
 import { useCallback } from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const BottomBar = ({
                             state,

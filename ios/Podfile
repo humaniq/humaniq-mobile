@@ -6,6 +6,8 @@ install! 'cocoapods', :deterministic_uuids => false
 
 target 'MoverMobile' do
   config = use_native_modules!
+  
+  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
 
   # Flags change depending on the env values.
   flags = get_default_flags()

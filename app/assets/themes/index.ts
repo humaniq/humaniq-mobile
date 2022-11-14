@@ -8,8 +8,10 @@ export const DarkNightTheme: Theme = {
   fonts: {
     ...fonts
   },
-  spaces: [2, 4, 8, 12, 16, 20, 24],
-  fontSize: [10, 12, 14, 16, 18, 20, 22, 24],
+  spaces: {
+    horizontal: 24,
+    vertical: 32
+  },
   shadows: {}
 }
 
@@ -20,16 +22,18 @@ export const LightMorningTheme: Theme = {
   fonts: {
     ...fonts
   },
-  spaces: [2, 4, 8, 12, 16, 20, 24],
-  fontSize: [10, 12, 14, 16, 18, 20, 22, 24],
+  spaces: {
+    horizontal: 24,
+    vertical: 32
+  },
   shadows: {
     shadowColor: "#000000",
     shadowOffset: {
       width: 0,
-      height: 0,
+      height: 0
     },
     shadowOpacity: 0.12,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 3
   }
 }

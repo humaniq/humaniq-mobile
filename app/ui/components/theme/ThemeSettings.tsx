@@ -2,26 +2,37 @@ import { ScrollView, Text, View } from "react-native"
 import { ThemeSettingsProps } from "./types"
 import { useStyles } from "./styles"
 import { ThemeItem } from "ui/components/theme/item/ThemeItem"
-import React, { useCallback, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useTheme } from "hooks/useTheme"
 import { Themes } from "context/theme/types"
+import { t } from "app/i18n/translate"
 
 export const ThemeSettings = ({}: ThemeSettingsProps) => {
-  const [selectedTheme, setSelectedTheme] = useState(Themes.Light)
   const scrollRef = useRef<ScrollView>(null)
   const styles = useStyles()
-  const { switchTheme } = useTheme()
+  const { switchTheme, themeId } = useTheme()
+  const [selectedTheme, setSelectedTheme] = useState(themeId)
+  const [contentWidth, setContentWidth] = useState(0)
 
-  const scrollTo = useCallback((width: number) => {
+  const scrollTo = useCallback((index: number) => {
     scrollRef?.current.scrollTo({
-      x: width
+      x: contentWidth * index / 6
     })
-  }, [scrollRef])
+  }, [scrollRef, contentWidth])
+
+  useEffect(() => {
+    if (themeId === Themes.Dark) {
+      scrollTo(1)
+    } else if (themeId === Themes.System) {
+      scrollTo(2)
+    }
+  }, [scrollTo])
 
   return (
     <View style={ styles.root }>
-      <Text style={ styles.header }>Theme settings</Text>
+      <Text style={ styles.header }>{ t("themeSettings") }</Text>
       <ScrollView
+        onContentSizeChange={ setContentWidth }
         ref={ scrollRef }
         contentContainerStyle={ styles.container }
         horizontal
@@ -34,25 +45,28 @@ export const ThemeSettings = ({}: ThemeSettingsProps) => {
           } }
           selected={ selectedTheme === Themes.Light }
           icon={ "theme_light" }
-          title={ "Light" }/>
+          title={ t("light") }
+        />
         <ThemeItem
           onPress={ () => {
             setSelectedTheme(Themes.Dark)
             switchTheme(Themes.Dark)
-            scrollTo(50)
+            scrollTo(1)
           } }
           selected={ selectedTheme === Themes.Dark }
           icon={ "theme_dark" }
-          title={ "Dark" }/>
+          title={ t("dark") }
+        />
         <ThemeItem
           onPress={ () => {
             setSelectedTheme(Themes.System)
-            switchTheme(Themes.Dark)
-            scrollTo(120)
+            switchTheme(Themes.System)
+            scrollTo(2)
           } }
           selected={ selectedTheme === Themes.System }
           icon={ "theme_system" }
-          title={ "System" }/>
+          title={ t("system") }
+        />
       </ScrollView>
     </View>
   )

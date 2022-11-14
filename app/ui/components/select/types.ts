@@ -6,9 +6,12 @@ export interface SelectProps {
   containerStyle?: StyleProp<ViewStyle>
   onItemClick?: (item: SelectItem) => void
   data: SelectItem[]
+  placeholder?: string
+  selectedValue?: SelectItem
 }
 
 export type SelectItem = {
   icon?: string
   title: string
+  value: string
 }

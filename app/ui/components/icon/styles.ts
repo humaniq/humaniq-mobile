@@ -1,6 +1,6 @@
 import { withTheme } from "hooks/useTheme"
 
-export const useStyles = withTheme(theme => ({
+export const useRoundIconStyles = withTheme(theme => ({
   root: {
     backgroundColor: theme.colors.secondaryBg,
     borderRadius: 8,

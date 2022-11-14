@@ -1,12 +1,12 @@
 import { RoundedIconProps } from "./types"
 import { View } from "react-native"
-import { useStyles } from "./styles"
-import { MovIcon } from "ui/components/icon"
+import { useRoundIconStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
 import { scale } from "utils/screenUtils"
+import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const RoundedIcon = ({ icon }: RoundedIconProps) => {
-  const styles = useStyles()
+  const styles = useRoundIconStyles()
   const theme = useTheme()
 
   return (
