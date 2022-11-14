@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import * as _ from 'underscore';
+import * as _ from 'underscore'
 import { scale, scaleFontSize } from "utils/screenUtils"
 
 const adjustableProperties = {
@@ -12,7 +12,7 @@ const adjustableProperties = {
     'paddingHorizontal',
     'left',
     'right',
-    'width',
+    'width'
   ],
   height: [
     'marginTop',
@@ -23,28 +23,28 @@ const adjustableProperties = {
     'paddingVertical',
     'top',
     'bottom',
-    'height',
+    'height'
   ],
   rest: [
-    'fontSize',
-  ],
-};
+    'fontSize'
+  ]
+}
 
 export const ExtendedStyleSheet = <T>(styleSheet: any) => {
   _.each(styleSheet, selector => {
     _.each(selector, (value, property) => {
-      const style = selector;
-      const containsHeight = _.includes(adjustableProperties.height, property);
-      const containsWidth = _.includes(adjustableProperties.width, property);
-      const containsRest = _.includes(adjustableProperties.rest, property);
+      const style = selector
+      const containsHeight = _.includes(adjustableProperties.height, property)
+      const containsWidth = _.includes(adjustableProperties.width, property)
+      const containsRest = _.includes(adjustableProperties.rest, property)
 
       if (containsRest) {
         if (typeof style[property] !== 'string') {
-          style[property] = scaleFontSize(value);
+          style[property] = scaleFontSize(value)
         }
       }
-    });
-  });
+    })
+  })
 
   return StyleSheet.create<T>(styleSheet)
 }
