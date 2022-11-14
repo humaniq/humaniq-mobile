@@ -22,12 +22,12 @@ export const useStyles = withTheme(theme => ({
   },
   selectText: {
     fontFamily: theme.fonts.medium,
-    fontSize: 16,
+    fontSize: 15,
     color: theme.colors.headerTitle,
     marginRight: 10
   },
   icon: {
-    fontSize: 16,
+    fontSize: 15,
     marginRight: 8,
     includeFontPadding: false,
     textAlign: "center"

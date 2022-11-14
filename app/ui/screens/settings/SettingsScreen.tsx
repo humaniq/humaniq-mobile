@@ -57,7 +57,10 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           />
         </ScrollView>
       </Screen>
-      <ConnectProviderSheet visible={ visible } onDismiss={ () => setVisible(false) }/>
+      <ConnectProviderSheet
+        visible={ visible }
+        onDismiss={ () => setVisible(false) }
+      />
     </>
   )
 }

@@ -1,8 +1,8 @@
 import { Text, TouchableOpacity, View } from "react-native"
-import { useMemo, useRef } from "react"
+import { useEffect, useMemo, useRef } from "react"
 import { Props } from "./types"
 import { useStyles } from "./styles"
-import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet'
+import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
 import { t } from "app/i18n/translate"
 import { Switch } from "ui/components/switch/Switch"
 import Metamask from "../../../assets/images/icons/metamask.svg"
@@ -12,9 +12,10 @@ import { IconText } from "ui/components/text/IconText"
 import { ParsedTextView } from "ui/components/parsed/ParsedTextView"
 import { PROVIDERS } from "ui/components/sheet/consts"
 import { useTheme } from "hooks/useTheme"
+import { usePressBack } from "hooks/usePressBack"
 
 export const ConnectProviderSheet = ({
-                                       visible,
+                                       visible = false,
                                        onProviderPressed,
                                        onTermsPressed,
                                        onStateChange,
@@ -22,28 +23,38 @@ export const ConnectProviderSheet = ({
                                      }: Props) => {
   const styles = useStyles()
   const { colors } = useTheme()
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
 
-  const snapPoints = useMemo(() => ['50%', '75%', '100%'], [])
+  const snapPoints = useMemo(() => ['65%', '100%'], [])
 
-  if (!visible) return null
+  usePressBack(() => {
+    bottomSheetRef.current?.close()
+  })
+
+  useEffect(() => {
+    if (visible) {
+      bottomSheetRef.current?.present();
+    }
+  }, [visible])
 
   return (
-    <BottomSheet
+    <BottomSheetModal
       backdropComponent={ (backdropProps) => (
         <BottomSheetBackdrop
           { ...backdropProps }
           enableTouchThrough={ true }
+          appearsOnIndex={ 0 }
+          disappearsOnIndex={ -1 }
         />
       ) }
       enablePanDownToClose={ true }
       ref={ bottomSheetRef }
-      index={ 1 }
+      index={ 0 }
       snapPoints={ snapPoints }
       onChange={ onStateChange }
       backgroundStyle={ styles.root }
       handleIndicatorStyle={ styles.indicator }
-      onClose={ onDismiss }
+      onDismiss={ onDismiss }
     >
       <View style={ styles.content }>
         <Text style={ styles.title }>{ t("web3Connect.title") }</Text>
@@ -115,6 +126,6 @@ export const ConnectProviderSheet = ({
           />
         </View>
       </View>
-    </BottomSheet>
+    </BottomSheetModal>
   )
 }
