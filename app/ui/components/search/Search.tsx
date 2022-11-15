@@ -6,7 +6,7 @@ import { useState } from "react"
 import { usePressBack } from "hooks/usePressBack"
 import { MovIcon } from "ui/components/icon/MovIcon"
 
-export const Search = ({ hint }: SearchProps) => {
+export const Search = ({ hint, containerStyle, style }: SearchProps) => {
   const [input, setInput] = useState("")
   const styles = useStyles()
   const { colors } = useTheme()
@@ -14,14 +14,14 @@ export const Search = ({ hint }: SearchProps) => {
   usePressBack()
 
   return (
-    <View style={ styles.root }>
+    <View style={ [styles.root, containerStyle] }>
       <MovIcon
         name={ "search" }
         color={ colors.searchIcon }
-        size={ 24 }
+        size={ 22 }
       />
       <TextInput
-        style={ styles.input }
+        style={ [styles.input, style] }
         value={ input }
         onChangeText={ setInput }
         placeholder={ hint }

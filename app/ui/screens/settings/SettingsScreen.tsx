@@ -11,7 +11,7 @@ import { useTheme } from "hooks/useTheme"
 import { Currencies, Languages } from "./data"
 import { t } from "app/i18n/translate"
 import { Screen } from "ui/screens/screen/Screen"
-import { ConnectProviderSheet } from "ui/components/sheet/ConnectProviderSheet"
+import { SelectTokenSheet } from "ui/components/sheet/token/SelectTokenSheet"
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
   const styles = useStyles()
@@ -57,7 +57,7 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           />
         </ScrollView>
       </Screen>
-      <ConnectProviderSheet
+      <SelectTokenSheet
         visible={ visible }
         onDismiss={ () => setVisible(false) }
       />

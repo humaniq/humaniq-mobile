@@ -5,9 +5,9 @@ import { useStyles } from "./styles"
 import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
 import { t } from "app/i18n/translate"
 import { Switch } from "ui/components/switch/Switch"
-import Metamask from "../../../assets/images/icons/metamask.svg"
-import Coinbase from "../../../assets/images/icons/coinbase.svg"
-import WalletConnect from "../../../assets/images/icons/wallet_connect.svg"
+import Metamask from "assets/images/icons/metamask.svg"
+import Coinbase from "assets/images/icons/coinbase.svg"
+import WalletConnect from "assets/images/icons/wallet_connect.svg"
 import { IconText } from "ui/components/text/IconText"
 import { ParsedTextView } from "ui/components/parsed/ParsedTextView"
 import { PROVIDERS } from "ui/components/sheet/consts"
@@ -33,7 +33,7 @@ export const ConnectProviderSheet = ({
 
   useEffect(() => {
     if (visible) {
-      bottomSheetRef.current?.present();
+      bottomSheetRef.current?.present()
     }
   }, [visible])
 
