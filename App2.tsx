@@ -21,6 +21,11 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { ConnectProviderSheet } from "ui/components/sheet/ConnectProviderSheet"
 import { observer } from "mobx-react-lite"
 import { useWalletConnect as useWC } from "@walletconnect/react-native-dapp/dist/hooks"
+import { configure } from "mobx"
+
+configure({
+  enforceActions: "never",
+})
 
 LogBox.ignoreLogs([
   "new NativeEventEmitter()",

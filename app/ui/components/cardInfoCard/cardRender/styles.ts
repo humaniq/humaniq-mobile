@@ -12,11 +12,12 @@ export const useStyles = withTheme(theme => ({
     maxWidth: 400,
     flex: 1,
     height: 240,
-    padding: 24,
     borderRadius: 24,
     shadowColor: "#838482",
     borderColor: toRGBAColor(theme.colors.borderColor, 0.5),
     borderWidth: 1,
+    padding: 0,
+    margin: 0,
   },
   backGroundImg: {
     flexWrap: "nowrap",
@@ -36,7 +37,7 @@ export const useStyles = withTheme(theme => ({
     display: "flex", flexDirection: "row",
     position: "absolute",
     left: 5,
-    bottom: 0
+    bottom: 24
   },
   textHolder: {
     paddingHorizontal: 5,
@@ -54,7 +55,7 @@ export const useStyles = withTheme(theme => ({
   logo: {
     position: "absolute",
     right: 5,
-    bottom: 0,
+    bottom: 24,
     zIndex: 2,
   },
 }))

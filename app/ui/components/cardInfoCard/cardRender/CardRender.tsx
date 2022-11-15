@@ -7,6 +7,7 @@ import { computed } from "mobx"
 import { Skin } from "../../../../services/microServices/cardSkin"
 import { observer } from "mobx-react-lite"
 import { MovIcon } from "ui/components/icon/MovIcon"
+import { useTheme } from "hooks/useTheme"
 
 interface Props {
   expiration?: dayjs.Dayjs;
@@ -28,39 +29,44 @@ export const CardRender: React.FC<Props> = observer((
   }) => {
 
   const exp = computed(() => expiration ? expiration.format("MM/YY") : "")
-  const styles = useStyles()
 
-  return <Card style={ styles.card }>
+  const styles = useStyles()
+  const theme = useTheme()
+
+  const textColor = computed(() => theme.colors[skin?.textColor])
+  const backGroundColor = computed( () => skin?.backgroundType === "color" ? theme.colors[skin.backgroundColor] : "#fff")
+
+  return <Card style={ { ...styles.card, backgroundColor: backGroundColor.get() } }>
     <ImageBackground
     resizeMode="cover"
     source={ { uri: skin?.backgroundType !== "color" ? skin?.picture?.src : undefined } }
     style={ skin?.backgroundType === "color" ? {
-      backgroundColor: skin?.backgroundColor,
+      backgroundColor: backGroundColor.get(),
       ...styles.backGroundImg
     } : styles.backGroundImg }>
       { children }
     <View style={ styles.cardNumber }>
-      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
-      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
-      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
-      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>{ last4Digits || "••••" }</Text>
+      <Text style={ { color: textColor.get(), ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: textColor.get(), ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: textColor.get(), ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: textColor.get(), ...styles.textMedium } }>{ last4Digits || "••••" }</Text>
     </View>
     <View style={ styles.data }>
-      { iban && <Text style={ { ...styles.textMedium, color: skin?.textColor } }>{ iban }</Text> }
-      { exp.get() && <Text style={ { ...styles.textMedium, color: skin?.textColor } }>{ exp.get() }</Text> }
+      { iban && <Text style={ { ...styles.textMedium, color: textColor.get() } }>{ iban }</Text> }
+      { exp.get() && <Text style={ { ...styles.textMedium, color: textColor.get() } }>{ exp.get() }</Text> }
     </View>
     <View style={ styles.holder }>
-      { holder ? <Text style={ { color: skin?.textColor } }>{ holder }</Text> :
+      { holder ? <Text style={ { color: textColor.get() } }>{ holder }</Text> :
         <>
-          <Text style={ { color: skin?.textColor, ...styles.textHolder } }>••••</Text>
-          <Text style={ { color: skin?.textColor, ...styles.textHolder } }>••••</Text>
+          <Text style={ { color: textColor.get(), ...styles.textHolder } }>••••</Text>
+          <Text style={ { color: textColor.get(), ...styles.textHolder } }>••••</Text>
         </> }
     </View>
     <View style={ styles.logo }>
       <MovIcon
         name={ "visa" }
         size={ 25 }
-        color={ { color: skin?.textColor } } />
+        color={ { color: textColor.get() } } />
     </View>
 
   </ImageBackground></Card>

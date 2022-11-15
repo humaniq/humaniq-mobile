@@ -7,8 +7,8 @@ import { useInstance } from "react-ioc"
 import { CardSkinService } from "../../../services/microServices/cardSkin"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import { CardService, CardState } from "../../../services/microServices/cardService"
-import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
 import { WalletService } from "../../../services/WalletService"
+import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
 
 export const CardInfoCard = observer(() => {
 
@@ -18,7 +18,7 @@ export const CardInfoCard = observer(() => {
 
   useEffect(() => {
     skinService.init()
-  })
+  }, [])
   // const wallet = useInstance( WalletService)
 
   // const newIncomingTransaction
@@ -51,6 +51,5 @@ export const CardInfoCard = observer(() => {
       </>
     </CardRender>
     <View style={ styles.actionsContainer }></View>
-
   </View>
 })

@@ -2,6 +2,7 @@ import { PictureSourceDescriptor } from "../../references/images"
 import { localStorage } from "utils/localStorage"
 import { inject } from "react-ioc"
 import { WalletService } from "../WalletService"
+import { makeAutoObservable, reaction } from "mobx"
 
 enum CardSkin {
   Default = "default",
@@ -36,15 +37,15 @@ const registry: Record<CardSkin, Skin> = {
     key: CardSkin.Default,
     nameTranslationKey: "skin.default.name",
     backgroundType: "color",
-    backgroundColor: "#fff",
-    textColor: "#333",
+    backgroundColor: "skinBackGroundWhite", //"#fff",
+    textColor: "skinTextBlack", //"#333",
   },
   [CardSkin.Dark]: {
     key: CardSkin.Dark,
     nameTranslationKey: "skin.dark.name",
     backgroundType: "color",
-    backgroundColor: "#404040",
-    textColor: "#fff",
+    backgroundColor: "skinBackgroundBlack", // "#404040",
+    textColor: "skinTextWhite", //"#fff",
   },
   [CardSkin.Cat]: {
     key: CardSkin.Cat,
@@ -53,7 +54,7 @@ const registry: Record<CardSkin, Skin> = {
     picture: {
       src: require("assets/images/card_skin_cat.png"),
     },
-    textColor: "#fff",
+    textColor: "skinTextWhite", //"#fff",
   },
   [CardSkin.Ape]: {
     key: CardSkin.Ape,
@@ -62,7 +63,7 @@ const registry: Record<CardSkin, Skin> = {
     picture: {
       src: require("assets/images/card_skin_ape.png"),
     },
-    textColor: "#fff",
+    textColor: "skinTextWhite", //"#fff",
   },
   [CardSkin.Peace]: {
     key: CardSkin.Peace,
@@ -71,7 +72,7 @@ const registry: Record<CardSkin, Skin> = {
     picture: {
       src: require("assets/images/card_skin_peace.png"),
     },
-    textColor: "#333",
+    textColor: "skinTextBlack", // "#333",
   },
 }
 
@@ -85,14 +86,23 @@ export class CardSkinService {
 
   wallet = inject(this, WalletService)
 
-  init = async () => {
-    if (this.initialized) return
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  init = async (forse = false) => {
+    if (this.initialized && !forse) return
     this.cardSkin = await localStorage.load<CardSkin>(`card-skin[${ this.wallet.address ?? "" }]`, CardSkin.Default)
     if (!available.includes(this.cardSkin)) {
       this.cardSkin = CardSkin.Default
     }
     this.selectedCardSkin = await localStorage.load("card-skin-selected", false)
     this.initialized = true
+
+    reaction(() => this.wallet.address, () => {
+      this.init(true)
+    })
+
   }
 
   setSkin = async (s: CardSkin) => {
