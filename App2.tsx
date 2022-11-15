@@ -17,6 +17,7 @@ import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { WalletService } from "./app/services/WalletService"
 import { LogBox } from "react-native"
 import "./app/i18n/i18n"
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 
 LogBox.ignoreLogs([
   "new NativeEventEmitter()",
@@ -31,7 +32,9 @@ export const AppScreen = () => {
     >
       <SafeAreaProvider>
         <ThemeProvider>
-          <AppNavigation />
+          <BottomSheetModalProvider>
+            <AppNavigation/>
+          </BottomSheetModalProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </PaperProvider>

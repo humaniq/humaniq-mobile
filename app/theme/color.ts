@@ -25,6 +25,7 @@ export const colorsLight = {
   select: "#FFFFFF",
   red: "#E8102C",
   avatar: "#B1B1B1",
+  greenLight: "#00D64F",
 }
 
 export const colorsDark: typeof colorsLight = {
@@ -54,6 +55,7 @@ export const colorsDark: typeof colorsLight = {
   select: "#404040",
   red: "#E8102C",
   avatar: "#FFFFFF",
+  greenLight: "#00D64F",
 }
 
 export const fonts = {

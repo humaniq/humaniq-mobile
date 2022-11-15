@@ -1,6 +1,6 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {SCREENS } from 'navigation/path'
+import React from "react"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { SCREENS } from "navigation/path"
 import { BottomParamList } from "types/navigation"
 import { CardScreen } from "ui/screens/card/CardScreen"
 import { EarnScreen } from "ui/screens/earn/EarnScreen"
@@ -10,7 +10,7 @@ import { BottomBar } from "ui/components/bar/BottomBar"
 const BottomBarNav = createBottomTabNavigator<BottomParamList>()
 
 const screenOptions = {
-  headerShown: false
+  headerShown: false,
 }
 
 export const BottomNavigator = ({}) => {

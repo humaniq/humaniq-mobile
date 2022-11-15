@@ -9,6 +9,7 @@ export interface PrimaryTextProps {
 export interface LockTextProps {
   text: string
   icon: string
+  style?: StyleProp<TextStyle>
 }
 
 export interface LinkTextProps {

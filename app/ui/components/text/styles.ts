@@ -11,11 +11,9 @@ export const useTextStyles = withTheme(theme => ({
 
 export const useIconTextStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.bg,
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: 2,
-    marginTop: 40
   },
   text: {
     fontFamily: theme.fonts.regular,
