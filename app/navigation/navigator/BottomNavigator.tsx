@@ -1,19 +1,20 @@
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import React from "react"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import { SCREENS } from "navigation/path"
 import { BottomParamList } from "types/navigation"
 import { CardScreen } from "ui/screens/card/CardScreen"
 import { EarnScreen } from "ui/screens/earn/EarnScreen"
 import { HistoryScreen } from "ui/screens/history/HistoryScreen"
 import { BottomBar } from "ui/components/bar/BottomBar"
-import { SCREENS } from "navigation/path"
+import { observer } from "mobx-react-lite"
 
 const BottomBarNav = createBottomTabNavigator<BottomParamList>()
 
 const screenOptions = {
-  headerShown: false
+  headerShown: false,
 }
 
-export const BottomNavigator = ({}) => {
+export const BottomNavigator = observer(({}) => {
   return (
     <BottomBarNav.Navigator screenOptions={ screenOptions } tabBar={ props => <BottomBar { ...props } /> }>
       <BottomBarNav.Screen
@@ -30,4 +31,4 @@ export const BottomNavigator = ({}) => {
       />
     </BottomBarNav.Navigator>
   )
-}
+})

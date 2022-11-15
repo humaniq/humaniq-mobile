@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { KeyValuePair } from "@react-native-async-storage/async-storage/src/types"
 
 
@@ -10,10 +10,10 @@ export class LocalStorage {
    */
   async loadString(key: string): Promise<string | null> {
     try {
-      return await AsyncStorage.getItem(key);
+      return await AsyncStorage.getItem(key)
     } catch {
       // not sure why this would fail... even reading the RN docs I'm unclear
-      return null;
+      return null
     }
   }
 
@@ -25,10 +25,10 @@ export class LocalStorage {
    */
   async saveString(key: string, value: string): Promise<boolean> {
     try {
-      await AsyncStorage.setItem(key, value);
-      return true;
+      await AsyncStorage.setItem(key, value)
+      return true
     } catch {
-      return false;
+      return false
     }
   }
 
@@ -36,13 +36,15 @@ export class LocalStorage {
    * Loads something from localStorage and runs it thru JSON.parse.
    *
    * @param key The key to fetch.
+   * @param def Default value
    */
-  async load(key: string): Promise<any | null> {
+  async load<T>(key: string, def?: any): Promise<any | null> {
     try {
-      const almostThere = await AsyncStorage.getItem(key);
-      return JSON.parse(almostThere);
+      const almostThere = await AsyncStorage.getItem(key)
+      return almostThere !== undefined && almostThere !== null ? JSON.parse(almostThere) as T : def
     } catch {
-      return null;
+      console.log("Error-async-storage")
+      return null
     }
   }
 
@@ -54,10 +56,11 @@ export class LocalStorage {
    */
   async save(key: string, value: any): Promise<boolean> {
     try {
-      await AsyncStorage.setItem(key, JSON.stringify(value));
-      return true;
+      await AsyncStorage.setItem(key, JSON.stringify(value))
+      return true
     } catch {
-      return false;
+      console.log("Error-async-storage")
+      return false
     }
   }
 
@@ -68,7 +71,7 @@ export class LocalStorage {
    */
   async remove(key: string): Promise<void> {
     try {
-      await AsyncStorage.removeItem(key);
+      await AsyncStorage.removeItem(key)
     } catch {
     }
   }
@@ -78,13 +81,13 @@ export class LocalStorage {
    */
   async clear(): Promise<void> {
     try {
-      await AsyncStorage.clear();
+      await AsyncStorage.clear()
     } catch {
     }
   }
 }
 
-export const localStorage = new LocalStorage();
+export const localStorage = new LocalStorage()
 
 /**
  * Loads a string from localStorage.
@@ -93,19 +96,19 @@ export const localStorage = new LocalStorage();
  */
 export async function loadString(key: string): Promise<string | null> {
   try {
-    return await AsyncStorage.getItem(key);
+    return await AsyncStorage.getItem(key)
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
-    return null;
+    return null
   }
 }
 
 export async function loadMultiString(key: string[]): Promise<readonly KeyValuePair[]> {
   try {
-    return await AsyncStorage.multiGet(key);
+    return await AsyncStorage.multiGet(key)
   } catch {
     // not sure why this would fail... even reading the RN docs I'm unclear
-    return null;
+    return null
   }
 }
 
@@ -117,10 +120,10 @@ export async function loadMultiString(key: string[]): Promise<readonly KeyValueP
  */
 export async function saveString(key: string, value: string): Promise<boolean> {
   try {
-    await AsyncStorage.setItem(key, value);
-    return true;
+    await AsyncStorage.setItem(key, value)
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -131,10 +134,10 @@ export async function saveString(key: string, value: string): Promise<boolean> {
  */
 export async function load(key: string): Promise<any | null> {
   try {
-    const almostThere = await AsyncStorage.getItem(key);
-    return JSON.parse(almostThere);
+    const almostThere = await AsyncStorage.getItem(key)
+    return JSON.parse(almostThere)
   } catch {
-    return null;
+    return null
   }
 }
 
@@ -146,10 +149,10 @@ export async function load(key: string): Promise<any | null> {
  */
 export async function save(key: string, value: any): Promise<boolean> {
   try {
-    await AsyncStorage.setItem(key, JSON.stringify(value));
-    return true;
+    await AsyncStorage.setItem(key, JSON.stringify(value))
+    return true
   } catch {
-    return false;
+    return false
   }
 }
 
@@ -160,7 +163,7 @@ export async function save(key: string, value: any): Promise<boolean> {
  */
 export async function remove(key: string): Promise<void> {
   try {
-    await AsyncStorage.removeItem(key);
+    await AsyncStorage.removeItem(key)
   } catch {
   }
 }
@@ -170,7 +173,7 @@ export async function remove(key: string): Promise<void> {
  */
 export async function clear(): Promise<void> {
   try {
-    await AsyncStorage.clear();
+    await AsyncStorage.clear()
   } catch {
   }
 }

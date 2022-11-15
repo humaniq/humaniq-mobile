@@ -6,7 +6,7 @@ export const useStyles = withTheme(theme => ({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 8,
-    paddingHorizontal: theme.spaces.horizontal
+    paddingHorizontal: theme.spaces.horizontal,
   },
   title: {
     fontFamily: theme.fonts.medium,
@@ -33,6 +33,10 @@ export const useStyles = withTheme(theme => ({
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 16,
+  },
+  closeWithShadows: {
+    ...theme.shadows,
+    backgroundColor: theme.colors.headerCircle,
   },
   settings: {
     height: 42,

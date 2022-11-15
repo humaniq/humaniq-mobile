@@ -3,6 +3,7 @@ import { StorageService } from "./StorageService"
 import { inject } from "react-ioc"
 import { WalletConnectService } from "./WalletConnectService"
 import { ProviderService } from "./ProviderService"
+import { WalletService } from "./WalletService"
 
 export class AppService {
 
@@ -12,6 +13,7 @@ export class AppService {
   storage = inject(this, StorageService)
   wc = inject(this, WalletConnectService)
   provider = inject(this, ProviderService)
+  walletService = inject(this, WalletService)
 
   constructor() {
     makeAutoObservable(this, null, { autoBind: true })
@@ -30,6 +32,7 @@ export class AppService {
     console.log("init app")
     this.destructor()
     this.destructor = reaction(() => this.wc.initialized, async () => {
+      this.walletService.tryInitCached()
       this.provider.init()
     })
   }

@@ -1,6 +1,6 @@
 import { SettingsScreenProps } from "./types"
 import { useStyles } from "./styles"
-import React, { useState } from "react"
+import React from "react"
 import { Header } from "ui/components/header/Header"
 import { ThemeSettings } from "ui/components/theme/ThemeSettings"
 import { Select } from "ui/components/select/Select"
@@ -11,12 +11,11 @@ import { useTheme } from "hooks/useTheme"
 import { Currencies, Languages } from "./data"
 import { t } from "app/i18n/translate"
 import { Screen } from "ui/screens/screen/Screen"
-import { ConnectProviderSheet } from "ui/components/sheet/ConnectProviderSheet"
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
   const styles = useStyles()
   const { switchAppLang, appLang } = useTheme()
-  const [visible, setVisible] = useState(false)
+
 
   return (
     <>
@@ -57,10 +56,6 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           />
         </ScrollView>
       </Screen>
-      <ConnectProviderSheet
-        visible={ visible }
-        onDismiss={ () => setVisible(false) }
-      />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { RootStackParamList } from "types/navigation"
+import { MAIN_STACK, SCREENS } from "navigation/path"
 import * as React from "react"
 import { BottomNavigator } from "navigation/navigator/BottomNavigator"
 import { ContactDetailsScreen } from "ui/screens/details/ContactDetailsScreen"
@@ -7,7 +8,7 @@ import { SettingsScreen } from "ui/screens/settings/SettingsScreen"
 import { CreateTagScreen } from "ui/screens/tag/CreateTagScreen"
 import { PersonalInfoScreen } from "ui/screens/personal/PersonalInfoScreen"
 import { PhoneValidationScreen } from "ui/screens/phone/PhoneValidationScreen"
-import { MAIN_STACK, SCREENS } from "navigation/path"
+import { observer } from "mobx-react-lite"
 
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -15,9 +16,9 @@ const screenOptions = {
   headerShown: false
 }
 
-export const RootNavigator = () => {
+export const RootNavigator = observer(() => {
   return (
-    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ SCREENS.SETTINGS_SCREEN }>
+    <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ MAIN_STACK }>
       <Stack.Screen
         component={ BottomNavigator }
         name={ MAIN_STACK }
@@ -44,4 +45,4 @@ export const RootNavigator = () => {
       />
     </Stack.Navigator>
   )
-}
+})
