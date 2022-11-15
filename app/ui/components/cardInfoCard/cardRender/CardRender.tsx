@@ -29,7 +29,6 @@ export const CardRender: React.FC<Props> = observer((
   }) => {
 
   const exp = computed(() => expiration ? expiration.format("MM/YY") : "")
-
   const styles = useStyles()
   const theme = useTheme()
 
