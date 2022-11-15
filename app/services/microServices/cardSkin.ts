@@ -14,7 +14,7 @@ enum CardSkin {
 type SkinPicture = {
   backgroundType: "image";
   picture: {
-    src: string;
+    src: any;
     sources?: Array<PictureSourceDescriptor>;
     webpSources?: Array<PictureSourceDescriptor>;
   };
@@ -91,6 +91,7 @@ export class CardSkinService {
     if (!available.includes(this.cardSkin)) {
       this.cardSkin = CardSkin.Default
     }
+    this.cardSkin = CardSkin.Cat
     this.selectedCardSkin = await localStorage.load("card-skin-selected", false)
     this.initialized = true
   }
@@ -109,5 +110,3 @@ export class CardSkinService {
     return Object.values(registry).filter((v) => available.includes(v.key))
   }
 }
-
-

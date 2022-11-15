@@ -1,60 +1,59 @@
 import { withTheme } from "hooks/useTheme"
-import { toRGBAColor } from "ui/components/theme/utils"
-
+import { StyleSheet } from "react-native"
 
 export const useStyles = withTheme(theme => ({
-  card: {
-    position: "relative",
-    display: "flex",
-    flexWrap: "nowrap",
-    flexDirection: "column",
-    alignItems: "center",
-    maxWidth: 400,
-    flex: 1,
-    height: 240,
-    padding: 24,
-    borderRadius: 24,
-    shadowColor: "#838482",
-    borderColor: toRGBAColor(theme.colors.borderColor, 0.5),
-    borderWidth: 1,
+  root: {
+    height: 230,
+    borderRadius: 12,
+    ...theme.shadows
   },
-  backGroundImg: {
-    flexWrap: "nowrap",
-    position: "relative",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    flex: 1,
+  content: {
+    height: "100%",
   },
-  cardNumber: {
-    display: "flex",
-    flexDirection: "row",
-    paddingTop: 42,
-  },
-  data: {},
-  holder: {
-    display: "flex", flexDirection: "row",
+  header: {
     position: "absolute",
-    left: 5,
-    bottom: 0
+    right: 24,
+    top: 56,
+    left: 24,
+  },
+  background: {
+    ...StyleSheet.absoluteFillObject
+  },
+  more: {
+    backgroundColor: "#F1F1F1",
+    borderRadius: 30,
+    position: "absolute",
+    right: 24,
+    top: 24,
+  },
+  expirationDots: {
+    flexDirection: "row",
+    alignItems: "center",
   },
   textHolder: {
-    paddingHorizontal: 5,
+    paddingRight: 5,
     color: theme.colors.primary,
-    fontWeight: "500",
-    fontSize: 28
+    fontFamily: theme.fonts.medium,
+    fontSize: 15,
+  },
+  holder: {
+    color: theme.colors.primary,
+    fontFamily: theme.fonts.medium,
+    fontSize: 18,
   },
   textMedium: {
     color: theme.colors.primary,
-    fontWeight: "500",
-    fontSize: 42,
-    lineHeight: 36,
-    paddingHorizontal: 10,
+    fontFamily: theme.fonts.medium,
+    fontSize: 26,
+    paddingRight: 12,
   },
-  logo: {
+  bottom: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     position: "absolute",
-    right: 5,
-    bottom: 0,
-    zIndex: 2,
+    left: 24,
+    right: 24,
+    bottom: 24,
   },
 }))

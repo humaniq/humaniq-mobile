@@ -1,79 +1,41 @@
-// import "./shim"
-// import "@ethersproject/shims";
-import { observer } from "mobx-react-lite"
-import React, { useEffect } from "react"
-import { useWalletConnect as useWC, withWalletConnect } from "@walletconnect/react-native-dapp"
-import AsyncStorage from "@react-native-async-storage/async-storage"
-import { Button, Text, View } from "react-native"
-import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
-import { MovIcon } from "app/ui/components/icon/MovIcon"
-import { ProviderType } from "./app/references/providers"
-
-import { configure } from "mobx"
-import { AppService } from "./app/services/AppService"
-import { StorageService } from "./app/services/StorageService"
-import { WalletConnectService } from "./app/services/WalletConnectService"
-import { ProviderService } from "./app/services/ProviderService"
-import { provider, useInstance } from "react-ioc"
-import { CardSkinService } from "./app/services/microServices/cardSkin"
-
-configure({
-  enforceActions: "never",
-})
-
-const AppScreen = observer(() => {
-
-  const app = useInstance(AppService)
-  const provider = useInstance(ProviderService)
-  const connector = useWC()
-  const wc = useInstance(WalletConnectService)
-
-  useEffect(() => {
-    connector.protocol && wc.init(connector)
-  }, [ connector ])
-
-  useEffect(() => {
-    app.init()
-  }, [])
-
-
-  return <View style={ { minHeight: "100%" } }>
-    <MovIcon name={ "logo" } size={ 200 } color={ "#fff" } />
-    { provider.initialized &&
-      <View>
-        {
-          !!provider.isConnected && <View>
-            <View><Text>{ provider.chainId }</Text></View>
-            <View><Text>{ provider.address }</Text></View>
-            <View><Text>{ provider.balance }</Text></View>
-          </View>
-        }
-        { !provider.isConnected ? <>
-            <Button title={ "Connect to WC" } onPress={ () => provider.pureConnect(ProviderType.WalletConnect) } />
-            <Button title={ "Connect to MetaMask" } onPress={ () => provider.pureConnect(ProviderType.Metamask) } />
-          </> :
-          <Button title={ "Kill session" } onPress={ () => provider.disconnect() } /> }
-      </View>
-    }
-    {
-      !provider.initialized && <View><Text>Initializing...</Text></View>
-    }
-  </View>
-})
-
-const AppWithProvider = provider()(AppScreen)
-
-AppWithProvider.register(
-  AppService,
-  StorageService,
-  WalletConnectService,
-  ProviderService,
-  CardSkinService
-)
-
-export const App = withWalletConnect(AppWithProvider, {
-  redirectUrl: "mover://",
-  storageOptions: {
-    asyncStorage: AsyncStorage as unknown as IAsyncStorage,
-  },
-})
+// import * as React from "react";
+// import {
+//   withWalletConnect,
+//   useWalletConnect, RenderQrcodeModalProps, WalletService,
+// } from "@walletconnect/react-native-dapp"
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
+// import { TouchableOpacity, View, Text } from "react-native"
+// import BottomSheet from "@gorhom/bottom-sheet"
+//
+// function CustomBottomSheet({
+//                              walletServices,
+//                              visible,
+//                              connectToWalletService,
+//                              uri,
+//                            }: RenderQrcodeModalProps): JSX.Element {
+//   const renderContent = React.useCallback(() => {
+//     return walletServices.map((walletService: WalletService, i: number) => (
+//       <TouchableOpacity key={`i${i}`} onPress={() => connectToWalletService(walletService, uri)}>
+//         {/*<Image source={{ uri: walletService.logo }} />*/}
+//         <Text>{walletService.name}</Text>
+//       </TouchableOpacity>
+//     ));
+//   }, [walletServices, uri]);
+//   return <BottomSheet snapPoints={["10%, 100#"]}>{renderContent}</BottomSheet>;
+// };
+//
+// function App(): JSX.Element {
+//   const connector = useWalletConnect(); // valid
+//   return <><View></View></>;
+// }
+//
+// export default withWalletConnect(App, {
+//   redirectUrl: "yourappscheme://",
+//   storageOptions: {
+//     asyncStorage: AsyncStorage as unknown as IAsyncStorage,
+//   },
+//   renderQrcodeModal: (props: RenderQrcodeModalProps): JSX.Element => (
+//     <CustomBottomSheet {...props} />
+//   ),
+// });

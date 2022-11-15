@@ -1,36 +1,22 @@
 import { withTheme } from "hooks/useTheme"
+import { StyleSheet } from "react-native"
 
 export const useStyles = withTheme(theme => ({
-  notConnected: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 3,
-    display: "flex",
-    flex: 1,
-    flexWrap: "nowrap",
-    flexDirection: "column",
+  root: {
+    ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
-    height: 200,
-    borderRadius: 12,
+    overflow: "hidden",
   },
   description: {
-    fontWeight: "400",
+    fontFamily: theme.fonts.regular,
     fontSize: 14,
     lineHeight: 22,
     textAlign: "center",
-    paddingTop: 8
+    paddingTop: 8,
   },
-  absolute: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+  blur: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 16,
   },
-  button: {
-    width: 150
-  }
 }))

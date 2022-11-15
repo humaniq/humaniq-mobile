@@ -10,21 +10,27 @@ import { t } from "../../../i18n/translate"
 import { WalletService } from "../../../services/WalletService"
 
 export const CardNotConnectedOverlay = observer(() => {
-
   const styles = useStyles()
-  const skinService = useInstance(CardSkinService)
 
+  const skinService = useInstance(CardSkinService)
   const walletService = useInstance(WalletService)
 
-  return <View style={ styles.notConnected }>
-    <BlurView
-      style={ styles.absolute }
-      blurType="light"
-      blurAmount={ 9 }
-      reducedTransparencyFallbackColor="white"
-    />
-    <PrimaryButton style={ styles.button } onPress={ () => walletService.setConnectProviderModal(true) }
-                   title={ t("connectWallet") } />
-    <Text style={ { ...styles.description, color: skinService?.skin?.textColor } }>{ t("connectWallet-title") }</Text>
-  </View>
+  return (
+    <View style={ styles.root }>
+      <BlurView
+        style={ styles.blur }
+        blurType="light"
+        blurAmount={ 7 }
+        reducedTransparencyFallbackColor="white"
+      />
+      <PrimaryButton
+        onPress={ () => walletService.setConnectProviderModal(true) }
+        title={ t("connectWallet") }
+      />
+      <Text style={ {
+        ...styles.description,
+        // color: skinService?.skin?.textColor,
+      } }>{ t("connectWallet-title") }</Text>
+    </View>
+  )
 })
