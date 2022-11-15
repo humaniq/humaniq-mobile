@@ -197,7 +197,7 @@ export class ProviderService {
 
     } catch (e) {
       console.log("Error-set-provider", e)
-      // await localStorage.remove(WALLET_TYPE_CONNECTED)
+      await localStorage.remove(WALLET_TYPE_CONNECTED)
     } finally {
       this.pending = false
     }
