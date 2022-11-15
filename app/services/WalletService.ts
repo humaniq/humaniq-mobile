@@ -11,13 +11,20 @@ export class WalletService {
   provider = inject(this, ProviderService)
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, null, { autoBind: true })
+  }
+
+  connectProviderModalVisible = false
+
+  setConnectProviderModal = (val: boolean) => {
+    console.log("SET-connect", val)
+    this.connectProviderModalVisible = val
   }
 
   triedToConnect = false
 
   get isWalletReady() {
-    return this.provider.initialized // && confirmOwnership.confirmed.value;
+    return this.provider.isConnected // && confirmOwnership.confirmed.value;
   }
 
   get address() {
@@ -41,34 +48,35 @@ export class WalletService {
   }
 
   tryInit = async (providerType?: ProviderType): Promise<void> => {
+    this.setConnectProviderModal(false)
     addSentryBreadcrumb({
-      type: 'info',
-      message: 'Wallet initialize...'
-    });
+      type: "info",
+      message: "Wallet initialize...",
+    })
     try {
-      await this.provider.connect(providerType);
+      await this.provider.connect(providerType)
     } catch (err) {
       addSentryBreadcrumb({
-        type: 'error',
-        message: 'web3 initializing failed'
-      });
-      throw err;
+        type: "error",
+        message: "web3 initializing failed",
+      })
+      throw err
     }
 
     if (this.provider.isConnected) {
-      await this.innerInit(false);
+      await this.innerInit(false)
     }
-  };
+  }
 
   tryInitCached = async () => {
-    console.log({
-      type: 'info',
-      message: 'Wallet initialize (from cache)...'
+    addSentryBreadcrumb({
+      type: "info",
+      message: "Wallet initialize (from cache)...",
     })
     try {
       const connected = await this.provider.tryConnectCachedProvider()
-      if(connected) {
-        await this.innerInit(true);
+      if (connected) {
+        await this.innerInit(true)
       }
     } catch (err) {
       if (
@@ -80,32 +88,32 @@ export class WalletService {
         //
         // UI will be unlocked by then, thanks to finally block assignment
         // and the router guard will do its job in background
-        throw err;
+        throw err
       }
 
       addSentryBreadcrumb({
-        type: 'error',
-        message: 'web3 initializing failed (from cache)'
-      });
-      captureSentryException(err);
+        type: "error",
+        message: "web3 initializing failed (from cache)",
+      })
+      captureSentryException(err)
       // toast.auto(new UnexpectedError(UECode.ConnectCacheProviderWeb3));
     } finally {
-      this.triedToConnect = true;
+      this.triedToConnect = true
     }
 
   }
 
   innerInit = async (cached: boolean) => {
     if (this.address === undefined) {
-      throw new MoverError('Current address is undefined in wallet->init');
+      throw new MoverError("Current address is undefined in wallet->init")
     }
 
     if (this.provider === undefined) {
-      throw new MoverError('WEb3 provider is undefined in wallet->init');
+      throw new MoverError("WEb3 provider is undefined in wallet->init")
     }
 
     const confirmed = true //  await confirmOwnership.init();
-    if(!confirmed) {
+    if (!confirmed) {
       // процесс конфирмации
       // try {
       //   useWeb3Modal().closeModal();
@@ -130,9 +138,9 @@ export class WalletService {
     // });
     //
     addSentryBreadcrumb({
-      type: 'info',
-      message: 'Wallet initialized successfully'
-    });
+      type: "info",
+      message: "Wallet initialized successfully",
+    })
     // const { loadCommonPrices } = useTokenPrice();
     // // load utility prices asynchronously
     // loadCommonPrices();

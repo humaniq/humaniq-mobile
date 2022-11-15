@@ -8,6 +8,7 @@ import { SettingsScreen } from "ui/screens/settings/SettingsScreen"
 import { CreateTagScreen } from "ui/screens/tag/CreateTagScreen"
 import { PersonalInfoScreen } from "ui/screens/personal/PersonalInfoScreen"
 import { PhoneValidationScreen } from "ui/screens/phone/PhoneValidationScreen"
+import { observer } from "mobx-react-lite"
 
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -15,7 +16,7 @@ const screenOptions = {
   headerShown: false
 }
 
-export const RootNavigator = () => {
+export const RootNavigator = observer(() => {
   return (
     <Stack.Navigator screenOptions={ screenOptions } initialRouteName={ MAIN_STACK }>
       <Stack.Screen
@@ -44,4 +45,4 @@ export const RootNavigator = () => {
       />
     </Stack.Navigator>
   )
-}
+})

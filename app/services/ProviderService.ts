@@ -16,8 +16,9 @@ import { Network } from "../references/network"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
 import { isRejectedRequestError, isUnrecognizedChainError } from "utils/error/ProviderRPCError"
 import { EECode, ExpectedError } from "utils/error/ExpectedError"
+import { addSentryBreadcrumb } from "../logs/sentry"
 
-export const WALLET_TYPE_CONNECTED = "Mover-wallet-type-connected"
+export const WALLET_TYPE_CONNECTED = "MoverConnectedProvider"
 
 export class ProviderService {
 
@@ -35,11 +36,17 @@ export class ProviderService {
 
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, null, { autoBind: true })
   }
 
   tryConnectCachedProvider = async () => {
     const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
+
+    addSentryBreadcrumb({
+      type: "info",
+      message: provider ? `Wallet initialize (from cache)...${ provider }` : "Could not find cached provider",
+    })
+
     if (provider) {
       await this.pureConnect(provider as ProviderType, true)
       return true
@@ -48,7 +55,6 @@ export class ProviderService {
   }
 
   init = async () => {
-    // await this.tryConnectCachedProvider()
     this.destructor1()
     this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
       if (prev === val || val === -1) return
@@ -74,24 +80,24 @@ export class ProviderService {
 
   connect = async (providerType: ProviderType = ProviderType.Metamask): Promise<void> => {
     try {
-      await this.pureConnect(providerType);
+      await this.pureConnect(providerType)
     } catch (e) {
-      if (typeof e === 'object' && e) {
-        const err: Record<string, unknown> = e as Record<string, unknown>;
+      if (typeof e === "object" && e) {
+        const err: Record<string, unknown> = e as Record<string, unknown>
         if (
-          'message' in err &&
+          "message" in err &&
           err.message &&
-          typeof err.message === 'string' &&
+          typeof err.message === "string" &&
           [
-            'user rejected the request.',
-            'user closed modal',
-            'user denied account authorization'
+            "user rejected the request.",
+            "user closed modal",
+            "user denied account authorization",
           ].includes(err.message.toLowerCase())
         ) {
-          throw new ExpectedError(EECode.userRejectAuth);
+          throw new ExpectedError(EECode.userRejectAuth)
         }
       }
-      console.error('error when connect to provider, try clean localstorage and try again', e);
+      console.error("error when connect to provider, try clean localstorage and try again", e)
 
       // wallet connect sometimes maybe good, sometimes maybe shit
       // Object.entries(localStorage)
@@ -100,13 +106,13 @@ export class ProviderService {
       //   .forEach((x) => localStorage.removeItem(x));
 
       try {
-        await this.pureConnect(providerType);
+        await this.pureConnect(providerType)
       } catch (err) {
-        console.error('error when retry connect to provider', err);
-        throw new UnexpectedError(UECode.ConnectProviderWeb3CleanCache);
+        console.error("error when retry connect to provider", err)
+        throw new UnexpectedError(UECode.ConnectProviderWeb3CleanCache)
       }
     }
-  };
+  }
 
   pureConnect = async (provider = ProviderType.WalletConnect, fromCache = false) => {
     try {
@@ -163,6 +169,13 @@ export class ProviderService {
 
       await localStorage.save(WALLET_TYPE_CONNECTED, provider)
 
+      console.log(provider)
+
+      addSentryBreadcrumb({
+        type: "info",
+        massage: `Save cached provider:${ await localStorage.load(WALLET_TYPE_CONNECTED) }`,
+      })
+
       this.provider.removeAllListeners()
       // @ts-ignore
       this.provider.provider.on("accountsChanged", this.handleAccountsChange)
@@ -184,7 +197,7 @@ export class ProviderService {
 
     } catch (e) {
       console.log("Error-set-provider", e)
-      await localStorage.remove(WALLET_TYPE_CONNECTED)
+      // await localStorage.remove(WALLET_TYPE_CONNECTED)
     } finally {
       this.pending = false
     }
@@ -291,34 +304,34 @@ export class ProviderService {
       await this.provider.send("wallet_switchEthereumChain", [ `0x${ networkInfo.chainId.toString(16) }` ])
     } catch (error) {
       if (isRejectedRequestError(error)) {
-        throw new ExpectedError(EECode.userRejectNetworkChange);
+        throw new ExpectedError(EECode.userRejectNetworkChange)
       }
 
       if (isUnrecognizedChainError(error)) {
         try {
-          await (this.provider.send('wallet_addEthereumChain',[
+          await (this.provider.send("wallet_addEthereumChain", [
               {
-                chainId: `0x${networkInfo.chainId.toString(16)}`,
+                chainId: `0x${ networkInfo.chainId.toString(16) }`,
                 chainName: networkInfo.name,
                 rpcUrls: networkInfo.rpcUrl,
                 nativeCurrency: {
                   name: networkInfo.baseAsset.name,
                   symbol: networkInfo.baseAsset.symbol,
-                  decimals: networkInfo.baseAsset.decimals
+                  decimals: networkInfo.baseAsset.decimals,
                 },
-                blockExplorerUrls: [networkInfo.explorer]
-              }
+                blockExplorerUrls: [ networkInfo.explorer ],
+              },
             ])
           )
         } catch (error) {
           if (isRejectedRequestError(error)) {
-            throw new ExpectedError(EECode.userRejectNetworkChange);
+            throw new ExpectedError(EECode.userRejectNetworkChange)
           }
-          console.error(`Can't add ethereum network to the provider:`, error);
-          throw new ExpectedError(EECode.addNetworkToProvider);
+          console.error(`Can't add ethereum network to the provider:`, error)
+          throw new ExpectedError(EECode.addNetworkToProvider)
         }
       } else {
-        throw new ExpectedError(EECode.switchProviderNetwork);
+        throw new ExpectedError(EECode.switchProviderNetwork)
       }
     }
   }

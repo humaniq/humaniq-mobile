@@ -3,15 +3,13 @@ import { CardScreenTypes } from "./types"
 import { useStyles } from "./styles"
 import { View } from "react-native"
 import { MenuItem } from "ui/components/menu/MenuItem"
-import { Search } from "ui/components/search/Search"
 import { Header } from "ui/components/header/Header"
-import { LockText } from "ui/components/lock/LockText"
 import { CardInfoCard } from "ui/components/cardInfoCard/CardInfoCard"
 import { Screen } from "ui/screens/screen/Screen"
+import { observer } from "mobx-react-lite"
 
-export const CardScreen = ({}: CardScreenTypes) => {
+export const CardScreen = observer(({}: CardScreenTypes) => {
   const styles = useStyles()
-
 
   return (
     <Screen style={ styles.root }>
@@ -38,4 +36,4 @@ export const CardScreen = ({}: CardScreenTypes) => {
       </View>
     </Screen>
   )
-}
+})

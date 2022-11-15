@@ -8,11 +8,13 @@ import { CardSkinService } from "../../../services/microServices/cardSkin"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import { CardService, CardState } from "../../../services/microServices/cardService"
 import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
+import { WalletService } from "../../../services/WalletService"
 
 export const CardInfoCard = observer(() => {
 
   const cardService = useInstance(CardService)
   const skinService = useInstance(CardSkinService)
+  const walletService = useInstance(WalletService)
 
   useEffect(() => {
     skinService.init()
@@ -45,7 +47,7 @@ export const CardInfoCard = observer(() => {
       <>
         { ![ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) &&
           <PrimaryButton icon={ "dots" } style={ styles.button } iconStyles={ { size: 24, ...styles.iconStyles } } /> }
-        <CardNotConnectedOverlay />
+        { !walletService.initialized && <CardNotConnectedOverlay /> }
       </>
     </CardRender>
     <View style={ styles.actionsContainer }></View>
