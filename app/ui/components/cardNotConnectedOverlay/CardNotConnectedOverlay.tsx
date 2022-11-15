@@ -6,6 +6,7 @@ import { useStyles } from "./styles"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import { Text } from "react-native-paper"
 import { BlurView } from "@react-native-community/blur"
+import { t } from "../../../i18n/translate"
 
 export const CardNotConnectedOverlay = observer(() => {
 
@@ -15,10 +16,10 @@ export const CardNotConnectedOverlay = observer(() => {
     <BlurView
       style={ styles.absolute }
       blurType="light"
-      blurAmount={ 5 }
+      blurAmount={ 9 }
       reducedTransparencyFallbackColor="white"
     />
-    <PrimaryButton onPress={ () => ({}) } title={ "Connect" } />
-    <Text style={ { ...styles.description, color: skinService?.skin?.textColor } }>connectWallet-title"</Text>
+    <PrimaryButton style={ styles.button } onPress={ () => ({}) } title={ t("connectWallet") } />
+    <Text style={ { ...styles.description, color: skinService?.skin?.textColor } }>{ t("connectWallet-title") }</Text>
   </View>
 })

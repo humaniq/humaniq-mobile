@@ -43,8 +43,8 @@ export const CardInfoCard = observer(() => {
 
     >
       <>
-        { [ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) &&
-          <PrimaryButton icon={ "card" } style={ styles.button } /> }
+        { ![ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) &&
+          <PrimaryButton icon={ "dots" } style={ styles.button } iconStyles={ { size: 24, ...styles.iconStyles } } /> }
         <CardNotConnectedOverlay />
       </>
     </CardRender>

@@ -5,10 +5,15 @@ export const useStyles = withTheme(theme => ({
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
-    maxWidth: 400,
+    marginBottom: 40
   },
   actionsContainer: {},
   button: {
-    fontSize: 24
+    position: "absolute",
+    top: 24,
+    right: 24
+  },
+  iconStyles: {
+    color: theme.colors.secondary
   }
 }))

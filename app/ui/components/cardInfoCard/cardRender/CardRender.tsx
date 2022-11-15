@@ -2,11 +2,11 @@ import React from "react"
 import { ImageBackground, View } from "react-native"
 import dayjs from "dayjs"
 import { useStyles } from "./styles"
-import { Text } from "react-native-paper"
+import { Card, Text } from "react-native-paper"
 import { computed } from "mobx"
 import { Skin } from "../../../../services/microServices/cardSkin"
 import { observer } from "mobx-react-lite"
-import { MovIcon } from "ui/components/icon"
+import { MovIcon } from "ui/components/icon/MovIcon"
 
 interface Props {
   expiration?: dayjs.Dayjs;
@@ -14,7 +14,7 @@ interface Props {
   skin: Skin;
   iban?: string;
   holder?: string;
-  children: React.ReactElement
+  children?: React.ReactElement
 }
 
 export const CardRender: React.FC<Props> = observer((
@@ -30,19 +30,20 @@ export const CardRender: React.FC<Props> = observer((
   const exp = computed(() => expiration ? expiration.format("MM/YY") : "")
   const styles = useStyles()
 
-  return <ImageBackground
+  return <Card style={ styles.card }>
+    <ImageBackground
     resizeMode="cover"
     source={ { uri: skin?.backgroundType !== "color" ? skin?.picture?.src : undefined } }
     style={ skin?.backgroundType === "color" ? {
-      ...styles.card,
       backgroundColor: skin?.backgroundColor,
-    } : styles.card }>
-    { children }
+      ...styles.backGroundImg
+    } : styles.backGroundImg }>
+      { children }
     <View style={ styles.cardNumber }>
-      <Text style={ { color: skin?.textColor } }>••••</Text>
-      <Text style={ { color: skin?.textColor } }>••••</Text>
-      <Text style={ { color: skin?.textColor } }>••••</Text>
-      <Text style={ { color: skin?.textColor } }>{ last4Digits || "••••" }</Text>
+      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>••••</Text>
+      <Text style={ { color: skin?.textColor, ...styles.textMedium } }>{ last4Digits || "••••" }</Text>
     </View>
     <View style={ styles.data }>
       { iban && <Text style={ { ...styles.textMedium, color: skin?.textColor } }>{ iban }</Text> }
@@ -51,13 +52,16 @@ export const CardRender: React.FC<Props> = observer((
     <View style={ styles.holder }>
       { holder ? <Text style={ { color: skin?.textColor } }>{ holder }</Text> :
         <>
-          <Text style={ { color: skin?.textColor } }>••••</Text>
-          <Text style={ { color: skin?.textColor } }>••••</Text>
+          <Text style={ { color: skin?.textColor, ...styles.textHolder } }>••••</Text>
+          <Text style={ { color: skin?.textColor, ...styles.textHolder } }>••••</Text>
         </> }
     </View>
-    <MovIcon
-      name={ "visa" }
-      size={ 25 }
-      color={ { color: skin?.textColor } } />
-  </ImageBackground>
+    <View style={ styles.logo }>
+      <MovIcon
+        name={ "visa" }
+        size={ 25 }
+        color={ { color: skin?.textColor } } />
+    </View>
+
+  </ImageBackground></Card>
 })

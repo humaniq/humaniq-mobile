@@ -1,7 +1,7 @@
 import { HeaderProps } from "./types"
 import { Text, TouchableOpacity, View } from "react-native"
 import { useStyles } from "./styles"
-import { MovIcon } from "ui/components/icon"
+import { MovIcon } from "ui/components/icon/MovIcon"
 import { useTheme } from "hooks/useTheme"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { SCREENS } from "navigation/path"

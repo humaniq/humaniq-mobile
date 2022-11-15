@@ -7,4 +7,8 @@ export interface PrimaryButtonProps {
   onPress?: typeof noop
   disabled?: boolean
   style?: StyleProp<ViewStyle>
+  iconStyles?: {
+    size?: number,
+    color?: string
+  }
 }

@@ -6,7 +6,7 @@ import { useWalletConnect as useWC, withWalletConnect } from "@walletconnect/rea
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { Button, Text, View } from "react-native"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
-import { MovIcon } from "app/ui/components/icon"
+import { MovIcon } from "app/ui/components/icon/MovIcon"
 import { ProviderType } from "./app/references/providers"
 
 import { configure } from "mobx"
