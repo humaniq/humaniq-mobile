@@ -11,14 +11,14 @@ export const ThemeSettings = ({}: ThemeSettingsProps) => {
   const scrollRef = useRef<ScrollView>(null)
   const styles = useStyles()
   const { switchTheme, themeId } = useTheme()
-  const [selectedTheme, setSelectedTheme] = useState(themeId)
-  const [contentWidth, setContentWidth] = useState(0)
+  const [ selectedTheme, setSelectedTheme ] = useState(themeId)
+  const [ contentWidth, setContentWidth ] = useState(0)
 
   const scrollTo = useCallback((index: number) => {
     scrollRef?.current.scrollTo({
-      x: contentWidth * index / 6
+      x: contentWidth * index / 6,
     })
-  }, [scrollRef, contentWidth])
+  }, [ scrollRef, contentWidth ])
 
   useEffect(() => {
     if (themeId === Themes.Dark) {
@@ -26,7 +26,7 @@ export const ThemeSettings = ({}: ThemeSettingsProps) => {
     } else if (themeId === Themes.System) {
       scrollTo(2)
     }
-  }, [scrollTo])
+  }, [ scrollTo ])
 
   return (
     <View style={ styles.root }>

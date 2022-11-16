@@ -17,6 +17,6 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.medium,
     color: theme.colors.searchIcon,
     marginLeft: 12,
-    fontSize: 16,
+    fontSize: 14,
   }
 }))
