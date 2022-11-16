@@ -26,9 +26,9 @@ export const colorsLight = {
   red: "#E8102C",
   avatar: "#B1B1B1",
   greenLight: "#00D64F",
-  skinTextWhite: "#fff",
-  skinTextBlack: "#333",
-  skinBackGroundWhite: "#fff",
+  skinTextWhite: "#FFFFFF",
+  skinTextBlack: "#333333",
+  skinBackGroundWhite: "#FFFFFF",
   skinBackgroundBlack:"#404040"
 }
 
@@ -60,8 +60,8 @@ export const colorsDark: typeof colorsLight = {
   red: "#E8102C",
   avatar: "#FFFFFF",
   greenLight: "#00D64F",
-  skinTextWhite: "#333",
-  skinTextBlack: "#fff",
+  skinTextWhite: "#333333",
+  skinTextBlack: "#FFFFFF",
   skinBackGroundWhite: "#404040",
   skinBackgroundBlack:"#fff"
 }

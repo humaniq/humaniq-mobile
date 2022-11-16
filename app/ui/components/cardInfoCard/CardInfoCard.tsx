@@ -11,13 +11,15 @@ import { WalletController } from "../../../controllers/WalletController"
 import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
 
 export const CardInfoCard = observer(() => {
-
+  const styles = useStyles()
   const cardService = useInstance(CardController)
   const skinService = useInstance(CardSkinController)
   const walletService = useInstance(WalletController)
 
   useEffect(() => {
-    skinService.init()
+    ;(async () => {
+      await skinService.init()
+    })()
   }, [])
   // const wallet = useInstance( WalletService)
 
@@ -33,23 +35,17 @@ export const CardInfoCard = observer(() => {
   //
   // const incomingTransaction = computed(() => undefined)
 
-
-  const styles = useStyles()
-  return <View style={ styles.container }>
-    <CardRender
-      skin={ skinService.skin }
-      expiration={ cardService.showCardInfo ? cardService.data.expiration : undefined }
-      holder={ cardService.data.holder }
-      iban={ cardService.showCardInfo ? cardService.data.iban : undefined }
-      last4Digits={ cardService.data.last4Digits }
-
-    >
-      <>
-        { ![ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) &&
-          <PrimaryButton icon={ "dots" } style={ styles.button } iconStyles={ { size: 24, ...styles.iconStyles } } /> }
-        { !walletService.initialized && <CardNotConnectedOverlay /> }
-      </>
-    </CardRender>
-    <View style={ styles.actionsContainer }></View>
-  </View>
+  return (
+    <View style={ styles.container }>
+      <CardRender
+        skin={ skinService.skin }
+        expiration={ cardService.showCardInfo ? cardService.data.expiration : undefined }
+        holder={ cardService.data.holder }
+        iban={ cardService.showCardInfo ? cardService.data.iban : undefined }
+        last4Digits={ cardService.data.last4Digits }
+        initialized={ walletService.initialized }
+        showMore={ [ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) }
+      />
+    </View>
+  )
 })

@@ -9,7 +9,7 @@ import { AppController as AppController } from "./app/controllers/AppController"
 import { StorageController } from "./app/controllers/StorageController"
 import { WalletConnectController } from "./app/controllers/WalletConnectController"
 import { ProviderController } from "./app/controllers/ProviderController"
-import { withWalletConnect } from "@walletconnect/react-native-dapp"
+import { withWalletConnect, RenderQrcodeModalProps } from "@walletconnect/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { WalletController } from "./app/controllers/WalletController"
@@ -88,4 +88,5 @@ export const App = withWalletConnect(AppWithProvider, {
   storageOptions: {
     asyncStorage: AsyncStorage as unknown as IAsyncStorage,
   },
+    renderQrcodeModal: (props: RenderQrcodeModalProps): JSX.Element => null,
 })
