@@ -41,7 +41,7 @@ export const CardInfoCard = observer(() => {
         holder={ cardService.data.holder }
         iban={ cardService.showCardInfo ? cardService.data.iban : undefined }
         last4Digits={ cardService.data.last4Digits }
-        initialized={ !walletService.initialized }
+        initialized={ walletService.initialized }
         showMore={ [ CardState.Pending, CardState.OrderNow ].includes(cardService.data.cardState) }
       />
     </View>

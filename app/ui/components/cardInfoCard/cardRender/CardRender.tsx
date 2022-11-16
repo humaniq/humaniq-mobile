@@ -100,7 +100,7 @@ export const CardRender = observer((
         </View>
       </View>
       { !initialized && (
-        <CardNotConnectedOverlay />
+        <CardNotConnectedOverlay textColor={ textColor.get() }  />
       ) }
     </Card>
   )

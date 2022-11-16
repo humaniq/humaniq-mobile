@@ -36,7 +36,7 @@ module.exports = {
           context: './app/context',
           hooks: './app/hooks',
           ui: './app/ui',
-          navigation: './app/navigation'
+          navigation: './app/navigation',
         },
       },
     ],
