@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native'
 import * as _ from 'underscore'
-import { scale, scaleFontSize } from "utils/screenUtils"
+import { scaleFontSize } from "utils/screenUtils"
 
 const adjustableProperties = {
   width: [

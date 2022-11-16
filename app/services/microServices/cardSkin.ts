@@ -15,7 +15,7 @@ enum CardSkin {
 type SkinPicture = {
   backgroundType: "image";
   picture: {
-    src: string;
+    src: any;
     sources?: Array<PictureSourceDescriptor>;
     webpSources?: Array<PictureSourceDescriptor>;
   };
@@ -90,19 +90,19 @@ export class CardSkinService {
     makeAutoObservable(this)
   }
 
-  init = async (forse = false) => {
-    if (this.initialized && !forse) return
+  init = async (force = false) => {
+    if (this.initialized && !force) return
     this.cardSkin = await localStorage.load<CardSkin>(`card-skin[${ this.wallet.address ?? "" }]`, CardSkin.Default)
     if (!available.includes(this.cardSkin)) {
       this.cardSkin = CardSkin.Default
     }
+
     this.selectedCardSkin = await localStorage.load("card-skin-selected", false)
     this.initialized = true
 
     reaction(() => this.wallet.address, () => {
       this.init(true)
     })
-
   }
 
   setSkin = async (s: CardSkin) => {
@@ -119,5 +119,3 @@ export class CardSkinService {
     return Object.values(registry).filter((v) => available.includes(v.key))
   }
 }
-
-

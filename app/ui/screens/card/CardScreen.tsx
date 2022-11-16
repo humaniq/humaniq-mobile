@@ -1,7 +1,7 @@
 import React from "react"
 import { CardScreenTypes } from "./types"
 import { useStyles } from "./styles"
-import { View } from "react-native"
+import { ScrollView, View } from "react-native"
 import { MenuItem } from "ui/components/menu/MenuItem"
 import { Header } from "ui/components/header/Header"
 import { CardInfoCard } from "ui/components/cardInfoCard/CardInfoCard"
@@ -14,7 +14,7 @@ export const CardScreen = observer(({}: CardScreenTypes) => {
   return (
     <Screen style={ styles.root }>
       <Header title={ "Card" } back={ false } isSettings />
-      <View style={ styles.content }>
+      <ScrollView contentContainerStyle={ styles.content }>
         <CardInfoCard />
         <MenuItem
           icon={ "deposit" }
@@ -33,7 +33,7 @@ export const CardScreen = observer(({}: CardScreenTypes) => {
           subTitle={ "Add cash to debit card" }
           comingSoon
         />
-      </View>
+      </ScrollView>
     </Screen>
   )
 })

@@ -9,3 +9,10 @@ export const useRoundIconStyles = withTheme(theme => ({
     padding: 6,
   }
 }))
+
+export const useTouchableIconStyles = withTheme(theme => ({
+  root: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+}))
