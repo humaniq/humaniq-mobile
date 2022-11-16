@@ -1,20 +1,20 @@
 import { observer } from "mobx-react-lite"
 import { View } from "react-native"
 import { useInstance } from "react-ioc"
-import { CardSkinService } from "../../../services/microServices/cardSkin"
+import { CardSkinController } from "../../../controllers/CardSkinController"
 import { useStyles } from "./styles"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import { Text } from "react-native-paper"
 import { BlurView } from "@react-native-community/blur"
 import { t } from "../../../i18n/translate"
-import { WalletService } from "../../../services/WalletService"
+import { WalletController } from "../../../controllers/WalletController"
 
 export const CardNotConnectedOverlay = observer(() => {
 
   const styles = useStyles()
-  const skinService = useInstance(CardSkinService)
+  const skinService = useInstance(CardSkinController)
 
-  const walletService = useInstance(WalletService)
+  const walletService = useInstance(WalletController)
 
   return <View style={ styles.notConnected }>
     <BlurView

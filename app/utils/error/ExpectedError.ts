@@ -1,4 +1,4 @@
-import { MoverError } from './MoverError';
+import { MoverError } from '../../services/MoverError';
 
 export enum EECode {
   userRejectAuth = 'errors.userRejectAuth',

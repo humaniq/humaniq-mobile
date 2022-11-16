@@ -4,17 +4,17 @@ import { View } from "react-native"
 import { useStyles } from "./styles"
 import { CardRender } from "ui/components/cardInfoCard/cardRender/CardRender"
 import { useInstance } from "react-ioc"
-import { CardSkinService } from "../../../services/microServices/cardSkin"
+import { CardSkinController } from "../../../controllers/CardSkinController"
 import { PrimaryButton } from "ui/components/button/PrimaryButton"
-import { CardService, CardState } from "../../../services/microServices/cardService"
-import { WalletService } from "../../../services/WalletService"
+import { CardController, CardState } from "../../../controllers/CardController"
+import { WalletController } from "../../../controllers/WalletController"
 import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
 
 export const CardInfoCard = observer(() => {
 
-  const cardService = useInstance(CardService)
-  const skinService = useInstance(CardSkinService)
-  const walletService = useInstance(WalletService)
+  const cardService = useInstance(CardController)
+  const skinService = useInstance(CardSkinController)
+  const walletService = useInstance(WalletController)
 
   useEffect(() => {
     skinService.init()

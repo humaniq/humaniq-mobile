@@ -1,11 +1,11 @@
 import { makeAutoObservable } from "mobx"
-import WalletConnect from "@walletconnect/client"
+import WC from "@walletconnect/client"
 
-export class WalletConnectService {
-  connector: WalletConnect
+export class WalletConnectController {
+  connector: WC
   initialized = false
 
-  init = (connector: WalletConnect) => {
+  init = (connector: WC) => {
     this.connector = connector
     this.initialized = true
   }

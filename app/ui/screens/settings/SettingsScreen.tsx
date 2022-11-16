@@ -25,10 +25,10 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           title={ t("settings") }
         />
         <ScrollView>
-          <Avatar containerStyle={ styles.avatar }/>
+          <Avatar containerStyle={ styles.avatar } />
           <Text style={ styles.tag }>{ t("tag.yourTag") }</Text>
           <Text style={ styles.tag2 }>{ t("tag.notSet") }</Text>
-          <ThemeSettings/>
+          <ThemeSettings />
           <Select
             selectedValue={ Currencies.find((item) => item.value === "usd") }
             containerStyle={ styles.currency }
@@ -48,10 +48,9 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           <PrimaryButton
             style={ styles.button }
             title={ t("disconnectWalletWithAddress", {
-              address: "0xf6A0…050b7"
+              address: "0xf6A0…050b7",
             }) }
             onPress={ () => {
-              setVisible(true)
             } }
           />
         </ScrollView>

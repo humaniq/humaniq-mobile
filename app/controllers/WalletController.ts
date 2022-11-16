@@ -1,14 +1,14 @@
 import { makeAutoObservable } from "mobx"
 import { inject } from "react-ioc"
-import { ProviderService } from "./ProviderService"
+import { ProviderController } from "./ProviderController"
 import { ProviderType } from "../references/providers"
 import { addSentryBreadcrumb, captureSentryException } from "../logs/sentry"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
-import { MoverError } from "utils/error/MoverError"
+import { MoverError } from "../services/MoverError"
 
-export class WalletService {
+export class WalletController {
 
-  provider = inject(this, ProviderService)
+  provider = inject(this, ProviderController)
 
   constructor() {
     makeAutoObservable(this, null, { autoBind: true })

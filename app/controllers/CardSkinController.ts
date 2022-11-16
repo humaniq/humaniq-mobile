@@ -1,7 +1,7 @@
-import { PictureSourceDescriptor } from "../../references/images"
+import { PictureSourceDescriptor } from "../references/images"
 import { localStorage } from "utils/localStorage"
 import { inject } from "react-ioc"
-import { WalletService } from "../WalletService"
+import { WalletController } from "./WalletController"
 import { makeAutoObservable, reaction } from "mobx"
 
 enum CardSkin {
@@ -78,13 +78,13 @@ const registry: Record<CardSkin, Skin> = {
 
 const available = [ CardSkin.Default, CardSkin.Dark, CardSkin.Cat, CardSkin.Ape, CardSkin.Peace ]
 
-export class CardSkinService {
+export class CardSkinController {
 
   initialized = false
   cardSkin: CardSkin
   selectedCardSkin
 
-  wallet = inject(this, WalletService)
+  wallet = inject(this, WalletController)
 
   constructor() {
     makeAutoObservable(this)

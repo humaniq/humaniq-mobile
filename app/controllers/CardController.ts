@@ -1,14 +1,14 @@
 import { localStorage } from "utils/localStorage"
 import { makeAutoObservable } from "mobx"
-import { CardStatus, Gender, GetInfoResponse } from "../api/mover/card/types"
-import { CardSkinService } from "./cardSkin"
+import { CardStatus, Gender, GetInfoResponse } from "../services/api/mover/card/types"
+import { CardSkinController } from "./CardSkinController"
 import { inject } from "react-ioc"
-import { WalletService } from "../WalletService"
+import { WalletController } from "./WalletController"
 import dayjs from "dayjs"
-import { PermitData, TokenWithBalance } from "../../references/tokens"
-import { TransferData } from "../api/mover/swap/types"
-import { CompoundEstimateWithUnwrapResponse } from "../api/mover/onchain/types"
-import { TransactionScenario } from "../api/mover/onchain/transaction-states"
+import { PermitData, TokenWithBalance } from "../references/tokens"
+import { TransferData } from "../services/api/mover/swap/types"
+import { CompoundEstimateWithUnwrapResponse } from "../services/api/mover/onchain/types"
+import { TransactionScenario } from "../services/api/mover/onchain/transaction-states"
 
 export enum CardState {
   OrderNow = "order-now",
@@ -27,7 +27,7 @@ export enum OrderState {
   ChangePhone = "change-phone"
 }
 
-export class CardService {
+export class CardController {
 
   showCardInfo
   loading = false
@@ -41,8 +41,8 @@ export class CardService {
   }
   error
 
-  skinService = inject(this, CardSkinService)
-  walletService = inject(this, WalletService)
+  skinService = inject(this, CardSkinController)
+  walletService = inject(this, WalletController)
 
 
   constructor() {

@@ -4,7 +4,7 @@ import WalletConnectProvider from "@walletconnect/web3-provider"
 import { getAPIKey } from "../references/keys"
 import { BigNumber, ethers } from "ethers"
 import { inject } from "react-ioc"
-import { WalletConnectService } from "./WalletConnectService"
+import { WalletConnectController } from "./WalletConnectController"
 import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider"
 import { ProviderType } from "../references/providers"
 import { Linking } from "react-native"
@@ -20,7 +20,7 @@ import { addSentryBreadcrumb } from "../logs/sentry"
 
 export const WALLET_TYPE_CONNECTED = "MoverConnectedProvider"
 
-export class ProviderService {
+export class ProviderController {
 
   initialized = false
   pending = false
@@ -32,7 +32,7 @@ export class ProviderService {
   destructor1 = () => null
   destructor2 = () => null
 
-  wc: WalletConnectService = inject(this, WalletConnectService)
+  wc: WalletConnectController = inject(this, WalletConnectController)
 
 
   constructor() {
@@ -117,8 +117,8 @@ export class ProviderService {
   pureConnect = async (provider = ProviderType.WalletConnect, fromCache = false) => {
     try {
       this.pending = true
-      if (provider === ProviderType.Metamask) {
-
+      if (false) {
+        // Bad working service, for metamask can be used Wallet Connect service
         const MMSDK = new MetaMaskSDK({
           openDeeplink: (link) => {
             Linking.openURL(link) // Use React Native Linking method or your favourite way of opening deeplinks
@@ -130,12 +130,11 @@ export class ProviderService {
           },
         })
 
-
         const provider = MMSDK.getProvider()
         this.provider = new ethers.providers.Web3Provider(provider, "any")
         this.setAddress((await this.getAccounts())[0])
 
-      } else if (provider === ProviderType.WalletConnect) {
+      } else if (provider === ProviderType.WalletConnect || provider === ProviderType.Metamask) {
 
         try {
           await this.wc.connector.connect()
