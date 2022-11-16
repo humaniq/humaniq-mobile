@@ -10,7 +10,7 @@ export const useRoundIconStyles = withTheme(theme => ({
   }
 }))
 
-export const useMIconStyles = withTheme(theme => ({
+export const useTouchableIconStyles = withTheme(theme => ({
   root: {
     alignItems: 'center',
     justifyContent: 'center',

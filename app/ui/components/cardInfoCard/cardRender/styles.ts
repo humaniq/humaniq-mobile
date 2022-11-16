@@ -5,7 +5,8 @@ export const useStyles = withTheme(theme => ({
   root: {
     height: 230,
     borderRadius: 12,
-    ...theme.shadows
+    overflow: "hidden",
+    margin: 4,
   },
   content: {
     height: "100%",
@@ -16,8 +17,14 @@ export const useStyles = withTheme(theme => ({
     top: 56,
     left: 24,
   },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
   background: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 12,
   },
   more: {
     backgroundColor: "#F1F1F1",
@@ -32,7 +39,6 @@ export const useStyles = withTheme(theme => ({
   },
   textHolder: {
     paddingRight: 5,
-    color: theme.colors.primary,
     fontFamily: theme.fonts.medium,
     fontSize: 15,
   },
@@ -46,6 +52,13 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.medium,
     fontSize: 26,
     paddingRight: 12,
+  },
+  textSmall: {
+    color: theme.colors.primary,
+    fontFamily: theme.fonts.medium,
+    fontSize: 15,
+    paddingRight: 12,
+    marginTop: 12,
   },
   bottom: {
     flexDirection: "row",

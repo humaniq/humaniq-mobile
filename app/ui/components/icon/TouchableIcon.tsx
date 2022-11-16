@@ -1,16 +1,16 @@
 import { MIconProps } from "./types"
-import { useMIconStyles } from "./styles"
+import { useTouchableIconStyles } from "./styles"
 import { TouchableOpacity } from "react-native"
 import { MovIcon } from "ui/components/icon/MovIcon"
 
-export const MIcon = ({
+export const TouchableIcon = ({
                         icon,
                         onPress,
                         size,
                         color,
                         containerStyle,
                       }: MIconProps) => {
-  const styles = useMIconStyles()
+  const styles = useTouchableIconStyles()
 
   return (
     <TouchableOpacity
