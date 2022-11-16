@@ -10,18 +10,18 @@ import { Search } from "ui/components/search/Search"
 import { TokensCarousel } from "ui/components/carousel/TokensCarousel"
 import { Divider } from "ui/components/divider/Divider"
 
+const networks = []
+
 export const SelectTokenSheet = ({
                                    visible = false,
-                                   onTermsPressed,
                                    onStateChange,
-                                   onDismiss
+                                   onDismiss,
                                  }: Props) => {
   const styles = useStyles()
-
   const { colors } = useTheme()
   const bottomSheetRef = useRef<BottomSheetModal>(null)
 
-  const snapPoints = useMemo(() => ['65%', '100%'], [])
+  const snapPoints = useMemo(() => [ "55%", "100%" ], [])
 
   usePressBack(() => {
     bottomSheetRef.current?.close()
@@ -33,7 +33,7 @@ export const SelectTokenSheet = ({
     } else {
       bottomSheetRef.current?.close()
     }
-  }, [visible])
+  }, [ visible ])
 
   return (
     <BottomSheetModal
@@ -64,9 +64,11 @@ export const SelectTokenSheet = ({
         <Text
           style={ styles.sub }>{ t("selectToken.network") }</Text>
         <TokensCarousel
-          contentStyle={ styles.carousel }/>
+          contentStyle={ styles.carousel }
+        />
         <Divider
-          style={ styles.divider }/>
+          style={ styles.divider }
+        />
       </View>
     </BottomSheetModal>
   )

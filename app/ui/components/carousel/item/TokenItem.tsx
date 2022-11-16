@@ -1,22 +1,22 @@
 import { TokenItemProps } from "./types"
 import { useStyles } from "./styles"
-import { Text, TouchableOpacity } from "react-native"
-import EthereumIcon from "assets/images/icons/networks/icon-ethereum.svg"
-import { useTheme } from "hooks/useTheme"
+import { Image, Text, TouchableOpacity } from "react-native"
 
-export const TokenItem = ({ selected, style, onPress }: TokenItemProps) => {
+export const TokenItem = ({ selected, style, onPress, item }: TokenItemProps) => {
   const styles = useStyles()
-  const { colors } = useTheme()
 
   return (
     <TouchableOpacity
       onPress={ onPress }
-      style={ [styles.root, selected && styles.selected] }>
-      <EthereumIcon style={ styles.icon }/>
+      style={ [ styles.root, selected && styles.selected ] }>
+      <Image
+        source={ item.iconURL as any }
+        style={ styles.icon }
+      />
       <Text
         ellipsizeMode={ "tail" }
         numberOfLines={ 1 }
-        style={ styles.text }>Ethereum</Text>
+        style={ styles.text }>{ item.displayedName }</Text>
     </TouchableOpacity>
   )
 }

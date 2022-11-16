@@ -8,15 +8,18 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 16,
     backgroundColor: theme.colors.secondaryBg,
     marginRight: 12,
+    marginVertical: 4,
   },
   icon: {
-    width: 20,
-    height: 20,
+    width: 17,
+    height: 17,
+    borderRadius: 17,
   },
   text: {
     fontFamily: theme.fonts.medium,
     fontSize: 13,
-    marginLeft: 8
+    marginLeft: 8,
+    color: theme.colors.comingSoonText
   },
   selected: {
     backgroundColor: theme.colors.white,

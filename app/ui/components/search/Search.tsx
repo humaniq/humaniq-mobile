@@ -25,6 +25,7 @@ export const Search = ({ hint, containerStyle, style }: SearchProps) => {
         value={ input }
         onChangeText={ setInput }
         placeholder={ hint }
+        placeholderTextColor={ colors.searchIcon }
       />
     </View>
   )

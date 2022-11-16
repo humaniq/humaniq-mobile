@@ -17,39 +17,41 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
   const { switchAppLang, appLang } = useTheme()
 
   return (
-    <Screen style={ styles.root }>
-      <Header
-        back={ false }
-        title={ t("settings") }
-      />
-      <ScrollView>
-        <Avatar containerStyle={ styles.avatar } />
-        <Text style={ styles.tag }>{ t("tag.yourTag") }</Text>
-        <Text style={ styles.tag2 }>{ t("tag.notSet") }</Text>
-        <ThemeSettings />
-        <Select
-          selectedValue={ Currencies.find((item) => item.value === "usd") }
-          containerStyle={ styles.currency }
-          data={ Currencies }
-          header={ t("baseCurrency") }
-          description={ t("baseCurrencyDescription") }
+    <>
+      <Screen style={ styles.root }>
+        <Header
+          back={ false }
+          title={ t("settings") }
         />
-        <Select
-          selectedValue={ Languages.find((item) => item.value === appLang) }
-          onItemClick={ (item) => {
-            switchAppLang(item.value)
-          } }
-          data={ Languages }
-          containerStyle={ styles.language }
-          header={ t("language") }
-        />
-        <PrimaryButton
-          style={ styles.button }
-          title={ t("disconnectWalletWithAddress", {
-            address: "0xf6A0…050b7",
-          }) }
-        />
-      </ScrollView>
-    </Screen>
+        <ScrollView>
+          <Avatar containerStyle={ styles.avatar } />
+          <Text style={ styles.tag }>{ t("tag.yourTag") }</Text>
+          <Text style={ styles.tag2 }>{ t("tag.notSet") }</Text>
+          <ThemeSettings />
+          <Select
+            selectedValue={ Currencies.find((item) => item.value === "usd") }
+            containerStyle={ styles.currency }
+            data={ Currencies }
+            header={ t("baseCurrency") }
+            description={ t("baseCurrencyDescription") }
+          />
+          <Select
+            selectedValue={ Languages.find((item) => item.value === appLang) }
+            onItemClick={ (item) => {
+              switchAppLang(item.value)
+            } }
+            data={ Languages }
+            containerStyle={ styles.language }
+            header={ t("language") }
+          />
+          <PrimaryButton
+            style={ styles.button }
+            title={ t("disconnectWalletWithAddress", {
+              address: "0xf6A0…050b7",
+            }) }
+          />
+        </ScrollView>
+      </Screen>
+    </>
   )
 }

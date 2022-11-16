@@ -1,19 +1,26 @@
 import { Props } from "./types"
 import { useStyles } from "./styles"
-import { ScrollView } from "react-native"
 import { TokenItem } from "ui/components/carousel/item/TokenItem"
+import { ScrollView } from "react-native-gesture-handler"
+import { networks } from "../../../references/networks"
+import { memo } from "react"
 
-export const TokensCarousel = ({ containerStyle, contentStyle }: Props) => {
+export const TokensCarousel = memo(({ containerStyle, contentStyle }: Props) => {
   const styles = useStyles()
 
   return (
     <ScrollView
-      contentContainerStyle={ [styles.content, contentStyle] }
+      contentContainerStyle={ [ styles.content, contentStyle ] }
       showsHorizontalScrollIndicator={ false }
       horizontal={ true }>
-      { [1, 2, 3, 4, 5, 6].map((item, index) => (
-        <TokenItem key={ index } selected={ index === 0 }/>
+      { Object.values(networks).map((item, index) => (
+        <TokenItem
+          onPress={ () => {} }
+          item={ item }
+          key={ index }
+          selected={ index === 0 }
+        />
       )) }
     </ScrollView>
   )
-}
+})
