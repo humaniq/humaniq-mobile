@@ -1,5 +1,5 @@
 // Stacks
-export const MAIN_STACK = 'MainStack'
+export const MAIN_STACK = "MainStack"
 
 // Screens
 export enum SCREENS {

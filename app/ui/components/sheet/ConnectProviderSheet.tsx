@@ -2,19 +2,19 @@ import { Text, TouchableOpacity, View } from "react-native"
 import { useEffect, useMemo, useRef } from "react"
 import { Props } from "./types"
 import { useStyles } from "./styles"
-import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet'
+import { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { t } from "app/i18n/translate"
 import { Switch } from "ui/components/switch/Switch"
-import Metamask from "assets/images/icons/metamask.svg"
-import Coinbase from "assets/images/icons/coinbase.svg"
-import WalletConnect from "assets/images/icons/wallet_connect.svg"
+import Metamask from "../../../assets/images/icons/metamask.svg"
+import WalletConnect from "../../../assets/images/icons/wallet_connect.svg"
 import { IconText } from "ui/components/text/IconText"
 import { ParsedTextView } from "ui/components/parsed/ParsedTextView"
-import { PROVIDERS } from "ui/components/sheet/consts"
 import { useTheme } from "hooks/useTheme"
 import { usePressBack } from "hooks/usePressBack"
+import { ProviderType } from "../../../references/providers"
+import { observer } from "mobx-react-lite"
 
-export const ConnectProviderSheet = ({
+export const ConnectProviderSheet = observer(({
                                        visible = false,
                                        onProviderPressed,
                                        onTermsPressed,
@@ -33,7 +33,9 @@ export const ConnectProviderSheet = ({
 
   useEffect(() => {
     if (visible) {
-      bottomSheetRef.current?.present()
+      bottomSheetRef.current?.present();
+    } else {
+      bottomSheetRef.current?.close()
     }
   }, [visible])
 
@@ -79,7 +81,7 @@ export const ConnectProviderSheet = ({
 
         <TouchableOpacity
           style={ styles.row }
-          onPress={ () => onProviderPressed?.(PROVIDERS.METAMASK) }>
+          onPress={ () => onProviderPressed?.(ProviderType.Metamask) }>
           <Text
             ellipsizeMode={ "tail" }
             numberOfLines={ 1 }
@@ -87,19 +89,19 @@ export const ConnectProviderSheet = ({
           <Metamask width={ 40 } height={ 40 }/>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={ styles.row }
-          onPress={ () => onProviderPressed?.(PROVIDERS.COINBASE) }>
-          <Text
-            ellipsizeMode={ "tail" }
-            numberOfLines={ 1 }
-            style={ styles.rowTitle }>{ t("web3Connect.coinbaseWallet") }</Text>
-          <Coinbase width={ 40 } height={ 40 }/>
-        </TouchableOpacity>
+        {/*<TouchableOpacity*/}
+        {/*  style={ styles.row }*/}
+        {/*  onPress={ () => onProviderPressed?.(PROVIDERS.COINBASE) }>*/}
+        {/*  <Text*/}
+        {/*    ellipsizeMode={ "tail" }*/}
+        {/*    numberOfLines={ 1 }*/}
+        {/*    style={ styles.rowTitle }>{ t("web3Connect.coinbaseWallet") }</Text>*/}
+        {/*  <Coinbase width={ 40 } height={ 40 }/>*/}
+        {/*</TouchableOpacity>*/}
 
         <TouchableOpacity
           style={ styles.row }
-          onPress={ () => onProviderPressed?.(PROVIDERS.WALLET_CONNECT) }>
+          onPress={ () => onProviderPressed?.(ProviderType.WalletConnect) }>
           <Text
             ellipsizeMode={ "tail" }
             numberOfLines={ 1 }
@@ -128,4 +130,4 @@ export const ConnectProviderSheet = ({
       </View>
     </BottomSheetModal>
   )
-}
+})

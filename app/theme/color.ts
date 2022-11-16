@@ -10,6 +10,7 @@ export const colorsLight = {
   secondaryBg: "#EDEDED",
   menuTitle: "#000000",
   comingSoonText: "#333333",
+  borderColor: "#D8D8D8",
   searchBg: "#F1F1F1",
   searchIcon: "#B1B1B1",
   tabIcon: "#C4C4C4",
@@ -25,6 +26,10 @@ export const colorsLight = {
   red: "#E8102C",
   avatar: "#B1B1B1",
   greenLight: "#00D64F",
+  skinTextWhite: "#FFFFFF",
+  skinTextBlack: "#333333",
+  skinBackGroundWhite: "#FFFFFF",
+  skinBackgroundBlack:"#404040"
   divider: "#D8D8D8",
 }
 
@@ -40,6 +45,7 @@ export const colorsDark: typeof colorsLight = {
   secondaryBg: "#333333",
   menuTitle: "#FFFFFF",
   comingSoonText: "#999999",
+  borderColor: "#272727",
   searchBg: "#F1F1F1",
   searchIcon: "#B1B1B1",
   tabIcon: "#535353",
@@ -55,6 +61,10 @@ export const colorsDark: typeof colorsLight = {
   red: "#E8102C",
   avatar: "#FFFFFF",
   greenLight: "#00D64F",
+  skinTextWhite: "#333333",
+  skinTextBlack: "#FFFFFF",
+  skinBackGroundWhite: "#404040",
+  skinBackgroundBlack:"#fff"
   divider: "#FFFFFF",
 }
 
