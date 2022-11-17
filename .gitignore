@@ -65,3 +65,14 @@ buck-out/
 
 # react-native-ultimate-config
 rnuc.xcconfig
+google-services.json
+GoogleService-Info.plist
+
+# keystore
+android/keystore.properties
+
+# envs
+!configs/firebase/android/.gitkeep
+!configs/firebase/ios/.gitkeep
+!configs/.gitkeep
+configs/*
