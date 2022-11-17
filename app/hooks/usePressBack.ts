@@ -14,6 +14,6 @@ export const usePressBack = (onBackPressed?: () => void): void =>
         'hardwareBackPress',
         onPressBack,
       );
-      return backHandler.remove;
+      return () => backHandler.remove();
     }
   }, [onBackPressed]);

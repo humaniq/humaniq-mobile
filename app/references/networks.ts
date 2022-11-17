@@ -19,7 +19,7 @@ export const networks: NetworkInfoMap = {
     network: Network.ethereum,
     explorer: 'https://etherscan.io',
     subsidizedUrl: 'https://api.viamover.com/api/v1',
-    iconURL: require('../assets/images/icons/networks/icon-ethereum.svg'),
+    iconURL: require('../assets/images/icons/networks/ethereum.png'),
     baseAsset: {
       address: 'eth',
       decimals: 18,
@@ -42,7 +42,7 @@ export const networks: NetworkInfoMap = {
     network: Network.polygon,
     explorer: 'https://polygonscan.com',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-polygon.svg'),
+    iconURL: require('../assets/images/icons/networks/polygon.png'),
     baseAsset: {
       address: 'matic',
       decimals: 18,
@@ -60,7 +60,7 @@ export const networks: NetworkInfoMap = {
     network: Network.binance,
     explorer: 'https://bscscan.com',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-binance.svg'),
+    iconURL: require('../assets/images/icons/networks/binance.png'),
     baseAsset: {
       address: 'bsc',
       decimals: 18,
@@ -93,7 +93,7 @@ export const networks: NetworkInfoMap = {
     network: Network.avalanche,
     explorer: 'https://snowtrace.io',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-avalanche.svg'),
+    iconURL: require('../assets/images/icons/networks/avalanche.png'),
     baseAsset: {
       address: 'avax',
       decimals: 18,
@@ -112,7 +112,7 @@ export const networks: NetworkInfoMap = {
     network: Network.arbitrum,
     explorer: 'https://arbiscan.io',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-arbitrum.svg'),
+    iconURL: require('../assets/images/icons/networks/arbitrum.png'),
     baseAsset: {
       address: 'areth',
       decimals: 18,
@@ -131,7 +131,7 @@ export const networks: NetworkInfoMap = {
     network: Network.fantom,
     explorer: 'https://ftmscan.com',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-fantom.svg'),
+    iconURL: require('../assets/images/icons/networks/fantom.png'),
     baseAsset: {
       address: 'ftm',
       decimals: 18,
@@ -149,7 +149,7 @@ export const networks: NetworkInfoMap = {
     network: Network.optimism,
     explorer: 'https://optimistic.etherscan.io',
     subsidizedUrl: undefined,
-    iconURL: require('../assets/images/icons/networks/icon-optimism.svg'),
+    iconURL: require('../assets/images/icons/networks/optimism.png'),
     baseAsset: {
       address: 'oeth',
       decimals: 18,
