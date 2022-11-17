@@ -98,7 +98,6 @@
     "trustedBy": "Affidato da {count} utenti."
   },
   "forms": {
-    "chooseToken": "Scegli token",
     "chooseAmount": "Scegliere l'importo",
     "insufficientBalance": "Equilibrio insufficiente",
     "reviewTransaction": "Transazione di revisione",
@@ -126,6 +125,7 @@
         "totalFiat": "Valore totale depositato dopo il deposito",
         "totalBalance": "Savings+ saldo dopo il deposito",
         "button": "Deposito a Savings+",
+        "holdButton": "Aspetta per depositare",
         "allSwitch": "Depositare tutti",
         "inputLabel": "Importo depositato in {0}"
       },
@@ -139,6 +139,7 @@
         "totalFiat": "Valore totale depositato dopo il prelievo",
         "totalBalance": "Saldo di Savings+ dopo il prelievo",
         "button": "Prelievo dai Savings+",
+        "holdButton": "Aspetta per prelevare",
         "allSwitch": "Ritirare tutti",
         "inputLabel": "Importo che preleviamo in {0}"
       }
@@ -147,6 +148,7 @@
       "topUp": {
         "cashOutToDebitCard": "Preleva su carta di debito",
         "button": "Ricarica",
+        "holdButton": "Aspetta per ricaricare",
         "whatDoWeTopUp": "Cosa ricarichiamo",
         "networkWeTopUpFrom": "Rete da cui effettuiamo la ricarica",
         "amountWeTopUpIn": "Importo ricaricato in {symbol}",
@@ -160,8 +162,8 @@
         "previousSendsToTag": "Invio per la prima volta | {count} transazione precedente | {count} transazioni precedenti",
         "allSwitch": "Depositare tutti",
         "reviewYourTopUp": "Verifica la tua ricarica",
-        "minimumAmount": "L'importo minimo di ricarica della carta è {min}.",
-        "maximumAmount": "Il saldo massimo consentito della carta è {max}.",
+        "minimumAmount": "L'importo minimo di ricarica della carta è {min}",
+        "maximumAmount": "Il saldo massimo consentito della carta è {max}",
         "emptyTag": "Inserisci il tag dove hai mandato i fondi"
       }
     },
@@ -174,6 +176,7 @@
         "totalFiat": "Valore totale bloccato dopo il deposito",
         "totalBalance": "Saldo del Smart Treasury dopo il deposito",
         "button": "Deposito presso la Smart Treasury",
+        "holdButton": "Aspetta per depositare",
         "allSwitch": "Depositare tutti",
         "inputLabel": "Importo depositato in {0}"
       },
@@ -185,6 +188,7 @@
         "totalFiat": "Valore totale bloccato dopo il prelievo",
         "totalBalance": "Saldo del Smart Treasury dopo il prelievo",
         "button": "Preleva da Smart Treasury",
+        "holdButton": "Aspetta per prelevare",
         "allSwitch": "Ritirare tutte le disponibilità",
         "inputLabel": "Importo che preleviamo in {0}"
       }
@@ -200,6 +204,7 @@
         "totalFiat": "Valore totale in staking dopo il deposito",
         "totalBalance": "Saldo di Staking dopo il deposito",
         "button": "Deposito in Staking",
+        "holdButton": "Aspetta per depositare",
         "allSwitch": "Depositare tutti",
         "inputLabel": "Importo che depositiamo in {0}"
       },
@@ -213,6 +218,7 @@
         "totalFiat": "Valore totale in staking dopo il prelievo",
         "totalBalance": "Saldo di Staking dopo il prelievo",
         "button": "Preleva da Staking",
+        "holdButton": "Aspetta per prelevare",
         "allSwitch": "Ritirare tutti",
         "inputLabel": "Importo che preleviamo in {0}"
       }
@@ -240,7 +246,7 @@
       "flex": "Flex su Twitter",
       "support": "Raggiungere il supporto",
       "explorer": "Apri Explorer",
-      "flexTwitterText": "Ho appena usato {'@'}viaMover per ricaricare la mia carta. Dal {network}. Ottieni la carta ora su {link}",
+      "flexTwitterText": "Ho appena usato {'@'}viaMover per ricaricare la mia carta. Dal #{network}. Ottieni la carta ora su {link}",
       "reverted": "La tua transazione non è riuscita e non è stata eseguita. Non preoccuparti: dev'esserci un motivo.",
       "types": {
         "treasury_deposit": "Avete depositato nella Smart Treasury {value}",
@@ -497,5 +503,16 @@
     "card": "Carta",
     "earn": "Earn",
     "history": "Cronologia transazioni"
+  },
+  "waitlistPosition": "La tua posizione nella lista di attesa è {position}",
+  "education": {
+    "titlePrefix": "Cos'è {term}?",
+    "networks": {
+      "arbitrum": "Arbitrum è un network creato per potenziare la blockchain di Ethereum per quel che concerne la velocità e la scalabilità mentre aggiunge ulteriori funzionalità per la privacy. \n\nArbitrum è una soluzione Layer-2. I network Layer-2 (come Optimism) non sono blockchain separate. Piuttosto, combinano grandi quantità di transazioni off-chain prima di inviarle raggruppate assieme on-chain, affidandosi così allo stesso meccanismo di sicurezza e di consenso di Ethereum.",
+      "optimism": "Optimism è un network creato per potenziare la blockchain di Ethereum per quel che concerne la scalabilità di velocità mentre aggiunge ulteriori funzionalità per la privacy.\n\nOptimism è una soluzione Layer-2. I network Layer-2 (come Arbitrum) non sono blockchain separate. Piuttosto, combinano grandi quantità di transazioni off-chain prima di inviarle raggruppate assieme on-chain, affidandosi così allo stesso meccanismo di sicurezza e di consenso di Ethereum.",
+      "polygon": "Polygon è una blockchain distinta e separata che è compatibile con Ethereum. Essa utilizza un meccanismo di consenso diverso da Ethereum e ha le sue proprie misure di sicurezza. Polygon è anche conosciuta per i suoi costi di transazione più bassi e per un'elaborazione delle transazioni più veloce.\n\nPolygon è compatibile con Ethereum per cui l'indirizzo del tuo portafoglio su Ethereum è lo stesso di quello di Polygon.",
+      "avalanche": "Avalanche è una blockchain stand-alone finalizzata a fornire un'alternativa agli alti costi e alle basse velocità. Avalanche utilizza un meccanismo di consenso proprietario per incrementare il throughput delle transazioni e per minimizzare il consumo dell'energia da parte dei validatori.\n\nAvalanche è compatibile con Ethereum per cui l'indirizzo del tuo portafoglio su Ethereum è lo stesso di quello di Avalanche.",
+      "binance": "Binance Smart Chain (BSC) è una versione modificata del network Ethereum, BSC ha un meccanismo di consenso diverso e parametri di network che gli permettono di avere costi più bassi per le transazioni e un tempo di elaborazione più veloce.\n\nBSC è compatibile con Ethereum per cui l'indirizzo del tuo portafoglio su Ethereum è lo stesso di quello di BSC."
+    }
   }
 }
