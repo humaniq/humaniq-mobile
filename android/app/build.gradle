@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
@@ -136,11 +138,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId project.config.get("APPLICATION_ID")
+        applicationId project.config.get("PROJECT_BUNDLE_IDENTIFIER")
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode project.config.get("APP_VERSION_CODE")
-        versionName project.config.get("APP_VERSION_NAME")
+        versionCode project.config.get("VERSION_CODE")
+        versionName project.config.get("VERSION")
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
 
         if (isNewArchitectureEnabled()) {

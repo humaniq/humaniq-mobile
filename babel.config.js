@@ -37,6 +37,7 @@ module.exports = {
           hooks: './app/hooks',
           ui: './app/ui',
           navigation: './app/navigation',
+          configs: './configs'
         },
       },
     ],
