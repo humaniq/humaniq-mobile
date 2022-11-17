@@ -3,3 +3,7 @@ APP_NAME=(Dev)MoverMobile
 APP_VERSION_CODE=1
 APP_VERSION_NAME=1.0
 APPLICATION_ID=com.movermobile.dev
+APP_API_ASSETS_SERVICE_URL=https:/$()/apiassets.viamover.com
+APP_API_SERVICE_URL=https:/$()/api.viamover.com/api
+APP_API_VIEW_SERVICE_URL=https:/$()/apiview.viamover.com/api
+APP_API_TAG_SERVICE_URL=https:/$()/apitag.viamover.com

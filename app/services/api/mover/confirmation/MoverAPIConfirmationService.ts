@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import { addSentryBreadcrumb } from 'app/logs/sentry';
 import { MoverAPIService } from 'app/services/api/mover/MoverAPIService';
 import { MoverAPISuccessfulResponse } from 'app/services/api/mover/types';
+import { APP_API_TAG_SERVICE_URL } from "../../../../envs/env"
 
 export class MoverAPIConfirmationService extends MoverAPIService {
   protected baseURL: string;
@@ -40,6 +41,7 @@ export class MoverAPIConfirmationService extends MoverAPIService {
   }
 
   public async validConfirmation(address: string, signature: string): Promise<boolean> {
+    console.log("valid-confirmation")
     try {
       await this.client.get<MoverAPISuccessfulResponse<void>>(`/confirmation/valid`, {
         headers: {
@@ -66,6 +68,6 @@ export class MoverAPIConfirmationService extends MoverAPIService {
   }
 
   protected lookupBaseURL(): string {
-    return process.env.VUE_APP_API_TAG_SERVICE_URL || '';
+    return APP_API_TAG_SERVICE_URL
   }
 }

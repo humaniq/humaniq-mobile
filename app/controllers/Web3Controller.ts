@@ -5,7 +5,6 @@ import { getAPIKey } from "../references/keys"
 import { BigNumber, ethers } from "ethers"
 import { inject } from "react-ioc"
 import { WalletConnectController } from "./WalletConnectController"
-import { Web3Provider } from "@ethersproject/providers/src.ts/web3-provider"
 import { ProviderType } from "../references/providers"
 import { Linking } from "react-native"
 import BackgroundTimer from "react-native-background-timer"
@@ -20,24 +19,27 @@ import { addSentryBreadcrumb } from "../logs/sentry"
 
 export const WALLET_TYPE_CONNECTED = "MoverConnectedProvider"
 
-export class ProviderController {
+export class Web3Controller {
 
   initialized = false
   pending = false
-  provider: Web3Provider
+  provider: ethers.providers.Web3Provider
   address: string
-  signer
+  signer: ethers.providers.JsonRpcSigner
   chainId: number = -1
   balance: string = ""
   destructor1 = () => null
   destructor2 = () => null
 
-  wc: WalletConnectController = inject(this, WalletConnectController)
-
+  ethereum
 
   constructor() {
-    makeAutoObservable(this, null, { autoBind: true })
+    makeAutoObservable(this, {
+      ethereum: false,
+    }, { autoBind: true })
   }
+
+  wc: WalletConnectController = inject(this, WalletConnectController)
 
   tryConnectCachedProvider = async () => {
     const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
@@ -63,7 +65,7 @@ export class ProviderController {
 
     this.destructor2()
     this.destructor2 = reaction(() => this.address, async (val, prev) => {
-      if (prev === val || val === "") return
+      if (prev === val || val === "" || val === prev) return
       this.setBalance(await this.getBalance())
     })
 
@@ -115,6 +117,7 @@ export class ProviderController {
   }
 
   pureConnect = async (provider = ProviderType.WalletConnect, fromCache = false) => {
+    console.log("pure-connect")
     try {
       this.pending = true
       if (false) {
@@ -130,17 +133,21 @@ export class ProviderController {
           },
         })
 
-        const provider = MMSDK.getProvider()
-        this.provider = new ethers.providers.Web3Provider(provider, "any")
+        this.ethereum = MMSDK.getProvider()
+        this.provider = new ethers.providers.Web3Provider(this.ethereum, "any")
         this.setAddress((await this.getAccounts())[0])
 
       } else if (provider === ProviderType.WalletConnect || provider === ProviderType.Metamask) {
 
-        try {
-          await this.wc.connector.connect()
-        } catch (e) {
-          console.log("ERROR-set-provider", e)
-        }
+        setTimeout(async () => {
+          try {
+            await this.wc.connector.connect()
+          } catch (e) {
+            await this.disconnect()
+            return
+          }
+
+        }, 500)
 
         const rpc: Record<number, string> = {}
 
@@ -148,15 +155,15 @@ export class ProviderController {
           rpc[networkInfo.chainId] = networkInfo.rpcUrl[0]
         })
 
-        const provider = new WalletConnectProvider({
+        this.ethereum = new WalletConnectProvider({
           rpc,
           infuraId: getAPIKey("INFURA_PROJECT_ID"),
           connector: this.wc.connector,
           qrcode: false,
         })
 
-        const result = await provider.enable()
-        this.provider = new ethers.providers.Web3Provider(provider, "any")
+        const result = await this.ethereum.enable()
+        this.provider = new ethers.providers.Web3Provider(this.ethereum, "any")
         this.signer = this.provider.getSigner()
         this.setAddress(result[0])
       } else {
@@ -167,8 +174,6 @@ export class ProviderController {
       this.setBalance(await this.getBalance())
 
       await localStorage.save(WALLET_TYPE_CONNECTED, provider)
-
-      console.log(provider)
 
       addSentryBreadcrumb({
         type: "info",
@@ -196,7 +201,7 @@ export class ProviderController {
 
     } catch (e) {
       console.log("Error-set-provider", e)
-      await localStorage.remove(WALLET_TYPE_CONNECTED)
+      await this.disconnect()
     } finally {
       this.pending = false
     }
@@ -333,5 +338,18 @@ export class ProviderController {
         throw new ExpectedError(EECode.switchProviderNetwork)
       }
     }
+  }
+  signMessage = async (message: string) => {
+    const dataHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(JSON.stringify(message)))
+    const arraifyed = ethers.utils.arrayify(dataHash)
+    addSentryBreadcrumb({
+      type: "info",
+      data: {
+        message,
+        arraifyed,
+        dataHash,
+      },
+    })
+    return this.signer.signMessage(arraifyed)
   }
 }

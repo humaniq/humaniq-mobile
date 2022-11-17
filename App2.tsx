@@ -8,8 +8,8 @@ import { provider, useInstance } from "react-ioc"
 import { AppController as AppController } from "./app/controllers/AppController"
 import { StorageController } from "./app/controllers/StorageController"
 import { WalletConnectController } from "./app/controllers/WalletConnectController"
-import { ProviderController } from "./app/controllers/ProviderController"
-import { withWalletConnect, RenderQrcodeModalProps } from "@walletconnect/react-native-dapp"
+import { Web3Controller } from "./app/controllers/Web3Controller"
+import { RenderQrcodeModalProps, withWalletConnect } from "@walletconnect/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { WalletController } from "./app/controllers/WalletController"
@@ -22,6 +22,12 @@ import { useWalletConnect as useWC } from "@walletconnect/react-native-dapp/dist
 import { configure } from "mobx"
 import { CardSkinController } from "./app/controllers/CardSkinController"
 import { CardController } from "./app/controllers/CardController"
+import { ConfirmOwnershipController } from "./app/controllers/ConfirmOwnershipController"
+import {
+  ModalConfirmOwnership,
+  ModalConfirmOwnershipViewModel,
+} from "ui/components/modalConfirmOwnership/ModalConfirmOwnership"
+import { Toast, ToastViewModel } from "ui/components/toast/Toast"
 
 configure({
   enforceActions: "never",
@@ -39,7 +45,9 @@ export const AppScreen = observer(() => {
   const walletService = useInstance(WalletController)
 
   useEffect(() => {
-    connector.protocol && wc.init(connector)
+    if(connector.protocol) {
+      wc.init(connector)
+    }
   }, [ connector ])
 
   useEffect(() => {
@@ -64,6 +72,8 @@ export const AppScreen = observer(() => {
                 walletService.tryInit(selectedProviderId)
               } }
             />
+            <Toast />
+            <ModalConfirmOwnership />
           </BottomSheetModalProvider>
         </ThemeProvider>
       </SafeAreaProvider>
@@ -74,11 +84,14 @@ export const AppScreen = observer(() => {
 const AppWithProvider = provider()(AppScreen)
 
 AppWithProvider.register(
+  ConfirmOwnershipController,
+  ModalConfirmOwnershipViewModel,
+  ToastViewModel,
   AppController,
   StorageController,
   WalletConnectController,
   WalletController,
-  ProviderController,
+  Web3Controller,
   CardSkinController,
   CardController,
 )
@@ -88,5 +101,5 @@ export const App = withWalletConnect(AppWithProvider, {
   storageOptions: {
     asyncStorage: AsyncStorage as unknown as IAsyncStorage,
   },
-    renderQrcodeModal: (props: RenderQrcodeModalProps): JSX.Element => null,
+  renderQrcodeModal: (props: RenderQrcodeModalProps): JSX.Element => null,
 })

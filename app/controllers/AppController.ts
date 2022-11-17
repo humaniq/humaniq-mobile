@@ -2,7 +2,7 @@ import { makeAutoObservable, reaction } from "mobx"
 import { StorageController } from "./StorageController"
 import { inject } from "react-ioc"
 import { WalletConnectController } from "./WalletConnectController"
-import { ProviderController } from "./ProviderController"
+import { Web3Controller } from "./Web3Controller"
 import { WalletController } from "./WalletController"
 
 export class AppController {
@@ -12,7 +12,7 @@ export class AppController {
 
   storage = inject(this, StorageController)
   wc = inject(this, WalletConnectController)
-  provider = inject(this, ProviderController)
+  provider = inject(this, Web3Controller)
   walletService = inject(this, WalletController)
 
   constructor() {
