@@ -12,14 +12,14 @@ export const MenuItem = ({
                            subTitle,
                            arrowRight = false,
                            comingSoon = false,
-                           onPress
+                           onPress,
                          }: MenuItemProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
 
   return (
     <TouchableOpacity style={ styles.root } onPress={ onPress }>
-      <RoundedIcon icon={ icon }/>
+      <RoundedIcon icon={ icon } />
       <View style={ styles.middle }>
         <Text
           numberOfLines={ 1 }
@@ -34,7 +34,8 @@ export const MenuItem = ({
         <MovIcon
           name={ "arrow_right" }
           size={ 26 }
-          color={ colors.primary }/>
+          color={ colors.primary }
+        />
       ) }
       { comingSoon && (
         <View style={ styles.comingSoon }>

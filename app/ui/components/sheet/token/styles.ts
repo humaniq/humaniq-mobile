@@ -5,6 +5,7 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.bg
   },
   content: {
+    paddingBottom: 20,
   },
   indicator: {
     backgroundColor: theme.colors.searchIcon,
@@ -37,5 +38,16 @@ export const useStyles = withTheme(theme => ({
   },
   divider: {
     marginHorizontal: 18,
+  },
+  empty: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  emptyTitle: {
+    fontFamily: theme.fonts.regular,
+    fontSize: 15,
+    color: theme.colors.comingSoonText,
+    marginTop: 12,
   }
 }))

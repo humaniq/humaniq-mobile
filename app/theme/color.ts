@@ -31,6 +31,7 @@ export const colorsLight = {
   skinBackGroundWhite: "#FFFFFF",
   skinBackgroundBlack:"#404040",
   divider: "#D8D8D8",
+  black: "#000000",
 }
 
 export const colorsDark: typeof colorsLight = {
@@ -66,6 +67,7 @@ export const colorsDark: typeof colorsLight = {
   skinBackGroundWhite: "#404040",
   skinBackgroundBlack:"#fff",
   divider: "#FFFFFF",
+  black: "#000000",
 }
 
 export const fonts = {

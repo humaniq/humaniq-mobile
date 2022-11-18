@@ -44,7 +44,7 @@ export const ConnectProviderSheet = observer(({
   } = useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   usePressBack(() => {
-    bottomSheetRef.current?.close()
+    bottomSheetRef.current?.dismiss()
   })
 
   useEffect(() => {

@@ -1,8 +1,8 @@
-import React, { memo, useMemo } from 'react'
-import { Appearance, StatusBar, View } from 'react-native'
-import { AppStatusBarInterface } from './types'
-import { IS_ANDROID } from 'utils/common'
-import { useTheme } from 'hooks/useTheme'
+import React, { memo, useMemo } from "react"
+import { Appearance, StatusBar, View } from "react-native"
+import { AppStatusBarInterface } from "./types"
+import { IS_ANDROID } from "utils/common"
+import { useTheme } from "hooks/useTheme"
 
 export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   const { colors, isDarkMode, isSystemMode } = useTheme()
@@ -16,8 +16,8 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
       return Appearance.getColorScheme() === "dark" ? "light-content" : "dark-content"
     }
 
-    return 'dark-content'
-  }, [isDarkMode, isSystemMode, Appearance.getColorScheme])
+    return "dark-content"
+  }, [ isDarkMode, isSystemMode, Appearance.getColorScheme ])
 
   const {
     backgroundColor = colors.bg,
@@ -40,7 +40,7 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   return (
     <View
       style={ {
-        backgroundColor
+        backgroundColor: 'red',
       } }>
       <StatusBar
         animated={ animated }

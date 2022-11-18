@@ -1,8 +1,8 @@
-import { TokenItemProps } from "./types"
+import { CarouselItemProps } from "./types"
 import { useStyles } from "./styles"
 import { Image, Text, TouchableOpacity } from "react-native"
 
-export const TokenItem = ({ selected, style, onPress, item }: TokenItemProps) => {
+export const CarouselItem = ({ selected, style, onPress, item }: CarouselItemProps) => {
   const styles = useStyles()
 
   return (

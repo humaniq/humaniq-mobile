@@ -4,12 +4,12 @@ import { TouchableOpacity } from "react-native"
 import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const TouchableIcon = ({
-                        icon,
-                        onPress,
-                        size,
-                        color,
-                        containerStyle,
-                      }: MIconProps) => {
+                                icon,
+                                onPress,
+                                size,
+                                color,
+                                containerStyle,
+                              }: MIconProps) => {
   const styles = useTouchableIconStyles()
 
   return (

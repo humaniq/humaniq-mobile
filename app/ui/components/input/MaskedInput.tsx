@@ -35,7 +35,10 @@ export const MaskedInput = ({
           autoComplete="off"
         />
         { loading && (
-          <ActivityIndicator style={ styles.loading } color={ colors.primary }/>
+          <ActivityIndicator
+            style={ styles.loading }
+            color={ colors.primary }
+          />
         ) }
       </View>
     </View>
