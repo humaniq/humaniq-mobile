@@ -7,7 +7,7 @@ export const Switch = ({ defaultState, color, onToggle }: SwitchProps) => {
 
   const onToggleSwitch = useCallback(() => {
     setIsSwitchOn(!isSwitchOn)
-    onToggle?.(isSwitchOn)
+    onToggle?.(!isSwitchOn)
   }, [isSwitchOn, setIsSwitchOn])
 
   return (

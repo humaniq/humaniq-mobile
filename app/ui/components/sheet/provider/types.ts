@@ -1,5 +1,5 @@
 import { noop } from "utils/common"
-import { ProviderType } from "../../../references/providers"
+import { ProviderType } from "../../../../references/providers"
 
 export interface Props {
   visible: boolean
