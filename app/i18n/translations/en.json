@@ -131,6 +131,7 @@
         "totalFiat": "Total value deposited after the deposit",
         "totalBalance": "Savings+ balance after the deposit",
         "button": "Deposit in Savings+",
+        "holdButton": "Hold to Deposit",
         "allSwitch": "Deposit all",
         "inputLabel": "Amount we deposit in {0}"
       },
@@ -144,6 +145,7 @@
         "totalFiat": "Total value deposited after the withdrawal",
         "totalBalance": "Savings+ balance after the withdrawal",
         "button": "Withdraw from Savings+",
+        "holdButton": "Hold to Withdraw",
         "allSwitch": "Withdraw all",
         "inputLabel": "Amount we withdraw in {0}"
       }
@@ -152,6 +154,7 @@
       "topUp": {
         "cashOutToDebitCard": "Cash out to debit card",
         "button": "Top up",
+        "holdButton": "Hold to Top up",
         "emptyTag": "Enter the tag where to send funds",
         "whatDoWeTopUp": "What do we top up",
         "networkWeTopUpFrom": "Network we top up from",
@@ -159,15 +162,15 @@
         "totalTopUpAmount": "Total card top up amount",
         "cashingOutToCard": "Cashing out to card",
         "filledOwnTag": "Sending to yourself? Right on.",
-        "doubleCheckTag": "Double check the $tag to avoid sending funds to a wrong person.",
+        "doubleCheckTag": "Double check the $tag to avoid sending funds to the wrong person.",
         "tagFound": "{0} is found. Sending for the first time, please double check the tag. | {0} is found. {count} transaction previously. | {0} is found. {count} previous transactions.",
         "tagNotFound": "{0} We can’t find {1}. Are you sure it is the correct $tag?",
         "topUpMyDebitCard": "Top up my debit card",
         "previousSendsToTag": "Sending for the first time | {count} transaction previously | {count} previous transactions",
         "allSwitch": "Deposit all",
         "reviewYourTopUp": "Review your top up",
-        "minimumAmount": "Minimum card top up amount is {min}.",
-        "maximumAmount": "Maximum allowed card balance is {max}."
+        "minimumAmount": "Minimum card top up amount is {min}",
+        "maximumAmount": "Maximum allowed card balance is {max}"
       }
     },
     "smartTreasury": {
@@ -179,6 +182,7 @@
         "totalFiat": "Total value locked after the deposit",
         "totalBalance": "Smart Treasury balance after the deposit",
         "button": "Deposit to Smart Treasury",
+        "holdButton": "Hold to Deposit",
         "allSwitch": "Deposit all",
         "inputLabel": "Amount we deposit in {0}"
       },
@@ -190,6 +194,7 @@
         "totalFiat": "Total value locked after the withdrawal",
         "totalBalance": "Smart Treasury balance after the withdrawal",
         "button": "Withdraw from Smart Treasury",
+        "holdButton": "Hold to Withdraw",
         "allSwitch": "Withdraw all available",
         "inputLabel": "Amount we withdraw in {0}"
       }
@@ -205,6 +210,7 @@
         "totalFiat": "Total value staked after the deposit",
         "totalBalance": "Staking balance after the deposit",
         "button": "Deposit in Staking",
+        "holdButton": "Hold to Deposit",
         "allSwitch": "Deposit all",
         "inputLabel": "Amount we deposit in {0}"
       },
@@ -218,6 +224,7 @@
         "totalFiat": "Total value staked after the withdrawal",
         "totalBalance": "Staking balance after the withdrawal",
         "button": "Withdraw from Staking",
+        "holdButton": "Hold to Withdraw",
         "allSwitch": "Withdraw all",
         "inputLabel": "Amount we withdraw in {0}"
       }
@@ -243,7 +250,7 @@
       "success": "Success",
       "failed": "Failed",
       "flex": "Flex on Twitter",
-      "flexTwitterText": "I just used {'@'}viaMover to top up my card. From {network}. Get your card now at {link}",
+      "flexTwitterText": "I just used {'@'}viaMover to top up my card. From #{network}. Get your card now at {link}",
       "support": "Reach to support",
       "explorer": "Open Explorer",
       "reverted": "Your transaction failed and was not executed. No worries, there must be a reason why that happened.",
@@ -453,6 +460,7 @@
     "invalid": "Security code must be 6 digits."
   },
   "joinWaitlist": "Join wait list",
+  "waitlistPosition": "Your position on wait list is {position}",
   "joinForFree": "Join for free",
   "topUpAvailable": "You don’t have a debit card attached to this wallet. However, you can still top up a debit card, if you know the person’s web3 $tag.",
   "enterWalletAddressToAddToApproved": "Add to approved wallets",
@@ -496,5 +504,15 @@
   "wayToSpend": "way to spend your crypto",
   "virtual": "Virtual",
   "cardImmediatelyAvailable": "card immediately available",
-  "yourNewCardWillHave": "Your new card will have"
+  "yourNewCardWillHave": "Your new card will have",
+  "education": {
+    "titlePrefix": "What is {term}?",
+    "networks": {
+      "arbitrum": "Arbitrum is a network designed to enhance the Ethereum blockchain in terms of speed and scalability while adding additional privacy features.\n\nArbitrum is a Layer-2 solution. Layer-2 networks (like Optimism) are not separate blockchains. Instead, they combine large quantities of transactions off-chain before submitting them bundled together on-chain, thus relying upon the same security and consensus mechanism as Ethereum.",
+      "optimism": "Optimism is a network designed to enhance Ethereum blockchain in terms of speed scalability while adding additional privacy features.\n\nOptimism is a Layer-2 solution. Layer 2 networks (like Arbitrum) are not separate blockchains. Instead, they combine large quantities of transactions off-chain before then submitting them bundled together on-chain, thus relying upon the same security and consensus mechanism as Ethereum.",
+      "polygon": "Polygon is a distinct and separate blockchain that is compatible with Ethereum. It uses a different consensus mechanism than Ethereum and has its own security measures. Polygon is also known for lower transaction fees and faster transaction processing.\n\nPolygon is Ethereum compatible so your wallet address on Ethereum is the same as on Polygon.",
+      "avalanche": "Avalanche is a stand-alone blockchain aiming to provide an alternative to the high costs and low speeds. Avalanche uses a proprietary consensus mechanism to increase transaction throughput and minimize energy consumption by validators.\n\nAvalanche is Ethereum compatible so your wallet address on Ethereum is the same as on Avalanche.",
+      "binance": "Binance Smart Chain (BSC) is a modified version of the Ethereum network. BSC has a different consensus mechanism and network parameters that allow it to have lower transaction costs and faster processing time.\n\nBSC is Ethereum compatible so your wallet address on Ethereum is the same as on BSC."
+    }
+  }
 }

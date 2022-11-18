@@ -81,7 +81,7 @@
     "title": "Wybierz token",
     "placeHolder": "Wyszukaj dowolny token według nazwy lub adresu kontraktu",
     "network": "Na jakiej sieci znajduje się token?",
-    "no-results": "would change żetonów for tokenów"
+    "no-results": "Nie mogliśmy znaleźć żadnych tokenów"
   },
   "depositAll": "Wpłać wszystko",
   "earnedIn": "Zarobione w {month}",
@@ -98,7 +98,6 @@
     "trustedBy": "Zaufało nam {count} użytkowników."
   },
   "forms": {
-    "chooseToken": "Wybierz token",
     "chooseAmount": "Wybierz kwotę",
     "insufficientBalance": "Niewystarczająca ilość środków",
     "reviewTransaction": "Przejrzyj transakcję",
@@ -126,6 +125,7 @@
         "totalFiat": "Całkowita wartość zdeponowana po wpłacie",
         "totalBalance": "Saldo Savings+ po wpłacie",
         "button": "Wpłać do Savings+",
+        "holdButton": "Trzymaj dla wpłaty",
         "allSwitch": "Wpłać wszystko",
         "inputLabel": "Kwota, którą wpłacamy w {0}"
       },
@@ -139,6 +139,7 @@
         "totalFiat": "Całkowita kwota zdeponowana po wypłacie",
         "totalBalance": "Saldo Savings+ po wypłacie",
         "button": "Wypłać z Savings+",
+        "holdButton": "Trzymaj dla wypłacenia",
         "allSwitch": "Wypłać wszystko",
         "inputLabel": "Kwota, którą wypłacamy w {0}"
       }
@@ -147,6 +148,7 @@
       "topUp": {
         "cashOutToDebitCard": "Wypłać na kartę debetową",
         "button": "Doładuj",
+        "holdButton": "Trzymaj dla uzupełnienia",
         "whatDoWeTopUp": "Co doładowujemy",
         "networkWeTopUpFrom": "Sieć, którą doładowujemy z",
         "amountWeTopUpIn": "Kwota, którą doładowujemy w {symbol}",
@@ -160,7 +162,7 @@
         "previousSendsToTag": "Wysyłanie po raz pierwszy | {count} transakcja poprzednio | {count} poprzednie transakcje",
         "allSwitch": "Wpłać wszystko",
         "reviewYourTopUp": "Przejrzyj swoje doładowanie",
-        "minimumAmount": "Minimalna kwota doładowania karty to {min}.",
+        "minimumAmount": "Minimalna kwota doładowania karty to {min}",
         "maximumAmount": "Maksymalne dopuszczalne saldo karty to {max}",
         "emptyTag": "Wpisz tag określający, gdzie wysłać środki"
       }
@@ -174,6 +176,7 @@
         "totalFiat": "Całkowita wartość zablokowana po wpłacie",
         "totalBalance": "Saldo Smart Treasury po wpłacie",
         "button": "Wpłata do Smart Treasury",
+        "holdButton": "Trzymaj dla wpłaty",
         "allSwitch": "Wpłać wszystko",
         "inputLabel": "Kwota, którą wpłacamy w {0}"
       },
@@ -185,6 +188,7 @@
         "totalFiat": "Całkowita wartość zablokowana po wypłacie",
         "totalBalance": "Saldo Smart Treasury po wypłacie środków",
         "button": "Wypłata ze Smart Treasury",
+        "holdButton": "Trzymaj dla wypłacenia",
         "allSwitch": "Wypłać wszystkie dostępne",
         "inputLabel": "Kwota, którą wypłacamy w {0}"
       }
@@ -200,6 +204,7 @@
         "totalFiat": "Łączna wartość stakowana po wpłacie",
         "totalBalance": "Saldo stakingowe po wpłacie",
         "button": "Wpłata na Staking",
+        "holdButton": "Trzymaj dla wpłaty",
         "allSwitch": "Wpłać wszystko",
         "inputLabel": "Kwota, którą wpłacamy w {0}"
       },
@@ -213,6 +218,7 @@
         "totalFiat": "Całkowita wartość stakowana po wycofaniu",
         "totalBalance": "Saldo stakingowe po wpłacie",
         "button": "Wycofaj ze Staking",
+        "holdButton": "Trzymaj dla wypłacenia",
         "allSwitch": "Wypłać wszystko",
         "inputLabel": "Kwota, którą wypłacamy w {0}"
       }
@@ -240,7 +246,7 @@
       "flex": "Udostępnij na Twitterze",
       "support": "Skontaktuj się z Supportem",
       "explorer": "Otwórz Eksploratora",
-      "flexTwitterText": "Właśnie doładowałem {'@'}viaMover swoją kartę z użyciem. Z {network}. Otrzymaj kartę pod adresem {link}",
+      "flexTwitterText": "Właśnie doładowałem {'@'}viaMover swoją kartę z użyciem. Z #{network}. Otrzymaj kartę pod adresem {link}",
       "reverted": "Twoja transakcja nie powiodła się i nie została wykonana. Bez obaw, musi być jakiś powód, dla którego tak się stało.",
       "types": {
         "treasury_deposit": "Wpłaciłeś do Smart Treasury {value}",
@@ -497,5 +503,16 @@
     "card": "Karta",
     "earn": "Earn",
     "history": "Historia transakcji"
+  },
+  "waitlistPosition": "Twoje miejsce na liście oczekujących to {position}",
+  "education": {
+    "titlePrefix": "Co to jest {term}?",
+    "networks": {
+      "arbitrum": "Arbitrum to sieć zaprojektowana w celu ulepszenia blockchaina Ethereum pod względem szybkości i skalowalności przy jednoczesnym zastosowaniu dodatkowych funkcji prywatności.\n\nArbitrum jest rozwiązaniem typu Layer-2 (warstw drugich). Sieci warstw drugich (jak Optimism) nie są oddzielnymi blockchainami, a zamiast tego łączą duże liczby transakcji off-chain (poza blockchainami) przed wysłaniem ich razem w pakiecie on-chain (na łańcuchu), polegając w ten sposób na tym samym mechanizmie bezpieczeństwa i konsensusu, co Ethereum.",
+      "optimism": "Optimism to sieć zaprojektowana w celu ulepszenia blockchaina Ethereum pod względem szybkości i skalowalności przy jednoczesnym zastosowaniu dodatkowych funkcji prywatności.\n\nOptimism jest rozwiązaniem typu Layer-2 (warstw drugich). Sieci warstw drugich (jak Arbitrum) nie są oddzielnymi blockchainami, a zamiast tego łączą duże liczby transakcji off-chain (poza blockchainami) przed wysłaniem ich razem w pakiecie on-chain (na łańcuchu), polegając w ten sposób na tym samym mechanizmie bezpieczeństwa i konsensusu, co Ethereum.",
+      "polygon": "Polygon jest odrębnym i oddzielnym blockchainem, który jest kompatybilny z Ethereum. Używa innego mechanizmu konsensusu niż Ethereum i ma własne środki bezpieczeństwa. Polygon jest również znany z niższych opłat transakcyjnych oraz szybszego przetwarzania transakcji.\n\nPolygon jest kompatybilny z Ethereum, więc Twój adres portfela na Ethereum jest taki sam jak na Polygon.",
+      "avalanche": "Avalanche to samodzielny blockchain mający na celu zapewnienie alternatywy dla wysokich kosztów i niskich prędkości. Avalanche wykorzystuje autorski mechanizm konsensusu, aby zwiększyć przepustowość transakcji i zminimalizować zużycie energii przez walidatory.\n\nAvalanche jest kompatybilny z Ethereum, więc Twój adres portfela na Ethereum jest taki sam jak na Avalanche.",
+      "binance": "Binance Smart Chain (BSC) to zmodyfikowana wersja sieci Ethereum. BSC ma inny mechanizm konsensusu i parametry sieci, które pozwalają mu mieć niższe koszty transakcji i szybszy czas przetwarzania.\n\nBSC jest kompatybilny z Ethereum, więc Twój adres portfela na Ethereum jest taki sam jak na BSC."
+    }
   }
 }
