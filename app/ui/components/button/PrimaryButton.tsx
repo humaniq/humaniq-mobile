@@ -3,6 +3,7 @@ import { PrimaryButtonProps } from "./types"
 import { useStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
 import { MovIcon } from "ui/components/icon/MovIcon"
+import { ActivityIndicator } from "react-native-paper"
 
 export const PrimaryButton = ({
                                 title,
@@ -11,6 +12,7 @@ export const PrimaryButton = ({
                                 style,
                                 icon,
                                 iconStyles,
+                                pending,
                               }: PrimaryButtonProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
@@ -21,14 +23,14 @@ export const PrimaryButton = ({
       style={ [ styles.root, {
         backgroundColor: disabled ? colors.disabled : colors.primaryButton,
       }, style ] }
-      onPress={ onPress }>
-      { icon ? (
+      onPress={ !pending && onPress }>
+      { icon && !pending ? (
         <MovIcon
           { ...iconStyles }
           name={ icon }
         />
       ) : null }
-      { title ? (
+      { title && !pending ? (
         <Text
           ellipsizeMode={ "tail" }
           numberOfLines={ 1 }
@@ -38,6 +40,7 @@ export const PrimaryButton = ({
           { title }
         </Text>
       ) : null }
+      { pending && <ActivityIndicator color={ styles.pendingColor.color } style={ styles.pending } /> }
     </TouchableOpacity>
   )
 }

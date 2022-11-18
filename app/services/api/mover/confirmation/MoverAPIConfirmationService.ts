@@ -3,7 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import { addSentryBreadcrumb } from 'app/logs/sentry';
 import { MoverAPIService } from 'app/services/api/mover/MoverAPIService';
 import { MoverAPISuccessfulResponse } from 'app/services/api/mover/types';
-import { APP_API_TAG_SERVICE_URL } from "../../../../envs/env"
+import { APP_API_TAG_SERVICE_URL } from "configs/env"
 
 export class MoverAPIConfirmationService extends MoverAPIService {
   protected baseURL: string;

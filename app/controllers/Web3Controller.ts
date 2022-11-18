@@ -16,6 +16,8 @@ import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
 import { isRejectedRequestError, isUnrecognizedChainError } from "utils/error/ProviderRPCError"
 import { EECode, ExpectedError } from "utils/error/ExpectedError"
 import { addSentryBreadcrumb } from "../logs/sentry"
+import { utf8ToHex } from "web3-utils"
+import { ConfirmOwnershipController } from "./ConfirmOwnershipController"
 
 export const WALLET_TYPE_CONNECTED = "MoverConnectedProvider"
 
@@ -40,6 +42,7 @@ export class Web3Controller {
   }
 
   wc: WalletConnectController = inject(this, WalletConnectController)
+  ownershipModal = inject(this, ConfirmOwnershipController)
 
   tryConnectCachedProvider = async () => {
     const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
@@ -139,15 +142,18 @@ export class Web3Controller {
 
       } else if (provider === ProviderType.WalletConnect || provider === ProviderType.Metamask) {
 
-        setTimeout(async () => {
-          try {
-            await this.wc.connector.connect()
-          } catch (e) {
-            await this.disconnect()
-            return
-          }
 
-        }, 500)
+        await this.wc.connector.connect()
+
+        // setTimeout(async () => {
+        //   try {
+        //
+        //   } catch (e) {
+        //     await this.disconnect()
+        //     return
+        //   }
+        //
+        // }, 500)
 
         const rpc: Record<number, string> = {}
 
@@ -163,8 +169,8 @@ export class Web3Controller {
         })
 
         const result = await this.ethereum.enable()
+        console.log(result)
         this.provider = new ethers.providers.Web3Provider(this.ethereum, "any")
-        this.signer = this.provider.getSigner()
         this.setAddress(result[0])
       } else {
         return
@@ -180,7 +186,7 @@ export class Web3Controller {
         massage: `Save cached provider:${ await localStorage.load(WALLET_TYPE_CONNECTED) }`,
       })
 
-      this.provider.removeAllListeners()
+      this.provider?.removeAllListeners()
       // @ts-ignore
       this.provider.provider.on("accountsChanged", this.handleAccountsChange)
       // @ts-ignore
@@ -198,7 +204,6 @@ export class Web3Controller {
         await this.provider.send("wallet_switchEthereumChain", [ `0x${ networks.ethereum.chainId.toString(16) }` ])
       }
 
-
     } catch (e) {
       console.log("Error-set-provider", e)
       await this.disconnect()
@@ -213,10 +218,9 @@ export class Web3Controller {
 
   handleAccountsChange = async (accounts: string[]) => {
     console.log("accounts changed", accounts)
-    if (this.address === accounts[0]) return
-    this.address = accounts[0]
+    if (this.address === ethers.utils.getAddress(accounts[0])) return
+    this.setAddress(accounts[0])
   }
-
   handleDisconnect = async () => {
     console.log("on disconnect")
     await this.disconnect()
@@ -225,12 +229,17 @@ export class Web3Controller {
   disconnect = async () => {
     console.log("disconnect")
     try {
-      this.setAddress("")
+      this.address = ""
       this.setChainId(-1)
+      this.ownershipModal.modal.closeModal()
 
       const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
       if (provider && provider === ProviderType.WalletConnect) {
-        await this.wc?.connector?.killSession()
+        try {
+          await this.wc?.connector?.killSession()
+        } catch (e) {
+          console.log(e)
+        }
       }
 
       this.provider = null
@@ -247,7 +256,7 @@ export class Web3Controller {
   }
 
   setAddress = (address) => {
-    this.address = address
+    this.address = ethers.utils.getAddress(address)
     console.log("Set-address", this.address)
   }
 
@@ -273,7 +282,7 @@ export class Web3Controller {
 
   getChainId = async () => {
     try {
-      const chainId = await this.provider.send("eth_chainId", [])
+      const chainId = await this.ethereum.request({ method: "eth_chainId", params: [] })
       return BigNumber.from(chainId).toNumber()
     } catch (e) {
       console.log("Error-get-chain-id", e)
@@ -283,7 +292,7 @@ export class Web3Controller {
 
   getAccounts = async () => {
     try {
-      return await this.provider.send("eth_requestAccounts", [])
+      return await this.ethereum.request({ method: "eth_requestAccounts", params: [] })
     } catch (e) {
       console.log("ERROR-get-accounts", e)
     }
@@ -305,7 +314,10 @@ export class Web3Controller {
     const networkInfo = networks[network]
 
     try {
-      await this.provider.send("wallet_switchEthereumChain", [ `0x${ networkInfo.chainId.toString(16) }` ])
+      await this.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [ `0x${ networkInfo.chainId.toString(16) }` ],
+      })
     } catch (error) {
       if (isRejectedRequestError(error)) {
         throw new ExpectedError(EECode.userRejectNetworkChange)
@@ -313,19 +325,21 @@ export class Web3Controller {
 
       if (isUnrecognizedChainError(error)) {
         try {
-          await (this.provider.send("wallet_addEthereumChain", [
-              {
-                chainId: `0x${ networkInfo.chainId.toString(16) }`,
-                chainName: networkInfo.name,
-                rpcUrls: networkInfo.rpcUrl,
-                nativeCurrency: {
-                  name: networkInfo.baseAsset.name,
-                  symbol: networkInfo.baseAsset.symbol,
-                  decimals: networkInfo.baseAsset.decimals,
+          await (this.ethereum.request({
+              method: "wallet_addEthereumChain", params: [
+                {
+                  chainId: `0x${ networkInfo.chainId.toString(16) }`,
+                  chainName: networkInfo.name,
+                  rpcUrls: networkInfo.rpcUrl,
+                  nativeCurrency: {
+                    name: networkInfo.baseAsset.name,
+                    symbol: networkInfo.baseAsset.symbol,
+                    decimals: networkInfo.baseAsset.decimals,
+                  },
+                  blockExplorerUrls: [ networkInfo.explorer ],
                 },
-                blockExplorerUrls: [ networkInfo.explorer ],
-              },
-            ])
+              ],
+            })
           )
         } catch (error) {
           if (isRejectedRequestError(error)) {
@@ -339,17 +353,9 @@ export class Web3Controller {
       }
     }
   }
+
   signMessage = async (message: string) => {
-    const dataHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(JSON.stringify(message)))
-    const arraifyed = ethers.utils.arrayify(dataHash)
-    addSentryBreadcrumb({
-      type: "info",
-      data: {
-        message,
-        arraifyed,
-        dataHash,
-      },
-    })
-    return this.signer.signMessage(arraifyed)
+    const hashedMessage = utf8ToHex(message)
+    return await this.ethereum.request({ method: "personal_sign", params: [ hashedMessage, this.address, "" ] })
   }
 }

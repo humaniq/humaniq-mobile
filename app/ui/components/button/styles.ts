@@ -5,7 +5,7 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.primaryButton,
     borderRadius: 22,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   text: {
     fontFamily: theme.fonts.regular,
@@ -14,4 +14,9 @@ export const useStyles = withTheme(theme => ({
     marginVertical: 13,
     paddingHorizontal: 20,
   },
+  pending: {
+    marginVertical: 13,
+    paddingHorizontal: 20,
+  },
+  pendingColor: { color: theme.colors.white },
 }))

@@ -5,6 +5,7 @@ import { makeAutoObservable } from "mobx"
 import { useStyles } from "./styles"
 import { ExpectedError } from "utils/error/ExpectedError"
 import { UnexpectedError } from "utils/error/UnexpectedError"
+import { observer } from "mobx-react-lite"
 
 export class ToastViewModel {
   visible = false
@@ -33,7 +34,7 @@ export class ToastViewModel {
 
 }
 
-export const Toast = () => {
+export const Toast = observer(() => {
 
   const view = useInstance(ToastViewModel)
   const style = useStyles()
@@ -44,4 +45,4 @@ export const Toast = () => {
                    visible={ view?.visible }>
     { view.message }
   </Snackbar>
-}
+})

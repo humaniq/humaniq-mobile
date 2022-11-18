@@ -18,5 +18,8 @@ export const useStyles = withTheme(theme => ({
   },
   indicator: {
     paddingTop: 50
+  },
+  button: {
+    marginTop: 20
   }
 }))
