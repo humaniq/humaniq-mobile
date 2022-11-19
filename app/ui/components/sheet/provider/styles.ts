@@ -2,7 +2,7 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.bg
+    backgroundColor: theme.colors.modalBackground
   },
   content: {
     paddingHorizontal: 18,
@@ -12,7 +12,7 @@ export const useStyles = withTheme(theme => ({
   title: {
     fontFamily: theme.fonts.bold,
     fontSize: 17,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     textAlign: "center"
   },
   sub: {
@@ -24,7 +24,7 @@ export const useStyles = withTheme(theme => ({
   subTitle: {
     fontFamily: theme.fonts.regular,
     fontSize: 14,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     lineHeight: 25,
     flex: 1,
     marginRight: 16
@@ -41,7 +41,7 @@ export const useStyles = withTheme(theme => ({
   },
   rowTitle: {
     fontFamily: theme.fonts.medium,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     fontSize: 14,
     flex: 1,
   },
@@ -54,12 +54,13 @@ export const useStyles = withTheme(theme => ({
   terms: {
     textDecorationLine: 'underline',
     textDecorationStyle: 'solid',
-    textDecorationColor: theme.colors.headerTitle,
+    textDecorationColor: theme.colors.text,
     fontFamily: theme.fonts.regular
   },
-  indicator: {
-    backgroundColor: theme.colors.searchIcon,
+  handle: {
+    backgroundColor: theme.colors.indicator,
     width: 36,
     height: 5,
-  }
+    marginTop: -3
+  },
 }))

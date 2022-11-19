@@ -3,7 +3,7 @@ import { ActivityIndicator, Text, View } from "react-native"
 import { MaskedInputProps } from "./types"
 import { useMaskedInputStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
-import TextInputMask from 'react-native-text-input-mask'
+import TextInputMask from "react-native-text-input-mask"
 
 export const MaskedInput = ({
                               title,
@@ -12,13 +12,13 @@ export const MaskedInput = ({
                               placeholder,
                               onChange,
                               mask,
-                              loading
+                              loading,
                             }: MaskedInputProps) => {
   const styles = useMaskedInputStyles()
   const { colors } = useTheme()
 
   return (
-    <View style={ [styles.root, containerStyle] }>
+    <View style={ [ styles.root, containerStyle ] }>
       { title ? (
         <Text style={ styles.title }>{ title }</Text>
       ) : null }

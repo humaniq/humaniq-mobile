@@ -2,8 +2,10 @@ import { Props } from "./types"
 import { useStyles } from "./styles"
 import { Text, TouchableOpacity, View } from "react-native"
 import React from "react"
+import { MoverImage } from "ui/components/image/MoverImage"
+import { getNetwork } from "../../../references/references"
 
-export const TokenItem = ({
+export const TokenInfo = ({
                             onPress,
                             containerStyle,
                             token,
@@ -14,21 +16,29 @@ export const TokenItem = ({
     <TouchableOpacity
       style={ [ styles.root, containerStyle ] }
       onPress={ onPress }>
-
-      <View style={ styles.image }>
-
+      <View style={ styles.imageContainer }>
+        <MoverImage
+          imageStyle={ styles.image }
+          subImageStyle={ styles.imageMini }
+          source={ {
+            uri: token.iconURL,
+          } }
+          subSource={ getNetwork(token.network).iconURL }
+        />
       </View>
-
       <View style={ styles.middle }>
         <Text
           numberOfLines={ 1 }
           ellipsizeMode={ "tail" }
-          style={ styles.title }>{ "Mover" }</Text>
+          style={ styles.title }>{ token.name }</Text>
         <Text
           numberOfLines={ 1 }
           ellipsizeMode={ "tail" }
-          style={ styles.subTitle }>{ "MOVE" }</Text>
+          style={ styles.subTitle }>{ token.symbol }</Text>
       </View>
+      <Text style={ styles.cost }>
+        { token.priceUSD }
+      </Text>
     </TouchableOpacity>
   )
 }

@@ -7,7 +7,7 @@ import { useTheme } from "hooks/useTheme"
 export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   const { colors, isDarkMode, isSystemMode } = useTheme()
 
-  const statusbarColor = useMemo(() => {
+  const statusbarStyle = useMemo(() => {
     if (isDarkMode) {
       return "light-content"
     }
@@ -20,8 +20,8 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   }, [ isDarkMode, isSystemMode, Appearance.getColorScheme ])
 
   const {
-    backgroundColor = colors.bg,
-    barStyle = statusbarColor,
+    backgroundColor = colors.background,
+    barStyle = statusbarStyle,
     animated,
     ...otherProps
   } = props
@@ -40,7 +40,7 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
   return (
     <View
       style={ {
-        backgroundColor: 'red',
+        backgroundColor: colors.background,
       } }>
       <StatusBar
         animated={ animated }

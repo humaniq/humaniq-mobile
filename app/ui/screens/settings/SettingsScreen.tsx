@@ -57,7 +57,10 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           />
         </ScrollView>
       </Screen>
-      <SelectTokenSheet visible={ visible } onDismiss={ () => setVisible(false) } />
+      <SelectTokenSheet
+        visible={ visible }
+        onDismiss={ () => setVisible(false) }
+      />
     </>
   )
 }

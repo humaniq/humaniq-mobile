@@ -2,20 +2,20 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.bg,
+    backgroundColor: theme.colors.background,
     paddingHorizontal: 0,
   },
   content: {
-    paddingHorizontal: theme.spaces.horizontal,
-    paddingBottom: theme.spaces.horizontal
+    paddingHorizontal: theme.spaces.h24,
+    paddingBottom: theme.spaces.h24,
   },
   title: {
-    marginTop: theme.spaces.vertical,
+    marginTop: theme.spaces.v40,
   },
   input: {
-    marginTop: theme.spaces.vertical
+    marginTop: theme.spaces.v40,
   },
   button: {
-    marginTop: theme.spaces.vertical
-  }
+    marginTop: theme.spaces.v40,
+  },
 }))

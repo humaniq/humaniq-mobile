@@ -76,7 +76,7 @@ export const ConnectProviderSheet = observer(({
       snapPoints={ animatedSnapPoints }
       onChange={ onStateChange }
       backgroundStyle={ styles.root }
-      handleIndicatorStyle={ styles.indicator }
+      handleIndicatorStyle={ styles.handle }
       onDismiss={ onDismiss }
     >
       <BottomSheetView

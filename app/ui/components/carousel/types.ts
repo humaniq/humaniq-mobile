@@ -1,8 +1,10 @@
 import { StyleProp, ViewStyle } from "react-native"
-import { NetworkInfo } from "../../../references/types"
+import { Network } from "../../../references/network"
 
 export interface Props {
+  header?: string
   containerStyle?: StyleProp<ViewStyle>
   contentStyle?: StyleProp<ViewStyle>
-  onPress?: (item: NetworkInfo) => void
+  onPress?: (item: Network) => void
+  networks?: Array<Network>;
 }

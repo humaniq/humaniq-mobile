@@ -44,7 +44,7 @@ export const Select = ({
             <MovIcon
               name={ "select_arrows" }
               size={ 16 }
-              color={ colors.headerTitle }
+              color={ colors.text }
             />
           </TouchableOpacity>
         }>

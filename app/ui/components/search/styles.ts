@@ -2,12 +2,12 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.searchBg,
+    backgroundColor: theme.colors.tertiary,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 24,
-    borderRadius: 10,
-    height: 40,
+    borderRadius: 8,
+    height: 42,
   },
   input: {
     flex: 1,

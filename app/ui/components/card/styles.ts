@@ -2,7 +2,7 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    marginTop: theme.spaces.vertical,
+    marginTop: theme.spaces.v40,
   },
   skin: {
     width: "100%",
