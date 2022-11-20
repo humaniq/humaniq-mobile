@@ -5,6 +5,7 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.modalBackground,
   },
   content: {
+    paddingBottom: 30,
   },
   handle: {
     backgroundColor: theme.colors.indicator,

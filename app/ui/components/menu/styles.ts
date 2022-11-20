@@ -4,7 +4,12 @@ export const useStyles = withTheme(theme => ({
   root: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 24
+    marginBottom: 24,
+  },
+  content: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
   },
   middle: {
     flex: 1,
@@ -21,19 +26,19 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.regular,
     color: theme.colors.secondary,
     includeFontPadding: false,
-    marginTop: 2
+    marginTop: 4
   },
   comingSoon: {
     borderRadius: 8,
-    backgroundColor: theme.colors.secondaryBg,
+    backgroundColor: theme.colors.settings,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   comingSoonText: {
-    fontFamily: theme.fonts.regular,
-    fontSize: 11,
-    marginVertical: 4,
-    marginHorizontal: 7,
-    color: theme.colors.comingSoonText
+    fontFamily: theme.fonts.semi,
+    fontSize: 10,
+    marginVertical: 2,
+    marginHorizontal: 5,
+    color: theme.colors.comingSoonText,
   }
 }))

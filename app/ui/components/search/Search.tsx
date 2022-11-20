@@ -2,17 +2,17 @@ import { ActivityIndicator, TextInput, View } from "react-native"
 import { useStyles } from "./styles"
 import { SearchProps } from "./types"
 import { useTheme } from "hooks/useTheme"
-import React, { useCallback, useState } from "react"
+import React, { memo, useCallback, useState } from "react"
 import { usePressBack } from "hooks/usePressBack"
 import { MovIcon } from "ui/components/icon/MovIcon"
 
-export const Search = ({
-                         hint,
-                         containerStyle,
-                         style,
-                         onChangeText,
-                         loading,
-                       }: SearchProps) => {
+export const Search = memo(({
+                              hint,
+                              containerStyle,
+                              style,
+                              onChangeText,
+                              loading,
+                            }: SearchProps) => {
   const [ input, setInput ] = useState("")
   const styles = useStyles()
   const { colors } = useTheme()
@@ -37,6 +37,8 @@ export const Search = ({
         onChangeText={ handleTextChange }
         placeholder={ hint }
         placeholderTextColor={ colors.searchIcon }
+        numberOfLines={ 1 }
+        multiline={ false }
       />
       { loading && (
         <ActivityIndicator
@@ -46,4 +48,4 @@ export const Search = ({
       ) }
     </View>
   )
-}
+})

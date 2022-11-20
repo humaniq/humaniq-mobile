@@ -11,7 +11,6 @@ import { WalletService } from "../../../services/WalletService"
 
 export const CardNotConnectedOverlay = observer(({ textColor }: Props) => {
   const styles = useStyles()
-
   const walletService = useInstance(WalletService)
 
   return (

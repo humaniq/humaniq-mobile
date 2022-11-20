@@ -1,10 +1,10 @@
-import React, { memo, useMemo } from "react"
+import React, { useMemo } from "react"
 import { Appearance, StatusBar, View } from "react-native"
 import { AppStatusBarInterface } from "./types"
 import { IS_ANDROID } from "utils/common"
 import { useTheme } from "hooks/useTheme"
 
-export const AppStatusBar = memo((props: AppStatusBarInterface) => {
+export const AppStatusBar = (props: AppStatusBarInterface) => {
   const { colors, isDarkMode, isSystemMode } = useTheme()
 
   const statusbarStyle = useMemo(() => {
@@ -50,4 +50,4 @@ export const AppStatusBar = memo((props: AppStatusBarInterface) => {
       />
     </View>
   )
-})
+}

@@ -1,5 +1,5 @@
 import { noop } from "utils/common"
-import { StyleProp, ViewStyle } from "react-native"
+import { StyleProp, TextStyle, ViewStyle } from "react-native"
 
 export interface PrimaryButtonProps {
   title?: string
@@ -7,6 +7,7 @@ export interface PrimaryButtonProps {
   onPress?: typeof noop
   disabled?: boolean
   style?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
   iconStyles?: {
     size?: number,
     color?: string

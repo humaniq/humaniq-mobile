@@ -2,7 +2,7 @@ import { MoverImageProps } from "./types"
 import { useStyles } from "./styles"
 import FastImage from "react-native-fast-image"
 import { useState } from "react"
-import { View } from "react-native"
+import { Text, View } from "react-native"
 
 export const MoverImage = ({
                              imageStyle,
@@ -10,19 +10,29 @@ export const MoverImage = ({
                              source,
                              subSource,
                              resizeMode = FastImage.resizeMode.contain,
+                             fallbackText,
                            }: MoverImageProps) => {
   const styles = useStyles()
   const [ loading, setLoading ] = useState(false)
 
   return (
     <View style={ styles.root }>
-      <FastImage
-        style={ imageStyle }
-        source={ source }
-        resizeMode={ resizeMode }
-        onLoadStart={ () => setLoading(true) }
-        onLoadEnd={ () => setLoading(false) }
-      />
+      { source ? (
+        <FastImage
+          style={ imageStyle }
+          source={ source }
+          resizeMode={ resizeMode }
+          onLoadStart={ () => setLoading(true) }
+          onLoadEnd={ () => setLoading(false) }
+        />
+      ) : (
+        <View style={ [ styles.placeholder, imageStyle ] }>
+          <Text
+            ellipsizeMode={ "tail" }
+            style={ styles.placeholderText }
+            numberOfLines={ 1 }>{ fallbackText }</Text>
+        </View>
+      ) }
       { subSource && (
         <FastImage
           style={ subImageStyle }

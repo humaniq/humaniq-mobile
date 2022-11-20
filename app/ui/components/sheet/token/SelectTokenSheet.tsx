@@ -2,7 +2,8 @@ import { Props } from "./types"
 import { useStyles } from "./styles"
 import {
   BottomSheetBackdrop,
-  BottomSheetModal, BottomSheetScrollView,
+  BottomSheetModal,
+  BottomSheetScrollView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -34,10 +35,12 @@ export const SelectTokenSheet = observer(({
                                             onTokenPress,
                                           }: Props) => {
   const styles = useStyles()
-  const { top } = useSafeAreaInsets()
+  const { top: topInset } = useSafeAreaInsets()
   const [ selectedNetwork, setSelectedNetwork ] = useState(Network.ethereum) // by default
   const [ searchValue, setSearchValue ] = useState("")
   const bottomSheetRef = useRef<BottomSheetModal>(null)
+
+  const snapPoints = useMemo(() => [ "CONTENT_HEIGHT", "100%" ], [])
 
   const handleTokenPress = useCallback((item: TokenWithBalance) => {
     onTokenPress?.(item)
@@ -59,6 +62,7 @@ export const SelectTokenSheet = observer(({
           toLowerCase(token.name).includes(search),
       )
     }
+
     return tokens.sort((a, b) =>
       new BigNumber(b.balance)
         .times(b.priceUSD)
@@ -66,8 +70,6 @@ export const SelectTokenSheet = observer(({
         .toNumber(),
     )
   })
-
-  const snapPoints = useMemo(() => [ "CONTENT_HEIGHT", "100%" ], [])
 
   const {
     animatedContentHeight,
@@ -88,21 +90,23 @@ export const SelectTokenSheet = observer(({
     }
   }, [ visible ])
 
+  const renderBackDrop = useCallback((backdropProps) => (
+    <BottomSheetBackdrop
+      { ...backdropProps }
+      enableTouchThrough={ true }
+      appearsOnIndex={ 0 }
+      disappearsOnIndex={ -1 }
+    />
+  ), [])
+
   return (
     <BottomSheetModal
-      topInset={ top }
+      topInset={ topInset }
       keyboardBehavior="interactive"
       android_keyboardInputMode="adjustPan"
       handleHeight={ animatedHandleHeight }
       contentHeight={ animatedContentHeight }
-      backdropComponent={ (backdropProps) => (
-        <BottomSheetBackdrop
-          { ...backdropProps }
-          enableTouchThrough={ true }
-          appearsOnIndex={ 0 }
-          disappearsOnIndex={ -1 }
-        />
-      ) }
+      backdropComponent={ renderBackDrop }
       enablePanDownToClose={ true }
       ref={ bottomSheetRef }
       index={ 0 }
@@ -114,7 +118,9 @@ export const SelectTokenSheet = observer(({
     >
       <View
         onLayout={ handleContentLayout }
-        style={ styles.content }>
+        style={ [
+          styles.content,
+        ] }>
         <Text style={ styles.title }>{ t("selectToken.title") }</Text>
         <Search
           onChangeText={ setSearchValue }
@@ -131,7 +137,7 @@ export const SelectTokenSheet = observer(({
           style={ styles.divider }
         />
         { tokensFilteredByChain.get().length ? (
-          <BottomSheetScrollView>
+          <BottomSheetScrollView bounces={ false }>
             { tokensFilteredByChain.get().map((item, index) => (
               <TokenInfo
                 key={ `${ item.address }_${ index }` }

@@ -24,6 +24,7 @@ export const TokenInfo = ({
             uri: token.iconURL,
           } }
           subSource={ getNetwork(token.network).iconURL }
+          fallbackText={ token.symbol }
         />
       </View>
       <View style={ styles.middle }>
@@ -37,7 +38,7 @@ export const TokenInfo = ({
           style={ styles.subTitle }>{ token.symbol }</Text>
       </View>
       <Text style={ styles.cost }>
-        { token.priceUSD }
+        ${ token.priceUSD }
       </Text>
     </TouchableOpacity>
   )

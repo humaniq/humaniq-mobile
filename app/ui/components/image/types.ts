@@ -7,4 +7,5 @@ export interface MoverImageProps {
   source?: Source | ImageRequireSource
   resizeMode?: ResizeMode
   subSource?: Source | ImageRequireSource
+  fallbackText?: string
 }

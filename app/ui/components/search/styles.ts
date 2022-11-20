@@ -8,6 +8,7 @@ export const useStyles = withTheme(theme => ({
     paddingLeft: 24,
     borderRadius: 8,
     height: 42,
+    paddingVertical: 0,
   },
   input: {
     flex: 1,
@@ -16,5 +17,6 @@ export const useStyles = withTheme(theme => ({
     marginLeft: 12,
     marginRight: 12,
     fontSize: 14,
+    paddingVertical: 0,
   },
 }))

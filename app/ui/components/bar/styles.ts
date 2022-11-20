@@ -11,7 +11,7 @@ export const useStyles = withTheme(theme => ({
     alignSelf: "center",
     height: 50,
     borderRadius: 40,
-    backgroundColor: theme.colors.tabBg,
+    backgroundColor: theme.colors.headerCircle,
     paddingHorizontal: 10,
   },
   tab: {

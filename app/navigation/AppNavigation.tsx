@@ -1,6 +1,8 @@
 import * as React from "react"
 import { FC } from "react"
-import { NavigationContainer } from "@react-navigation/native"
+import {
+  NavigationContainer,
+} from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { navigationRef } from "navigation/RootNavigation"
 import { RootStackParamList } from "types/navigation"
@@ -11,7 +13,6 @@ import { observer } from "mobx-react-lite"
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export const AppNavigation: FC = observer(() => {
-
   useBackButtonHandler(navigationRef, canExit)
 
   return (

@@ -17,6 +17,5 @@ export const useStyles = withTheme(theme => ({
   },
   blur: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 16,
   },
 }))

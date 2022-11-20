@@ -5,6 +5,7 @@ import { ProviderType } from "../references/providers"
 import { addSentryBreadcrumb, captureSentryException } from "../logs/sentry"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
 import { MoverError } from "utils/error/MoverError"
+import { Linking } from "react-native"
 
 export class WalletService {
 
@@ -100,7 +101,12 @@ export class WalletService {
     } finally {
       this.triedToConnect = true
     }
+  }
 
+  handleTermsPress = async () => {
+    try {
+      await Linking.openURL("https://viamover.com/terms_of_use")
+    } catch (e) {}
   }
 
   innerInit = async (cached: boolean) => {
