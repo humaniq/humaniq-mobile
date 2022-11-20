@@ -8,7 +8,7 @@ import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const BottomBar = ({
                             state,
-                            navigation
+                            navigation,
                           }: BottomBarProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
@@ -16,30 +16,34 @@ export const BottomBar = ({
 
   const onTabClick = useCallback((screen: string, params?: any) => {
     navigation.navigate(screen, params)
-  }, [state.index])
+  }, [ state.index, navigation ])
 
   const getIcon = useCallback((route: string) => {
-    if (route === 'Card') {
+    if (route === "Card") {
       return "card"
-    } else if (route === 'Earn') {
+    } else if (route === "Earn") {
       return "dollar"
     } else {
       return "history"
     }
-  }, [state.routeNames])
+  }, [ state.routeNames ])
 
   return (
     <View style={ [
       styles.root,
-      bottom && { bottom }]
+      bottom && { bottom } ]
     }>
       { state.routes.map((item, index) => {
         return (
-          <TouchableOpacity key={ item.name } style={ styles.tab } onPress={ () => onTabClick(item.name) }>
+          <TouchableOpacity
+            key={ item.name }
+            style={ styles.tab }
+            onPress={ () => onTabClick(item.name) }>
             <MovIcon
               name={ getIcon(item.name) }
-              size={ 26 }
-              color={ state.index === index ? colors.primary : colors.tabIcon }/>
+              size={ 25 }
+              color={ state.index === index ? colors.primary : colors.tabIcon }
+            />
           </TouchableOpacity>
         )
       }) }

@@ -17,7 +17,7 @@ export const useStyles = withTheme(theme => ({
   tab: {
     alignItems: "center",
     justifyContent: "center",
-    width: 60,
+    width: 58,
     height: "100%",
     borderRadius: 40
   }
