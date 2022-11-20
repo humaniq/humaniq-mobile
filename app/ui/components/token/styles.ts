@@ -42,7 +42,7 @@ export const useStyles = withTheme(theme => ({
     marginTop: 4,
   },
   cost: {
-    fontFamily: theme.fonts.regular,
+    fontFamily: theme.fonts.medium,
     color: theme.colors.text,
     fontSize: 14,
   },

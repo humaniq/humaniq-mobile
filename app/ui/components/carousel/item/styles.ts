@@ -8,7 +8,7 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 16,
     backgroundColor: theme.colors.tertiary,
     marginRight: 12,
-    marginVertical: 4,
+    marginVertical: 20,
   },
   icon: {
     width: 17,

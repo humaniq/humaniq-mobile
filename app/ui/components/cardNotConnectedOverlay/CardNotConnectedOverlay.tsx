@@ -22,13 +22,15 @@ export const CardNotConnectedOverlay = observer(({ textColor }: Props) => {
         reducedTransparencyFallbackColor="white"
       />
       <PrimaryButton
+        textStyle={ styles.buttonText }
         onPress={ () => walletService.setConnectProviderModal(true) }
         title={ t("connectWallet") }
       />
-      <Text style={ {
-        ...styles.description,
-        color: textColor,
-      } }>{ t("connectWallet-title") }</Text>
+      <Text
+        style={ {
+          ...styles.description,
+          color: textColor,
+        } }>{ t("connectWallet-title") }</Text>
     </View>
   )
 })

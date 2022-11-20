@@ -33,7 +33,7 @@ export const MoverImage = ({
             numberOfLines={ 1 }>{ fallbackText }</Text>
         </View>
       ) }
-      { subSource && (
+      { subSource ? (
         <FastImage
           style={ subImageStyle }
           source={ subSource }
@@ -41,7 +41,7 @@ export const MoverImage = ({
           onLoadStart={ () => setLoading(true) }
           onLoadEnd={ () => setLoading(false) }
         />
-      ) }
+      ) : null }
     </View>
   )
 }

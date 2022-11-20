@@ -30,7 +30,7 @@ export const NetworksCarousel = memo(({
     setSelectedChain(item)
     scrollTo(index)
     onPress?.(item)
-  }, [ setSelectedChain, scrollTo ])
+  }, [ setSelectedChain, scrollTo, onPress ])
 
   return (
     <View>

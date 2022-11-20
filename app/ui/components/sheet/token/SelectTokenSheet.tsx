@@ -3,6 +3,7 @@ import { useStyles } from "./styles"
 import {
   BottomSheetBackdrop,
   BottomSheetModal,
+  BottomSheetView,
   BottomSheetScrollView,
   useBottomSheetDynamicSnapPoints,
 } from "@gorhom/bottom-sheet"
@@ -116,7 +117,7 @@ export const SelectTokenSheet = observer(({
       handleIndicatorStyle={ styles.handle }
       onDismiss={ onDismiss }
     >
-      <View
+      <BottomSheetView
         onLayout={ handleContentLayout }
         style={ [
           styles.content,
@@ -155,7 +156,7 @@ export const SelectTokenSheet = observer(({
             <Text style={ styles.emptyTitle }>{ t("selectToken.no-results") }</Text>
           </View>
         ) }
-      </View>
+      </BottomSheetView>
     </BottomSheetModal>
   )
 })

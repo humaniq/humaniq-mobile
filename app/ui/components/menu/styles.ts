@@ -26,7 +26,7 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.regular,
     color: theme.colors.secondary,
     includeFontPadding: false,
-    marginTop: 4
+    marginTop: 3
   },
   comingSoon: {
     borderRadius: 8,
@@ -36,7 +36,7 @@ export const useStyles = withTheme(theme => ({
   },
   comingSoonText: {
     fontFamily: theme.fonts.semi,
-    fontSize: 10,
+    fontSize: 9,
     marginVertical: 2,
     marginHorizontal: 5,
     color: theme.colors.comingSoonText,
