@@ -29,7 +29,6 @@ export class ConfirmOwnershipController {
   }
 
   confirm = async () => {
-    console.log("confirm-modal")
     if (this.wallet.address === undefined) {
       throw new Error("empty address")
     }
@@ -47,7 +46,6 @@ export class ConfirmOwnershipController {
           new UnexpectedError(UECode.SignMessage).wrap(e))
         return
       }).then(async (sig) => {
-
         const succeeded = await moverConfirmationService.setConfirmation(this.wallet.address, sig)
         if (succeeded) {
           await localStorage.save(`sign[${ this.wallet.address }]`, sig)
