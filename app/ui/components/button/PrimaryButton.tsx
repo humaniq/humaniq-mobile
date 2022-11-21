@@ -41,7 +41,7 @@ export const PrimaryButton = ({
           { title }
         </Text>
       ) : null }
-      { pending && <ActivityIndicator color={ styles.pendingColor.color } /> }
+      { pending && <ActivityIndicator color={ colors.indicator } /> }
     </TouchableOpacity>
   )
 }
