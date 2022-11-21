@@ -1,6 +1,4 @@
 {
-  "expo": {
-    "name": "MoverMobile",
-    "slug": "mover"
-  }
+  "name": "MoverMobile",
+  "displayName": "MoverMobile"
 }

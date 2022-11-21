@@ -1,25 +1,25 @@
-import { SettingsScreenProps } from "./types"
-import { useStyles } from "./styles"
-import React, { useState } from "react"
-import { Header } from "ui/components/header/Header"
-import { ThemeSettings } from "ui/components/theme/ThemeSettings"
-import { Select } from "ui/components/select/Select"
-import { PrimaryButton } from "ui/components/button/PrimaryButton"
-import { Avatar } from "ui/components/avatar/Avatar"
-import { ScrollView, Text } from "react-native"
-import { useTheme } from "hooks/useTheme"
-import { Currencies, Languages } from "./data"
-import { t } from "app/i18n/translate"
-import { Screen } from "ui/screens/screen/Screen"
-import { SelectTokenSheet } from "ui/components/sheet/token/SelectTokenSheet"
-import { useInstance } from "react-ioc"
-import { WalletController } from "../../../controllers/WalletController"
+import { SettingsScreenProps } from "./types";
+import { useStyles } from "./styles";
+import React, { useState } from "react";
+import { Header } from "ui/components/header/Header";
+import { ThemeSettings } from "ui/components/theme/ThemeSettings";
+import { Select } from "ui/components/select/Select";
+import { PrimaryButton } from "ui/components/button/PrimaryButton";
+import { Avatar } from "ui/components/avatar/Avatar";
+import { ScrollView, Text } from "react-native";
+import { useTheme } from "hooks/useTheme";
+import { Currencies, Languages } from "./data";
+import { t } from "app/i18n/translate";
+import { Screen } from "ui/screens/screen/Screen";
+import { SelectTokenSheet } from "ui/components/sheet/token/SelectTokenSheet";
+import { useInstance } from "react-ioc";
+import { WalletController } from "../../../controllers/WalletController";
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
-  const styles = useStyles()
-  const { switchAppLang, appLang } = useTheme()
-  const [ visible, setVisible ] = useState(false)
-  const walletController = useInstance(WalletController)
+  const styles = useStyles();
+  const { switchAppLang, appLang } = useTheme();
+  const [ visible, setVisible ] = useState(false);
+  const walletController = useInstance(WalletController);
 
   return (
     <>
@@ -43,7 +43,7 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           <Select
             selectedValue={ Languages.find((item) => item.value === appLang) }
             onItemClick={ (item) => {
-              switchAppLang(item.value)
+              switchAppLang(item.value);
             } }
             data={ Languages }
             containerStyle={ styles.language }
@@ -54,7 +54,7 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
               onPress={ walletController.tryDisconnect }
               style={ styles.button }
               title={ t("disconnectWalletWithAddress", {
-                address: walletController.shortAddress,
+                address: walletController.shortAddress
               }) }
             />
           }
@@ -65,5 +65,5 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
         onDismiss={ () => setVisible(false) }
       />
     </>
-  )
-}
+  );
+};
