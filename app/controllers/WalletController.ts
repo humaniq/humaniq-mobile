@@ -87,7 +87,6 @@ export class WalletController {
     try {
       const connected = await this.web3.tryConnectCachedProvider()
       if (connected) {
-        console.log("Connected", connected)
         await this.innerInit(true)
       }
     } catch (err) {
@@ -122,8 +121,7 @@ export class WalletController {
   }
 
   innerInit = async (cached: boolean) => {
-    console.log("inner-inherit", this.address)
-    if (!!this.address) {
+    if (!this.address) {
       return
       // throw new MoverError("Current address is undefined in wallet->init")
     }
@@ -180,9 +178,7 @@ export class WalletController {
 
     this.destructor1()
     this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
-      console.log({ val, prev })
       if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
-      console.log("change address")
       await this.innerInit(true)
     })
   }

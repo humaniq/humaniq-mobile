@@ -120,7 +120,6 @@ export class Web3Controller {
   }
 
   pureConnect = async (provider = ProviderType.WalletConnect, fromCache = false) => {
-    console.log("pure-connect")
     try {
       this.pending = true
       if (false) {
@@ -142,9 +141,7 @@ export class Web3Controller {
 
       } else if (provider === ProviderType.WalletConnect || provider === ProviderType.Metamask) {
 
-
         await this.wc.connector.connect()
-
 
         const rpc: Record<number, string> = {}
 
@@ -158,9 +155,7 @@ export class Web3Controller {
           connector: this.wc.connector,
           qrcode: false,
         })
-
         const result = await this.ethereum.enable()
-        console.log(result)
         this.provider = new ethers.providers.Web3Provider(this.ethereum, "any")
         this.setAddress(result[0])
       } else {
@@ -178,12 +173,12 @@ export class Web3Controller {
       })
 
       this.provider?.removeAllListeners()
+      // @ts-ignore
       this.provider?.provider?.on("accountsChanged", this.handleAccountsChange)
+      // @ts-ignore
       this.provider?.provider?.on("disconnect", this.handleDisconnect)
+      // @ts-ignore
       this.provider?.provider?.on("chainChanged", this.handleChainChange)
-
-      console.log(this.provider, this.ethereum)
-
 
       // Check if chain supported
       const chain = Object.values(networks).find(item => item.chainId === this.chainId)
@@ -195,7 +190,6 @@ export class Web3Controller {
       }
 
     } catch (e) {
-      console.log("Error-set-provider", e)
       await this.disconnect()
     } finally {
       this.pending = false
@@ -207,17 +201,15 @@ export class Web3Controller {
   }
 
   handleAccountsChange = async (accounts: string[]) => {
-    console.log("accounts changed", accounts)
     if (this.address === ethers.utils.getAddress(accounts[0])) return
     this.setAddress(accounts[0])
   }
   handleDisconnect = async () => {
-    console.log("on disconnect")
     await this.disconnect()
   }
 
   disconnect = async () => {
-    console.log("disconnect")
+    addSentryBreadcrumb({ type: "info", message: "Disconnect wallet" })
     try {
       this.setAddress("")
       this.setChainId(-1)
@@ -241,18 +233,17 @@ export class Web3Controller {
   }
 
   handleChainChange = async (info: any) => {
-    console.log("chain changed", info)
     this.chainId = typeof info === "object" ? +info.chainId : +info
   }
 
   setAddress = (address) => {
     this.address = address ? ethers.utils.getAddress(address) : ""
-    console.log("Set-address", this.address)
+    addSentryBreadcrumb({ type: "info", message: `Set wallet address: ${ this.address }` })
   }
 
   setBalance = (balance) => {
     this.balance = balance
-    console.log("Set-balance", this.balance)
+    addSentryBreadcrumb({ type: "info", message: `Set wallet balance: ${ this.balance }` })
   }
 
   getBalance = async () => {
@@ -260,14 +251,13 @@ export class Web3Controller {
       const balance = await this.provider.getBalance(this.address)
       return balance.toString()
     } catch (e) {
-      console.log("ERROR-get-balance", e)
       return ""
     }
   }
 
   setChainId = (chainId) => {
     this.chainId = BigNumber.from(chainId).toNumber()
-    console.log("Set-chainId", this.chainId)
+    addSentryBreadcrumb({ type: "info", message: `Set chainId: ${ this.chainId }` })
   }
 
   getChainId = async () => {
@@ -275,7 +265,6 @@ export class Web3Controller {
       const chainId = await this.ethereum.request({ method: "eth_chainId", params: [] })
       return BigNumber.from(chainId).toNumber()
     } catch (e) {
-      console.log("Error-get-chain-id", e)
       return -1
     }
   }
@@ -284,7 +273,7 @@ export class Web3Controller {
     try {
       return await this.ethereum.request({ method: "eth_requestAccounts", params: [] })
     } catch (e) {
-      console.log("ERROR-get-accounts", e)
+      addSentryBreadcrumb({ type: "error", message: `Error request accounts: ${ this.chainId }` })
     }
   }
 
@@ -335,7 +324,6 @@ export class Web3Controller {
           if (isRejectedRequestError(error)) {
             throw new ExpectedError(EECode.userRejectNetworkChange)
           }
-          console.error(`Can't add ethereum network to the provider:`, error)
           throw new ExpectedError(EECode.addNetworkToProvider)
         }
       } else {
@@ -346,6 +334,7 @@ export class Web3Controller {
 
   signMessage = async (message: string) => {
     const hashedMessage = utf8ToHex(message)
-    return await this.ethereum.request({ method: "personal_sign", params: [ hashedMessage, this.address, "" ] })
+    // return await this.ethereum.request({ method: "personal_sign", params: [ hashedMessage, this.address, "" ] })
+    return await this.wc.connector.signPersonalMessage([ hashedMessage, this.address ])
   }
 }

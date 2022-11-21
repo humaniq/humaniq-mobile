@@ -14,9 +14,5 @@ export const useStyles = withTheme(theme => ({
     color: theme.colors.white,
     fontSize: 15,
   },
-  pending: {
-    marginVertical: 13,
-    paddingHorizontal: 20,
-  },
   pendingColor: { color: theme.colors.white },
 }))
