@@ -12,11 +12,14 @@ import { Currencies, Languages } from "./data"
 import { t } from "app/i18n/translate"
 import { Screen } from "ui/screens/screen/Screen"
 import { SelectTokenSheet } from "ui/components/sheet/token/SelectTokenSheet"
+import { useInstance } from "react-ioc"
+import { WalletController } from "../../../controllers/WalletController"
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
   const styles = useStyles()
   const { switchAppLang, appLang } = useTheme()
   const [ visible, setVisible ] = useState(false)
+  const walletController = useInstance(WalletController)
 
   return (
     <>
@@ -46,15 +49,15 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
             containerStyle={ styles.language }
             header={ t("language") }
           />
-          <PrimaryButton
-            onPress={ () => {
-              setVisible(true)
-            } }
-            style={ styles.button }
-            title={ t("disconnectWalletWithAddress", {
-              address: "0xf6A0…050b7",
-            }) }
-          />
+          { walletController.address &&
+            <PrimaryButton
+              onPress={ walletController.tryDisconnect }
+              style={ styles.button }
+              title={ t("disconnectWalletWithAddress", {
+                address: walletController.shortAddress,
+              }) }
+            />
+          }
         </ScrollView>
       </Screen>
       <SelectTokenSheet

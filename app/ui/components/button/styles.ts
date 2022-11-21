@@ -13,8 +13,6 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.regular,
     color: theme.colors.white,
     fontSize: 15,
-    marginVertical: 13,
-    paddingHorizontal: 20,
   },
   pending: {
     marginVertical: 13,

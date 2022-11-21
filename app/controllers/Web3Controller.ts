@@ -145,15 +145,6 @@ export class Web3Controller {
 
         await this.wc.connector.connect()
 
-        // setTimeout(async () => {
-        //   try {
-        //
-        //   } catch (e) {
-        //     await this.disconnect()
-        //     return
-        //   }
-        //
-        // }, 500)
 
         const rpc: Record<number, string> = {}
 
@@ -187,9 +178,9 @@ export class Web3Controller {
       })
 
       this.provider?.removeAllListeners()
-      this.provider.provider.on("accountsChanged", this.handleAccountsChange)
-      this.provider.provider.on("disconnect", this.handleDisconnect)
-      this.provider.provider.on("chainChanged", this.handleChainChange)
+      this.provider?.provider?.on("accountsChanged", this.handleAccountsChange)
+      this.provider?.provider?.on("disconnect", this.handleDisconnect)
+      this.provider?.provider?.on("chainChanged", this.handleChainChange)
 
       console.log(this.provider, this.ethereum)
 
@@ -228,12 +219,12 @@ export class Web3Controller {
   disconnect = async () => {
     console.log("disconnect")
     try {
-      this.address = ""
+      this.setAddress("")
       this.setChainId(-1)
       this.ownershipModal.modal.closeModal()
 
       const provider = await localStorage.load(WALLET_TYPE_CONNECTED)
-      if (provider && provider === ProviderType.WalletConnect) {
+      if (provider) {
         try {
           await this.wc?.connector?.killSession()
         } catch (e) {
@@ -255,7 +246,7 @@ export class Web3Controller {
   }
 
   setAddress = (address) => {
-    this.address = ethers.utils.getAddress(address)
+    this.address = address ? ethers.utils.getAddress(address) : ""
     console.log("Set-address", this.address)
   }
 

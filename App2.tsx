@@ -7,9 +7,8 @@ import { AppNavigation } from "navigation/AppNavigation"
 import { provider, useInstance } from "react-ioc"
 import { AppController as AppController } from "./app/controllers/AppController"
 import { StorageController } from "./app/controllers/StorageController"
-import { WalletConnectController } from "./app/controllers/WalletConnectController"
+import { WalletConnectController, } from "./app/controllers/WalletConnectController"
 import { Web3Controller } from "./app/controllers/Web3Controller"
-import { RenderQrcodeModalProps, withWalletConnect } from "./app/utils/react-native-dapp"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { IAsyncStorage } from "keyvaluestorage/dist/cjs/react-native/types"
 import { WalletController } from "./app/controllers/WalletController"
@@ -18,7 +17,6 @@ import "./app/i18n/i18n"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { ConnectProviderSheet } from "ui/components/sheet/provider/ConnectProviderSheet"
 import { observer } from "mobx-react-lite"
-import { useWalletConnect as useWC } from "./app/utils/react-native-dapp/dist/hooks"
 import { configure } from "mobx"
 import { CardSkinController } from "./app/controllers/CardSkinController"
 import { CardController } from "./app/controllers/CardController"
@@ -28,6 +26,7 @@ import {
   ModalConfirmOwnershipViewModel,
 } from "ui/components/modalConfirmOwnership/ModalConfirmOwnership"
 import { Toast, ToastViewModel } from "ui/components/toast/Toast"
+import { RenderQrcodeModalProps, withWalletConnect, useWalletConnect as useWC  } from "@walletconnect/react-native-dapp"
 
 configure({
   enforceActions: "never",
