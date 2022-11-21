@@ -4,7 +4,6 @@ import { Web3Controller } from "./Web3Controller"
 import { ProviderType } from "../references/providers"
 import { addSentryBreadcrumb, captureSentryException } from "../logs/sentry"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
-import { MoverError } from "../services/MoverError"
 import { isRejectedRequestError } from "utils/error/ProviderRPCError"
 import { EECode, ExpectedError } from "utils/error/ExpectedError"
 import { ConfirmOwnershipController } from "./ConfirmOwnershipController"
@@ -71,6 +70,7 @@ export class WalletController {
     }
 
     if (this.web3.isConnected) {
+      console.log("web3 connected inner")
       await this.innerInit(false)
     }
   }
@@ -83,6 +83,7 @@ export class WalletController {
     try {
       const connected = await this.web3.tryConnectCachedProvider()
       if (connected) {
+        console.log("Connected", connected)
         await this.innerInit(true)
       }
     } catch (err) {
@@ -110,13 +111,15 @@ export class WalletController {
   }
 
   innerInit = async (cached: boolean) => {
-    console.log("inner-inherit")
-    if (this.address === undefined) {
-      throw new MoverError("Current address is undefined in wallet->init")
+    console.log("inner-inherit", this.address)
+    if (!!this.address) {
+      return
+      // throw new MoverError("Current address is undefined in wallet->init")
     }
 
     if (this.web3 === undefined) {
-      throw new MoverError("WEb3 provider is undefined in wallet->init")
+      return
+      //throw new MoverError("WEb3 provider is undefined in wallet->init")
     }
 
     const confirmed = await this.confirmOwnership.init(this)
@@ -165,10 +168,12 @@ export class WalletController {
     // });
 
     this.destructor1()
-    this.destructor1 = reaction(() => this.web3.address, async () => {
+    this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
+      console.log({ val, prev })
+      if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
+      console.log("change address")
       await this.innerInit(true)
     })
-
   }
 
   tryDisconnect = async () => {

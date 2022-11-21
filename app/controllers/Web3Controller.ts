@@ -187,12 +187,11 @@ export class Web3Controller {
       })
 
       this.provider?.removeAllListeners()
-      // @ts-ignore
       this.provider.provider.on("accountsChanged", this.handleAccountsChange)
-      // @ts-ignore
       this.provider.provider.on("disconnect", this.handleDisconnect)
-      // @ts-ignore
       this.provider.provider.on("chainChanged", this.handleChainChange)
+
+      console.log(this.provider, this.ethereum)
 
 
       // Check if chain supported

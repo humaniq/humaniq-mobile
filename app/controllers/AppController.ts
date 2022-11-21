@@ -32,10 +32,8 @@ export class AppController {
     console.log("init app")
     this.destructor()
     this.destructor = reaction(() => this.wc.initialized, async () => {
-      setTimeout(() => {
-        this.walletService.tryInitCached()
-        this.provider.init()
-      }, 500)
+      this.walletService.tryInitCached()
+      this.provider.init()
     })
   }
 }
