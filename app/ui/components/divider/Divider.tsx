@@ -6,6 +6,6 @@ export const Divider = ({ style }: DividerProps) => {
   const styles = useStyles()
 
   return (
-    <View style={ [styles.root, style] }/>
+    <View style={ [ styles.root, style ] } />
   )
 }

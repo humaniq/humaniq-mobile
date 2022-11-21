@@ -12,8 +12,11 @@ export type FontList = {
 };
 
 export type Space = {
-  horizontal: number
-  vertical: number
+  h16: number
+  h20: number
+  h24: number
+  v20: number
+  v40: number
 }
 
 export type Theme = {

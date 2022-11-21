@@ -11,7 +11,6 @@ import { WalletService } from "../../../services/WalletService"
 
 export const CardNotConnectedOverlay = observer(({ textColor }: Props) => {
   const styles = useStyles()
-
   const walletService = useInstance(WalletService)
 
   return (
@@ -23,13 +22,15 @@ export const CardNotConnectedOverlay = observer(({ textColor }: Props) => {
         reducedTransparencyFallbackColor="white"
       />
       <PrimaryButton
+        textStyle={ styles.buttonText }
         onPress={ () => walletService.setConnectProviderModal(true) }
         title={ t("connectWallet") }
       />
-      <Text style={ {
-        ...styles.description,
-        color: textColor,
-      } }>{ t("connectWallet-title") }</Text>
+      <Text
+        style={ {
+          ...styles.description,
+          color: textColor,
+        } }>{ t("connectWallet-title") }</Text>
     </View>
   )
 })

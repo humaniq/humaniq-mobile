@@ -10,11 +10,12 @@ export const IconText = ({ text, icon, style }: LockTextProps) => {
   const { colors } = useTheme()
 
   return (
-    <View style={ [styles.root, style] }>
+    <View style={ [ styles.root, style ] }>
       <MovIcon
         name={ icon }
         size={ 26 }
-        color={ colors.sub }/>
+        color={ colors.sub }
+      />
       <Text style={ styles.text }>
         { text }
       </Text>

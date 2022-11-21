@@ -11,13 +11,13 @@ export const useStyles = withTheme(theme => ({
     alignSelf: "center",
     height: 50,
     borderRadius: 40,
-    backgroundColor: theme.colors.tabBg,
+    backgroundColor: theme.colors.headerCircle,
     paddingHorizontal: 10,
   },
   tab: {
     alignItems: "center",
     justifyContent: "center",
-    width: 60,
+    width: 58,
     height: "100%",
     borderRadius: 40
   }

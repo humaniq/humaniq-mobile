@@ -3,6 +3,6 @@ import { withTheme } from "hooks/useTheme"
 export const useStyles = withTheme(theme => ({
   root: {
     backgroundColor: theme.colors.divider,
-    height: 1,
+    height: 0.5,
   }
 }))

@@ -124,6 +124,14 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 /**
  * Architectures to build native code for.
  */
@@ -219,6 +227,14 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+        release {
+            if (keystorePropertiesFile.exists()) {
+                storeFile file(keystoreProperties['UPLOAD_STORE_FILE'])
+                storePassword keystoreProperties['UPLOAD_STORE_PASSWORD']
+                keyAlias keystoreProperties['UPLOAD_KEY_ALIAS']
+                keyPassword keystoreProperties['UPLOAD_KEY_PASSWORD']
+            }
         }
     }
     buildTypes {

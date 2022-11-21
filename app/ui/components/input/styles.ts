@@ -9,14 +9,14 @@ export const useStyles = withTheme(theme => ({
     paddingVertical: 16,
     fontFamily: theme.fonts.bold,
     fontSize: 15,
-    color: "#A1A1A1"
+    color: theme.colors.placeholder,
   },
   title: {
     fontFamily: theme.fonts.regular,
     color: theme.colors.sub,
     marginBottom: 8,
-    fontSize: 12
-  }
+    fontSize: 12,
+  },
 }))
 
 export const useMaskedInputStyles = withTheme(theme => ({
@@ -24,7 +24,7 @@ export const useMaskedInputStyles = withTheme(theme => ({
   input: {
     fontFamily: theme.fonts.bold,
     fontSize: 15,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     paddingVertical: 16,
     backgroundColor: theme.colors.tertiary,
     borderRadius: 8,
@@ -35,12 +35,12 @@ export const useMaskedInputStyles = withTheme(theme => ({
     fontFamily: theme.fonts.regular,
     color: theme.colors.sub,
     marginBottom: 8,
-    fontSize: 12
+    fontSize: 12,
   },
   loading: {
     position: "absolute",
     right: 12,
     bottom: 0,
-    top: 0
-  }
+    top: 0,
+  },
 }))

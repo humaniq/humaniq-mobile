@@ -23,7 +23,7 @@ export const ThemeItem = ({ title, selected, icon, onPress, selectedIcon = "them
         ellipsizeMode={ "tail" }
         numberOfLines={ 1 }
         style={ [styles.title, {
-          color: selected ? "#333333" : colors.headerTitle
+          color: selected ? "#333333" : colors.text
         }] }>{ title }</Text>
     </TouchableOpacity>
   )

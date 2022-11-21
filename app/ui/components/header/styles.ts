@@ -6,12 +6,12 @@ export const useStyles = withTheme(theme => ({
     alignItems: "center",
     justifyContent: "space-between",
     paddingVertical: 8,
-    paddingHorizontal: theme.spaces.horizontal,
+    paddingHorizontal: theme.spaces.h24,
   },
   title: {
     fontFamily: theme.fonts.medium,
     fontSize: 20,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     flex: 1,
   },
   back: {

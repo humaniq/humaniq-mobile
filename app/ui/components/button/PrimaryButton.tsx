@@ -11,6 +11,7 @@ export const PrimaryButton = ({
                                 style,
                                 icon,
                                 iconStyles,
+                                textStyle,
                               }: PrimaryButtonProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
@@ -18,9 +19,12 @@ export const PrimaryButton = ({
   return (
     <TouchableOpacity
       disabled={ disabled }
-      style={ [ styles.root, {
-        backgroundColor: disabled ? colors.disabled : colors.primaryButton,
-      }, style ] }
+      style={ [ styles.root,
+        {
+          backgroundColor: disabled ? colors.disabled : colors.primaryButton,
+        },
+        style,
+      ] }
       onPress={ onPress }>
       { icon ? (
         <MovIcon
@@ -32,9 +36,13 @@ export const PrimaryButton = ({
         <Text
           ellipsizeMode={ "tail" }
           numberOfLines={ 1 }
-          style={ [ styles.text, {
-            color: disabled ? colors.disabledText : colors.white,
-          } ] }>
+          style={ [
+            styles.text,
+            {
+              color: disabled ? colors.disabledText : colors.white,
+            },
+            textStyle,
+          ] }>
           { title }
         </Text>
       ) : null }

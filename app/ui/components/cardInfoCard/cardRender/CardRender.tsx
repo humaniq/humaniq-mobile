@@ -45,7 +45,7 @@ export const CardRender = observer((
   const backGroundColor = computed(() => skin?.backgroundType === "color" ? colors[skin.backgroundColor] : "#fff")
 
   return (
-    <Card style={ [ styles.root, { style } ] }>
+    <Card style={ [ styles.root, style ] }>
       <View style={ styles.content }>
         <ImageBackground
           source={ skin?.backgroundType !== "color" ? skin?.picture?.src : undefined }
@@ -100,7 +100,7 @@ export const CardRender = observer((
         </View>
       </View>
       { !initialized && (
-        <CardNotConnectedOverlay textColor={ textColor.get() }  />
+        <CardNotConnectedOverlay textColor={ textColor.get() } />
       ) }
     </Card>
   )

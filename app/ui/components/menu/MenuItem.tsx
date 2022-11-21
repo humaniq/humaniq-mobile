@@ -5,6 +5,7 @@ import { useStyles } from "./styles"
 import { MovIcon } from "ui/components/icon/MovIcon"
 import { useTheme } from "hooks/useTheme"
 import { RoundedIcon } from "ui/components/icon/RoundedIcon"
+import { t } from "../../../i18n/translate"
 
 export const MenuItem = ({
                            icon,
@@ -12,33 +13,42 @@ export const MenuItem = ({
                            subTitle,
                            arrowRight = false,
                            comingSoon = false,
-                           onPress
+                           onPress,
+                           disabled,
                          }: MenuItemProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
 
   return (
-    <TouchableOpacity style={ styles.root } onPress={ onPress }>
-      <RoundedIcon icon={ icon }/>
-      <View style={ styles.middle }>
-        <Text
-          numberOfLines={ 1 }
-          ellipsizeMode={ "tail" }
-          style={ styles.title }>{ title }</Text>
-        <Text
-          numberOfLines={ 1 }
-          ellipsizeMode={ "tail" }
-          style={ styles.subTitle }>{ subTitle }</Text>
+    <TouchableOpacity
+      style={ styles.root }
+      disabled={ disabled }
+      onPress={ onPress }>
+      <View style={ [ styles.content, {
+        opacity: disabled ? 0.5 : 1,
+      } ] }>
+        <RoundedIcon icon={ icon } />
+        <View style={ styles.middle }>
+          <Text
+            numberOfLines={ 1 }
+            ellipsizeMode={ "tail" }
+            style={ styles.title }>{ title }</Text>
+          <Text
+            numberOfLines={ 1 }
+            ellipsizeMode={ "tail" }
+            style={ styles.subTitle }>{ subTitle }</Text>
+        </View>
+        { arrowRight && (
+          <MovIcon
+            name={ "arrow_right" }
+            size={ 26 }
+            color={ colors.primary }
+          />
+        ) }
       </View>
-      { arrowRight && (
-        <MovIcon
-          name={ "arrow_right" }
-          size={ 26 }
-          color={ colors.primary }/>
-      ) }
       { comingSoon && (
         <View style={ styles.comingSoon }>
-          <Text style={ styles.comingSoonText }>Coming soon</Text>
+          <Text style={ styles.comingSoonText }>{ t("soon") }</Text>
         </View>
       ) }
     </TouchableOpacity>

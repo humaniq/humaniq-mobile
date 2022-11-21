@@ -13,7 +13,7 @@ import { observer } from "mobx-react-lite"
 export const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const screenOptions = {
-  headerShown: false
+  headerShown: false,
 }
 
 export const RootNavigator = observer(() => {

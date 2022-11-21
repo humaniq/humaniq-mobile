@@ -9,12 +9,12 @@ export const Input = ({ title, containerStyle, style, placeholder }: InputProps)
   const { colors } = useTheme()
 
   return (
-    <View style={ [styles.root, containerStyle] }>
+    <View style={ [ styles.root, containerStyle ] }>
       { title ? (
         <Text style={ styles.title }>{ title }</Text>
       ) : null }
       <TextInput
-        style={ [styles.input, style] }
+        style={ [ styles.input, style ] }
         placeholder={ placeholder }
         placeholderTextColor={ colors.placeholder }
       />

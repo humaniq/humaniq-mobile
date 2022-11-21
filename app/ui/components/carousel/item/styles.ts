@@ -6,9 +6,9 @@ export const useStyles = withTheme(theme => ({
     alignItems: "center",
     padding: 9,
     borderRadius: 16,
-    backgroundColor: theme.colors.secondaryBg,
+    backgroundColor: theme.colors.tertiary,
     marginRight: 12,
-    marginVertical: 4,
+    marginVertical: 20,
   },
   icon: {
     width: 17,
@@ -19,17 +19,13 @@ export const useStyles = withTheme(theme => ({
     fontFamily: theme.fonts.medium,
     fontSize: 13,
     marginLeft: 8,
-    color: theme.colors.comingSoonText
+    color: theme.colors.text,
   },
   selected: {
     backgroundColor: theme.colors.white,
-    shadowColor: "#000000",
-    shadowOffset: {
-      width: 0,
-      height: 0
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 4,
-    elevation: 3
-  }
+    ...theme.shadows,
+  },
+  selectedText: {
+    color: theme.colors.black,
+  },
 }))
