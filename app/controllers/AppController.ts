@@ -1,19 +1,19 @@
 import { makeAutoObservable, reaction } from "mobx"
-import { StorageService } from "./StorageService"
+import { StorageController } from "./StorageController"
 import { inject } from "react-ioc"
-import { WalletConnectService } from "./WalletConnectService"
-import { ProviderService } from "./ProviderService"
-import { WalletService } from "./WalletService"
+import { WalletConnectController } from "./WalletConnectController"
+import { Web3Controller } from "./Web3Controller"
+import { WalletController } from "./WalletController"
 
-export class AppService {
+export class AppController {
 
   initialized = false
   destructor = () => null
 
-  storage = inject(this, StorageService)
-  wc = inject(this, WalletConnectService)
-  provider = inject(this, ProviderService)
-  walletService = inject(this, WalletService)
+  storage = inject(this, StorageController)
+  wc = inject(this, WalletConnectController)
+  provider = inject(this, Web3Controller)
+  walletService = inject(this, WalletController)
 
   constructor() {
     makeAutoObservable(this, null, { autoBind: true })

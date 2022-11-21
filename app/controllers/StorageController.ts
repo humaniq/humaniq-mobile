@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx"
 
-export class StorageService {
+export class StorageController {
   counter = 0
 
   constructor() {

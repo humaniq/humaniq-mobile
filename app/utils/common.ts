@@ -15,6 +15,7 @@ export function debounce(func, timeout = 300) {
   return (...args) => {
     clearTimeout(timer)
     timer = setTimeout(() => {
+      // @ts-ignore
       func.apply(this, args)
     }, timeout)
   }

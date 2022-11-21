@@ -6,6 +6,7 @@ export interface PrimaryButtonProps {
   icon?: string
   onPress?: typeof noop
   disabled?: boolean
+  pending?: boolean
   style?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
   iconStyles?: {

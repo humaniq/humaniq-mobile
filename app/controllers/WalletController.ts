@@ -1,16 +1,24 @@
-import { makeAutoObservable } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 import { inject } from "react-ioc"
-import { ProviderService } from "./ProviderService"
+import { Web3Controller } from "./Web3Controller"
 import { ProviderType } from "../references/providers"
 import { addSentryBreadcrumb, captureSentryException } from "../logs/sentry"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
-import { MoverError } from "utils/error/MoverError"
+import { isRejectedRequestError } from "utils/error/ProviderRPCError"
+import { EECode, ExpectedError } from "utils/error/ExpectedError"
+import { ConfirmOwnershipController } from "./ConfirmOwnershipController"
+import { ToastViewModel } from "ui/components/toast/Toast"
 import { Linking } from "react-native"
 import { TERMS_OF_USE_URL } from "configs/env"
 
-export class WalletService {
 
-  provider = inject(this, ProviderService)
+export class WalletController {
+
+  web3 = inject(this, Web3Controller)
+  confirmOwnership = inject(this, ConfirmOwnershipController)
+  toast = inject(this, ToastViewModel)
+
+  destructor1 = () => null
 
   constructor() {
     makeAutoObservable(this, null, { autoBind: true })
@@ -26,19 +34,19 @@ export class WalletService {
   triedToConnect = false
 
   get isWalletReady() {
-    return this.provider.isConnected // && confirmOwnership.confirmed.value;
+    return this.web3.isConnected // && confirmOwnership.confirmed.value;
   }
 
   get address() {
-    return this.provider.address
+    return this.web3.address
   }
 
   get shortAddress() {
-    return this.provider.shortAddress
+    return this.web3.shortAddress
   }
 
   get network() {
-    return this.provider.network
+    return this.web3.network
   }
 
   get initialized() {
@@ -56,7 +64,7 @@ export class WalletService {
       message: "Wallet initialize...",
     })
     try {
-      await this.provider.connect(providerType)
+      await this.web3.connect(providerType)
     } catch (err) {
       addSentryBreadcrumb({
         type: "error",
@@ -65,7 +73,8 @@ export class WalletService {
       throw err
     }
 
-    if (this.provider.isConnected) {
+    if (this.web3.isConnected) {
+      console.log("web3 connected inner")
       await this.innerInit(false)
     }
   }
@@ -76,8 +85,9 @@ export class WalletService {
       message: "Wallet initialize (from cache)...",
     })
     try {
-      const connected = await this.provider.tryConnectCachedProvider()
+      const connected = await this.web3.tryConnectCachedProvider()
       if (connected) {
+        console.log("Connected", connected)
         await this.innerInit(true)
       }
     } catch (err) {
@@ -112,28 +122,32 @@ export class WalletService {
   }
 
   innerInit = async (cached: boolean) => {
-    if (this.address === undefined) {
-      throw new MoverError("Current address is undefined in wallet->init")
+    console.log("inner-inherit", this.address)
+    if (!!this.address) {
+      return
+      // throw new MoverError("Current address is undefined in wallet->init")
     }
 
-    if (this.provider === undefined) {
-      throw new MoverError("WEb3 provider is undefined in wallet->init")
+    if (this.web3 === undefined) {
+      return
+      //throw new MoverError("WEb3 provider is undefined in wallet->init")
     }
 
-    const confirmed = true //  await confirmOwnership.init();
+    const confirmed = await this.confirmOwnership.init(this)
     if (!confirmed) {
       // процесс конфирмации
-      // try {
-      //   useWeb3Modal().closeModal();
-      //   await confirmOwnership.confirm();
-      // } catch (error) {
-      //   if (error instanceof ExpectedError && error.getCode() === EECode.userRejectSign) {
-      //     toast.auto(new ExpectedError(EECode.userRejectOwnershipSignature));
-      //   } else {
-      //     toast.auto(new UnexpectedError(UECode.signErrorVerify).wrap(error));
-      //   }
+      try {
+        // useWeb3Modal().closeModal();
+        await this.confirmOwnership.confirm()
+      } catch (error) {
+        if (error instanceof ExpectedError && error.getCode() === EECode.userRejectSign) {
+          this.toast.auto(new ExpectedError(EECode.userRejectOwnershipSignature))
+        } else {
+          this.toast.auto(new UnexpectedError(UECode.signErrorVerify).wrap(error))
+        }
+      }
+      this.triedToConnect = true
     }
-    this.triedToConnect = true
 
     // explorer = new Explorer({
     //   MoralisAPIKey: getAPIKey('MORALIS_API_KEY'),
@@ -163,6 +177,38 @@ export class WalletService {
     //   type: 'info',
     //   message: 'Wallet tokens loaded'
     // });
+
+    this.destructor1()
+    this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
+      console.log({ val, prev })
+      if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
+      console.log("change address")
+      await this.innerInit(true)
+    })
+  }
+
+  tryDisconnect = async () => {
+    await this.web3.disconnect()
+  }
+
+  trySign = async (text: string): Promise<string> => {
+    if (this.address === undefined) {
+      throw new UnexpectedError(UECode.WalletSignEmptyAddress)
+    }
+
+    if (this.web3.provider === undefined) {
+      throw new UnexpectedError(UECode.WalletSignEmptyWeb3Provider)
+    }
+
+    try {
+      return await this.web3.signMessage(text)
+    } catch (e) {
+      if (isRejectedRequestError(e)) {
+        throw new ExpectedError(EECode.userRejectSign)
+      }
+
+      throw new UnexpectedError(UECode.SignMessage).wrap(e)
+    }
   }
 
 }
