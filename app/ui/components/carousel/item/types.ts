@@ -1,10 +1,10 @@
 import { StyleProp, ViewStyle } from "react-native"
 import { noop } from "utils/common"
-import { NetworkInfo } from "../../../../references/types"
+import { Network } from "../../../../references/network"
 
-export interface TokenItemProps {
+export interface CarouselItemProps {
+  item: Network
   selected?: boolean
   style?: StyleProp<ViewStyle>
   onPress?: typeof noop
-  item: NetworkInfo
 }

@@ -35,7 +35,8 @@ export const Header = ({ title, isSettings, back = true, containerStyle }: Heade
           <MovIcon
             name={ "settings" }
             size={ 25 }
-            color={ colors.primary } />
+            color={ colors.primary }
+          />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -45,7 +46,8 @@ export const Header = ({ title, isSettings, back = true, containerStyle }: Heade
           <MovIcon
             name={ "close" }
             size={ 27 }
-            color={ colors.primary } />
+            color={ colors.primary }
+          />
         </TouchableOpacity>
       ) }
     </View>

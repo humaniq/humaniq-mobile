@@ -13,6 +13,7 @@ export const PrimaryButton = ({
                                 icon,
                                 iconStyles,
                                 pending,
+                                textStyle,
                               }: PrimaryButtonProps) => {
   const styles = useStyles()
   const { colors } = useTheme()
@@ -36,7 +37,7 @@ export const PrimaryButton = ({
           numberOfLines={ 1 }
           style={ [ styles.text, {
             color: disabled ? colors.disabledText : colors.white,
-          } ] }>
+          }, textStyle ] }>
           { title }
         </Text>
       ) : null }

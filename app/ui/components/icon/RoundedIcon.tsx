@@ -2,7 +2,7 @@ import { RoundedIconProps } from "./types"
 import { View } from "react-native"
 import { useRoundIconStyles } from "./styles"
 import { useTheme } from "hooks/useTheme"
-import { scale } from "utils/screenUtils"
+import { verticalScale } from "utils/screenUtils"
 import { MovIcon } from "ui/components/icon/MovIcon"
 
 export const RoundedIcon = ({ icon }: RoundedIconProps) => {
@@ -13,7 +13,7 @@ export const RoundedIcon = ({ icon }: RoundedIconProps) => {
     <View style={ styles.root }>
       <MovIcon
         name={ icon }
-        size={ scale(26) }
+        size={ verticalScale(27) }
         color={ theme.colors.primary }
       />
     </View>

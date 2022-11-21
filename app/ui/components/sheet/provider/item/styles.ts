@@ -13,7 +13,7 @@ export const useStyles = withTheme(theme => ({
   },
   title: {
     fontFamily: theme.fonts.medium,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     fontSize: 14,
     flex: 1,
   },

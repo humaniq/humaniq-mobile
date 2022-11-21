@@ -23,7 +23,7 @@ export const useStyles = withTheme(theme => ({
   selectText: {
     fontFamily: theme.fonts.medium,
     fontSize: 15,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     marginRight: 10
   },
   icon: {
@@ -45,6 +45,6 @@ export const useStyles = withTheme(theme => ({
   dropdownText: {
     fontFamily: theme.fonts.regular,
     fontSize: 16,
-    color: theme.colors.headerTitle
+    color: theme.colors.text
   }
 }))

@@ -6,6 +6,6 @@ export const PrimaryText = ({ text, style }: PrimaryTextProps) => {
   const styles = useTextStyles()
 
   return (
-    <Text style={ [styles.root, style] }>{ text }</Text>
+    <Text style={ [ styles.root, style ] }>{ text }</Text>
   )
 }

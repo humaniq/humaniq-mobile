@@ -1,6 +1,6 @@
 import { SettingsScreenProps } from "./types"
 import { useStyles } from "./styles"
-import React from "react"
+import React, { useState } from "react"
 import { Header } from "ui/components/header/Header"
 import { ThemeSettings } from "ui/components/theme/ThemeSettings"
 import { Select } from "ui/components/select/Select"
@@ -11,10 +11,12 @@ import { useTheme } from "hooks/useTheme"
 import { Currencies, Languages } from "./data"
 import { t } from "app/i18n/translate"
 import { Screen } from "ui/screens/screen/Screen"
+import { SelectTokenSheet } from "ui/components/sheet/token/SelectTokenSheet"
 
 export const SettingsScreen = ({}: SettingsScreenProps) => {
   const styles = useStyles()
   const { switchAppLang, appLang } = useTheme()
+  const [ visible, setVisible ] = useState(false)
 
   return (
     <>
@@ -45,6 +47,9 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
             header={ t("language") }
           />
           <PrimaryButton
+            onPress={ () => {
+              setVisible(true)
+            } }
             style={ styles.button }
             title={ t("disconnectWalletWithAddress", {
               address: "0xf6A0…050b7",
@@ -52,6 +57,10 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           />
         </ScrollView>
       </Screen>
+      <SelectTokenSheet
+        visible={ visible }
+        onDismiss={ () => setVisible(false) }
+      />
     </>
   )
 }

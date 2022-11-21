@@ -1,22 +1,22 @@
 import { withTheme } from "hooks/useTheme"
-import { IS_IOS } from "utils/common"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.searchBg,
+    backgroundColor: theme.colors.tertiary,
     flexDirection: "row",
     alignItems: "center",
     paddingLeft: 24,
-    paddingRight: 10,
-    paddingTop: IS_IOS ? 10 : 0,
-    paddingBottom: IS_IOS ? 10 : 0,
-    borderRadius: 10
+    borderRadius: 8,
+    height: 42,
+    paddingVertical: 0,
   },
   input: {
     flex: 1,
     fontFamily: theme.fonts.medium,
     color: theme.colors.searchIcon,
     marginLeft: 12,
+    marginRight: 12,
     fontSize: 14,
-  }
+    paddingVertical: 0,
+  },
 }))

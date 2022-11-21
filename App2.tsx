@@ -65,6 +65,7 @@ export const AppScreen = observer(() => {
           <BottomSheetModalProvider>
             <AppNavigation />
             <ConnectProviderSheet
+              onTermsPressed={ walletService.handleTermsPress }
               visible={ walletService.connectProviderModalVisible }
               onDismiss={ () => walletService.setConnectProviderModal(false) }
               onProviderPressed={ (selectedProviderId) => {

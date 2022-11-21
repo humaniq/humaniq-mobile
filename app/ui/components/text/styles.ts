@@ -33,7 +33,7 @@ export const useLinkTextStyles = withTheme(theme => ({
   },
   text: {
     fontFamily: theme.fonts.medium,
-    color: theme.colors.headerTitle,
+    color: theme.colors.text,
     fontSize: 13,
     textDecorationLine: "underline",
   }

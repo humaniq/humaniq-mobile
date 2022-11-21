@@ -8,6 +8,9 @@ import { isRejectedRequestError } from "utils/error/ProviderRPCError"
 import { EECode, ExpectedError } from "utils/error/ExpectedError"
 import { ConfirmOwnershipController } from "./ConfirmOwnershipController"
 import { ToastViewModel } from "ui/components/toast/Toast"
+import { Linking } from "react-native"
+import { TERMS_OF_USE_URL } from "configs/env"
+
 
 export class WalletController {
 
@@ -24,6 +27,7 @@ export class WalletController {
   connectProviderModalVisible = false
 
   setConnectProviderModal = (val: boolean) => {
+    console.log("SET-connect", val)
     this.connectProviderModalVisible = val
   }
 
@@ -107,6 +111,13 @@ export class WalletController {
       // toast.auto(new UnexpectedError(UECode.ConnectCacheProviderWeb3));
     } finally {
       this.triedToConnect = true
+    }
+  }
+
+  handleTermsPress = async () => {
+    try {
+      await Linking.openURL(TERMS_OF_USE_URL)
+    } catch (e) {
     }
   }
 

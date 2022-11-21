@@ -7,4 +7,5 @@ export interface MenuItemProps {
   arrowRight?: boolean
   comingSoon?: boolean
   onPress?: typeof noop
+  disabled?: boolean
 }

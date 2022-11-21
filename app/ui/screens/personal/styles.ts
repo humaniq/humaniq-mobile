@@ -2,24 +2,24 @@ import { withTheme } from "hooks/useTheme"
 
 export const useStyles = withTheme(theme => ({
   root: {
-    backgroundColor: theme.colors.bg,
-    flex: 1
+    backgroundColor: theme.colors.background,
+    flex: 1,
   },
   content: {
-    paddingLeft: theme.spaces.horizontal,
-    paddingRight: theme.spaces.horizontal,
-    paddingBottom: theme.spaces.horizontal
+    paddingLeft: theme.spaces.h24,
+    paddingRight: theme.spaces.h24,
+    paddingBottom: theme.spaces.h24,
   },
   title: {
-    marginTop: 24
+    marginTop: 24,
   },
   gender: {
-    marginVertical: theme.spaces.vertical,
+    marginVertical: theme.spaces.v40,
   },
   input: {
-    marginTop: 24
+    marginTop: 24,
   },
   button: {
-    marginTop: theme.spaces.vertical
-  }
+    marginTop: theme.spaces.v40,
+  },
 }))

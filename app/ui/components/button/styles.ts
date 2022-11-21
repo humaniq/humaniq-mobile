@@ -6,6 +6,8 @@ export const useStyles = withTheme(theme => ({
     borderRadius: 22,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
   },
   text: {
     fontFamily: theme.fonts.regular,

@@ -1,5 +1,5 @@
 import { Text, View } from "react-native"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Props } from "./types"
 import { useStyles } from "./styles"
 import {
@@ -44,8 +44,17 @@ export const ConnectProviderSheet = observer(({
   } = useBottomSheetDynamicSnapPoints(initialSnapPoints)
 
   usePressBack(() => {
-    bottomSheetRef.current?.close()
+    bottomSheetRef.current?.dismiss()
   })
+
+  const renderBackDrop = useCallback((backdropProps) => (
+    <BottomSheetBackdrop
+      { ...backdropProps }
+      enableTouchThrough={ true }
+      appearsOnIndex={ 0 }
+      disappearsOnIndex={ -1 }
+    />
+  ), [])
 
   useEffect(() => {
     if (visible) {
@@ -62,21 +71,14 @@ export const ConnectProviderSheet = observer(({
       android_keyboardInputMode="adjustPan"
       handleHeight={ animatedHandleHeight }
       contentHeight={ animatedContentHeight }
-      backdropComponent={ (backdropProps) => (
-        <BottomSheetBackdrop
-          { ...backdropProps }
-          enableTouchThrough={ true }
-          appearsOnIndex={ 0 }
-          disappearsOnIndex={ -1 }
-        />
-      ) }
+      backdropComponent={ renderBackDrop }
       enablePanDownToClose={ true }
       ref={ bottomSheetRef }
       index={ 0 }
       snapPoints={ animatedSnapPoints }
       onChange={ onStateChange }
       backgroundStyle={ styles.root }
-      handleIndicatorStyle={ styles.indicator }
+      handleIndicatorStyle={ styles.handle }
       onDismiss={ onDismiss }
     >
       <BottomSheetView
