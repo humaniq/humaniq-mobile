@@ -98,7 +98,6 @@
     "trustedBy": "Patikimas {count} naudotojų."
   },
   "forms": {
-    "chooseToken": "Pasirinkite tokena",
     "chooseAmount": "Pasirink sumą",
     "insufficientBalance": "Nepakankamas balansas",
     "reviewTransaction": "Peržiūrėti sandori",
@@ -126,6 +125,7 @@
         "totalFiat": "Bendra deponuota vertė po deponavimo",
         "totalBalance": "Savings+ likutis po deponavimo",
         "button": "Indėlis į taupomąją Savings+",
+        "holdButton": "Laikyk, kad deponuoti",
         "allSwitch": "Deponuoti visa suma",
         "inputLabel": "Suma, kurią įnešame į {0}"
       },
@@ -139,6 +139,7 @@
         "totalFiat": "Bendra deponuota vertė po išėmimo",
         "totalBalance": "Savings+ balansas po išėmimo",
         "button": "Pasitraukti iš Savings",
+        "holdButton": "Laikyk, kad išimti",
         "allSwitch": "Išsiimti visus",
         "inputLabel": "Suma, kurią atsiimame {0}"
       }
@@ -147,6 +148,7 @@
       "topUp": {
         "cashOutToDebitCard": "Grynųjų pinigų išmokėjimas į debeto kortelę",
         "button": "Papildyti",
+        "holdButton": "Laikyk, kad papildyti",
         "whatDoWeTopUp": "Ką papildyti",
         "networkWeTopUpFrom": "Tinklas, iš kurio papildyti",
         "amountWeTopUpIn": "Suma, kurią papildome {symbol}",
@@ -160,8 +162,8 @@
         "previousSendsToTag": "Pirmas siuntimas | {count} ankstesnis siuntimas | {count} ankstesni siuntimai",
         "allSwitch": "Deponuoti visa suma",
         "reviewYourTopUp": "Peržiūrėkite savo papildymą",
-        "minimumAmount": "Minimali kortelės papildymo suma yra {min}.",
-        "maximumAmount": "Didžiausias leistinas kortelės likutis yra {max}.",
+        "minimumAmount": "Minimali kortelės papildymo suma yra {min}",
+        "maximumAmount": "Didžiausias leistinas kortelės likutis yra {max}",
         "emptyTag": "Įvesk tag, kur siųsti lėšas"
       }
     },
@@ -174,6 +176,7 @@
         "totalFiat": "Bendra užblokuota vertė po deponavimo",
         "totalBalance": "Smart Treasury balansas po deponavimo",
         "button": "Indėlis į Smart Treasury",
+        "holdButton": "Laikyk, kad deponuoti",
         "allSwitch": "Deponuoti visa suma",
         "inputLabel": "Suma, kurią įnešame į {0}"
       },
@@ -185,6 +188,7 @@
         "totalFiat": "Bendra vertė, užblokuota po išėmimo",
         "totalBalance": "Smart Treasury likutis po išėmimo",
         "button": "Išsiimti iš Smart Treasury",
+        "holdButton": "Laikyk, kad išimti",
         "allSwitch": "Išsiimti visus turimus",
         "inputLabel": "Suma, kurią atsiimame {0}"
       }
@@ -200,6 +204,7 @@
         "totalFiat": "Bendra vertė po įmokos",
         "totalBalance": "Staking balansas po įmokos",
         "button": "Deponuoti į Staking",
+        "holdButton": "Laikyk, kad deponuoti",
         "allSwitch": "Deponuoti visa suma",
         "inputLabel": "Suma, kurią įnešame į {0}"
       },
@@ -213,6 +218,7 @@
         "totalFiat": "Bendra vertė po išėmimo",
         "totalBalance": "Staking balansas po išėmimo",
         "button": "Išsiimti iš Staking",
+        "holdButton": "Laikyk, kad išimti",
         "allSwitch": "Išsiimti visus",
         "inputLabel": "Suma, kurią išsiiemam {0}"
       }
@@ -240,7 +246,7 @@
       "flex": "Dalintis Twitter",
       "support": "Pasiekti paramą",
       "explorer": "Atidaryk Explorer",
-      "flexTwitterText": "Aš ką tik panaudojau {'@'}viaMover kortelei papildynimui. Iš {network} . Gauk kortelę dabar adresu {link}",
+      "flexTwitterText": "Aš ką tik panaudojau {'@'}viaMover kortelei papildynimui. Iš #{network} . Gauk kortelę dabar adresu {link}",
       "reverted": "Jūsų sandoris nepavyko ir nebuvo įvykdytas. Nesijaudink, turi būti priežastis, kodėl taip nutiko.",
       "types": {
         "treasury_deposit": "Į Smart Treasury įnešėte indėlį {value}",
@@ -497,5 +503,16 @@
     "card": "Kortelė",
     "earn": "Earn",
     "history": "Sandorių istorija"
+  },
+  "waitlistPosition": "Tavo pozicija laukiančiųjų sąraše yra {position}",
+  "education": {
+    "titlePrefix": "Kas yra {term}?",
+    "networks": {
+      "arbitrum": "Arbitrum yra tinklas, skirtas pagerinti Ethereum blockchain greičio ir mastelio atžvilgiu, kartu pridedant papildomų privatumo funkcijų. \n\nArbitrum yra 2 sluoksnio sprendimas. 2 sluoksnio tinklai (kaip Optimism) nėra atskiros blockchain. Vietoj to, jie sujungia didelius transakcijų kiekius už on-chain, prieš pateikdami juos kartu off-chain, taip remdamiesi tuo pačiu saugumo ir sutarimo mehanizmu kaip ir Ethereum.",
+      "optimism": "Optimism to sieć zaprojektowana w celu ulepszenia blockchaina Ethereum pod względem szybkości i skalowalności przy jednoczesnym zastosowaniu dodatkowych funkcji prywatności.\n\nOptimism jest rozwiązaniem typu Layer-2 (warstw drugich). Sieci warstw drugich (jak Arbitrum) nie są oddzielnymi blockchainami, a zamiast tego łączą duże liczby transakcji off-chain (poza blockchainami) przed wysłaniem ich razem w pakiecie on-chain (na łańcuchu), polegając w ten sposób na tym samym mechanizmie bezpieczeństwa i konsensusu, co Ethereum.",
+      "polygon": "Polygon yra ypatingas ir atskiras blockchain, suderinamas su Ethereum. Jis naudoja kitokį sutarimo mechanizmą nei Ethereum ir turi savo saugumo priemones. Polygon taip pat žinomas dėl mažesnių operacijų mokesčių ir greitesnio operacijų apdorojimo.\n\nPolygon yra suderinamas su Ethereum, todėl tavo piniginės adresas Ethereum yra toks pat kaip ir Polygon.",
+      "avalanche": "Avalanche yra atskiras blockchain, kuris siekiamas suteikti alternatyvą didelėms sąnaudoms ir mažam greičiui. Avalanche naudoja patentuotą konsensuso mechanizmą, kad padidintų operacijų pralaidumą ir sumažintų tikrintojų energijos suvartojimą.\n\nAvalanche suderinamas su Ethereum, todėl jūsų piniginės adresas Ethereum yra toks pat kaip ir Avalanche.",
+      "binance": "Binance Smart Chain (BSC) yra modifikuota Ethereum tinklo versija. BSC turi skirtingą sutarimo mechanizmą ir tinklo parametrus, kurie leidžia turėti mažesnes operacijos išlaidas ir greitesnį apdorojimo laiką. \n\nBSC yra suderinamas su Ethereum, todėl jūsų piniginės adresas Ethereum yra toks pat kaip ir BSC."
+    }
   }
 }

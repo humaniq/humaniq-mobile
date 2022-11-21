@@ -98,7 +98,6 @@
     "trustedBy": "Confiado pelos utilizadores {count}."
   },
   "forms": {
-    "chooseToken": "Escolher Token",
     "chooseAmount": "Escolha o montante",
     "insufficientBalance": "Equilíbrio insuficiente",
     "reviewTransaction": "Transacção de revisão",
@@ -126,6 +125,7 @@
         "totalFiat": "Valor total depositado após depósito",
         "totalBalance": "Savings+ saldo após o depósito",
         "button": "Depósito em Savings+",
+        "holdButton": "Aguarde para Depositar",
         "allSwitch": "Depositar tudo",
         "inputLabel": "Quantia que depositamos em {0}"
       },
@@ -139,6 +139,7 @@
         "totalFiat": "Valor total depositado após levantamento",
         "totalBalance": "Savings+ saldo após o levantamento",
         "button": "Retirada da Savings+",
+        "holdButton": "Aguarde para Levantar",
         "allSwitch": "Levantar tudo",
         "inputLabel": "Valor que levantamos em {0}"
       }
@@ -147,6 +148,7 @@
       "topUp": {
         "cashOutToDebitCard": "Levantar para cartão de débito",
         "button": "Adicionar saldo",
+        "holdButton": "Aguarde para Carregar",
         "whatDoWeTopUp": "O que adicionamos",
         "networkWeTopUpFrom": "Rede a partir da qual adicionamos",
         "amountWeTopUpIn": "Quantia que completamos em {symbol}",
@@ -174,6 +176,7 @@
         "totalFiat": "Valor total bloqueado após depósito",
         "totalBalance": "Saldo do Smart Treasury após o depósito",
         "button": "Depósito a Smart Treasury",
+        "holdButton": "Aguarde para Depositar",
         "allSwitch": "Depositar tudo",
         "inputLabel": "Valor que depositamos em {0}"
       },
@@ -185,6 +188,7 @@
         "totalFiat": "Valor total bloqueado depois do levantamento",
         "totalBalance": "Balanço Smart Treasury após o levantamento",
         "button": "Levantar da Smart Treasury",
+        "holdButton": "Aguarde para Levantar",
         "allSwitch": "Levantar tudo disponível",
         "inputLabel": "Quantia que retiramos em {0}"
       }
@@ -200,6 +204,7 @@
         "totalFiat": "Valor total em staking após o depósito",
         "totalBalance": "Saldo de Staking após depósito",
         "button": "Depósito em Staking",
+        "holdButton": "Aguarde para Depositar",
         "allSwitch": "Depositar tudo",
         "inputLabel": "Quantia que depositamos em {0}"
       },
@@ -213,6 +218,7 @@
         "totalFiat": "Valor total em staking após levantamento",
         "totalBalance": "Saldo de Staking após levantamento",
         "button": "Retirada da Staking",
+        "holdButton": "Aguarde para Levantar",
         "allSwitch": "Retirar tudo",
         "inputLabel": "Quantia que retiramos em {0}"
       }
@@ -240,7 +246,7 @@
       "flex": "Flexível no Twitter",
       "support": "Alcance para apoiar",
       "explorer": "Abrir explorador",
-      "flexTwitterText": "Acabei de usar {'@'}viaMover para adicionar fundos para o meu cartão. De {network}. Obtenha já o seu cartão em {link}",
+      "flexTwitterText": "Acabei de usar {'@'}viaMover para adicionar fundos para o meu cartão. De #{network}. Obtenha já o seu cartão em {link}",
       "reverted": "A sua transação falhou e não foi executada. Sem problema, deve haver uma razão para isto.",
       "types": {
         "treasury_deposit": "Depositou {value} na Smart Treasury",
@@ -497,5 +503,16 @@
   "transactionHistorySearchPlaceholder": "Pesquise qualquer transação por token ou nome",
   "virtual": "Virtual",
   "wayToSpend": "forma de gastar as suas criptomoedas",
-  "yourNewCardWillHave": "O seu novo cartão terá"
+  "yourNewCardWillHave": "O seu novo cartão terá",
+  "waitlistPosition": "A sua posição na lista de espera é {position}",
+  "education": {
+    "titlePrefix": "O que é {term}?",
+    "networks": {
+      "arbitrum": "O Arbitrum é uma rede concebida para melhorar o blockchain Ethereum em termos de velocidade e escalabilidade, adicionando funcionalidades adicionais de privacidade.\n\nO Arbitrum é uma solução Layer-2. As redes Layer-2 (como o Optimism) não são blockchains separados. Em vez disso, combinam grandes quantidades de transações fora da cadeia antes de as enviar agrupadas na cadeia, confiando assim no mesmo mecanismo de segurança e consenso do Ethereum.",
+      "optimism": "O Optimism é uma rede concebida para melhorar o blockchain Ethereum em termos de escalabilidade de velocidade, adicionando funcionalidades adicionais de privacidade.\n\nO Optimism é uma solução Layer-2. As redes Layer-2 (como o Arbitrum) não são blockchains separados. Em vez disso, combinam grandes quantidades de transações fora da cadeia antes de as enviar agrupadas na cadeia, confiando assim no mesmo mecanismo de segurança e consenso do Ethereum.",
+      "polygon": "O Polygon é um blockchain distinto e separado que é compatível com o Ethereum. Utiliza um mecanismo de consenso diferente do Ethereum e possui as suas próprias medidas de segurança. O Polygon também é conhecido pelas taxas de transação mais baixas e processamento de transações mais rápido.\n\nO Polygon é compatível com o Ethereum, pelo que o endereço da sua carteira no Ethereum é o mesmo que no Polygon.",
+      "avalanche": "O Avalanche é um blockchain autónomo com o objetivo de fornecer uma alternativa aos altos custos e às baixas velocidades. O Avalanche utiliza um mecanismo de consenso proprietário para aumentar o rendimento das transações e minimizar o consumo de energia pelos validadores.\n\nO Avalanche é compatível com o Ethereum, pelo que o endereço da sua carteira no Ethereum é o mesmo que no Avalanche.",
+      "binance": "O Binance Smart Chain (BSC) é uma versão modificada da rede Ethereum. O BSC possui um mecanismo de consenso e parâmetros de rede diferentes que lhe permitem ter custos de transação mais baixos e tempo de processamento mais rápido.\n\nO BSC é compatível com o Ethereum, pelo que o endereço da sua carteira no Ethereum é o mesmo que no BSC."
+    }
+  }
 }

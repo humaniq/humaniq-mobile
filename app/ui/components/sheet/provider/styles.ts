@@ -5,7 +5,9 @@ export const useStyles = withTheme(theme => ({
     backgroundColor: theme.colors.bg
   },
   content: {
-    padding: 18
+    paddingHorizontal: 18,
+    paddingTop: 18,
+    paddingBottom: 20,
   },
   title: {
     fontFamily: theme.fonts.bold,

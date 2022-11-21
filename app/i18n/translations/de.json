@@ -95,7 +95,6 @@
     "trustedBy": "Vertraut von {count} Benutzern."
   },
   "forms": {
-    "chooseToken": "Token auswählen",
     "chooseAmount": "Betrag wählen",
     "insufficientBalance": "Unzureichendes Gleichgewicht",
     "reviewTransaction": "Überprüfung der Transaktion",
@@ -121,6 +120,7 @@
         "totalFiat": "Gesamtwert der Einzahlung nach Durchführung der Einzahlung",
         "totalBalance": "Saldo von Savings+ nach der Einzahlung",
         "button": "Einzahlung in Savings+",
+        "holdButton": "Halten zum Einzahlen",
         "allSwitch": "Alle einzahlen",
         "inputLabel": "Betrag, den wir in {0} einzahlen"
       },
@@ -134,6 +134,7 @@
         "totalFiat": "Gesamtwert der Einzahlung nach Abhebung",
         "totalBalance": "Saldo von Savings+ nach der Abhebung",
         "button": "Von Savings+ abheben",
+        "holdButton": "Halten zum Abheben",
         "allSwitch": "Alle Abhebungen",
         "inputLabel": "Betrag, den wir in {0} abheben"
       }
@@ -142,6 +143,7 @@
       "topUp": {
         "cashOutToDebitCard": "Abhebung auf Debitkarte",
         "button": "Aufladen",
+        "holdButton": "Halten zum Aufladen",
         "whatDoWeTopUp": "Was laden wir auf?",
         "networkWeTopUpFrom": "Netzwerk, von dem wir aufladen",
         "amountWeTopUpIn": "Betrag, den wir in {symbol} aufladen",
@@ -169,6 +171,7 @@
         "totalFiat": "Gesperrter Gesamtbetrag nach Einzahlung",
         "totalBalance": "Smart Treasury-Saldo nach der Einzahlung",
         "button": "Einzahlung in Smart Treasury",
+        "holdButton": "Halten zum Einzahlen",
         "allSwitch": "Alle einzahlen",
         "inputLabel": "Betrag, den wir in {0} einzahlen"
       },
@@ -180,6 +183,7 @@
         "totalFiat": "Gesamtwert nach Abhebung gesperrt",
         "totalBalance": "Smart Treasury-Saldo nach der Abhebung",
         "button": "Abhebung aus Smart Treasury",
+        "holdButton": "Halten zum Abheben",
         "allSwitch": "Alle verfügbaren Beträge abheben",
         "inputLabel": "Betrag, den wir in {0} abheben"
       }
@@ -195,6 +199,7 @@
         "totalFiat": "Gesamtwert des Einsatzes nach der Einzahlung",
         "totalBalance": "Saldo des Staking nach der Einzahlung",
         "button": "Einzahlung in Staking",
+        "holdButton": "Halten zum Einzahlen",
         "allSwitch": "Alle einzahlen",
         "inputLabel": "Eingezahlter Betrag in {0}"
       },
@@ -208,6 +213,7 @@
         "totalFiat": "Gesamtwert des Einsatzes nach der Auszahlung",
         "totalBalance": "Saldo des Staking nach der Auszahlung",
         "button": "Aus dem Staking abheben",
+        "holdButton": "Halten zum Abheben",
         "allSwitch": "Alle zurückziehen",
         "inputLabel": "Abgehobener Betrag in {0}"
       }
@@ -237,7 +243,7 @@
       "flex": "Flex auf Twitter",
       "support": "Reichweite zur Unterstützung",
       "explorer": "Explorer öffnen",
-      "flexTwitterText": "Ich habe gerade {'@'}viaMover benutzt, um meine Karte aufzuladen. Von {network}. Holen Sie sich Ihre Karte jetzt bei {link}",
+      "flexTwitterText": "Ich habe gerade {'@'}viaMover benutzt, um meine Karte aufzuladen. Von #{network}. Holen Sie sich Ihre Karte jetzt bei {link}",
       "reverted": "Deine Transaktion ist fehlgeschlagen und wurde nicht ausgeführt. Keine Sorge, es muss einen Grund geben, warum das passiert ist.",
       "types": {
         "treasury_deposit": "Sie haben bei Smart Treasury {value} eingezahlt",
@@ -270,14 +276,14 @@
       "unwrap": "Auspacken des {symbol} Tokens"
     },
     "actions": {
-      "treasury_deposit":"Mit {symbol} einzahlen",
+      "treasury_deposit": "Mit {symbol} einzahlen",
       "savings_deposit": "In {symbol} abheben",
       "treasury_withdraw": "In {symbol} abheben",
       "card_topup": "Mit {symbol} aufladen",
       "ubtstaking_deposit": "Mit {symbol} einzahlen",
       "ubtstaking_withdraw": "In {symbol} abheben",
       "savingsplus_deposit": "Mit {symbol} einzahlen",
-      "savingsplus_withdraw":  "In {symbol} abheben"
+      "savingsplus_withdraw": "In {symbol} abheben"
     }
   },
   "today": "heute",
@@ -497,5 +503,16 @@
     "card": "Karte",
     "earn": "Earn",
     "history": "Transaktionsverlauf"
+  },
+  "waitlistPosition": "Ihre Position auf der Warteliste ist {position}",
+  "education": {
+    "titlePrefix": "Was ist {term}?",
+    "networks": {
+      "arbitrum": "Arbitrum ist ein Netzwerk, das entwickelt wurde, um die Ethereum-Blockchain in Bezug auf Geschwindigkeit und Skalierbarkeit zu verbessern und gleichzeitig zusätzliche Datenschutzfunktionen hinzuzufügen.\n\nArbitrum ist eine Layer-2-Lösung. Layer-2-Netzwerke (wie Optimism) sind keine separaten Blockchains. Stattdessen fassen sie große Mengen von Transaktionen außerhalb der Blockchain zusammen, bevor sie diese gebündelt auf der Blockchain einreichen, und stützen sich dabei auf denselben Sicherheits und Konsensmechanismus wie Ethereum.",
+      "optimism": "Optimism ist ein Netzwerk, das entwickelt wurde, um die Ethereum-Blockchain in Bezug auf Geschwindigkeitsskalierbarkeit zu verbessern und gleichzeitig zusätzliche Datenschutzfunktionen hinzuzufügen.\n\nOptimism ist eine Layer-2-Lösung. Layer-2-Netzwerke (wie Arbitrum) sind keine separaten Blockchains. Stattdessen fassen sie große Mengen von Transaktionen außerhalb der Blockchain zusammen, bevor sie diese gebündelt auf der Blockchain einreichen, und stützen sich dabei auf denselben Sicherheits und Konsensmechanismus wie Ethereum.",
+      "polygon": "Polygon ist eine eigenständige und separate Blockchain, die mit Ethereum kompatibel ist. Sie verwendet einen anderen Konsensmechanismus als Ethereum und hat ihre eigenen Sicherheitsmaßnahmen. Polygon ist außerdem für niedrigere Transaktionsgebühren und eine schnellere Transaktionsverarbeitung bekannt.\n\nPolygon ist mit Ethereum kompatibel, sodass Ihre Wallet-Adresse auf Ethereum dieselbe ist wie auf Polygon.",
+      "avalanche": "Avalanche ist eine eigenständige Blockchain, die eine Alternative zu den hohen Kosten und geringen Geschwindigkeiten bieten soll. Avalanche verwendet einen proprietären Konsensmechanismus, um den Transaktionsdurchsatz zu erhöhen und den Energieverbrauch der Validierer zu minimieren.\n\nAvalanche ist mit Ethereum kompatibel, so dass Ihre Wallet-Adresse auf Ethereum dieselbe ist wie auf Avalanche.",
+      "binance": "Binance Smart Chain (BSC) ist eine modifizierte Version des Ethereum-Netzwerks. BSC hat einen anderen Konsens-Mechanismus und Netzwerk-Parameter, die es ermöglichen, niedrigere Transaktionskosten und schnellere Verarbeitungszeiten zu ermöglichen.\n\nBSC ist mit Ethereum kompatibel, so dass Ihre Wallet-Adresse auf Ethereum dieselbe ist wie auf BSC."
+    }
   }
 }
