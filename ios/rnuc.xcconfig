@@ -1,0 +1,13 @@
+// DO NOT COMMIT OR EDIT THIS FILE
+ENV=production
+VERSION=1.0.0
+VERSION_CODE=1
+PROJECT_NAME=MoverMobile
+DISPLAY_NAME=MoverMobile
+PROJECT_BUNDLE_IDENTIFIER=com.movermobile
+FIREBASE_CONFIG=configs/firebase/ios/GoogleService-Info-prod.plist
+APP_API_ASSETS_SERVICE_URL=https:/$()/apiassets.viamover.com
+APP_API_SERVICE_URL=https:/$()/api.viamover.com/api
+APP_API_VIEW_SERVICE_URL=https:/$()/apiview.viamover.com/api
+APP_API_TAG_SERVICE_URL=https:/$()/apitag.viamover.com
+TERMS_OF_USE_URL=https:/$()/viamover.com/terms_of_use

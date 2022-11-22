@@ -1,5 +1,5 @@
 {
-  "name": "Movermobile",
+  "name": "MoverMobile",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -25,7 +25,7 @@
     "rnuc:prod": "yarn rnuc configs/env.production.yml"
   },
   "dependencies": {
-    "@gorhom/bottom-sheet": "^4.4.5",
+    "@gorhom/bottom-sheet": "^4",
     "@metamask/sdk": "^0.0.1-beta.5",
     "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-community/blur": "^4.3.0",
@@ -52,7 +52,8 @@
     "postinstall-postinstall": "^2.1.0",
     "react": "18.1.0",
     "react-ioc": "^1.0.0",
-    "react-native": "0.70.6",
+    "react-localization": "^1.0.19",
+    "react-native": "0.70.5",
     "react-native-background-timer": "^2.4.1",
     "react-native-device-info": "^10.3.0",
     "react-native-fast-image": "^8.6.3",
@@ -60,13 +61,13 @@
     "react-native-paper": "5.0.0-rc.9",
     "react-native-parsed-text": "^0.0.22",
     "react-native-randombytes": "^3.6.1",
-    "react-native-reanimated": "^2.13.0",
+    "react-native-reanimated": "^2.12.0",
     "react-native-safe-area-context": "^4.4.1",
     "react-native-safe-area-view": "^1.1.1",
     "react-native-screens": "^3.18.2",
     "react-native-svg": "^12.4.4",
     "react-native-text-input-mask": "^3.1.4",
-    "react-native-ultimate-config": "^3.3.4",
+    "react-native-ultimate-config": "^4.0.0",
     "react-native-vector-icons": "^9.2.0",
     "stream-browserify": "^3.0.0",
     "ts-custom-error": "^3.3.1",
@@ -107,6 +108,14 @@
     "react-native-svg": "^12.4.4"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
