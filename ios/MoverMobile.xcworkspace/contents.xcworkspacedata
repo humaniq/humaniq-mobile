@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/djamshiddjuraev/Documents/projects/react-native/test22/ios/MoverMobile.xcodeproj">
+      location = "group:MoverMobile.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:MoverMobile.xcodeproj">
    </FileRef>
 </Workspace>
