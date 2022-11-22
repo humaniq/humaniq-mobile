@@ -1,4 +1,7 @@
-import { Network } from '@/references/network';
+import { sameAddress } from 'app/utils/addresses';
+import { Network } from 'app/references/network';
+import { NFT, NFTKind } from 'app/references/nfts';
+import { PermitData, TokenWithBalance } from 'app/references/tokens';
 
 export type AssetData = {
   address: string;
@@ -24,19 +27,44 @@ export type WalletResponse = {
     price: string;
     balance: string;
   }>;
+  nfts: Array<{
+    name: NFTKind;
+    hasBalance: boolean;
+  }>;
+};
+
+export type GetMultiChainWalletTokensResponse = {
+  tokens: Array<TokenWithBalance & PermitData>;
+  nfts: Array<NFT>;
+};
+
+export type FindAssetRequestItem = {
+  tokenAddress: string;
+  network: Network;
+};
+
+export type FindAssetsRequest = Array<FindAssetRequestItem>;
+
+export type HistoryPricesReturnItem = {
+  address: string;
+  network: Network;
+  price: string;
+  timestamp: number;
 };
 
 export type GetHistorySelectedTokenPricesRequest = {
-  timestamps: GetHistorySelectedTokenPricesInput;
+  items: GetHistorySelectedTokenPricesItems;
 };
 
-export type GetHistorySelectedTokenPricesInput = Record<
-  number,
-  {
-    address: string;
-    network: Network;
-  }
->;
+export type GetHistorySelectedTokenPricesItems = Array<GetHistorySelectedTokenPricesItem>;
+
+type GetHistorySelectedTokenPricesItem = {
+  address: string;
+  network: Network;
+  timestamp: number;
+};
+
+export type SelectedHistoryPricesReturn = Array<HistoryPricesReturnItem>;
 
 export type GetTokenPricesInput = Array<{
   address: string;
@@ -55,12 +83,6 @@ export type GetHistoryTokenPricesRequest = {
 };
 
 export type HistoryPricesReturn = Record<Network, Record<string, string>>;
-
-export type GetMultiHistoryTokenPricesRequest = {
-  timestamps: Array<number>;
-};
-
-export type MultiHistoryPricesReturn = Record<number, Record<Network, Record<string, string>>>;
 
 export type PricesResponse = {
   tokens: Array<{
@@ -90,12 +112,13 @@ export type CommonPricesReturn = {
 };
 
 export const findPriceInResponse = (
-  resp: MultiHistoryPricesReturn,
+  resp: SelectedHistoryPricesReturn,
   timestamp: number,
   network: Network,
   address: string
 ): string | undefined => {
-  const sourceLocation = resp[timestamp]?.[network];
-  const lowercaseKey = address.toLowerCase();
-  return sourceLocation?.[lowercaseKey];
+  return resp.find(
+    (item) =>
+      sameAddress(item.address, address) && item.network === network && item.timestamp === timestamp
+  )?.price;
 };

@@ -27,6 +27,7 @@ import {
 } from "ui/components/modalConfirmOwnership/ModalConfirmOwnership"
 import { Toast, ToastViewModel } from "ui/components/toast/Toast"
 import { RenderQrcodeModalProps, withWalletConnect, useWalletConnect as useWC  } from "@walletconnect/react-native-dapp"
+import { PriceController } from "./app/controllers/PriceController"
 
 configure({
   enforceActions: "never",
@@ -94,6 +95,7 @@ AppWithProvider.register(
   Web3Controller,
   CardSkinController,
   CardController,
+  PriceController
 )
 
 export const App = withWalletConnect(AppWithProvider, {

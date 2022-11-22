@@ -1,7 +1,6 @@
 import { Network } from "../references/network"
-import { ExplorerSettings } from "./types"
+import { ExplorerSettings, WalletTokens } from "./types"
 import { addSentryBreadcrumb } from "../logs/sentry"
-import { TokenWithBalance } from "../references/tokens"
 import { moverAssetsService } from "../controllers/services/MoverAssets"
 
 export class Explorer {
@@ -17,7 +16,7 @@ export class Explorer {
     this.availableNetworks = settings.availableNetworks
   }
 
-  public getTokens = async (): Promise<TokenWithBalance[]> => {
+  public getTokens = async (): Promise<WalletTokens> => {
 
     try {
       return await moverAssetsService.getMultiChainWalletTokens(

@@ -1,8 +1,8 @@
-import { toWei } from 'utils/bigmath';
-import { BridgeType } from './bridge';
-import { Network } from './network';
-import { networks } from './networks';
-import { ConstantsMap } from './types';
+import { toWei } from 'app/utils/bigmath';
+import { BridgeType } from 'app/references/bridge';
+import { Network } from 'app/references/network';
+import { networks } from 'app/references/networks';
+import { ConstantsMap } from 'app/references/types';
 
 export const DefaultSlippage = '10';
 export const AppName = 'ViaMover';
@@ -14,6 +14,7 @@ export const TRANSACTION_WATCH_VIEW_UPDATE_INTERVAL = 1000; // 1 sec
 export const MIN_TOKENS_UPDATE_RATE = 5 * 1000; // 5 sec
 export const IDLE_TIMEOUT = 5 * 60 * 1000; // 5 min
 export const GLOBAL_UPDATE_RATE = 60 * 1000; // 1 min
+export const RESULT_LAYOUT_ANIMATION_DELAY = 300;
 export const HEADER_TRANSFORM_DINSTANCE_DESKTOP = 200;
 export const HEADER_TRANSFORM_DINSTANCE_MOBILE = 184;
 export const TOASTS_TRANSLATE_IN_PX = 8;

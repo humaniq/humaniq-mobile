@@ -1,5 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
+import { sameAddress } from 'app/utils/addresses';
+
 import {
   getMoveAssetData,
   getMoveWethLPAssetData,
@@ -7,27 +9,27 @@ import {
   getUSDCAssetData
 } from 'app/references/assets';
 import { Network } from 'app/references/network';
-import { PermitData, Token, TokenWithBalance } from 'app/references/tokens';
+import { PermitData, Token } from 'app/references/tokens';
 import {
   AssetData,
   CommonPricesReturn,
-  GetHistorySelectedTokenPricesInput,
+  FindAssetsRequest,
+  GetHistorySelectedTokenPricesItems,
   GetHistorySelectedTokenPricesRequest,
   GetHistoryTokenPricesRequest,
-  GetMultiHistoryTokenPricesRequest,
+  GetMultiChainWalletTokensResponse,
   GetPermitDataResponse,
   GetTokenPricesInput,
   GetTokenPricesRequest,
   HistoryPricesReturn,
-  MultiHistoryPricesReturn,
   PricesResponse,
   PricesReturn,
+  SelectedHistoryPricesReturn,
   WalletResponse
 } from 'app/services/api/mover/assets/types';
 import { MoverAPIService } from 'app/services/api/mover/MoverAPIService';
 import { MoverAPISuccessfulResponse } from 'app/services/api/mover/types';
 import { addSentryBreadcrumb, captureSentryException } from "../../../../logs/sentry"
-import { sameAddress } from "utils/addresses"
 
 export class MoverAssetsService extends MoverAPIService {
   protected readonly client: AxiosInstance;
@@ -51,19 +53,17 @@ export class MoverAssetsService extends MoverAPIService {
     ).data.payload.tokens;
   }
 
-  public async getHistorySelectedTokenPrices(
-    input: GetHistorySelectedTokenPricesInput
-  ): Promise<MultiHistoryPricesReturn> {
-    const prices = (
-      await this.client.post<MoverAPISuccessfulResponse<MultiHistoryPricesReturn>>(
-        `prices/tokens/selected/multi/history`,
+  public async getSelectedTokenHistoryPrices(
+    items: GetHistorySelectedTokenPricesItems
+  ): Promise<SelectedHistoryPricesReturn> {
+    return (
+      await this.client.post<MoverAPISuccessfulResponse<SelectedHistoryPricesReturn>>(
+        `/prices/v2/selected/history`,
         {
-          timestamps: input
+          items: items
         } as GetHistorySelectedTokenPricesRequest
       )
     ).data.payload;
-
-    return this.mapAPIMultiPricesResponse(prices);
   }
 
   public async getHistoryTokenPrices(unixTs: number): Promise<HistoryPricesReturn> {
@@ -75,21 +75,6 @@ export class MoverAssetsService extends MoverAPIService {
         } as GetHistoryTokenPricesRequest
       )
     ).data.payload;
-  }
-
-  public async getMultiHistoryTokenPrices(
-    unixTss: Array<number>
-  ): Promise<MultiHistoryPricesReturn> {
-    const prices = (
-      await this.client.post<MoverAPISuccessfulResponse<MultiHistoryPricesReturn>>(
-        `prices/tokens/multi/history`,
-        {
-          timestamps: unixTss
-        } as GetMultiHistoryTokenPricesRequest
-      )
-    ).data.payload;
-
-    return this.mapAPIMultiPricesResponse(prices);
   }
 
   public async getCommonPrices(): Promise<CommonPricesReturn> {
@@ -172,27 +157,32 @@ export class MoverAssetsService extends MoverAPIService {
   public async getMultiChainWalletTokens(
     address: string,
     confirmationSignature: string
-  ): Promise<Array<TokenWithBalance & PermitData>> {
-    return (
+  ): Promise<GetMultiChainWalletTokensResponse> {
+    const data = (
       await this.client.get<MoverAPISuccessfulResponse<WalletResponse>>(
         `private/wallet/multichain/balances`,
         {
           headers: this.getAuthHeaders(address, confirmationSignature)
         }
       )
-    ).data.payload.tokens.map((t) => ({
-      name: t.token.name,
-      decimals: t.token.decimals,
-      symbol: t.token.symbol,
-      address: t.token.address,
-      iconURL: t.token.logoUrl,
-      network: t.token.network,
-      hasPermit: t.token.hasPermit,
-      permitType: t.token.permitType,
-      permitVersion: t.token.permitVersion,
-      priceUSD: t.price,
-      balance: t.balance
-    }));
+    ).data.payload;
+
+    return {
+      tokens: data.tokens.map((t) => ({
+        name: t.token.name,
+        decimals: t.token.decimals,
+        symbol: t.token.symbol,
+        address: t.token.address,
+        iconURL: t.token.logoUrl,
+        network: t.token.network,
+        hasPermit: t.token.hasPermit,
+        permitType: t.token.permitType,
+        permitVersion: t.token.permitVersion,
+        priceUSD: t.price,
+        balance: t.balance
+      })),
+      nfts: data.nfts
+    };
   }
 
   public async getAllTokens(network: Network): Promise<Array<Token>> {
@@ -287,19 +277,16 @@ export class MoverAssetsService extends MoverAPIService {
     }));
   }
 
-  private mapAPIMultiPricesResponse(data: MultiHistoryPricesReturn): MultiHistoryPricesReturn {
-    return Object.entries(data).reduce((acc: MultiHistoryPricesReturn, pricesEntry) => {
-      const key = pricesEntry[0] as unknown as number;
-      const value = pricesEntry[1];
-      acc[key] = (Object.keys(value) as Network[]).reduce((acc2, network: Network) => {
-        const modifiedPricesRecord = Object.entries(value[network]).map(([address, price]) => [
-          address.toLowerCase(),
-          price
-        ]);
-        acc2[network] = Object.fromEntries(modifiedPricesRecord);
-        return acc2;
-      }, {} as Record<Network, Record<string, string>>);
-      return acc;
-    }, {});
+  public async findAssets(input: FindAssetsRequest): Promise<Array<Token>> {
+    return (
+      await this.client.post<MoverAPISuccessfulResponse<Array<AssetData>>>(`tokens/find`, input)
+    ).data.payload.map((t) => ({
+      name: t.name,
+      decimals: t.decimals,
+      symbol: t.symbol,
+      address: t.address,
+      iconURL: t.logoUrl ?? '',
+      network: t.network
+    }));
   }
 }

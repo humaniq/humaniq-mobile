@@ -12,17 +12,27 @@ import { Linking } from "react-native"
 import { TERMS_OF_USE_URL } from "configs/env"
 import { Explorer } from "../explorers/Explorer"
 import { AvailableNetworks } from "../references/networks"
+import { PriceController } from "./PriceController"
+import { TokenWithBalance } from "../references/tokens"
+import { NFT } from "../references/nfts"
 
 
 export class WalletController {
 
-  web3 = inject(this, Web3Controller)
-  confirmOwnership = inject(this, ConfirmOwnershipController)
-  toast = inject(this, ToastViewModel)
+  web3 = inject<Web3Controller>(this, Web3Controller)
+  confirmOwnership = inject<ConfirmOwnershipController>(this, ConfirmOwnershipController)
+  priceController = inject<PriceController>(this, PriceController)
+  toast = inject<ToastViewModel>(this, ToastViewModel)
 
   explorer: Explorer
+  assets: TokenWithBalance[] = []
+  nfts: NFT[] = []
+  serviceInitialized = false
+  triedToConnect = false
+  loadedWalletContent = false
 
   destructor1 = () => null
+
 
   constructor() {
     makeAutoObservable(this, { explorer: false }, { autoBind: true })
@@ -31,14 +41,12 @@ export class WalletController {
   connectProviderModalVisible = false
 
   setConnectProviderModal = (val: boolean) => {
-    console.log("SET-connect", val)
     this.connectProviderModalVisible = val
   }
 
-  triedToConnect = false
 
-  get isWalletReady() {
-    return this.web3.isConnected // && confirmOwnership.confirmed.value;
+  get initialized() {
+    return this.web3.isConnected && this.confirmOwnership.confirmed
   }
 
   get address() {
@@ -51,10 +59,6 @@ export class WalletController {
 
   get network() {
     return this.web3.network
-  }
-
-  get initialized() {
-    return this.isWalletReady
   }
 
   get balance() {
@@ -134,12 +138,11 @@ export class WalletController {
       return
       //throw new MoverError("WEb3 provider is undefined in wallet->init")
     }
-
+    this.confirmOwnership.modal.closeModal()
     const confirmed = await this.confirmOwnership.init(this)
     if (!confirmed) {
       // процесс конфирмации
       try {
-        // useWeb3Modal().closeModal();
         await this.confirmOwnership.confirm()
       } catch (error) {
         if (error instanceof ExpectedError && error.getCode() === EECode.userRejectSign) {
@@ -147,9 +150,18 @@ export class WalletController {
         } else {
           this.toast.auto(new UnexpectedError(UECode.signErrorVerify).wrap(error))
         }
+        await this.tryDisconnect()
+        this.triedToConnect = true
+        return
       }
-      this.triedToConnect = true
     }
+
+    this.serviceInitialized = true
+
+    addSentryBreadcrumb({
+      type: "info",
+      message: "Wallet initialized successfully",
+    })
 
     this.explorer = new Explorer({
       availableNetworks: AvailableNetworks,
@@ -157,25 +169,19 @@ export class WalletController {
       confirmSignature: this.confirmOwnership.signature,
     })
 
+    this.priceController.loadCommonPrices()
+
+    const walletTokens = await this.explorer.getTokens()
+    this.assets = walletTokens?.tokens
+    this.nfts = walletTokens?.nfts
+
 
     addSentryBreadcrumb({
       type: "info",
-      message: "Wallet initialized successfully",
+      message: "Wallet tokens loaded",
     })
-    // const { loadCommonPrices } = useTokenPrice();
-    // // load utility prices asynchronously
-    // loadCommonPrices();
-    //
-    // // todo: make reinit function (after-tx-cleanup)
-    // state.assets = await explorer.getTokens();
-    //
-    // // TODO: for devs purposes, remove before release
-    // console.log(state.assets);
-    //
-    // addSentryBreadcrumb({
-    //   type: 'info',
-    //   message: 'Wallet tokens loaded'
-    // });
+
+    this.loadedWalletContent = true
 
     this.destructor1()
     this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
@@ -186,6 +192,7 @@ export class WalletController {
 
   tryDisconnect = async () => {
     await this.web3.disconnect()
+    this.serviceInitialized = false
   }
 
   trySign = async (text: string): Promise<string> => {
@@ -208,4 +215,21 @@ export class WalletController {
     }
   }
 
+  updateTokens = async () => {
+    try {
+      const walletTokens = await this.explorer?.getTokens()
+      if (walletTokens !== undefined) {
+        this.assets = walletTokens.tokens
+        this.nfts = walletTokens.nfts
+      }
+    } catch (error) {
+      addSentryBreadcrumb({
+        type: "warning",
+        message: "Failed to update wallet tokens",
+        data: {
+          error,
+        },
+      })
+    }
+  }
 }
