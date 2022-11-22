@@ -1,0 +1,60 @@
+// prettier-ignore
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "commonjs",
+    "lib": [
+      "es2017"
+    ],
+    "allowJs": true,
+    "jsx": "react-native",
+    "noEmit": true,
+    "isolatedModules": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitReturns": false,
+    "strictNullChecks": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "assets/*": [
+        "./app/assets/*"
+      ],
+      "types/*": [
+        "./app/types/*"
+      ],
+      "utils/*": [
+        "./app/utils/*"
+      ],
+      "context/*": [
+        "./app/context/*"
+      ],
+      "hooks/*": [
+        "./app/hooks/*"
+      ],
+      "ui/*": [
+        "./app/ui/*"
+      ],
+      "navigation/*": [
+        "./app/navigation/*"
+      ],
+      "configs/*": [
+        "./configs/*"
+      ]
+    },
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": false,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": [
+    "node_modules",
+    "metro.config.js"
+  ]
+}
