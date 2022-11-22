@@ -6,7 +6,7 @@ import { ThemeSettings } from "ui/components/theme/ThemeSettings";
 import { Select } from "ui/components/select/Select";
 import { PrimaryButton } from "ui/components/button/PrimaryButton";
 import { Avatar } from "ui/components/avatar/Avatar";
-import { ScrollView, Text } from "react-native";
+import { FlatList, ScrollView, Text } from "react-native";
 import { useTheme } from "hooks/useTheme";
 import { Currencies, Languages } from "./data";
 import { t } from "app/i18n/translate";
@@ -28,6 +28,9 @@ export const SettingsScreen = ({}: SettingsScreenProps) => {
           back={ false }
           title={ t("settings") }
         />
+              <FlatList data={[1, 2, 3]} renderItem={({ item }) => (
+        <Text>{item}</Text>
+      )} />
         <ScrollView>
           <Avatar containerStyle={ styles.avatar } />
           <Text style={ styles.tag }>{ t("tag.yourTag") }</Text>
