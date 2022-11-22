@@ -19,6 +19,8 @@
 		9DCF59EFA421456EA41B02CF /* icomoon.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A8052AC8A374309A98C5D91 /* icomoon.ttf */; };
 		A645D57F292D06D90087CF4F /* rnuc.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A645D57E292D06D90087CF4F /* rnuc.xcconfig */; };
 		A645D580292D06D90087CF4F /* rnuc.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = A645D57E292D06D90087CF4F /* rnuc.xcconfig */; };
+		A645D585292D0B780087CF4F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A645D584292D0B780087CF4F /* GoogleService-Info.plist */; };
+		A645D586292D0B780087CF4F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A645D584292D0B780087CF4F /* GoogleService-Info.plist */; };
 		B6B13DE5333D466CB2439007 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A63B7D3B97B64004AF574F3F /* Inter-SemiBold.ttf */; };
 		C6DB3FEF8C7606221FEE1754 /* Pods_MoverMobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D67AF788ABE714BD13B26673 /* Pods_MoverMobile.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,7 @@
 		89C6BE57DB24E9ADA2F236DE /* Pods-mov-movTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mov-movTests.release.xcconfig"; path = "Target Support Files/Pods-mov-movTests/Pods-mov-movTests.release.xcconfig"; sourceTree = "<group>"; };
 		A63B7D3B97B64004AF574F3F /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-SemiBold.ttf"; path = "../app/assets/fonts/Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		A645D57E292D06D90087CF4F /* rnuc.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = rnuc.xcconfig; sourceTree = "<group>"; };
+		A645D584292D0B780087CF4F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B365DF702FB6B7230C812221 /* Pods-MoverMobile-MoverMobileTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MoverMobile-MoverMobileTests.debug.xcconfig"; path = "Target Support Files/Pods-MoverMobile-MoverMobileTests/Pods-MoverMobile-MoverMobileTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C1CD3F3936874416BFC631AA /* Inter-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Inter-Regular.ttf"; path = "../app/assets/fonts/Inter-Regular.ttf"; sourceTree = "<group>"; };
 		D67AF788ABE714BD13B26673 /* Pods_MoverMobile.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MoverMobile.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +148,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				A645D584292D0B780087CF4F /* GoogleService-Info.plist */,
 				A645D57E292D06D90087CF4F /* rnuc.xcconfig */,
 				13B07FAE1A68108700A75B9A /* MoverMobile */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -273,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A645D580292D06D90087CF4F /* rnuc.xcconfig in Resources */,
+				A645D586292D0B780087CF4F /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +287,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				A645D585292D0B780087CF4F /* GoogleService-Info.plist in Resources */,
 				9A2762105FDD4D819CD369BC /* Inter-Bold.ttf in Resources */,
 				722FD6AF54B34F9480042B62 /* Inter-Medium.ttf in Resources */,
 				A645D57F292D06D90087CF4F /* rnuc.xcconfig in Resources */,
