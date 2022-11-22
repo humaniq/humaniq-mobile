@@ -5,5 +5,5 @@ import { useStyles } from "./styles"
 export const Modal = (props: ModalProps) => {
   const style = useStyles()
 
-  return <M { ...props } contentContainerStyle={ [ style.root, props.style ] } />
+  return <M { ...props }  contentContainerStyle={ [ style.root, props.contentContainerStyle ] } />
 }

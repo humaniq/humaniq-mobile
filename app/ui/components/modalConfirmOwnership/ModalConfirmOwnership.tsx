@@ -39,11 +39,13 @@ export const ModalConfirmOwnership = observer(() => {
   const styles = useStyles()
   const view = useInstance(ModalConfirmOwnershipViewModel)
   const wallet = useInstance(WalletController)
-  return <Modal visible={ view?.visible } onDismiss={ async () => {
-    view.setModal(false)
-    await wallet.tryDisconnect()
-  }
-  }>
+  return <Modal
+    visible={ view?.visible }
+    onDismiss={ async () => {
+      view.setModal(false)
+      await wallet.tryDisconnect()
+    } }
+    contentContainerStyle={ styles.root }>
     <Text style={ styles.title }>{ t("confirmOwnership.title") }</Text>
     <Text style={ styles.description }>{ t("confirmOwnership.description") }</Text>
     <PrimaryButton

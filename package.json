@@ -13,7 +13,6 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postinstall": "patch-package",
-    "build-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "android:release": "yarn rnuc:dev && cd ./android && ./gradlew assembleRelease",
     "android:release:prod": "yarn rnuc:prod && cd ./android && ./gradlew assembleRelease",
     "android:release:stage": "yarn rnuc:stage && cd ./android && ./gradlew assembleRelease",

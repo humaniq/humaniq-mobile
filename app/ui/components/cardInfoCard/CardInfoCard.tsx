@@ -5,10 +5,8 @@ import { useStyles } from "./styles"
 import { CardRender } from "ui/components/cardInfoCard/cardRender/CardRender"
 import { useInstance } from "react-ioc"
 import { CardSkinController } from "../../../controllers/CardSkinController"
-import { PrimaryButton } from "ui/components/button/PrimaryButton"
 import { CardController, CardState } from "../../../controllers/CardController"
 import { WalletController } from "../../../controllers/WalletController"
-import { CardNotConnectedOverlay } from "ui/components/cardNotConnectedOverlay/CardNotConnectedOverlay"
 
 export const CardInfoCard = observer(() => {
   const styles = useStyles()
