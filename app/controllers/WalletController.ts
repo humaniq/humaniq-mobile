@@ -10,6 +10,8 @@ import { ConfirmOwnershipController } from "./ConfirmOwnershipController"
 import { ToastViewModel } from "ui/components/toast/Toast"
 import { Linking } from "react-native"
 import { TERMS_OF_USE_URL } from "configs/env"
+import { Explorer } from "../explorers/Explorer"
+import { AvailableNetworks } from "../references/networks"
 
 
 export class WalletController {
@@ -18,10 +20,12 @@ export class WalletController {
   confirmOwnership = inject(this, ConfirmOwnershipController)
   toast = inject(this, ToastViewModel)
 
+  explorer: Explorer
+
   destructor1 = () => null
 
   constructor() {
-    makeAutoObservable(this, null, { autoBind: true })
+    makeAutoObservable(this, { explorer: false }, { autoBind: true })
   }
 
   connectProviderModalVisible = false
@@ -147,16 +151,13 @@ export class WalletController {
       this.triedToConnect = true
     }
 
-    // explorer = new Explorer({
-    //   MoralisAPIKey: getAPIKey('MORALIS_API_KEY'),
-    //   availableNetworks: AvailableNetworks,
-    //   currentAccount: address.value,
-    //   confirmSignature: confirmOwnership.signature.value,
-    //   web3Provider: web3.value,
-    //   AnkrAPIKey: getAPIKey('ANKR_API_KEY'),
-    //   AlchemyAPIKey: getAPIKey('ALCHEMY_API_KEY')
-    // });
-    //
+    this.explorer = new Explorer({
+      availableNetworks: AvailableNetworks,
+      currentAccount: this.address,
+      confirmSignature: this.confirmOwnership.signature,
+    })
+
+
     addSentryBreadcrumb({
       type: "info",
       message: "Wallet initialized successfully",
