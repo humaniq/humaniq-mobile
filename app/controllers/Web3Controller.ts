@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx"
+import { autorun, makeAutoObservable, reaction } from "mobx"
 import { AvailableNetworks, networks } from "../references/networks"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import { getAPIKey } from "../references/keys"
@@ -60,17 +60,17 @@ export class Web3Controller {
   }
 
   init = async () => {
-    this.destructor1()
-    this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
-      if (prev === val || val === -1) return
-      this.setBalance(val <= 0 ? 0 : await this.getBalance())
-    })
-
-    this.destructor2()
-    this.destructor2 = reaction(() => this.address, async (val, prev) => {
-      if (prev === val || val === "" || val === prev) return
-      this.setBalance(await this.getBalance())
-    })
+    // this.destructor1()
+    // this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
+    //   if (prev === val || val === -1) return
+    //   this.setBalance(val <= 0 ? 0 : await this.getBalance())
+    // })
+    //
+    // this.destructor2()
+    // this.destructor2 = reaction(() => this.address, async (val, prev) => {
+    //   if (prev === val || val === "" || val === prev) return
+    //   this.setBalance(await this.getBalance())
+    // })
 
     this.initialized = true
   }
@@ -202,7 +202,9 @@ export class Web3Controller {
 
   handleAccountsChange = async (accounts: string[]) => {
     if (this.address === ethers.utils.getAddress(accounts[0])) return
-    this.setAddress(accounts[0])
+    console.log("set-address")
+    this.address = accounts[0] ? ethers.utils.getAddress(accounts[0]) : ""
+    // this.setAddress(accounts[0])
   }
   handleDisconnect = async () => {
     await this.disconnect()

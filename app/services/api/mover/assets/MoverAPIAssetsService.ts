@@ -30,6 +30,7 @@ import {
 import { MoverAPIService } from 'app/services/api/mover/MoverAPIService';
 import { MoverAPISuccessfulResponse } from 'app/services/api/mover/types';
 import { addSentryBreadcrumb, captureSentryException } from "../../../../logs/sentry"
+import { APP_API_ASSETS_SERVICE_URL } from "configs/env";
 
 export class MoverAssetsService extends MoverAPIService {
   protected readonly client: AxiosInstance;
@@ -40,7 +41,7 @@ export class MoverAssetsService extends MoverAPIService {
 
   constructor() {
     super('assets.service');
-    this.baseURL = process.env.VUE_APP_API_ASSETS_SERVICE_URL || '';
+    this.baseURL = APP_API_ASSETS_SERVICE_URL || '';
 
     this.client = this.applyAxiosInterceptors(axios.create({ baseURL: this.baseURL }));
   }

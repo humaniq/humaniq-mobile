@@ -92,7 +92,7 @@ export class CardController {
   }
 
   getInfo = () => {
-    if (this.walletService.address === undefined) {
+    if (this.walletService.web3.address === undefined) {
       throw new Error("Empty address")
     }
 

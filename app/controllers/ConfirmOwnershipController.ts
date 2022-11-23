@@ -6,8 +6,6 @@ import { localStorage } from "utils/localStorage"
 import { moverConfirmationService } from "./services/ConfirmationOwnerShip"
 import { UECode, UnexpectedError } from "utils/error/UnexpectedError"
 import { ToastViewModel } from "ui/components/toast/Toast"
-import { isRejectedRequestError } from "utils/error/ProviderRPCError"
-import { EECode, ExpectedError } from "utils/error/ExpectedError"
 
 export class ConfirmOwnershipController {
 
@@ -15,6 +13,7 @@ export class ConfirmOwnershipController {
   initialized = false
   signature = ""
   wallet
+  signRequest
 
   modal = inject(this, ModalConfirmOwnershipViewModel)
   toast = inject(this, ToastViewModel)
@@ -35,27 +34,32 @@ export class ConfirmOwnershipController {
 
     this.modal.setModal(true)
 
-    this.modal.onPressButton = async () => {
-      this.modal.pending = true
-      const agreementText = `I confirm the ownership of address ${ this.wallet.address }, and agree to the terms and conditions.`
+    this.modal.onDismiss = async () => {
+      this.signRequest?.reject(false)
+    }
 
-      await this.wallet.trySign(agreementText).catch(e => {
-        this.modal.closeModal()
-        this.toast.auto(isRejectedRequestError(e) ?
-          new ExpectedError(EECode.userRejectSign) :
-          new UnexpectedError(UECode.SignMessage).wrap(e))
-        return
-      }).then(async (sig) => {
+    this.modal.onPressButton = async () => {
+      try {
+        this.modal.pending = true
+        const agreementText = `I confirm the ownership of address ${ this.wallet.address }, and agree to the terms and conditions.`
+
+        const sig = await this.wallet.trySign(agreementText)
+
         const succeeded = await moverConfirmationService.setConfirmation(this.wallet.address, sig)
         if (succeeded) {
           await localStorage.save(`sign[${ this.wallet.address }]`, sig)
           this.signature = sig
           this.confirmed = true
+          this.signRequest.resolve(true)
         } else {
+          this.signRequest.reject(new UnexpectedError(UECode.signErrorVerify))
           this.toast.auto(new UnexpectedError(UECode.signErrorVerify))
         }
         this.modal.closeModal()
-      })
+      } catch (e) {
+        this.signRequest.reject(e)
+      }
+
     }
   }
 
@@ -67,6 +71,7 @@ export class ConfirmOwnershipController {
     }
 
     const storedSignature = await localStorage.load(`sign[${ this.wallet.address }]`)
+
     if (storedSignature && storedSignature !== "") {
       const valid = await (moverConfirmationService.validConfirmation(
         this.wallet.address,

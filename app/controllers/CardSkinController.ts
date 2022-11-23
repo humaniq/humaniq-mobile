@@ -92,7 +92,7 @@ export class CardSkinController {
 
   init = async (force = false) => {
     if (this.initialized && !force) return
-    this.cardSkin = await localStorage.load<CardSkin>(`card-skin[${ this.wallet.address ?? "" }]`, CardSkin.Default)
+    this.cardSkin = await localStorage.load<CardSkin>(`card-skin[${ this.wallet.web3.address ?? "" }]`, CardSkin.Default)
     if (!available.includes(this.cardSkin)) {
       this.cardSkin = CardSkin.Default
     }
@@ -100,14 +100,15 @@ export class CardSkinController {
     this.selectedCardSkin = await localStorage.load("card-skin-selected", false)
     this.initialized = true
 
-    reaction(() => this.wallet.address, () => {
+    reaction(() => this.wallet.web3.address, () => {
+      console.log("AADS")
       this.init(true)
     })
   }
 
   setSkin = async (s: CardSkin) => {
     this.cardSkin = s
-    await localStorage.save(`card-skin[${ this.wallet.address ?? "" }]`, s)
+    await localStorage.save(`card-skin[${ this.wallet.web3.address ?? "" }]`, s)
     this.selectedCardSkin = true
   }
 

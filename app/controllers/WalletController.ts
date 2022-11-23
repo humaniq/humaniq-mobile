@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx"
+import { autorun, makeAutoObservable, reaction } from "mobx"
 import { inject } from "react-ioc"
 import { Web3Controller } from "./Web3Controller"
 import { ProviderType } from "../references/providers"
@@ -15,7 +15,6 @@ import { AvailableNetworks } from "../references/networks"
 import { PriceController } from "./PriceController"
 import { TokenWithBalance } from "../references/tokens"
 import { NFT } from "../references/nfts"
-
 
 export class WalletController {
 
@@ -44,13 +43,12 @@ export class WalletController {
     this.connectProviderModalVisible = val
   }
 
+  get address() {
+    return this.web3.address
+  }
 
   get initialized() {
     return this.web3.isConnected && this.confirmOwnership.confirmed
-  }
-
-  get address() {
-    return this.web3.address
   }
 
   get shortAddress() {
@@ -129,27 +127,36 @@ export class WalletController {
   }
 
   innerInit = async (cached: boolean) => {
-    if (!this.address) {
+    console.log(this.web3.address)
+    if (!this.web3.address) {
       return
       // throw new MoverError("Current address is undefined in wallet->init")
     }
 
     if (this.web3 === undefined) {
       return
-      //throw new MoverError("WEb3 provider is undefined in wallet->init")
+      // throw new MoverError("WEb3 provider is undefined in wallet->init")
     }
     this.confirmOwnership.modal.closeModal()
     const confirmed = await this.confirmOwnership.init(this)
+    console.log({ confirmed })
     if (!confirmed) {
-      // процесс конфирмации
       try {
         await this.confirmOwnership.confirm()
+
+        const signed = await new Promise((resolve, reject) => {
+          this.confirmOwnership.signRequest = { resolve, reject }
+        })
+
+        console.log(signed)
+
       } catch (error) {
         if (error instanceof ExpectedError && error.getCode() === EECode.userRejectSign) {
           this.toast.auto(new ExpectedError(EECode.userRejectOwnershipSignature))
         } else {
           this.toast.auto(new UnexpectedError(UECode.signErrorVerify).wrap(error))
         }
+        console.log("not-confirmed-disconnect")
         await this.tryDisconnect()
         this.triedToConnect = true
         return
@@ -165,7 +172,7 @@ export class WalletController {
 
     this.explorer = new Explorer({
       availableNetworks: AvailableNetworks,
-      currentAccount: this.address,
+      currentAccount: this.web3.address,
       confirmSignature: this.confirmOwnership.signature,
     })
 
@@ -183,11 +190,13 @@ export class WalletController {
 
     this.loadedWalletContent = true
 
-    this.destructor1()
-    this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
-      if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
-      await this.innerInit(true)
-    })
+    // this.destructor1()
+    // this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
+    //   console.log("AddressAddress")
+    //   if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
+    //   await this.innerInit(true)
+    // })
+
   }
 
   tryDisconnect = async () => {
@@ -196,7 +205,7 @@ export class WalletController {
   }
 
   trySign = async (text: string): Promise<string> => {
-    if (this.address === undefined) {
+    if (this.web3.address === undefined) {
       throw new UnexpectedError(UECode.WalletSignEmptyAddress)
     }
 

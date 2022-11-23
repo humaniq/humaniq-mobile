@@ -11,6 +11,8 @@ import { PrimaryButton } from "ui/components/button/PrimaryButton"
 export class ModalConfirmOwnershipViewModel {
   visible = false
   pending = false
+  onDismiss = () => {}
+
   setModal = (val) => {
     this.visible = val
   }
@@ -42,6 +44,7 @@ export const ModalConfirmOwnership = observer(() => {
   return <Modal
     visible={ view?.visible }
     onDismiss={ async () => {
+      view.onDismiss()
       view.setModal(false)
       await wallet.tryDisconnect()
     } }

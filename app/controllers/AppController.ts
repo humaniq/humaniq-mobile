@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx"
+import { autorun, makeAutoObservable, reaction } from "mobx"
 import { StorageController } from "./StorageController"
 import { inject } from "react-ioc"
 import { WalletConnectController } from "./WalletConnectController"
@@ -9,11 +9,12 @@ export class AppController {
 
   initialized = false
   destructor = () => null
+  destructor2 = () => null
 
   storage = inject(this, StorageController)
   wc = inject(this, WalletConnectController)
-  provider = inject(this, Web3Controller)
-  walletService = inject(this, WalletController)
+  web3 = inject(this, Web3Controller)
+  wallet = inject(this, WalletController)
 
   constructor() {
     makeAutoObservable(this, null, { autoBind: true })
@@ -32,8 +33,21 @@ export class AppController {
     console.log("init app")
     this.destructor()
     this.destructor = reaction(() => this.wc.initialized, async () => {
-      this.walletService.tryInitCached()
-      this.provider.init()
+      this.wallet.tryInitCached()
+      this.web3.init()
+    })
+    // this.destructor2()
+    // this.destructor2 = reaction(() => this.walletService?.address, (val, prev) => {
+    //   console.log("Address FDSFSDSD")
+    // })
+    // reaction(() => this.web3.address, () => {
+    //   console.log("Address FDSFSDSD")
+    // })
+
+    autorun(() => {
+      if(this.web3.address) {
+        console.log(this.web3.address)
+      }
     })
   }
 }
