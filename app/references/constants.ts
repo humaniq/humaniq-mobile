@@ -1,8 +1,8 @@
-import { toWei } from 'app/utils/bigmath';
-import { BridgeType } from 'app/references/bridge';
-import { Network } from 'app/references/network';
-import { networks } from 'app/references/networks';
-import { ConstantsMap } from 'app/references/types';
+import { toWei } from 'utils/bigmath';
+import { BridgeType } from './bridge';
+import { Network } from './network';
+import { networks } from './networks';
+import { ConstantsMap } from './types';
 
 export const DefaultSlippage = '10';
 export const AppName = 'ViaMover';

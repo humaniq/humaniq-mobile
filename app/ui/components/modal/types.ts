@@ -3,7 +3,7 @@ import { StyleProp, ViewStyle } from "react-native"
 
 export interface ModalProps {
   visible: boolean
-  onDismiss?: () => void;
+  onDismiss?: () => void
   children: React.ReactNode
-  contentContainerStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>
 }

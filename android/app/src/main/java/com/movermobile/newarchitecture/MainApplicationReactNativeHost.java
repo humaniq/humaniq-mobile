@@ -1,7 +1,9 @@
 package com.movermobile.newarchitecture;
 
 import android.app.Application;
+
 import androidx.annotation.NonNull;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -22,6 +24,7 @@ import com.facebook.react.uimanager.ViewManagerRegistry;
 import com.movermobile.BuildConfig;
 import com.movermobile.newarchitecture.components.MainComponentsRegistry;
 import com.movermobile.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+
 import java.util.ArrayList;
 import java.util.List;
 
