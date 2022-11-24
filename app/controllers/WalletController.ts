@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, reaction } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 import { inject } from "react-ioc"
 import { Web3Controller } from "./Web3Controller"
 import { ProviderType } from "../references/providers"
@@ -15,6 +15,7 @@ import { AvailableNetworks } from "../references/networks"
 import { PriceController } from "./PriceController"
 import { TokenWithBalance } from "../references/tokens"
 import { NFT } from "../references/nfts"
+
 
 export class WalletController {
 
@@ -34,17 +35,13 @@ export class WalletController {
 
 
   constructor() {
-    makeAutoObservable(this, { explorer: false }, { autoBind: true })
+    makeAutoObservable(this, null, { autoBind: true })
   }
 
   connectProviderModalVisible = false
 
   setConnectProviderModal = (val: boolean) => {
     this.connectProviderModalVisible = val
-  }
-
-  get address() {
-    return this.web3.address
   }
 
   get initialized() {
@@ -61,6 +58,10 @@ export class WalletController {
 
   get balance() {
     return 0
+  }
+
+  get address() {
+    return this.web3.address
   }
 
   tryInit = async (providerType?: ProviderType): Promise<void> => {
@@ -127,7 +128,6 @@ export class WalletController {
   }
 
   innerInit = async (cached: boolean) => {
-    console.log(this.web3.address)
     if (!this.web3.address) {
       return
       // throw new MoverError("Current address is undefined in wallet->init")
@@ -190,12 +190,11 @@ export class WalletController {
 
     this.loadedWalletContent = true
 
-    // this.destructor1()
-    // this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
-    //   console.log("AddressAddress")
-    //   if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
-    //   await this.innerInit(true)
-    // })
+    this.destructor1()
+    this.destructor1 = reaction(() => this.web3.address, async (val, prev) => {
+      if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
+      await this.innerInit(true)
+    })
 
   }
 

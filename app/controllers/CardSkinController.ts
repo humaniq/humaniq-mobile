@@ -101,7 +101,6 @@ export class CardSkinController {
     this.initialized = true
 
     reaction(() => this.wallet.web3.address, () => {
-      console.log("AADS")
       this.init(true)
     })
   }

@@ -307,7 +307,7 @@
     "@babel/helper-remap-async-to-generator" "^7.18.9"
     "@babel/plugin-syntax-async-generators" "^7.8.4"
 
-"@babel/plugin-proposal-class-properties@^7.0.0", "@babel/plugin-proposal-class-properties@^7.13.0", "@babel/plugin-proposal-class-properties@^7.18.6":
+"@babel/plugin-proposal-class-properties@^7.0.0", "@babel/plugin-proposal-class-properties@^7.13.0", "@babel/plugin-proposal-class-properties@^7.14.5", "@babel/plugin-proposal-class-properties@^7.18.6":
   version "7.18.6"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.18.6.tgz#b110f59741895f7ec21a6fff696ec46265c446a3"
   integrity sha512-cumfXOF0+nzZrrN8Rf0t7M+tF6sZc7vhQwYQck9q1/5w2OExlD+b4v4RpMJFaV1Z7WcDRgO6FqvxqxGlwo+RHQ==
@@ -323,6 +323,17 @@
     "@babel/helper-create-class-features-plugin" "^7.18.6"
     "@babel/helper-plugin-utils" "^7.18.6"
     "@babel/plugin-syntax-class-static-block" "^7.14.5"
+
+"@babel/plugin-proposal-decorators@^7.20.2":
+  version "7.20.2"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.20.2.tgz#1c6c32b2a44b154ebeec2bb534f9eaebdb541fb6"
+  integrity sha512-nkBH96IBmgKnbHQ5gXFrcmez+Z9S2EIDKDQGp005ROqBigc88Tky4rzCnlP/lnlj245dCEQl4/YyV0V1kYh5dw==
+  dependencies:
+    "@babel/helper-create-class-features-plugin" "^7.20.2"
+    "@babel/helper-plugin-utils" "^7.20.2"
+    "@babel/helper-replace-supers" "^7.19.1"
+    "@babel/helper-split-export-declaration" "^7.18.6"
+    "@babel/plugin-syntax-decorators" "^7.19.0"
 
 "@babel/plugin-proposal-dynamic-import@^7.18.6":
   version "7.18.6"
@@ -461,6 +472,13 @@
   integrity sha512-b+YyPmr6ldyNnM6sqYeMWE+bgJcJpO6yS4QD7ymxgH34GBPNDM/THBh8iunyvKIZztiwLH4CJZ0RxTk9emgpjw==
   dependencies:
     "@babel/helper-plugin-utils" "^7.14.5"
+
+"@babel/plugin-syntax-decorators@^7.19.0":
+  version "7.19.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-decorators/-/plugin-syntax-decorators-7.19.0.tgz#5f13d1d8fce96951bea01a10424463c9a5b3a599"
+  integrity sha512-xaBZUEDntt4faL1yN8oIFlhfXeQAWJW7CLKYsHTUqriCUbj8xOra8bfxxKGi/UwExPFBuPdH4XfHc9rGQhrVkQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.19.0"
 
 "@babel/plugin-syntax-dynamic-import@^7.0.0", "@babel/plugin-syntax-dynamic-import@^7.8.3":
   version "7.8.3"

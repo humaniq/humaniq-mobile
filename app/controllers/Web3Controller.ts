@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, reaction } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 import { AvailableNetworks, networks } from "../references/networks"
 import WalletConnectProvider from "@walletconnect/web3-provider"
 import { getAPIKey } from "../references/keys"
@@ -36,9 +36,7 @@ export class Web3Controller {
   ethereum
 
   constructor() {
-    makeAutoObservable(this, {
-      ethereum: false,
-    }, { autoBind: true })
+    makeAutoObservable(this, null, { autoBind: true })
   }
 
   wc: WalletConnectController = inject(this, WalletConnectController)
@@ -60,17 +58,17 @@ export class Web3Controller {
   }
 
   init = async () => {
-    // this.destructor1()
-    // this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
-    //   if (prev === val || val === -1) return
-    //   this.setBalance(val <= 0 ? 0 : await this.getBalance())
-    // })
-    //
-    // this.destructor2()
-    // this.destructor2 = reaction(() => this.address, async (val, prev) => {
-    //   if (prev === val || val === "" || val === prev) return
-    //   this.setBalance(await this.getBalance())
-    // })
+    this.destructor1()
+    this.destructor1 = reaction(() => this.chainId, async (val, prev) => {
+      if (prev === val || val === -1) return
+      this.setBalance(val <= 0 ? 0 : await this.getBalance())
+    })
+
+    this.destructor2()
+    this.destructor2 = reaction(() => this.address, async (val, prev) => {
+      if (prev === val || val === "" || val === prev) return
+      this.setBalance(await this.getBalance())
+    })
 
     this.initialized = true
   }
