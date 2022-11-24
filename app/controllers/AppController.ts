@@ -1,4 +1,4 @@
-import { autorun, makeAutoObservable, reaction } from "mobx"
+import { makeAutoObservable, reaction } from "mobx"
 import { StorageController } from "./StorageController"
 import { inject } from "react-ioc"
 import { WalletConnectController } from "./WalletConnectController"
@@ -36,18 +36,11 @@ export class AppController {
       this.wallet.tryInitCached()
       this.web3.init()
     })
-    // this.destructor2()
-    // this.destructor2 = reaction(() => this.walletService?.address, (val, prev) => {
-    //   console.log("Address FDSFSDSD")
-    // })
-    // reaction(() => this.web3.address, () => {
-    //   console.log("Address FDSFSDSD")
-    // })
-
-    autorun(() => {
-      if(this.web3.address) {
-        console.log(this.web3.address)
-      }
+    this.destructor2()
+    this.destructor2 = reaction(() => this.wallet.address, (val, prev) => {
+      console.log(val, prev)
+      if (!val || val?.toLowerCase() === prev?.toLowerCase()) return
+      console.log("Need to update some services...")
     })
   }
 }
